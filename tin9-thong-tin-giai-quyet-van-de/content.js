@@ -44,29 +44,26 @@ const CONCEPTS = {
   c1:{t:"Ghi nhớ", b:"<ul><li>Thông tin là cơ sở để đưa ra các quyết định. Cần phải quan tâm đến <b>chất lượng thông tin</b> khi tìm kiếm, tiếp nhận, trao đổi và sử dụng thông tin để có thể đưa ra các quyết định đúng đắn.</li></ul>"},
   c2:{t:"Ghi nhớ", b:"<ul><li>Chất lượng thông tin là yếu tố quan trọng, quyết định hiệu quả của việc giải quyết vấn đề.</li><li>Chất lượng thông tin được đánh giá thông qua <b>tính mới, tính chính xác, tính đầy đủ, tính sử dụng được</b>.</li></ul>"},
 
-  /* ---- GHI BÀI: nội dung ngắn gọn để học sinh chép vào vở, chốt ở cuối mỗi phần ---- */
+  /* ---- GHI BÀI: ngắn gọn, dễ hiểu – mỗi phần 1–3 ý, mỗi ý một dòng, từ khoá in đậm ---- */
   g1:{ghi:true, t:"Ghi bài", b:'<p class="gh">Mở đầu</p><ul>'
-    + "<li>Thông tin trên Internet rất nhiều, dễ tìm nhưng không phải thông tin nào cũng có chất lượng.</li>"
-    + "<li>Cần tìm thông tin <b>có chất lượng</b> để giải quyết vấn đề (ví dụ: chọn trường THPT).</li></ul>"},
-  g2:{ghi:true, t:"Ghi bài", b:'<p class="gh">1. Vai trò của chất lượng thông tin trong giải quyết vấn đề</p><ul>'
-    + "<li>Thông tin là <b>cơ sở để đưa ra quyết định</b>.</li>"
-    + "<li>Dùng thông tin chưa kiểm chứng (cũ, sai, thiếu) → quyết định có thể sai.</li>"
-    + "<li>Nên dùng thông tin từ <b>nguồn đáng tin cậy</b>: trang web của Sở GD&ĐT, giáo viên chủ nhiệm, người thân có kinh nghiệm,…</li>"
-    + "<li>Không phải số lượng mà <b>chất lượng</b> thông tin mới làm thông tin trở nên hữu ích.</li></ul>"},
-  g3:{ghi:true, t:"Ghi bài", b:'<p class="gh">2. Chất lượng thông tin</p>'
-    + "<p>Chất lượng thông tin là mức độ đáp ứng của thông tin đối với yêu cầu cụ thể để giải quyết vấn đề. Bốn tiêu chí đánh giá:</p><ul>"
-    + "<li><b>Tính mới</b> (cập nhật): thông tin không bị lỗi thời.</li>"
-    + "<li><b>Tính chính xác</b>: nội dung đúng, cụ thể, xác minh được.</li>"
-    + "<li><b>Tính đầy đủ</b>: bao quát nhiều khía cạnh, cho cái nhìn tổng thể.</li>"
-    + "<li><b>Tính sử dụng được</b> (liên quan, phù hợp): liên quan đến vấn đề cần giải quyết.</li></ul>"
-    + "<p>➜ Ví dụ: An không biết thời gian đăng kí nguyện vọng → thông tin <b>thiếu tính đầy đủ</b> → có thể lỡ hạn đăng kí.</p>"},
+    + "<li>Thông tin trên mạng nhiều nhưng <b>không phải tin nào cũng tốt</b>.</li>"
+    + "</ul>"},
+  g2:{ghi:true, t:"Ghi bài", b:'<p class="gh">1. Vai trò của chất lượng thông tin</p><ul>'
+    + "<li>Thông tin là <b>cơ sở để ra quyết định</b>.</li>"
+    + "<li>Tin cũ, sai, thiếu → quyết định <b>sai</b>.</li>"
+    + "<li>Nên lấy tin từ <b>nguồn tin cậy</b>: Sở GD&ĐT, thầy cô, người có kinh nghiệm.</li>"
+    + "</ul>"},
+  g3:{ghi:true, t:"Ghi bài", b:'<p class="gh">2. Chất lượng thông tin</p><ul>'
+    + "<li>Bốn tiêu chí: <b>mới – chính xác – đầy đủ – sử dụng được</b>.</li>"
+    + "<li><b>Mới</b>: không lỗi thời. <b>Chính xác</b>: đúng sự thật.</li>"
+    + "<li><b>Đầy đủ</b>: đủ các mặt. <b>Sử dụng được</b>: đúng vấn đề cần giải quyết.</li>"
+    + "</ul>"},
   g4:{ghi:true, t:"Ghi bài", b:'<p class="gh">Luyện tập</p><ul>'
-    + "<li>Số điện thoại của An (trang web nông trại chưa cập nhật): không mới, không chính xác, không sử dụng được.</li>"
-    + "<li>Số điện thoại của Minh (website nhà cung cấp dịch vụ viễn thông): mới, chính xác, sử dụng được.</li>"
-    + "<li>➜ Nên đối chiếu thông tin từ nhiều nguồn tin cậy.</li></ul>"},
+    + "<li>Số điện thoại cũ trên web nông trại: không mới, không chính xác, không dùng được.</li>"
+    + "</ul>"},
   g5:{ghi:true, t:"Ghi bài", b:'<p class="gh">Vận dụng</p><ul>'
-    + "<li>Máy tính điện tử kĩ thuật số đầu tiên: nhiều nguồn nêu là <b>ENIAC</b> (Mỹ, 1945–1946); một số nguồn nêu máy ABC hoặc Colossus.</li>"
-    + "<li>Đánh giá thông tin theo 4 tiêu chí; ưu tiên nguồn uy tín, so sánh nhiều nguồn.</li></ul>"}
+    + "<li>Kiểm tra thông tin: <b>so sánh nhiều nguồn</b>, ưu tiên nguồn uy tín.</li>"
+    + "</ul>"}
 };
 const TASK_IDS = Object.keys(TASKS);
 const L = ["A","B","C","D"];

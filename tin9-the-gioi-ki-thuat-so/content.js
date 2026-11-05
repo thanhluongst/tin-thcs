@@ -57,37 +57,30 @@ const CONCEPTS = {
   c2:{t:"Ghi nhớ", b:"<ul><li>Máy tính có khả năng <b>tính toán nhanh, bền bỉ, chính xác; lưu trữ dữ liệu với dung lượng lớn; kết nối toàn cầu với tốc độ cao</b>.</li><li>Máy tính được ứng dụng hiệu quả trong nhiều lĩnh vực của khoa học kĩ thuật và đời sống.</li></ul>"},
   c3:{t:"Ghi nhớ", b:"<ul><li>Công nghệ thông tin có tác động mạnh mẽ, đem lại những thay đổi tích cực trong xã hội, trong đó có giáo dục.</li><li>Cần sử dụng công nghệ thông tin đúng cách để tránh những tác động tiêu cực đến cuộc sống.</li></ul>"},
 
-  /* ---- GHI BÀI: nội dung ngắn gọn để học sinh chép vào vở, chốt ở cuối mỗi phần ---- */
+  /* ---- GHI BÀI: ngắn gọn, dễ hiểu – mỗi phần 1–3 ý, mỗi ý một dòng, từ khoá in đậm ---- */
   g1:{ghi:true, t:"Ghi bài", b:'<p class="gh">Mở đầu</p><ul>'
-    + "<li>Bộ xử lí là “bộ não” của máy tính.</li>"
-    + "<li>Bộ xử lí còn được gắn trong nhiều thiết bị khác: điện thoại thông minh, ti vi, robot lau nhà, máy giặt,…</li></ul>"},
+    + "<li><b>Bộ xử lí</b> là “bộ não” của máy tính và của nhiều thiết bị khác.</li>"
+    + "</ul>"},
   g2:{ghi:true, t:"Ghi bài", b:'<p class="gh">1. Thế giới kĩ thuật số</p><ul>'
-    + "<li>Thiết bị có gắn bộ xử lí thì xử lí được thông tin. Ví dụ: ti vi kĩ thuật số nhận tín hiệu từ bộ điều khiển → xử lí → chuyển kênh.</li>"
-    + "<li>Thiết bị có gắn bộ xử lí có mặt ở khắp nơi:</li></ul><ul>"
-    + "<li>Gia đình: ti vi, tủ lạnh, máy giặt, điều hoà, nồi cơm điện, robot lau nhà,…</li>"
-    + "<li>Xã hội: máy ATM, máy chấm công nhận khuôn mặt, bảng điện tử ở sân bay, máy chụp cắt lớp ở bệnh viện, robot lắp ráp ở nhà máy, ô tô lái tự động,…</li></ul>"
-    + "<p>➜ Chúng giúp con người <b>tự động hoá</b> một phần hoạt động xử lí thông tin, có mặt trong hầu hết các lĩnh vực: tạo nên <b>thế giới kĩ thuật số</b>.</p>"},
-  g3:{ghi:true, t:"Ghi bài", b:'<p class="gh">2. Ứng dụng thực tế của máy tính</p>'
-    + "<p><b>a) Khả năng của máy tính:</b></p><ul>"
-    + "<li>Tính toán nhanh, bền bỉ, chính xác.</li>"
-    + "<li>Lưu trữ dữ liệu với dung lượng lớn.</li>"
-    + "<li>Kết nối toàn cầu với tốc độ cao.</li></ul>"
-    + "<p><b>b) Ứng dụng:</b> trong hầu hết các lĩnh vực</p><ul>"
-    + "<li>Khoa học kĩ thuật: mô phỏng, dự báo thời tiết, nghiên cứu vũ trụ (kính viễn vọng Hubble).</li>"
-    + "<li>Y tế: chẩn đoán bệnh, quản lí người bệnh.</li>"
-    + "<li>Giao thông: xe tự lái, điều khiển đèn tín hiệu.</li>"
-    + "<li>Đời sống: liên lạc, mua sắm, đọc báo, giải trí.</li></ul>"},
-  g4:{ghi:true, t:"Ghi bài", b:'<p class="gh">3. Tác động của công nghệ thông tin lên giáo dục và xã hội</p><ul>'
-    + "<li><b>Giáo dục:</b> học mọi lúc, mọi nơi qua Internet; nhiều tài liệu miễn phí; dễ dàng bổ sung kiến thức, kĩ năng.</li>"
-    + "<li><b>Xã hội:</b> giao tiếp nhanh (điện thoại, tin nhắn, mạng xã hội), không bị giới hạn bởi khoảng cách; dễ chuyển giao, tiếp cận thông tin.</li>"
-    + "<li><b>Tiêu cực</b> nếu dùng sai cách: ảnh hưởng sức khoẻ thể chất, tinh thần của con người.</li></ul>"
-    + "<p>➜ Cần sử dụng công nghệ thông tin <b>đúng cách, có trách nhiệm</b>.</p>"},
+    + "<li>Thiết bị có <b>bộ xử lí</b> thì xử lí được thông tin. VD: ti vi nhận lệnh chuyển kênh.</li>"
+    + "<li>Chúng có <b>khắp nơi</b>: điện thoại, máy giặt, ATM, robot, ô tô tự lái,…</li>"
+    + "<li>Giúp con người <b>tự động hoá</b> công việc → tạo nên <b>thế giới kĩ thuật số</b>.</li>"
+    + "</ul>"},
+  g3:{ghi:true, t:"Ghi bài", b:'<p class="gh">2. Ứng dụng của máy tính</p><ul>'
+    + "<li>Khả năng: <b>tính nhanh, chính xác, bền bỉ</b>; <b>lưu trữ lớn</b>; <b>kết nối toàn cầu</b>.</li>"
+    + "<li>Ứng dụng: khoa học, y tế, giao thông, học tập, đời sống.</li>"
+    + "</ul>"},
+  g4:{ghi:true, t:"Ghi bài", b:'<p class="gh">3. Tác động của công nghệ thông tin</p><ul>'
+    + "<li><b>Tích cực</b>: học mọi lúc mọi nơi; liên lạc nhanh; tìm thông tin dễ.</li>"
+    + "<li><b>Tiêu cực</b> nếu dùng sai: hại sức khoẻ, nghiện mạng, tin giả.</li>"
+    + "<li>→ Dùng công nghệ <b>đúng cách, có trách nhiệm</b>.</li>"
+    + "</ul>"},
   g5:{ghi:true, t:"Ghi bài", b:'<p class="gh">Luyện tập</p><ul>'
-    + "<li><b>Câu 1.</b> Nếu bộ xử lí biến mất: liên lạc, học tập, giao thông, ngân hàng, y tế, sản xuất,… đều ngừng trệ; cuộc sống bị đảo lộn.</li>"
-    + "<li><b>Câu 2.</b> Ví dụ một điều em học được trên Internet (ghi rõ nguồn và ý nghĩa).</li></ul>"},
+    + "<li>Không có bộ xử lí: liên lạc, học tập, giao thông, ngân hàng,… đều ngừng.</li>"
+    + "</ul>"},
   g6:{ghi:true, t:"Ghi bài", b:'<p class="gh">Vận dụng</p><ul>'
-    + "<li>Đồng hồ thông minh: ngoài xem giờ còn đo nhịp tim, đếm bước chân, nhận tin nhắn, định vị,…</li>"
-    + "<li>Cần bộ xử lí để <b>tiếp nhận và xử lí thông tin</b> từ cảm biến, điện thoại và người dùng.</li></ul>"}
+    + "<li>Đồng hồ thông minh cần <b>bộ xử lí</b> để xử lí dữ liệu: nhịp tim, bước chân, tin nhắn.</li>"
+    + "</ul>"}
 };
 const TASK_IDS = Object.keys(TASKS);
 const L = ["A","B","C","D"];

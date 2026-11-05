@@ -56,34 +56,27 @@ const CONCEPTS = {
     + "<tr><th>Ví dụ</th><td>Windows, Linux, macOS,… (cho máy tính). Android, iOS,… (cho điện thoại thông minh hoặc máy tính bảng).</td><td>MindMaple, MindManager,… (sơ đồ tư duy); MS Word, Writer,… (soạn thảo văn bản); MS Paint, Draw, Photoshop (xử lí ảnh),…</td></tr>"
     + "</tbody></table></div>"},
 
-  /* ---- GHI BÀI: nội dung ngắn gọn để học sinh chép vào vở, chốt ở cuối mỗi phần ---- */
+  /* ---- GHI BÀI: ngắn gọn, dễ hiểu – mỗi phần 1–3 ý, mỗi ý một dòng, từ khoá in đậm ---- */
   g1:{ghi:true, t:"Ghi bài", b:'<p class="gh">Mở đầu</p><ul>'
-    + "<li>Máy tính gồm <b>phần cứng</b> và <b>phần mềm</b>. Chỉ có phần cứng thì máy tính chưa hoạt động được.</li>"
-    + "<li>Phần mềm gồm hai loại: <b>hệ điều hành</b> (quản lí, điều khiển máy tính) và <b>phần mềm ứng dụng</b> (xử lí văn bản, âm thanh, hình ảnh,…).</li></ul>"},
-  g2:{ghi:true, t:"Ghi bài", b:'<p class="gh">1. Hệ điều hành</p>'
-    + "<p><b>a) Khái niệm:</b> Hệ điều hành là phần mềm hệ thống quản lí và điều khiển hoạt động chung của máy tính.</p>"
-    + "<p><b>b) Chức năng:</b></p><ul>"
-    + "<li>Quản lí các thiết bị và dữ liệu, điều khiển chúng phối hợp hoạt động nhịp nhàng.</li>"
-    + "<li>Cung cấp môi trường giao tiếp (giao diện) giữa người sử dụng và máy tính.</li>"
-    + "<li>Cung cấp môi trường để chạy các phần mềm ứng dụng.</li></ul>"
-    + "<p><b>c) Ví dụ:</b></p><ul>"
-    + "<li>Máy tính: Windows, macOS, Linux.</li>"
-    + "<li>Điện thoại thông minh, máy tính bảng: Android, iOS.</li></ul>"},
-  g3:{ghi:true, t:"Ghi bài", b:'<p class="gh">2. Phần mềm ứng dụng</p>'
-    + "<p><b>a) Khái niệm:</b> Phần mềm ứng dụng là chương trình giúp người dùng thực hiện công việc cụ thể, xử lí một loại dữ liệu cụ thể. Ví dụ: Word, PowerPoint, Paint, Scratch, Zalo.</p>"
-    + "<p><b>b) Phần mở rộng của tệp:</b> là các kí tự sau dấu chấm cuối cùng trong tên tệp. Phần mở rộng cho biết <b>loại tệp</b> và <b>phần mềm</b> dùng để mở tệp.</p><ul>"
-    + "<li>.doc, .docx: văn bản Word. &nbsp;.ppt, .pptx: bài trình chiếu.</li>"
-    + "<li>.sb3: chương trình Scratch. &nbsp;.jpg, .png, .bmp: hình ảnh.</li>"
-    + "<li>.mp3: âm thanh. &nbsp;.mp4, .avi: video. &nbsp;.htm, .html: trang web.</li>"
-    + "<li>.exe, .com, .bat, .msi: tệp chương trình, ứng dụng.</li></ul>"
-    + "<p><b>c) Phân biệt:</b></p><ul>"
-    + "<li><b>Hệ điều hành</b>: trực tiếp quản lí phần cứng, phải cài đầu tiên, tạo môi trường cho phần mềm khác chạy.</li>"
-    + "<li><b>Phần mềm ứng dụng</b>: làm việc với phần cứng qua hệ điều hành, cài hoặc không tuỳ nhu cầu, phải chọn bản phù hợp với hệ điều hành.</li></ul>"},
+    + "<li>Máy tính = <b>phần cứng</b> + <b>phần mềm</b>. Thiếu phần mềm, máy không hoạt động.</li>"
+    + "</ul>"},
+  g2:{ghi:true, t:"Ghi bài", b:'<p class="gh">1. Hệ điều hành</p><ul>'
+    + "<li><b>Hệ điều hành</b>: phần mềm quản lí, điều khiển toàn bộ máy tính.</li>"
+    + "<li>Chức năng: quản lí <b>thiết bị, dữ liệu</b>; tạo <b>giao diện</b>; cho <b>chạy phần mềm ứng dụng</b>.</li>"
+    + "<li>VD: Windows, macOS, Linux (máy tính); Android, iOS (điện thoại).</li>"
+    + "</ul>"},
+  g3:{ghi:true, t:"Ghi bài", b:'<p class="gh">2. Phần mềm ứng dụng</p><ul>'
+    + "<li><b>Phần mềm ứng dụng</b>: giúp làm một việc cụ thể. VD: Word, Paint, Scratch, Zalo.</li>"
+    + "<li><b>Phần mở rộng</b>: chữ sau dấu chấm cuối tên tệp → cho biết loại tệp.</li>"
+    + "<li>VD: .docx (văn bản), .jpg (ảnh), .mp3 (nhạc), .mp4 (video), .sb3 (Scratch).</li>"
+    + "<li>Hệ điều hành cài <b>trước</b>; phần mềm ứng dụng chạy <b>trên</b> hệ điều hành.</li>"
+    + "</ul>"},
   g4:{ghi:true, t:"Ghi bài", b:'<p class="gh">Luyện tập</p><ul>'
-    + "<li><b>Câu 1.</b> Chức năng của hệ điều hành: quản lí thiết bị và dữ liệu; cung cấp giao diện; cung cấp môi trường chạy phần mềm ứng dụng.</li>"
-    + "<li><b>Câu 2.</b> Phát biểu sai là <b>C</b>: máy tính chỉ cần <b>hệ điều hành</b> là hoạt động được.</li></ul>"},
+    + "<li>Máy tính chỉ cần <b>hệ điều hành</b> là chạy được (câu 2: đáp án C sai).</li>"
+    + "</ul>"},
   g5:{ghi:true, t:"Ghi bài", b:'<p class="gh">Vận dụng</p><ul>'
-    + "<li>Phần mềm ứng dụng (như Scratch) chạy trên nền hệ điều hành, nên phải tải <b>phiên bản phù hợp với hệ điều hành</b> của máy (Windows, macOS, Linux,…).</li></ul>"}
+    + "<li>Tải phần mềm (Scratch) phải chọn bản <b>hợp với hệ điều hành</b> của máy.</li>"
+    + "</ul>"}
 };
 const TASK_IDS = Object.keys(TASKS);
 const L = ["A","B","C","D"];

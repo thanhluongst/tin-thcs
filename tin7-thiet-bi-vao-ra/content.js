@@ -64,28 +64,27 @@ const CONCEPTS = {
   c3:{t:"Chốt kiến thức", b:"<ul><li>Đầu nối tai nghe (e) cắm vào cổng <b>4</b>. Cắm nhầm sang cổng 5 sẽ không nghe thấy âm thanh, em có thể tưởng thiết bị bị hỏng.</li><li>Dây màn hình (d) cắm vào cổng <b>3</b>. Cố cắm vào cổng khác có thể làm hỏng đầu nối.</li><li>Cổng <b>7</b> là cổng USB dùng cho nhiều thiết bị như bàn phím, chuột. Cắm nhầm đầu nối khác có thể gây chập điện, hỏng thiết bị.</li><li>Dây nguồn (f) cắm vào cổng <b>8</b>; chỉ cấp nguồn <b>sau khi</b> các thiết bị đã được kết nối.</li></ul>"},
   c4:{t:"Ghi nhớ", b:"<ul><li>Đọc kĩ hướng dẫn của nhà sản xuất trước khi sử dụng thiết bị.</li><li>Kết nối các thiết bị đúng cách.</li><li>Giữ gìn nơi làm việc với máy tính gọn gàng, ngăn nắp, vệ sinh, khô ráo.</li></ul>"},
 
-  /* ---- GHI BÀI: nội dung ngắn gọn để học sinh chép vào vở, chốt ở cuối mỗi phần ---- */
+  /* ---- GHI BÀI: ngắn gọn, dễ hiểu – mỗi phần 1–3 ý, mỗi ý một dòng, từ khoá in đậm ---- */
   g1:{ghi:true, t:"Ghi bài", b:'<p class="gh">Mở đầu</p><ul>'
-    + "<li>Máy tính có 4 thành phần cơ bản: <b>thiết bị vào, thiết bị ra, bộ xử lí, bộ nhớ</b>.</li>"
-    + "<li>Thiết bị vào – ra giúp máy tính <b>trao đổi dữ liệu với thế giới bên ngoài</b>.</li></ul>"},
+    + "<li>Máy tính gồm 4 phần: <b>thiết bị vào, bộ xử lí, bộ nhớ, thiết bị ra</b>.</li>"
+    + "</ul>"},
   g2:{ghi:true, t:"Ghi bài", b:'<p class="gh">1. Thiết bị vào – ra</p><ul>'
-    + "<li><b>Thiết bị vào</b>: nhập thông tin vào máy tính. Ví dụ: bàn phím, chuột, micro, máy quét, webcam, camera.</li>"
-    + "<li><b>Thiết bị ra</b>: xuất thông tin từ máy tính ra ngoài. Ví dụ: màn hình, máy in, loa, tai nghe, máy chiếu.</li>"
-    + "<li>Có thiết bị <b>vừa vào vừa ra</b>: màn hình cảm ứng, tai nghe có gắn micro.</li>"
-    + "<li>Cách nhận biết: xét <b>chiều đi của thông tin</b> so với máy tính.</li>"
-    + "<li>Một số thiết bị vào – ra còn <b>lưu trữ, xử lí</b> dữ liệu (máy ghi hình kĩ thuật số, loa thông minh).</li></ul>"},
+    + "<li><b>Thiết bị vào</b>: đưa thông tin <b>vào</b> máy tính. VD: bàn phím, chuột, micro, máy quét.</li>"
+    + "<li><b>Thiết bị ra</b>: đưa thông tin <b>ra</b> ngoài. VD: màn hình, máy in, loa.</li>"
+    + "<li>Có thiết bị <b>vừa vào vừa ra</b>: màn hình cảm ứng, tai nghe có micro.</li>"
+    + "</ul>"},
   g3:{ghi:true, t:"Ghi bài", b:'<p class="gh">2. Sử dụng thiết bị an toàn</p><ul>'
-    + "<li>Đọc kĩ hướng dẫn trước khi sử dụng; kết nối thiết bị <b>đúng cổng</b>; cắm nguồn điện <b>sau cùng</b>.</li>"
-    + "<li>Tắt máy bằng lệnh <b>Shut down</b>, không ngắt điện đột ngột.</li>"
-    + "<li>Không ăn uống khi dùng máy; giữ tay khô, sạch; gõ phím nhẹ nhàng; không dùng vật sắc nhọn lên màn hình.</li>"
-    + "<li>Rút điện trước khi lau dọn; giữ nơi làm việc gọn gàng, sạch sẽ, khô ráo.</li></ul>"},
+    + "<li>Cắm thiết bị <b>đúng cổng</b>, cắm điện <b>sau cùng</b>.</li>"
+    + "<li>Tắt máy bằng <b>Shut down</b>, không rút điện đột ngột.</li>"
+    + "<li>Không ăn uống khi dùng máy; tay khô, sạch; gõ phím nhẹ.</li>"
+    + "</ul>"},
   g4:{ghi:true, t:"Ghi bài", b:'<p class="gh">Luyện tập</p><ul>'
-    + "<li><b>Câu 1.</b> Tai nghe có gắn micro là thiết bị <b>vừa vào vừa ra</b>.</li>"
-    + "<li><b>Câu 2.</b> Tắt máy an toàn: lưu tệp → đóng tệp → ngắt kết nối thẻ nhớ an toàn → Shut down (<b>d → b → c → a</b>).</li></ul>"},
+    + "<li>Tai nghe có micro: thiết bị <b>vừa vào vừa ra</b>.</li>"
+    + "<li>Tắt máy: lưu tệp → đóng tệp → rút thẻ nhớ an toàn → Shut down.</li>"
+    + "</ul>"},
   g5:{ghi:true, t:"Ghi bài", b:'<p class="gh">Vận dụng</p><ul>'
-    + "<li>Camera an ninh là thiết bị vào: chỉ thu hình, không báo cho người đứng trước biết đang bị theo dõi.</li>"
-    + "<li>Máy in in sai do virus thì diệt virus <b>trên máy tính</b>, vì máy in chỉ in theo dữ liệu máy tính gửi tới.</li>"
-    + "<li>Phòng máy: không mang đồ ăn uống; không tự ý cắm, rút thiết bị; tắt máy đúng cách; báo thầy cô khi có sự cố.</li></ul>"}
+    + "<li>Máy in in sai do virus → diệt virus <b>trên máy tính</b>.</li>"
+    + "</ul>"}
 };
 const TASK_IDS = Object.keys(TASKS);
 const L = ["A","B","C","D"];
