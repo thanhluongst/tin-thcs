@@ -137,6 +137,11 @@ textarea[readonly]{background:var(--sunk)}
 .seg button.unsure[aria-pressed="true"]{background:var(--key);color:var(--accent-ink)}
 .seg button:disabled{cursor:default}
 @media (max-width:560px){.sort-row{grid-template-columns:1fr}}
+.sort.wide .sort-row{grid-template-columns:1fr;gap:6px}
+.sort.wide .seg{display:flex;flex-direction:column;border-radius:8px}
+.sort.wide .seg button{border-left:0;border-top:1px solid var(--line);text-align:left;font-weight:500;padding:6px 10px}
+.sort.wide .seg button:first-child{border-top:0}
+.sort.wide .seg button.unsure{text-align:center}
 
 .match{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 @media (max-width:620px){.match{grid-template-columns:repeat(2,minmax(0,1fr))}}

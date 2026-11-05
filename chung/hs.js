@@ -89,7 +89,9 @@ const BODY = {
   },
   sort(id, t){
     if (!S.sort[id]) S.sort[id] = {};
-    const box = el("div", {class:"sort"});
+    /* Nhãn nhóm dài (ví dụ câu ghép nối) thì xếp nút chọn xuống dưới nội dung, không chen vào cùng hàng */
+    const wide = t.cats.join("").length > 36 || t.cats.some(c => c.length > 24);
+    const box = el("div", {class:"sort" + (wide ? " wide" : "")});
     const cats = t.cats.concat(["?"]);
     const rows = t.items.map(([name], i) => {
       const r = el("div", {class:"sort-row"});
