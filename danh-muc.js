@@ -91,7 +91,7 @@ window.CHUONG_TRINH = [
   ]},
   {lop: 9, chuDe: [
     {so: "1", ten: "Máy tính và cộng đồng", bai: [
-      {so: "1", ten: "Thế giới kĩ thuật số"}]},
+      {so: "1", ten: "Thế giới kĩ thuật số", tt: "dang"}]},
     {so: "2", ten: "Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin", bai: [
       {so: "2", ten: "Thông tin trong giải quyết vấn đề", slug: "thong-tin-giai-quyet-van-de"},
       {so: "3", ten: "Thực hành: Đánh giá chất lượng thông tin"}]},
