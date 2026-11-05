@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sử dụng bảng tính giải quyết bài toán thực tế · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=21">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 4. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>5</b></div><h1><span class="sr-only">Bài 5. </span>Sử dụng bảng tính giải quyết bài toán thực tế</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Giải thích được sự thay đổi địa chỉ tương đối trong công thức khi sao chép công thức.</li>
+        <li>Giải thích được sự khác nhau giữa địa chỉ tương đối và địa chỉ tuyệt đối của một ô tính.</li>
+        <li>Sử dụng được phần mềm bảng tính trợ giúp giải quyết bài toán thực tế.</li>
+        <li>Sao chép được dữ liệu từ các tệp văn bản, trang trình chiếu sang trang tính.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Địa chỉ tương đối thay đổi, địa chỉ tuyệt đối giữ nguyên khi sao chép">
+      <span class="node">C4 → thay đổi khi chép</span>
+      <span class="node io">$F$2 → giữ nguyên</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Địa chỉ tương đối</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Địa chỉ tuyệt đối</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Danh sách phần mềm ứng dụng</div>
+        <div class="reading">Bố của Khoa là giám đốc một công ti sản xuất phần mềm máy tính. Để giúp Khoa ôn lại kiến thức và tìm hiểu thêm về phần mềm bảng tính, bố giao cho Khoa tính toán doanh thu một số phần mềm mà công ti của bố sản xuất. Những phần mềm này được đưa lên các <b>chợ ứng dụng</b> trên mạng. Tuỳ theo từng phần mềm, người sử dụng có thể phải trả phí hoặc được miễn phí. Khoa đã tạo bảng tính để lưu thông tin về các phần mềm như minh hoạ trong Hình 5.1.</div>
+        <figure class="fig"><img src="hinh/h51.jpg" alt="Bảng tính Danh sách phần mềm ứng dụng: TT, Sản phẩm, Đơn giá, Số lượt mua, cột Doanh thu còn trống"><figcaption>Hình 5.1. Danh sách phần mềm của công ti</figcaption></figure>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Địa chỉ tương đối</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Tính doanh thu phần mềm</div>
+        <div class="reading">Dựa vào thông tin mà bạn Khoa đã lưu trữ trong bảng tính ở Hình 5.1 (đơn giá bằng 0 là phần mềm miễn phí). Đọc mục <b>1</b> (SGK trang 22): chương trình bảng tính sử dụng ba loại địa chỉ ô là địa chỉ tương đối, địa chỉ tuyệt đối và địa chỉ hỗn hợp. Trong Hình 5.2, công thức tại ô E4 là =C4*D4. Khi sao chép công thức này đến ô E5 thì các địa chỉ ô trong công thức sẽ tự động thay đổi: công thức tại ô E5 là =C5*D5. Các địa chỉ C4, D4, C5, D5 là <b>địa chỉ tương đối</b>.</div>
+        <div class="fcopy" data-fcopy>
+          <style>
+            .fcopy{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:10px}
+            .fcopy .t{font-weight:700}
+            .fcopy .row{display:flex;gap:8px 12px;flex-wrap:wrap;align-items:center;font-size:14px}
+            .fcopy input{font:600 15px ui-monospace,Consolas,monospace;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg,#fff);color:inherit;width:9em}
+            .fcopy input.sm{width:4.5em;text-transform:uppercase}
+            .fcopy .out{font:700 17px ui-monospace,Consolas,monospace;color:var(--accent);padding:6px 10px;border:1.5px solid var(--accent);border-radius:8px;min-width:8em;display:inline-block}
+            .fcopy .note{font-size:13.5px;opacity:.85}
+            .fcopy button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:4px 10px;cursor:pointer}
+            .fcopy button:hover{border-color:var(--accent)}
+            .fcopy .ref-r{color:#b45309;font-weight:700}.fcopy .ref-a{color:#047857;font-weight:700}
+          </style>
+          <div class="t">Mô phỏng sao chép công thức</div>
+          <div class="row">
+            <label>Công thức <input data-f value="=C4*D4" aria-label="Công thức"></label>
+            <label>ở ô <input class="sm" data-from value="E4" aria-label="Ô gốc"></label>
+            <label>sao chép đến ô <input class="sm" data-to value="E5" aria-label="Ô đích"></label>
+            <span>→</span><span class="out" data-out aria-live="polite"></span>
+          </div>
+          <div class="note" data-note></div>
+          <div class="row"><span class="note">Thử nhanh:</span>
+            <button type="button" data-try="=C4*D4|E4|E6">E4 → E6</button>
+            <button type="button" data-try="=E4*F2|F4|F5">=E4*F2: F4 → F5</button>
+            <button type="button" data-try="=E4*$F$2|F4|F9">=E4*$F$2: F4 → F9</button>
+            <button type="button" data-try="=A1*B1|C1|E2">=A1*B1: C1 → E2</button>
+          </div>
+          <script>
+          (function(){
+            var box = document.currentScript.parentNode;
+            var q = function(s){ return box.querySelector(s); };
+            function col2n(c){ var n = 0; for (var i = 0; i < c.length; i++) n = n * 26 + c.charCodeAt(i) - 64; return n; }
+            function n2col(n){ var s = ""; while (n > 0) { var m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; }
+            function cell(s){ var m = /^([A-Z]{1,2})(\d+)$/.exec(String(s).trim().toUpperCase()); return m ? [col2n(m[1]), +m[2]] : null; }
+            function upd(){
+              var f = q("[data-f]").value, a = cell(q("[data-from]").value), b = cell(q("[data-to]").value), out = q("[data-out]"), note = q("[data-note]");
+              if (!a || !b || f.charAt(0) !== "=") { out.textContent = "?"; note.textContent = "Nhập công thức bắt đầu bằng dấu = và địa chỉ ô như E4, F5."; return; }
+              var dc = b[0] - a[0], dr = b[1] - a[1], bad = false, rel = [], abs = [];
+              var res = f.toUpperCase().replace(/(\$?)([A-Z]{1,2})(\$?)(\d+)/g, function(m, d1, c, d2, r){
+                var cn = d1 ? col2n(c) : col2n(c) + dc, rn = d2 ? +r : +r + dr;
+                if (cn < 1 || rn < 1) bad = true;
+                (d1 && d2 ? abs : rel).push(m);
+                return d1 + n2col(Math.max(cn, 1)) + d2 + Math.max(rn, 1);
+              });
+              out.textContent = bad ? "#REF!" : res;
+              note.innerHTML = "Từ " + q("[data-from]").value.toUpperCase() + " đến " + q("[data-to]").value.toUpperCase() + ": " + (dc ? (dc > 0 ? "sang phải " : "sang trái ") + Math.abs(dc) + " cột" : "cùng cột") + ", " + (dr ? (dr > 0 ? "xuống " : "lên ") + Math.abs(dr) + " hàng" : "cùng hàng") + ". "
+                + (rel.length ? 'Địa chỉ tương đối <span class="ref-r">' + rel.join(", ") + "</span> thay đổi theo. " : "")
+                + (abs.length ? 'Địa chỉ tuyệt đối <span class="ref-a">' + abs.join(", ") + "</span> giữ nguyên." : "");
+            }
+            box.querySelectorAll("input").forEach(function(i){ i.addEventListener("input", upd); });
+            box.querySelectorAll("[data-try]").forEach(function(btn){ btn.addEventListener("click", function(){ var p = btn.dataset.try.split("|"); q("[data-f]").value = p[0]; q("[data-from]").value = p[1]; q("[data-to]").value = p[2]; upd(); }); });
+            upd();
+          })();
+          </script>
+        </div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 22</div>
+        <div data-task="p22" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Địa chỉ tương đối</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Địa chỉ tuyệt đối</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Địa chỉ tuyệt đối</div>
+        <div class="reading">Bạn Khoa đã tính được Doanh thu của mỗi phần mềm. Doanh thu là số tiền thu được của đơn vị quản lí chợ ứng dụng khi người sử dụng trả tiền mua phần mềm. Công ti của bố Khoa được trả 70% của số tiền này và gọi là <b>Doanh thu của công ti</b>. Giả sử tỉ lệ phần trăm doanh thu mà công ti được hưởng lưu ở ô F2 (Hình 5.3).<br>Đọc mục <b>2</b> (SGK trang 23): trong chương trình bảng tính, một địa chỉ ô trong công thức không thay đổi khi sao chép công thức thì địa chỉ đó là <b>địa chỉ tuyệt đối</b>. Địa chỉ tuyệt đối có kí hiệu <b>$</b> trước tên cột và trước tên hàng, ví dụ <b>$F$2</b>. Sau khi nhập địa chỉ tương đối, em nhấn phím <b>F4</b> để chuyển thành địa chỉ tuyệt đối. Em có thể dùng bảng mô phỏng ở mục 1 để thử sao chép công thức có địa chỉ tuyệt đối.</div>
+        <figure class="fig"><img src="hinh/h53.jpg" alt="Bảng tính có thêm ô F2 bằng 70% và cột Doanh thu của công ti"><figcaption>Hình 5.3. Tỉ lệ doanh thu của công ti được lưu ở ô F2</figcaption></figure>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 24</div>
+        <div data-task="p24a" data-n="1"></div>
+        <div data-task="p24b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Địa chỉ tuyệt đối</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Thực hành</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành 3</b> Sử dụng bảng tính giải quyết bài toán thực tế</div>
+        <div class="reading"><b>Nhiệm vụ:</b> tạo bảng tính theo mẫu Hình 5.1. Lập công thức sử dụng địa chỉ tương đối và địa chỉ tuyệt đối để tính Doanh thu mỗi phần mềm và Doanh thu của công ti.<ul><li><b>a)</b> Khởi động phần mềm bảng tính, nhập dữ liệu và định dạng như Hình 5.1, lưu tệp.</li><li><b>b)</b> Tại ô E4 nhập =C4*D4, sao chép đến các ô E5 đến E9.</li><li><b>c)</b> Tại ô D2 nhập “Tỉ lệ doanh thu của công ti”, tại ô F2 nhập 70%; tại ô F3 nhập tiêu đề “Doanh thu của công ti”; tại ô F4 nhập =E4*$F$2 (nhập $ từ bàn phím hoặc nhấn F4 sau khi nhập F2); sao chép đến F5:F9; lưu tệp.</li></ul></div>
+        <div data-task="th1" data-n="1"></div>
+        <div data-task="th2" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành 4</b> Sao chép dữ liệu từ các tệp văn bản, trang trình chiếu sang trang tính</div>
+        <div class="reading">Giả sử kết quả số học sinh chọn mỗi nhóm nghề của lĩnh vực Công nghệ thông tin được lưu trữ trong phần mềm soạn thảo văn bản hoặc phần mềm trình chiếu như Bảng 5.1. Em hãy sao chép bảng số liệu này sang phần mềm bảng tính.</div>
+        <div class="tbl-wrap"><table class="tbl"><caption style="caption-side:top;font-weight:700;padding:4px">Bảng 5.1. Số liệu thống kê lựa chọn nghề nghiệp của học sinh</caption><thead><tr><th>TT</th><th>Nhóm nghề</th><th>Nghề</th><th>Số lượng HS</th></tr></thead><tbody>
+          <tr><td>1</td><td>Lĩnh vực phát triển phần mềm</td><td>Lập trình viên, Thiết kế phần mềm, Kiến trúc sư phần mềm, Kiểm thử phần mềm,…</td><td>46</td></tr>
+          <tr><td>2</td><td>Lĩnh vực mạng máy tính và an toàn thông tin</td><td>Quản trị mạng, An toàn thông tin,…</td><td>25</td></tr>
+          <tr><td>3</td><td>Lĩnh vực đa phương tiện</td><td>Thiết kế đồ hoạ, truyền thông đa phương tiện</td><td>78</td></tr>
+          <tr><td>4</td><td>Lĩnh vực khác của Công nghệ thông tin</td><td>Quản trị website, giảng viên Công nghệ thông tin,…</td><td>42</td></tr>
+        </tbody></table></div>
+        <div data-task="cp" data-n="3"></div>
+        <div data-task="ks" data-n="4"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3, 4. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Bài tập SGK trang 26</div>
+        <div class="reading"><b>Câu 2.</b> Nhân dịp khai giảng năm học mới, tại một số cửa hàng, nhà sách,… các mặt hàng đồ dùng học tập được giảm giá. Bảng tính “Danh sách các mặt hàng được giảm giá” (Hình 5.7) có: ô D2 lưu tỉ lệ giảm giá 20%; các cột TT (A), Tên mặt hàng (B), Đơn giá (C), Đơn giá đã giảm (D); dữ liệu từ hàng 5 đến hàng 10 (vở 80 trang, vở 120 trang, bút bi, bút chì, balo, cặp sách). Em hãy nhập dữ liệu, tìm đơn giá các mặt hàng rồi làm các yêu cầu c), d), e), f).</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+        <div data-task="lt3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Doanh thu phần mềm trên chợ ứng dụng</div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=21"></script>
+<script src="content.js?v=21"></script>
+<script src="../chung/outline.js?v=21"></script>
+<script src="../chung/api.js?v=21"></script>
+<script src="../chung/chieu.js?v=21"></script>
+<script src="../chung/hs.js?v=21"></script>
+</body>
+</html>
