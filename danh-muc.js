@@ -100,7 +100,7 @@ window.CHUONG_TRINH = [
     {so: "4", ten: "Ứng dụng tin học", bai: [
       {so: "5", ten: "Tìm hiểu phần mềm mô phỏng", tt: "dang"},
       {so: "6", ten: "Thực hành: Khai thác phần mềm mô phỏng", tt: "dang"},
-      {so: "7", ten: "Trình bày thông tin trong trao đổi và hợp tác", slug: "trao-doi-hop-tac"},
+      {so: "7", ten: "Trình bày thông tin trong trao đổi và hợp tác", slug: "trao-doi-hop-tac", tt: "dang"},
       {so: "8", ten: "Thực hành: Sử dụng công cụ trực quan trình bày thông tin trong trao đổi và hợp tác", slug: "cong-cu-truc-quan"}]},
     {so: "4a", nhom: "a", ten: "Sử dụng bảng tính điện tử nâng cao", bai: [
       {so: "9a", ten: "Sử dụng công cụ xác thực dữ liệu", slug: "xac-thuc-du-lieu"},
