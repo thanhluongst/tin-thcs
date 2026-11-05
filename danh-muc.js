@@ -63,8 +63,8 @@ window.CHUONG_TRINH = [
     {so: "1", ten: "Máy tính và cộng đồng", bai: [
       {so: "1", ten: "Lược sử công cụ tính toán", tt: "dang"}]},
     {so: "2", ten: "Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin", bai: [
-      {so: "2", ten: "Thông tin trong môi trường số"},
-      {so: "3", ten: "Thực hành: Khai thác thông tin số"}]},
+      {so: "2", ten: "Thông tin trong môi trường số", tt: "dang"},
+      {so: "3", ten: "Thực hành: Khai thác thông tin số", tt: "dang"}]},
     {so: "3", ten: "Đạo đức, pháp luật và văn hoá trong môi trường số", bai: [
       {so: "4", ten: "Đạo đức và văn hoá trong sử dụng công nghệ kĩ thuật số", slug: "dao-duc-van-hoa-so"}]},
     {so: "4", ten: "Ứng dụng tin học", bai: [
