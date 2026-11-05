@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Khai thác phần mềm mô phỏng · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=21">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 4. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>6</b></div><h1><span class="sr-only">Bài 6. </span>Thực hành: Khai thác phần mềm mô phỏng</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nêu được những kiến thức đã thu nhận từ việc khai thác một vài phần mềm mô phỏng.</li>
+        <li>Nhận biết được sự mô phỏng thế giới thực nhờ máy tính có thể giúp con người khám phá tri thức và giải quyết vấn đề.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Ba nhiệm vụ thực hành">
+      <span class="node">NV1: Năng lượng</span><span class="arr">·</span>
+      <span class="node">NV2: Dòng điện</span><span class="arr">·</span>
+      <span class="node io">NV3: Tỉ lệ vàng</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Năng lượng</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Dòng điện</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Tỉ lệ vàng</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Thí nghiệm ảo</div>
+        <div class="reading">Phần mềm mô phỏng trình bày các hiện tượng khoa học bằng cách sử dụng hình ảnh động hay ba chiều, giúp em cảm nhận được sự vận động của các đối tượng. Bằng cách tương tác, khám phá nhiều chức năng của phần mềm mô phỏng dạng thí nghiệm ảo, em không chỉ bổ sung kiến thức về khoa học, toán học, học cách giải quyết một số vấn đề đặt ra trong công nghệ mà còn có thể phát hiện được những điều mới mẻ.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.1</span> Nhiệm vụ 1. Chuyển hoá năng lượng</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> a) Mở cửa sổ mô phỏng</div>
+        <div class="reading"><ul><li>Khởi động trình duyệt web, nhập <b>https://phet.colorado.edu/</b> vào thanh địa chỉ.</li><li>Di chuyển đến cuối trang web, chọn ngôn ngữ hiển thị là <b>Tiếng Việt</b> (Hình 6.1).</li><li>Chọn mục <b>CÁC MÔ PHỎNG</b> → <b>Hoá học</b> (Hình 6.2) → <b>Năng lượng: các dạng và sự chuyển hoá</b>, nháy nút ▶ để mở cửa sổ tương tác (Hình 6.3).</li></ul>Hoặc truy cập trực tiếp: <a href="https://phet.colorado.edu/vi/simulations/energy-forms-and-changes" target="_blank" rel="noopener">phet.colorado.edu/vi/simulations/energy-forms-and-changes</a></div>
+        <div data-task="nl1" data-n="1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> b) Tương tác với phần mềm</div>
+        <div class="reading">Trong cửa sổ, em có thể quan sát được sự chuyển hoá của các dạng năng lượng thông qua những biểu tượng. Em cũng có thể tương tác bằng cách chọn:<ul><li><b>Nguồn năng lượng:</b> người đạp xe, ánh sáng mặt trời, vòi nước chảy, ấm nước sôi.</li><li><b>Thiết bị chuyển hoá năng lượng thành điện năng:</b> pin mặt trời, máy phát điện.</li><li><b>Thiết bị tiêu thụ điện:</b> bếp điện, bóng đèn sợi đốt, bóng đèn compact, quạt điện.</li></ul></div>
+        <figure class="fig"><img src="hinh/h64.jpg" alt="Người đạp xe làm quay máy phát điện, có ống nước và cốc nước"><figcaption>Hình 6.4. Mô phỏng một số dạng năng lượng và sự chuyển hoá năng lượng</figcaption></figure>
+        <div data-task="nl2" data-n="2"></div>
+        <div data-task="nl3" data-n="3"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Nhiệm vụ 1</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Nhiệm vụ 2. Đo cường độ dòng điện</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> a), b) Truy cập phần mềm và vẽ mạch điện</div>
+        <div class="reading"><ul><li>Thực hiện tương tự Nhiệm vụ 1, chọn <b>CÁC MÔ PHỎNG</b> → <b>Vật lý</b> → <b>Bộ lắp ráp mạch điện: DC – Phòng thí nghiệm ảo</b>.</li><li>Kéo các biểu tượng Pin, Đèn tròn, Ampe kế, Công tắc và Dây nối, thả vào vùng hiển thị; kết nối các thành phần của mạch điện (Hình 6.5a).</li><li><i>Lưu ý:</i> ampe kế cần mắc nối tiếp với đoạn mạch cần đo và không mắc trực tiếp vào hai cực của nguồn điện (Hình 6.5b).</li></ul></div>
+        <figure class="fig"><img src="hinh/h65.jpg" alt="a) Mạch có pin, bóng đèn sáng, ampe kế chỉ 0,90 A; b) Ampe kế nối thẳng vào pin, bốc cháy"><figcaption>Hình 6.5. Lắp ampe kế đúng cách (a), không để xảy ra sự cố (b)</figcaption></figure>
+        <div data-task="am1" data-n="1"></div>
+        <div data-task="am2" data-n="2"></div>
+        <div data-task="am3" data-n="3"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> c) Trình bày giải pháp</div>
+        <div data-task="am4" data-n="4"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Nhiệm vụ 2</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Nhiệm vụ 3. Tỉ lệ vàng trong ngôi sao năm cánh</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Đo độ dài và tính tỉ lệ</div>
+        <div class="reading">Sử dụng công cụ đo và tính toán trong phần mềm mô phỏng hình học (Geometer's Sketchpad, GeoGebra,…): mở tệp có sẵn ngôi sao năm cánh, chọn đoạn thẳng AB rồi chọn <b>Measure/Length</b> để đo; đo tương tự BC, AC, AD; dùng <b>Number/Calculate...</b> để tính tỉ lệ. Nếu phòng máy chưa có phần mềm, em dùng <b>ngôi sao mô phỏng</b> dưới đây: kéo thanh trượt để thay đổi kích thước ngôi sao.</div>
+        <div class="star" id="star">
+          <style>
+            .star{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:12px;grid-template-columns:minmax(0,260px) minmax(0,1fr);align-items:center;margin:10px 0}
+            @media (max-width:600px){.star{grid-template-columns:1fr}}
+            .star svg{width:100%;height:auto;max-width:260px;justify-self:center}
+            .star .ln{stroke:currentColor;stroke-width:1.4;fill:none;opacity:.55}
+            .star .ad{stroke:var(--accent);stroke-width:3}
+            .star text{font:600 13px system-ui,sans-serif;fill:currentColor}
+            .star table{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px}
+            .star td{padding:3px 10px 3px 0}
+            .star .rt td:last-child{font-weight:700;color:var(--accent)}
+            .star label{display:flex;gap:8px;align-items:center;font-size:14px;margin-bottom:8px;flex-wrap:wrap}
+            .star input[type=range]{flex:1;min-width:120px}
+          </style>
+          <svg viewBox="-110 -110 220 220" role="img" aria-label="Ngôi sao năm cánh với các điểm A, B, C, D trên một cạnh"><g id="star-g"></g></svg>
+          <div>
+            <label for="star-r">Kéo để đổi kích thước ngôi sao</label>
+            <input type="range" id="star-r" min="20" max="60" value="35" aria-label="Kích thước ngôi sao">
+            <table><tbody id="star-len"></tbody></table>
+            <table><tbody id="star-rt" class="rt"></tbody></table>
+          </div>
+          <script>
+          (function(){
+            var g = document.getElementById("star-g"), sl = document.getElementById("star-r");
+            function P(a, r){ var t = a * Math.PI / 180; return [r * Math.cos(t), -r * Math.sin(t)]; }
+            function X(p1, p2, p3, p4){ var d = (p1[0]-p2[0])*(p3[1]-p4[1]) - (p1[1]-p2[1])*(p3[0]-p4[0]);
+              var t = ((p1[0]-p3[0])*(p3[1]-p4[1]) - (p1[1]-p3[1])*(p3[0]-p4[0])) / d; return [p1[0] + t*(p2[0]-p1[0]), p1[1] + t*(p2[1]-p1[1])]; }
+            function L(a, b){ return Math.hypot(a[0]-b[0], a[1]-b[1]); }
+            function f(x){ return x.toFixed(2).replace(".", ","); }
+            function upd(){
+              var cm = +sl.value / 5, R = 40 + (+sl.value - 20) * 1.5;                       /* hình và số đo cùng đổi theo thanh trượt */
+              var V = [90, 18, -54, -126, 162].map(function(a){ return P(a, R); });
+              var A = V[4], D = V[1], B = X(A, D, V[0], V[3]), C = X(A, D, V[0], V[2]);
+              var s = cm / L(A, D);                                   /* quy đổi đơn vị vẽ ra cm: AD = cm */
+              var path = [0, 2, 4, 1, 3, 0].map(function(i){ return V[i].join(","); }).join(" ");
+              g.innerHTML = '<polyline class="ln" points="' + path + '"/><line class="ad" x1="' + A[0] + '" y1="' + A[1] + '" x2="' + D[0] + '" y2="' + D[1] + '"/>'
+                + [["A", A, -16, -6], ["B", B, -4, -8], ["C", C, -4, -8], ["D", D, 6, -6]].map(function(p){ return '<circle cx="' + p[1][0] + '" cy="' + p[1][1] + '" r="2.6" fill="currentColor"/><text x="' + (p[1][0] + p[2]) + '" y="' + (p[1][1] + p[3]) + '">' + p[0] + "</text>"; }).join("");
+              var ab = L(A, B) * s, bc = L(B, C) * s, ac = L(A, C) * s, ad = L(A, D) * s;
+              document.getElementById("star-len").innerHTML = [["AB", ab], ["BC", bc], ["AC", ac], ["AD", ad]].map(function(r){ return "<tr><td>" + r[0] + " =</td><td>" + f(r[1]) + " cm</td></tr>"; }).join("");
+              document.getElementById("star-rt").innerHTML = [["AB / BC", ab / bc], ["AC / AB", ac / ab], ["AD / AC", ad / ac]].map(function(r){ return "<tr><td>" + r[0] + " =</td><td>" + r[1].toFixed(6).replace(".", ",") + "</td></tr>"; }).join("");
+            }
+            sl.addEventListener("input", upd); upd();
+          })();
+          </script>
+        </div>
+        <div data-task="tv1" data-n="1"></div>
+        <div data-task="tv2" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> d) Khám phá tri thức</div>
+        <div class="reading">Thay đổi kích thước ngôi sao, em sẽ thấy số đo các đoạn thẳng AB, BC, AC và AD cũng thay đổi theo. Điều đáng kinh ngạc là dù độ dài các đoạn thẳng thay đổi nhưng tỉ lệ giữa chúng không thay đổi, luôn bằng nhau và xấp xỉ 1,62. Tỉ lệ trên có tính chất đặc biệt, được gọi là <b>tỉ lệ vàng</b>. Một hình chữ nhật có tỉ lệ hai cạnh là tỉ lệ vàng thì sau khi cắt bỏ một hình vuông, phần còn lại cũng có tỉ lệ hai cạnh là tỉ lệ vàng (Hình 6.8b).</div>
+        <figure class="fig"><img src="hinh/h68.jpg" alt="a) Ngôi sao năm cánh nội tiếp đường tròn; b) Hình chữ nhật tỉ lệ vàng được chia thành các hình vuông"><figcaption>Hình 6.8. Ngôi sao năm cánh và hình chữ nhật tỉ lệ vàng</figcaption></figure>
+        <div data-task="tv3" data-n="3"></div>
+        <div data-task="tv4" data-n="4"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Nhiệm vụ 3</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Đo điện áp</div>
+        <div class="reading">Em hãy nêu giải pháp đo điện áp giữa hai đầu một điện trở bằng cách sử dụng phần mềm mô phỏng.</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Điện trở, cường độ dòng điện, điện áp</div>
+        <div class="reading">Trong phần mềm mô phỏng, em có thể lắp ráp mạch điện gồm: nguồn điện, công tắc, điện trở, ampe kế, vôn kế. Bằng cách thay đổi trị số của các linh kiện, hãy khám phá quy luật phụ thuộc lẫn nhau giữa điện trở, cường độ dòng điện qua nó và điện áp giữa hai đầu điện trở đó.</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=21"></script>
+<script src="content.js?v=21"></script>
+<script src="../chung/outline.js?v=21"></script>
+<script src="../chung/api.js?v=21"></script>
+<script src="../chung/chieu.js?v=21"></script>
+<script src="../chung/hs.js?v=21"></script>
+</body>
+</html>
