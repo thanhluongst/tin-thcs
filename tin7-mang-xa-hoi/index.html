@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mạng xã hội và kênh trao đổi thông tin · Tin học 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=22">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 7 · Chủ đề 2. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>4</b></div><h1><span class="sr-only">Bài 4. </span>Mạng xã hội và một số kênh trao đổi thông tin trên Internet</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nêu được tên một kênh trao đổi thông tin thông dụng trên Internet và loại thông tin trao đổi trên kênh đó.</li>
+        <li>Nêu được một số chức năng cơ bản của mạng xã hội. Nhận biết được một số website là mạng xã hội.</li>
+        <li>Sử dụng được một số chức năng cơ bản của một mạng xã hội để giao lưu và chia sẻ thông tin.</li>
+        <li>Nêu được ví dụ cụ thể về hậu quả của việc sử dụng thông tin vào mục đích sai trái.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Kênh trao đổi thông tin, mạng xã hội, sử dụng an toàn">
+      <span class="node">Kênh trao đổi thông tin</span>
+      <span class="node">Mạng xã hội</span>
+      <span class="node io">Sử dụng an toàn</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 7A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 7A1-T4" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Mạng xã hội</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Các cách trao đổi thông tin</div>
+        <div class="reading">Trong suốt chiều dài lịch sử, con người đã nghĩ ra nhiều cách trao đổi thông tin với nhau: dùng chim bồ câu đưa thư, gửi thư qua bưu điện, sử dụng điện báo, điện thoại,… Thế kỉ XX đã mang đến cho chúng ta Internet, giúp tạo ra nhiều kênh trao đổi thông tin rất hữu ích, nhanh chóng,… Một trong số đó là <b>mạng xã hội</b>.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Mạng xã hội – kênh trao đổi thông tin phổ biến trên Internet</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Cách thức trao đổi thông tin trên Internet</div>
+        <div class="reading">1. Ở lớp 6 em đã biết sử dụng Internet để nhận và gửi thông tin. Đó là cách nào?<br>2. Em có biết cách trao đổi thông tin nào trên Internet đang được sử dụng nhiều nhất không? Tại sao?</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> a) Các kênh trao đổi thông tin trên Internet</div>
+        <div class="reading">Đọc mục <b>a</b> (SGK trang 18). Từ khi Internet ra đời, việc trao đổi thông tin trên Internet ngày càng trở nên phổ biến và đóng vai trò quan trọng trong đời sống của chúng ta. Một số kênh trao đổi thông tin phổ biến trên Internet hiện nay là: <b>thư điện tử, diễn đàn (Forum), mạng xã hội</b>,… Thông tin trên Internet được liên tục cập nhật, chúng tồn tại với nhiều dạng khác nhau như dạng văn bản, hình ảnh, âm thanh, video, phần mềm,…</div>
+        <div data-task="kenh" data-n="1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> b) Mạng xã hội</div>
+        <div class="reading">Đọc mục <b>b</b> (SGK trang 19). <b>Mạng xã hội</b> là một cộng đồng trực tuyến để mọi người có thể tương tác với nhau. Cách tổ chức mạng xã hội phổ biến nhất để người sử dụng tham gia là dưới dạng các <b>website</b>. Tuỳ theo mục đích, các trang mạng xã hội có thể cung cấp những cách thức giao tiếp khác nhau như: tin nhắn riêng tư, đưa ra nhận xét trên trang của bạn bè, đăng ảnh và video lên, thảo luận học tập, chơi trò chơi trực tuyến,… Ví dụ một số website mạng xã hội được phân loại theo mục đích như trong Bảng 4.1.</div>
+        <div class="tbl-wrap"><table class="tbl" style="font-size:14px">
+          <caption style="caption-side:top;text-align:left;font-style:italic;padding:4px 0">Bảng 4.1. Một số mạng xã hội và mục đích sử dụng</caption>
+          <thead><tr><th>Mục đích và ví dụ</th><th>Mô tả</th></tr></thead>
+          <tbody>
+            <tr><td><b>Giao lưu với bạn bè</b><br>Facebook, Zalo</td><td>Cho phép người sử dụng tạo hồ sơ cá nhân, kết nối bạn bè. Người sử dụng có thể chia sẻ suy nghĩ và ý kiến cá nhân cũng như hình ảnh, âm nhạc, video.</td></tr>
+            <tr><td><b>Chia sẻ video</b><br>YouTube</td><td>Người sử dụng có thể xem, chia sẻ, bình luận các video hoặc tải lên video của riêng họ.</td></tr>
+            <tr><td><b>Chia sẻ ảnh</b><br>Instagram</td><td>Cho phép người sử dụng tải lên, sắp xếp và chia sẻ các hình ảnh của mình. Mọi người có thể khám phá những bức ảnh hay các phòng trưng bày kĩ thuật số.</td></tr>
+            <tr><td><b>Diễn đàn học tập, thảo luận</b><br>Scratch</td><td>Nơi mọi người có thể cùng nhau thảo luận, chia sẻ kiến thức về một chủ đề nào đó. Là hình thức thảo luận không trực tiếp, bài viết hoặc ý kiến của bạn có thể nhận phản hồi ngay, cũng có khi vài ngày hoặc lâu hơn.</td></tr>
+          </tbody>
+        </table></div>
+        <div data-task="mucdich" data-n="1"></div>
+        <div class="reading">Mạng xã hội luôn có tính <b>hai mặt, tốt và xấu</b>. Vì vậy, chúng ta cần cân nhắc và tìm hiểu kĩ trước khi quyết định tham gia. Một số mạng xã hội quy định độ tuổi tối thiểu được phép tham gia là thành viên, phổ biến là từ <b>13 tuổi</b> trở lên.<br><br>Nhiều bạn học sinh đã biết tận dụng mạng xã hội để kết nối bạn bè, tiếp nhận thông tin và học hỏi kiến thức, kĩ năng hay bày tỏ quan điểm cá nhân,… Tuy nhiên, cũng có những bạn sử dụng mạng xã hội và thông tin vào mục đích sai trái như đăng thông tin giả, thông tin đe doạ, bắt nạt,… gây hậu quả cho người khác hoặc cho chính bản thân mình. Ví dụ: có bạn học sinh bị nhà trường kỉ luật vì đăng tải thông tin sai trái (sao chép từ mạng xã hội mà không được kiểm chứng) gây hoang mang và nguy cơ suy nghĩ lệch lạc trong một bộ phận học sinh; có trường hợp học sinh bị đình chỉ thi và bị công an điều tra, xử lí vì hành vi chụp ảnh đề thi, chia sẻ lên mạng xã hội nhờ làm hộ trong quá trình thi.</div>
+        <div data-task="haimat" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 20</div>
+        <div data-task="p20a" data-n="1"></div>
+        <div data-task="p20b" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Mạng xã hội</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Sử dụng mạng xã hội</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Tạo tài khoản, chia sẻ thông tin, kết nối bạn bè</div>
+        <div class="reading"><b>Nhiệm vụ.</b> a) Tạo tài khoản trên một trang mạng xã hội phù hợp với lứa tuổi của em. b) Sử dụng một số chức năng như: xem, chia sẻ thông tin dạng văn bản, hình ảnh,… trên mạng xã hội đó. c) Kết nối với ít nhất một bạn cùng lớp.<br><br><b>Hướng dẫn</b> (SGK minh hoạ bằng Facebook và trình duyệt Google Chrome). <i>Lưu ý: Facebook yêu cầu mọi người phải đủ <b>13 tuổi</b> mới được phép tạo tài khoản (ở một số nơi giới hạn độ tuổi này có thể cao hơn).</i>
+          <ul>
+            <li><b>a) Tạo tài khoản</b>: Bước 1. Truy cập trang www.facebook.com. Bước 2. Chọn ngôn ngữ <b>Tiếng Việt</b> ở phía dưới màn hình. Bước 3. Nháy chuột vào ô <b>Tạo tài khoản mới</b>. Bước 4. Nhập đầy đủ thông tin vào các ô theo hướng dẫn. Bước 5. Nháy chuột vào nút <b>Đăng ký</b> (Hình 4.1).</li>
+            <li><b>b) Sử dụng một số chức năng</b>: Bước 1. Truy cập trang. Bước 2. Đăng nhập vào tài khoản, trang của em mở ra như Hình 4.2. Bước 3. Cập nhật ảnh đại diện và các thông tin cá nhân nếu muốn. Bước 4. Nháy chuột vào <b>hộp trạng thái</b> để nhập nội dung chia sẻ (Hình 4.3); có thể thêm ảnh, video bằng cách nháy chuột vào <b>Ảnh/Video</b>. Nháy chuột vào nút <b>Đăng/Post</b> để hoàn thành.</li>
+            <li><b>c) Kết nối với một bạn cùng lớp</b>: Bước 1. Nhập tên của bạn vào ô tìm kiếm (Hình 4.4). Bước 2. Khi tìm thấy trang của bạn, nháy chuột vào ảnh đại diện để mở (Hình 4.5). Bước 3. Nháy chuột vào nút <b>Thêm bạn bè</b> để gửi yêu cầu kết bạn (Hình 4.6). Nếu yêu cầu được chấp nhận, em và bạn sẽ trở thành “bạn bè”. Hai tài khoản sẽ tự động theo dõi nhau, có thể thấy hoạt động và tương tác với nhau.</li>
+          </ul></div>
+        <figure class="fig sm"><img src="hinh/h41.jpg" alt="Biểu mẫu Đăng ký: họ, tên, số di động hoặc email, mật khẩu mới, ngày sinh, giới tính, nút Đăng ký"><figcaption>Hình 4.1. Tạo tài khoản</figcaption></figure>
+        <figure class="fig"><img src="hinh/h42.jpg" alt="Trang cá nhân: thanh menu bên trái, hộp trạng thái Học ơi, bạn đang nghĩ gì thế? ở giữa" style="max-width:560px"><figcaption>Hình 4.2. Trang cá nhân</figcaption></figure>
+        <figure class="fig"><img src="hinh/h43.jpg" alt="Nháy chuột vào hộp trạng thái để nhập nội dung chia sẻ" style="max-width:560px"><figcaption>Hình 4.3. Nhập nội dung chia sẻ</figcaption></figure>
+        <figure class="fig"><img src="hinh/h44.jpg" alt="Nhập tên bạn vào ô tìm kiếm ở góc trên bên trái" style="max-width:560px"><figcaption>Hình 4.4. Tìm bạn</figcaption></figure>
+        <figure class="fig"><img src="hinh/h45.jpg" alt="Kết quả tìm kiếm: nháy chuột vào ảnh đại diện để mở trang" style="max-width:560px"><figcaption>Hình 4.5. Kết quả tìm kiếm</figcaption></figure>
+        <figure class="fig"><img src="hinh/h46.jpg" alt="Trang của bạn, nút Thêm bạn bè để gửi yêu cầu kết bạn" style="max-width:560px"><figcaption>Hình 4.6. Gửi yêu cầu kết bạn</figcaption></figure>
+
+        <div class="mxh" data-mxh>
+          <style>
+            .mxh{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:10px}
+            .mxh .t{font-weight:700}
+            .mxh .note{font-size:13px;opacity:.85}
+            .mxh .pane{border:1px dashed var(--line);border-radius:10px;padding:10px;display:grid;gap:8px}
+            .mxh .pane h4{margin:0;font-size:15px}
+            .mxh .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+            .mxh input,.mxh select,.mxh textarea{font:inherit;font-size:14px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg,#fff);color:inherit;min-width:0}
+            .mxh textarea{width:100%;min-height:54px;resize:vertical}
+            .mxh button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:5px 12px;cursor:pointer}
+            .mxh button.pri{background:var(--accent,#1f8a70);border-color:var(--accent,#1f8a70);color:#fff}
+            .mxh button:disabled{opacity:.45;cursor:default}
+            .mxh .msg{font-size:14px;min-height:1.2em}
+            .mxh .bad{color:#c0392b}
+            .mxh .post{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px}
+            .mxh .post small{opacity:.7}
+            .mxh .res{display:grid;gap:4px}
+            .mxh .res div{display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:6px;cursor:pointer;font-size:14px}
+            .mxh .res div:hover{background:var(--accent-soft,#d6efe9)}
+            .mxh .av{width:28px;height:28px;border-radius:50%;display:inline-grid;place-items:center;font-weight:700;font-size:13px;color:#fff;background:#5b7fa6;flex:none}
+            .mxh .ck{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:14px}
+            .mxh .ck li::before{content:"☐ "}
+            .mxh .ck li.ok::before{content:"☑ ";color:#1c7c54}
+            .mxh .ck li.ok{color:#1c7c54;font-weight:600}
+          </style>
+          <div class="t">Bảng mô phỏng mạng xã hội “Lớp Mình”</div>
+          <div class="note">Đây là mô phỏng chạy ngay trên máy, không gửi dữ liệu đi đâu. <b>Không nhập thông tin thật</b> (số điện thoại, mật khẩu) của em.</div>
+
+          <div class="pane" data-p="dk">
+            <h4>a) Đăng ký</h4>
+            <div class="row"><input data-ho placeholder="Họ" style="width:8em"><input data-ten placeholder="Tên" style="width:8em"></div>
+            <div class="row"><label>Năm sinh <input data-nam type="number" min="1950" max="2030" placeholder="VD: 2012" style="width:7em"></label>
+              <label>Giới tính <select data-gt><option value="">–</option><option>Nữ</option><option>Nam</option><option>Tuỳ chỉnh</option></select></label></div>
+            <div class="row"><button type="button" class="pri" data-dk>Đăng ký</button></div>
+            <div class="msg" data-dkmsg aria-live="polite"></div>
+          </div>
+
+          <div class="pane" data-p="trang" hidden>
+            <h4>b) Trang của <span data-me></span></h4>
+            <textarea data-tt placeholder="Học ơi, bạn đang nghĩ gì thế?" aria-label="Hộp trạng thái"></textarea>
+            <div class="row"><button type="button" data-anh>🖼️ Ảnh/Video</button><span data-anhok class="note"></span><button type="button" class="pri" data-dang>Đăng</button></div>
+            <div data-feed style="display:grid;gap:6px"></div>
+          </div>
+
+          <div class="pane" data-p="ban" hidden>
+            <h4>c) Kết nối với bạn cùng lớp</h4>
+            <div class="row"><input data-tim placeholder="🔍 Tìm kiếm trên Lớp Mình" style="width:16em"></div>
+            <div class="res" data-res></div>
+            <div data-prof hidden style="display:grid;gap:6px;justify-items:start;border-top:1px solid var(--line);padding-top:8px">
+              <div style="display:flex;align-items:center;gap:8px"><span class="av" data-pav style="width:40px;height:40px"></span><b data-pten></b></div>
+              <button type="button" data-them>👤+ Thêm bạn bè</button>
+            </div>
+            <div class="msg" data-banmsg aria-live="polite"></div>
+          </div>
+
+          <ul class="ck">
+            <li data-ck="0">Tạo tài khoản (đủ 13 tuổi)</li>
+            <li data-ck="1">Chia sẻ một nội dung lên trang của em</li>
+            <li data-ck="2">Kết bạn với ít nhất một bạn cùng lớp</li>
+          </ul>
+          <div class="row"><button type="button" data-reset>Làm lại từ đầu</button></div>
+          <script>
+          (function(){
+            var box = document.currentScript.parentNode, q = function(s){ return box.querySelector(s); };
+            var LOP = ["Nguyễn Minh Anh","Trần Gia Bảo","Lê Thu Hà","Phạm Đức Huy","Hoàng Khánh Linh","Vũ Ngọc Mai","Đặng Quốc Nam","Bùi Phương Thảo"];
+            var st, CL = ["#5b7fa6","#b0603a","#3f8a5a","#8a5aa8","#b08a2a"];
+            function init(){ st = {me:"", posts:[], anh:false, ban:{}}; }
+            function bo(s){ return s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase(); }
+            function av(n){ var w = n.trim().split(/\s+/); return w[w.length - 1][0].toUpperCase(); }
+            function col(n){ var h = 0; for (var i = 0; i < n.length; i++) h += n.charCodeAt(i); return CL[h % CL.length]; }
+            function e(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+            function draw(){
+              q('[data-p="trang"]').hidden = q('[data-p="ban"]').hidden = !st.me;
+              q("[data-me]").textContent = st.me;
+              q("[data-feed]").innerHTML = st.posts.map(function(p){ return '<div class="post"><b>' + e(st.me) + '</b> <small>· vừa xong</small><br>' + e(p.t) + (p.a ? '<div style="font-size:42px;line-height:1.2">🏞️</div>' : "") + "</div>"; }).join("");
+              q("[data-anhok]").textContent = st.anh ? "Đã chọn 1 ảnh" : "";
+              var nb = Object.keys(st.ban).filter(function(k){ return st.ban[k] === 2; }).length;
+              [!!st.me, st.posts.length > 0, nb > 0].forEach(function(v, i){ q('[data-ck="' + i + '"]').classList.toggle("ok", v); });
+            }
+            q("[data-dk]").addEventListener("click", function(){
+              var ho = q("[data-ho]").value.trim(), ten = q("[data-ten]").value.trim(), nam = +q("[data-nam]").value, gt = q("[data-gt]").value, m = q("[data-dkmsg]");
+              m.className = "msg bad";
+              if (!ho || !ten || !nam || !gt) { m.textContent = "Cần nhập đầy đủ thông tin vào các ô (họ, tên, năm sinh, giới tính)."; return; }
+              var tuoi = new Date().getFullYear() - nam;
+              if (tuoi < 13) { m.textContent = "Bạn chưa đủ 13 tuổi (" + tuoi + " tuổi) nên chưa được tạo tài khoản. Trên mạng xã hội thật, em không được khai sai tuổi. Ở bảng mô phỏng này, em hãy đóng vai một người đủ tuổi (ví dụ anh, chị) để luyện tập."; return; }
+              if (tuoi > 100) { m.textContent = "Năm sinh chưa hợp lí."; return; }
+              st.me = ho + " " + ten; m.className = "msg"; m.textContent = "Đăng ký thành công! Trang của em đã mở ra bên dưới."; draw();
+            });
+            q("[data-anh]").addEventListener("click", function(){ st.anh = !st.anh; draw(); });
+            q("[data-dang]").addEventListener("click", function(){ var t = q("[data-tt]").value.trim(); if (!t && !st.anh) { q("[data-tt]").focus(); return; } st.posts.unshift({t:t, a:st.anh}); st.anh = false; q("[data-tt]").value = ""; draw(); });
+            var cur = null;
+            q("[data-tim]").addEventListener("input", function(){
+              var k = bo(q("[data-tim]").value.trim()); q("[data-prof]").hidden = true;
+              q("[data-res]").innerHTML = !k ? "" : LOP.filter(function(n){ return bo(n).indexOf(k) >= 0; }).map(function(n){ return '<div data-n="' + e(n) + '"><span class="av" style="background:' + col(n) + '">' + av(n) + "</span>" + e(n) + (st.ban[n] === 2 ? " · <small>Bạn bè</small>" : "") + "</div>"; }).join("") || '<span class="note">Không tìm thấy. Thử: Minh Anh, Bảo, Linh,…</span>';
+              q("[data-res]").querySelectorAll("[data-n]").forEach(function(d){ d.addEventListener("click", function(){ cur = d.dataset.n; prof(); }); });
+            });
+            function prof(){
+              q("[data-prof]").hidden = false; q("[data-pten]").textContent = cur; q("[data-pav]").textContent = av(cur); q("[data-pav]").style.background = col(cur);
+              var s = st.ban[cur] || 0, b = q("[data-them]");
+              b.textContent = s === 2 ? "✓ Bạn bè" : s === 1 ? "Đã gửi lời mời" : "👤+ Thêm bạn bè"; b.disabled = s > 0;
+            }
+            q("[data-them]").addEventListener("click", function(){
+              var n = cur; st.ban[n] = 1; prof(); q("[data-banmsg]").textContent = "Đã gửi yêu cầu kết bạn đến " + n + ". Đang chờ bạn chấp nhận…";
+              setTimeout(function(){ if (st.ban[n] !== 1) return; st.ban[n] = 2; if (cur === n) prof(); q("[data-banmsg]").textContent = n + " đã chấp nhận. Hai bạn trở thành “bạn bè” và tự động theo dõi nhau."; draw(); }, 1800);
+            });
+            q("[data-reset]").addEventListener("click", function(){ init(); ["[data-ho]","[data-ten]","[data-nam]","[data-tim]","[data-tt]"].forEach(function(s){ q(s).value = ""; }); q("[data-gt]").value = ""; q("[data-dkmsg]").textContent = q("[data-banmsg]").textContent = ""; q("[data-res]").innerHTML = ""; q("[data-prof]").hidden = true; draw(); });
+            init(); draw();
+          })();
+          </script>
+        </div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-task="nv3" data-n="3"></div>
+        <div data-task="nvkq" data-n="4"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Câu hỏi SGK trang 22</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Giới thiệu mạng xã hội, phòng tránh hậu quả</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 7 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=22"></script>
+</body>
+</html>
