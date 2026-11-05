@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tính toán tự động trên bảng tính · Tin học 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=22">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 7 · Chủ đề 4. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>7</b></div><h1><span class="sr-only">Bài 7. </span>Tính toán tự động trên bảng tính</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nhận biết được một số kiểu dữ liệu trên bảng tính.</li>
+        <li>Sử dụng được công thức và dùng được địa chỉ trong công thức, tạo được bảng tính đơn giản có số liệu tính toán bằng công thức.</li>
+        <li>Giải thích được việc đưa các công thức vào bảng tính là một cách điều khiển tính toán tự động trên dữ liệu.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Kiểu dữ liệu, công thức, sao chép công thức">
+      <span class="node">Kiểu dữ liệu</span>
+      <span class="node">Công thức</span>
+      <span class="node io">Sao chép công thức</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 7A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 7A1-T7" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Kiểu dữ liệu</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Công thức</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Sao chép</a>
+    <a href="#phan-4" data-stage="phan-4"><span class="sn">2.4</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+        <style>
+          .bt{border:1px solid var(--line);border-radius:12px;padding:10px;margin:10px 0;display:grid;gap:8px;outline:none}
+          .bt .t{font-weight:700}
+          .bt .note{font-size:13px;opacity:.85}
+          .bt .tb{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+          .bt .tb button{font:inherit;font-size:13px;min-width:30px;border:1px solid var(--line);background:transparent;color:inherit;border-radius:6px;padding:3px 8px;cursor:pointer}
+          .bt .tb button:hover{border-color:var(--accent)}
+          .bt .tb .sep{width:1px;height:20px;background:var(--line);margin:0 3px}
+          .bt .fb{display:flex;gap:6px;align-items:center}
+          .bt .nb{font:600 13px/1.6 Consolas,monospace;border:1px solid var(--line);border-radius:4px;padding:2px 6px;min-width:88px;text-align:center;background:var(--bg,#fff)}
+          .bt .fx{font-style:italic;font-weight:700;opacity:.6}
+          .bt .fb input{flex:1;min-width:0;font:14px Consolas,"Be Vietnam Pro",monospace;padding:3px 6px;border:1px solid var(--line);border-radius:4px;background:var(--bg,#fff);color:inherit}
+          .bt .gw{overflow-x:auto;border:1px solid #c8c8c8;-webkit-user-select:none;user-select:none}
+          .bt table{border-collapse:collapse;table-layout:fixed;font:14px/1.3 Calibri,"Be Vietnam Pro",Arial,sans-serif;background:#fff;color:#111}
+          .bt th{background:#efefef;color:#333;font-weight:500;font-size:12.5px;border:1px solid #d0d0d0;height:22px;position:relative;cursor:pointer;padding:0}
+          .bt th.hl{background:#d6e6d9;color:#1d6b36;border-bottom-color:#217346}
+          .bt th .rz{position:absolute;right:-3px;top:0;width:6px;height:100%;cursor:col-resize;z-index:2}
+          .bt td{border:1px solid #e1e1e1;height:22px;padding:0 4px;white-space:nowrap;overflow:hidden;cursor:cell}
+          .bt td.sel{background:#d3e3fb}
+          .bt td.act{outline:2px solid #217346;outline-offset:-2px}
+          .bt td.cp{outline:2px dashed #217346;outline-offset:-3px}
+          .bt td.err{color:#c0392b}
+          .bt .tabs{display:flex;gap:4px;align-items:center;font-size:13px}
+          .bt .tab{border:1px solid var(--line);border-top:0;border-radius:0 0 6px 6px;padding:2px 12px;cursor:pointer;background:#fff;color:#217346;font-weight:700}
+          .bt .tab input{font:inherit;font-size:13px;width:14em;padding:0 2px}
+          .bt .msg{font-size:13.5px;min-height:1.2em}
+          .bt .msg.bad{color:#c0392b}
+          .bt .ck{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:13.5px}
+          .bt .ck li::before{content:"☐ "}
+          .bt .ck li.ok::before{content:"☑ ";color:#1c7c54}
+          .bt .ck li.ok{color:#1c7c54;font-weight:600}
+        </style>
+        <script>
+        /* Bảng tính mô phỏng có công thức: + - * / ^ ( ), địa chỉ ô, tự động tính lại, sao chép công thức (địa chỉ tương đối) */
+        window.BangTinh = function(box, opt){
+          opt = opt || {}; var C = opt.cols || 6, R = opt.rows || 12, q = function(s){ return box.querySelector(s); };
+          var L = function(c){ return String.fromCharCode(65 + c); };
+          var d, f, w, a, s, e, sheet, clip = null, drag = false;
+          function reset(){ d = {}; f = {}; w = (opt.widths || []).slice(); for (var i = w.length; i < C; i++) w.push(72); a = [0, 0]; s = [0, 0]; e = [0, 0]; sheet = opt.sheet || "Sheet1"; clip = null;
+            if (opt.data) Object.keys(opt.data).forEach(function(k){ d[k] = opt.data[k]; });
+            if (opt.fmt) Object.keys(opt.fmt).forEach(function(k){ f[k] = JSON.parse(JSON.stringify(opt.fmt[k])); }); }
+          reset();
+          box.innerHTML = '<div class="t">' + (opt.title || "Bảng tính mô phỏng") + '</div>'
+            + '<div class="tb"><button type="button" data-f="copy" title="Sao chép (Ctrl+C)">📋 Sao chép</button><button type="button" data-f="paste" title="Dán (Ctrl+V)">📌 Dán</button><span class="sep"></span>'
+            + '<button type="button" data-f="b" title="Chữ đậm"><b>B</b></button><button type="button" data-f="fill" title="Màu nền vàng">🟨 Nền</button>'
+            + '<button type="button" data-f="left" title="Căn trái">⇤</button><button type="button" data-f="center" title="Căn giữa">↔</button><button type="button" data-f="right" title="Căn phải">⇥</button><span class="sep"></span>'
+            + '<button type="button" data-f="reset">Làm lại</button></div>'
+            + '<div class="fb"><span class="nb" data-nb>A1</span><span class="fx">fx</span><input data-in aria-label="Vùng nhập dữ liệu" placeholder="Vùng nhập dữ liệu (công thức bắt đầu bằng =)" autocomplete="off" spellcheck="false"></div>'
+            + '<div class="gw"><table data-g></table></div>'
+            + '<div class="tabs"><span class="tab" data-tab title="Nháy đúp để đổi tên"></span></div>'
+            + '<div class="msg" data-msg aria-live="polite"></div>'
+            + (opt.check ? '<ul class="ck" data-ck></ul>' : "")
+            + '<div class="note">' + (opt.note || "") + '</div>';
+          box.tabIndex = 0;
+          function k(c, r){ return L(c) + (r + 1); }
+          function rg(){ return [Math.min(s[0], e[0]), Math.min(s[1], e[1]), Math.max(s[0], e[0]), Math.max(s[1], e[1])]; }
+          function isDate(v){ var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(v); if (!m) return false; var dt = new Date(+m[3], +m[1] - 1, +m[2]); return dt.getMonth() === +m[1] - 1 && dt.getDate() === +m[2]; }
+          function isNum(v){ return /^-?\d+(\.\d+)?$/.test(String(v).trim()); }
+          /* Tính công thức. Trả về số, hoặc chuỗi lỗi bắt đầu bằng # */
+          function compile(src, depth){
+            var bad = null;
+            var ex = src.replace(/\$?([A-Za-z]{1,2})\$?(\d+)/g, function(m, cl, rw){
+              var key = cl.toUpperCase() + rw, v = val(key, depth + 1);
+              if (typeof v === "number") return "(" + v + ")";
+              if (v === "") return "0";
+              if (String(v)[0] === "#") { bad = bad || v; return "0"; }
+              bad = bad || "#VALUE!"; return "0"; });
+            if (/[^0-9.+\-*/()^\s]/.test(ex)) return "#NAME?";
+            if (bad) return bad;
+            var r; try { r = Function('"use strict";return (' + ex.replace(/\^/g, "**") + ");")(); } catch (err) { return "#SYNTAX"; }
+            if (typeof r !== "number" || isNaN(r)) return "#VALUE!"; if (!isFinite(r)) return "#DIV/0!";
+            return +r.toPrecision(12);
+          }
+          function val(key, depth){ depth = depth || 0; var v = d[key]; if (v == null || v === "") return "";
+            if (v[0] === "=") return depth > 30 ? "#VÒNG!" : compile(v.slice(1), depth);
+            return isNum(v) ? +v : v; }
+          function kind(v){ return v == null || v === "" ? "" : v[0] === "=" ? "công thức" : isNum(v) ? "số" : isDate(v) ? "ngày tháng" : "văn bản"; }
+          function shift(raw, dc, dr){ if (!raw || raw[0] !== "=") return raw;
+            return "=" + raw.slice(1).replace(/(\$?)([A-Za-z]{1,2})(\$?)(\d+)/g, function(m, d1, cl, d2, rw){
+              var c = cl.toUpperCase().charCodeAt(0) - 65 + (d1 ? 0 : dc), r = +rw + (d2 ? 0 : dr);
+              return c < 0 || r < 1 ? "#REF!" : d1 + L(c) + d2 + r; }); }
+          function draw(){
+            var g = rg(), h = "<colgroup><col style='width:34px'>" + w.map(function(x){ return "<col style='width:" + x + "px'>"; }).join("") + "</colgroup><tr><th></th>";
+            for (var c = 0; c < C; c++) h += "<th data-c='" + c + "' class='" + (c >= g[0] && c <= g[2] ? "hl" : "") + "'>" + L(c) + "<span class='rz' data-rz='" + c + "'></span></th>";
+            h += "</tr>";
+            for (var r = 0; r < R; r++) { h += "<tr><th class='" + (r >= g[1] && r <= g[3] ? "hl" : "") + "' data-r='" + r + "'>" + (r + 1) + "</th>";
+              for (c = 0; c < C; c++) { var key = k(c, r), v = val(key), F = f[key] || {}, err = typeof v === "string" && v[0] === "#" && (d[key] || "")[0] === "=",
+                al = F.al || (typeof v === "number" || isDate(String(v)) || err ? "right" : "left"), st = "text-align:" + al + ";";
+                if (F.b) st += "font-weight:700;"; if (F.fill) st += "background:#ffe94d;";
+                var inC = clip && c >= clip.g[0] && c <= clip.g[2] && r >= clip.g[1] && r <= clip.g[3];
+                var cls = (c === a[0] && r === a[1]) ? "act" : inC ? "cp" : (c >= g[0] && c <= g[2] && r >= g[1] && r <= g[3] && (g[0] !== g[2] || g[1] !== g[3])) ? "sel" : "";
+                if (err) cls += " err";
+                h += "<td data-k='" + key + "' data-c='" + c + "' data-r='" + r + "' class='" + cls + "' style='" + st + "'>" + String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</td>"; }
+              h += "</tr>"; }
+            q("[data-g]").innerHTML = h;
+            var n = (g[2] - g[0] + 1) * (g[3] - g[1] + 1);
+            q("[data-nb]").textContent = n > 1 ? k(g[0], g[1]) + ":" + k(g[2], g[3]) : k(a[0], a[1]);
+            if (document.activeElement !== q("[data-in]")) q("[data-in]").value = d[k(a[0], a[1])] || "";
+            if (!q("[data-tab] input")) q("[data-tab]").textContent = sheet;
+            if (opt.check) { var res = opt.check({d: d, f: f, sheet: sheet, w: w, val: val}); q("[data-ck]").innerHTML = res.map(function(x){ return "<li class='" + (x[1] ? "ok" : "") + "'>" + x[0] + "</li>"; }).join(""); }
+          }
+          function say(t, bad){ var m = q("[data-msg]"); m.textContent = t; m.className = "msg" + (bad ? " bad" : ""); }
+          function selInfo(){ var g = rg(), n = (g[2] - g[0] + 1) * (g[3] - g[1] + 1), key = k(a[0], a[1]), raw = d[key];
+            say(n > 1 ? "Đã chọn vùng " + k(g[0], g[1]) + ":" + k(g[2], g[3]) + " (" + n + " ô)."
+              : "Ô " + key + (raw ? ": dữ liệu kiểu " + kind(raw) + (raw[0] === "=" ? ", kết quả " + val(key) : "") + "." : " đang trống.")); }
+          function commit(move){
+            var key = k(a[0], a[1]), v = q("[data-in]").value.trim();
+            if (v[0] === "=") { var t = compile(v.slice(1), 0);
+              if (t === "#SYNTAX" || t === "#NAME?" || v.length === 1) { say("Công thức " + v + " có lỗi" + (t === "#NAME?" ? " (có kí tự lạ)" : " (thiếu hoặc thừa dấu ngoặc, thiếu phép toán…)") + ". Em sửa lại rồi nhấn Enter.", true); return; } }
+            if (v) d[key] = v; else delete d[key];
+            if (v) say("Đã nhập vào " + key + ": " + kind(v) + (v[0] === "=" ? " → kết quả " + val(key) + ". Vùng nhập dữ liệu hiện công thức, ô hiện kết quả." : "."));
+            if (move && a[1] < R - 1) a[1]++; s = a.slice(); e = a.slice(); q("[data-in]").blur(); draw(); box.focus();
+          }
+          function copy(){ clip = {g: rg(), raw: {}}; for (var c = clip.g[0]; c <= clip.g[2]; c++) for (var r = clip.g[1]; r <= clip.g[3]; r++) clip.raw[k(c, r)] = d[k(c, r)];
+            say("Đã sao chép " + q("[data-nb]").textContent + " (Ctrl+C). Chọn ô hoặc vùng muốn dán rồi bấm Dán (Ctrl+V)."); draw(); }
+          function paste(){ if (!clip) { say("Chưa sao chép gì. Chọn ô rồi bấm Sao chép (Ctrl+C) trước.", true); return; }
+            var g = rg(), cw = clip.g[2] - clip.g[0] + 1, ch = clip.g[3] - clip.g[1] + 1, tw = Math.max(cw, g[2] - g[0] + 1), th = Math.max(ch, g[3] - g[1] + 1), out = [];
+            for (var dc = 0; dc < tw; dc++) for (var dr = 0; dr < th; dr++) { var tc = g[0] + dc, tr = g[1] + dr; if (tc >= C || tr >= R) continue;
+              var sc = clip.g[0] + dc % cw, sr = clip.g[1] + dr % ch, raw = clip.raw[k(sc, sr)], nv = shift(raw, tc - sc, tr - sr);
+              if (nv) d[k(tc, tr)] = nv; else delete d[k(tc, tr)]; if (nv && nv[0] === "=") out.push(k(tc, tr) + " " + nv); }
+            say("Đã dán (Ctrl+V)." + (out.length ? " Công thức sau khi dán: " + out.join("; ") + "." : "")); draw(); }
+          var tbl = q("[data-g]"), rz = null;
+          tbl.addEventListener("mousedown", function(ev){
+            var t = ev.target;
+            if (t.dataset.rz != null) { rz = {c: +t.dataset.rz, x: ev.clientX, w: w[+t.dataset.rz]}; ev.preventDefault(); return; }
+            if (t.tagName === "TD") { a = [+t.dataset.c, +t.dataset.r]; s = a.slice(); e = a.slice(); drag = true; }
+            else if (t.dataset.c != null) { s = [+t.dataset.c, 0]; e = [+t.dataset.c, R - 1]; a = s.slice(); }
+            else if (t.dataset.r != null) { s = [0, +t.dataset.r]; e = [C - 1, +t.dataset.r]; a = s.slice(); }
+            else return;
+            if (document.activeElement === q("[data-in]")) q("[data-in]").blur();
+            draw(); selInfo(); box.focus(); ev.preventDefault();
+          });
+          tbl.addEventListener("mouseover", function(ev){ if (!drag || ev.target.tagName !== "TD") return; e = [+ev.target.dataset.c, +ev.target.dataset.r]; draw(); selInfo(); });
+          window.addEventListener("mousemove", function(ev){ if (!rz) return; w[rz.c] = Math.max(24, rz.w + ev.clientX - rz.x); q("[data-g]").querySelectorAll("col")[rz.c + 1].style.width = w[rz.c] + "px"; });
+          window.addEventListener("mouseup", function(){ if (rz) { say("Đã đổi độ rộng cột " + L(rz.c) + "."); rz = null; draw(); } drag = false; });
+          tbl.addEventListener("touchstart", function(ev){ var t = ev.target; if (t.tagName === "TD") { a = [+t.dataset.c, +t.dataset.r]; s = a.slice(); e = a.slice(); draw(); selInfo(); } }, {passive: true});
+          tbl.addEventListener("dblclick", function(ev){ if (ev.target.tagName !== "TD") return; var i = q("[data-in]"); i.value = d[k(a[0], a[1])] || ""; i.focus(); say("Đang sửa ô " + k(a[0], a[1]) + ". Sửa xong nhấn Enter."); });
+          q("[data-in]").addEventListener("keydown", function(ev){ if (ev.key === "Enter") { ev.preventDefault(); commit(true); } else if (ev.key === "Escape") { q("[data-in]").value = d[k(a[0], a[1])] || ""; q("[data-in]").blur(); box.focus(); } });
+          q("[data-in]").addEventListener("focus", function(){ s = a.slice(); e = a.slice(); });
+          box.addEventListener("keydown", function(ev){
+            if (ev.target !== box) return;
+            if ((ev.ctrlKey || ev.metaKey) && (ev.key === "c" || ev.key === "C")) { copy(); ev.preventDefault(); return; }
+            if ((ev.ctrlKey || ev.metaKey) && (ev.key === "v" || ev.key === "V")) { paste(); ev.preventDefault(); return; }
+            if (ev.key === "Escape") { clip = null; draw(); return; }
+            var mv = {ArrowUp:[0,-1], ArrowDown:[0,1], ArrowLeft:[-1,0], ArrowRight:[1,0]}[ev.key];
+            if (mv) { a = [Math.min(C - 1, Math.max(0, a[0] + mv[0])), Math.min(R - 1, Math.max(0, a[1] + mv[1]))]; if (!ev.shiftKey) s = a.slice(); e = a.slice(); if (ev.shiftKey) a = s.slice(); draw(); selInfo(); ev.preventDefault(); return; }
+            if (ev.key === "Delete" || ev.key === "Backspace") { var g = rg(); for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) delete d[k(c, r)]; say("Đã xoá dữ liệu trong " + q("[data-nb]").textContent + "."); draw(); ev.preventDefault(); return; }
+            if (ev.key === "Enter") { a[1] = Math.min(R - 1, a[1] + 1); s = a.slice(); e = a.slice(); draw(); selInfo(); ev.preventDefault(); return; }
+            if (ev.key.length === 1 && !ev.ctrlKey && !ev.metaKey) { var i = q("[data-in]"); i.focus(); i.value = ev.key; ev.preventDefault(); say("Đang nhập vào ô " + k(a[0], a[1]) + ". Nhập xong nhấn Enter."); }
+          });
+          box.querySelectorAll("[data-f]").forEach(function(b){ b.addEventListener("click", function(){
+            var t = b.dataset.f, g = rg();
+            if (t === "reset") { reset(); say("Đã làm lại từ đầu."); draw(); return; }
+            if (t === "copy") { copy(); box.focus(); return; }
+            if (t === "paste") { paste(); box.focus(); return; }
+            var first = f[k(g[0], g[1])] || {}, on = !first[t];
+            for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {};
+              if (t === "left" || t === "center" || t === "right") F.al = t; else F[t] = on; }
+            say("Đã định dạng " + q("[data-nb]").textContent + "."); draw(); box.focus();
+          }); });
+          q("[data-tab]").addEventListener("dblclick", function(){
+            var tab = q("[data-tab]"); if (tab.querySelector("input")) return; tab.innerHTML = "<input value='" + sheet.replace(/'/g, "&#39;") + "'>"; var i = tab.querySelector("input"), ok = false; i.focus(); i.select();
+            function done(){ if (ok) return; ok = true; sheet = i.value.trim() || sheet; tab.textContent = sheet; say("Đã đổi tên trang tính thành " + sheet + "."); draw(); }
+            i.addEventListener("keydown", function(ev){ if (ev.key === "Enter") done(); }); i.addEventListener("blur", done);
+          });
+          draw(); selInfo();
+          return {set: function(key, v){ if (v) d[key] = v; else delete d[key]; draw(); }, val: val};
+        };
+        </script>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Nhập công thức được không?</div>
+        <div class="reading">Trong bài trước em đã biết nhập dữ liệu dạng số, văn bản và thời gian vào bảng tính. Có thể nhập dữ liệu là công thức tính toán được không? Khi thực hiện dự án <b>Trường học xanh</b>, em cần tính toán rất nhiều. Hãy tìm hiểu các công cụ tính toán đó của phần mềm bảng tính để có thể sử dụng cho dự án.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Kiểu dữ liệu trên bảng tính</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Nhận biết kiểu dữ liệu trên bảng tính</div>
+        <div class="reading">Quan sát các ô dữ liệu, vùng nhập dữ liệu (có hình ngôi sao) trong Hình 7.1, Hình 7.2 và cho biết: 1. Bảng tính điện tử nhận biết được các kiểu dữ liệu nào? 2. Các kiểu dữ liệu đó được thể hiện như thế nào trên bảng tính?</div>
+        <figure class="fig"><img src="hinh/h712.jpg" alt="Hình 7.1: ô B3 chứa ngày 3/5/2010, các ô văn bản và số. Hình 7.2: ô B4 hiện 6, vùng nhập dữ liệu hiện = 2 + 1.5 + 2.5" style="max-width:600px"><figcaption>Hình 7.1. Dữ liệu văn bản, số, ngày tháng · Hình 7.2. Dữ liệu là biểu thức toán học bắt đầu bằng dấu “=”</figcaption></figure>
+        <div data-task="hd1a" data-n="1"></div>
+        <div class="reading">Thử trên bảng mô phỏng: nháy vào từng ô để xem kiểu dữ liệu; nháy vào ô E5 để thấy vùng nhập dữ liệu hiện công thức còn ô hiện kết quả. Nhập thêm dữ liệu của em.</div>
+        <div class="bt" data-bt1></div>
+        <div data-task="kieu" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Công thức và kí hiệu phép toán</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 34). Khi nhập dữ liệu vào các ô trong trang tính, phần mềm sẽ tự động nhận biết được kiểu dữ liệu đã nhập và hiển thị theo khuôn dạng mặc định. Các kiểu dữ liệu cơ bản phần mềm nhận dạng được là văn bản, số, ngày tháng,… Khả năng hỗ trợ tính toán là đặc trưng ưu việt của các phần mềm bảng tính. Em có thể sử dụng <b>công thức</b> để thực hiện các tính toán với dữ liệu một cách nhanh chóng. Công thức có dạng các biểu thức toán học được nhập trực tiếp vào ô tính. Muốn nhập công thức cần gõ dấu <b>“=”</b> đầu tiên, sau đó gõ biểu thức. Các phép toán đơn giản là phép cộng (+), trừ (–), nhân (*), chia (/) và luỹ thừa (^). Công thức tính toán có thể chứa các số, phép toán và các dấu ngoặc tròn. Thứ tự thực hiện các phép toán trong công thức giống như trong các biểu thức toán học.</div>
+        <div class="tbl-wrap"><table class="tbl" style="font-size:14px;max-width:560px">
+          <caption style="caption-side:top;text-align:left;font-style:italic;padding:4px 0">Bảng 7.1. Một số kí hiệu phép toán dùng trong phần mềm bảng tính</caption>
+          <thead><tr><th>Phép toán</th><th>Kí hiệu toán</th><th>Kí hiệu trong bảng tính</th><th>Ví dụ</th></tr></thead>
+          <tbody><tr><td>Phép cộng</td><td>+</td><td><b>+</b></td><td>20 + 7</td></tr><tr><td>Phép trừ</td><td>–</td><td><b>–</b></td><td>42 – 35</td></tr><tr><td>Phép nhân</td><td>×</td><td><b>*</b></td><td>7*9</td></tr><tr><td>Phép chia</td><td>:</td><td><b>/</b></td><td>35/7</td></tr><tr><td>Phép luỹ thừa</td><td>a<sup>x</sup></td><td><b>a^x</b></td><td>5^3</td></tr></tbody>
+        </table></div>
+        <div data-task="kihieu" data-n="1"></div>
+        <div data-task="p35" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Kiểu dữ liệu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Công thức trong bảng tính</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Nhập công thức vào bảng tính</div>
+        <div class="reading">Em hãy cho biết, nếu nhập công thức vào một ô tính và tính toán với giá trị nằm ở các ô khác thì phải làm thế nào?<br><br>Đọc mục <b>2</b> (SGK trang 35). Nếu em muốn tính Tổng số cây hoa ở ô E4 trong Bảng 2. Dự kiến số lượng cây cần trồng (Hình 7.3), thì em cần lấy số vị trí (là dữ liệu ở ô C4) nhân với số lượng cây ở mỗi vị trí (là dữ liệu ở ô D4). Có hai cách tính:<ul><li><b>Cách 1.</b> Nhập vào ô E4 công thức với giá trị số lấy từ các ô C4, D4: nhập <b>= 25*10</b> (Hình 7.3).</li><li><b>Cách 2.</b> Nhập vào ô E4 công thức với các địa chỉ ô C4, D4: nhập <b>= C4*D4</b> (Hình 7.4).</li></ul>Với cách 1, em tính được tổng số cây hoa cần trồng là 250. Nhưng khi em muốn bổ sung thêm vị trí hoặc tăng số lượng cây hoa tại một vị trí, tức là dữ liệu trong ô C4 hoặc D4 thay đổi thì kết quả tại ô E4 không thay đổi (vẫn là 250), tức là kết quả không được cập nhật. Với cách 2, nếu sửa dữ liệu tại hai ô C4, D4, thì ô kết quả E4 luôn được cập nhật đúng. Cách 2 có ưu điểm là công thức sẽ tự động cập nhật nếu các dữ liệu có liên quan thay đổi. Có thể nói, công thức sử dụng trong cách 2 được <b>tính toán tự động</b>.</div>
+        <figure class="fig"><img src="hinh/h734.jpg" alt="Hình 7.3: ô E4 có công thức =25*10, kết quả 250. Hình 7.4: ô E4 có công thức =C4*D4, kết quả 250" style="max-width:600px"><figcaption>Hình 7.3. Công thức (cách 1) · Hình 7.4. Công thức (cách 2)</figcaption></figure>
+        <div data-task="hd2" data-n="1"></div>
+        <div class="reading">Thử trên bảng mô phỏng: nhập <b>=C4*D4</b> vào E4, nhập <b>=25*10</b> vào một ô khác, rồi sửa D4 thành 12 và quan sát ô nào tự động cập nhật. Sau đó làm tiếp Hoạt động 3 (sao chép E4 xuống E5, E6) trên cùng bảng này.</div>
+        <div class="bt" data-bt2></div>
+        <div data-task="cach" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 36</div>
+        <div class="reading">Trong các trường hợp sau, công thức cần nhập tại ô tính là gì?</div>
+        <figure class="fig"><img src="hinh/h756.jpg" alt="Hình 7.5: AB=15, BC=10, CA=12 ở C3:C5, ô C6 Nửa chu vi. Hình 7.6: bán kính R=10.45 ở C3, PI=3.141593 ở C4, chu vi C5, diện tích C6" style="max-width:600px"><figcaption>Hình 7.5. Nhập công thức tính nửa chu vi tam giác ABC vào ô C6 · Hình 7.6. Nhập công thức tính chu vi và diện tích hình tròn vào các ô C5, C6</figcaption></figure>
+        <div data-task="p36a" data-n="1"></div>
+        <div data-task="p36b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Công thức trong bảng tính</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.3</span> Sao chép ô tính chứa công thức</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 3</b> Sao chép ô tính chứa công thức</div>
+        <div class="reading">1. Khi sao chép ô tính chứa công thức hoặc vùng có chứa công thức thì các công thức này sẽ được sao chép như thế nào? 2. Chức năng tính toán tự động của công thức có được bảo toàn hay không khi sao chép dữ liệu? Nếu có thì được thể hiện như thế nào?<br><br>Đọc mục <b>3</b> (SGK trang 36). Muốn sao chép công thức tính tổng số cây hoa cần trồng từ ô E4 xuống các ô phía dưới (E5, E6) để tính Tổng số cho các loại cây khác:<ul><li>Bước 1. Chọn ô tính chứa dữ liệu cần sao chép (ô E4).</li><li>Bước 2. Nhấn tổ hợp phím <b>Ctrl+C</b> để sao chép dữ liệu (có công thức).</li><li>Bước 3. Đánh dấu vùng muốn sao chép dữ liệu đến (E5:E6).</li><li>Bước 4. Nhấn tổ hợp phím <b>Ctrl+V</b> để dán dữ liệu.</li></ul>Kết quả là vùng E5:E6 được gán dữ liệu là công thức tính tổng số cây cần trồng tương ứng. Khi sao chép công thức = C4*D4 có trong ô E4 xuống các ô phía dưới của cột E, các địa chỉ C4, D4 trong công thức này đã bị thay đổi, chẳng hạn công thức trong ô E6 sẽ là = C6*D6. Trong ví dụ trên, công thức gốc tại ô E4 là = C4*D4, vị trí tương đối của hai ô C4, D4 với E4 (lần lượt bên trái 2 ô, bên trái 1 ô) sẽ không thay đổi khi sao chép E4 đến E6. Việc <b>giữ nguyên vị trí tương đối</b> giữa các ô tham chiếu và ô chứa công thức khi sao chép là tính năng quan trọng của mọi phần mềm bảng tính.</div>
+        <figure class="fig"><img src="hinh/h778.jpg" alt="Hình 7.7: ô E4 có công thức =C4*D4. Hình 7.8: E4 có viền nét đứt, vùng E5:E6 được chọn để dán" style="max-width:360px"><figcaption>Hình 7.7. Nhập công thức tại ô E4 · Hình 7.8. Sao chép công thức xuống các ô E5, E6</figcaption></figure>
+        <div class="reading">Làm trên bảng mô phỏng ở mục 2.2: chọn E4 → bấm <b>Sao chép</b> (Ctrl+C) → kéo chọn E5:E6 → bấm <b>Dán</b> (Ctrl+V), rồi nháy vào E6 để xem công thức.</div>
+        <div data-task="hd3a" data-n="1"></div>
+        <div data-task="hd3b" data-n="2"></div>
+        <div data-concept="c3"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 37</div>
+        <div data-task="p37a" data-n="1"></div>
+        <div data-task="p37b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Sao chép công thức</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-4">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.4</span> Thực hành: Nhập thông tin dự kiến số lượng cây cần trồng của dự án</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Dự kiến số lượng cây cần trồng</div>
+        <div class="reading"><b>Nhiệm vụ:</b> tạo trang tính mới trong bảng tính của dự án để nhập dữ liệu dự kiến số lượng cây trồng; nhập dữ liệu; thiết lập công thức tính tổng số cây mỗi loại và tổng số cây của tất cả các loại; định dạng dữ liệu cho trang tính.<br><b>Hướng dẫn:</b>
+          <ul>
+            <li><b>Bước 1.</b> Mở tệp <b>THXanh.xlsx</b>.</li>
+            <li><b>Bước 2.</b> Nháy chuột vào nút <b>⊕</b> tại vùng tên trang tính để tạo trang tính mới. Nhập tên trang tính là <b>2. Dự kiến số lượng cây</b> và nhập dữ liệu như Hình 7.9 (đã nhập sẵn trên bảng mô phỏng).</li>
+            <li><b>Bước 3.</b> Nhập công thức <b>= C4*D4</b> vào ô E4, sau đó sao chép công thức này xuống các ô E5 và E6.</li>
+            <li><b>Bước 4.</b> Tại ô E7 thiết lập công thức tính tổng của cả ba loại cây dự kiến trồng: nhập <b>= E4+E5+E6</b>.</li>
+            <li><b>Bước 5.</b> Định dạng chữ đậm và màu nền vàng cho ô A2 và hàng tiêu đề của bảng (hàng 3). Cột STT căn giữa. Điều chỉnh độ rộng cột để hiển thị đủ dữ liệu.</li>
+            <li><b>Bước 6.</b> Lưu lại kết quả.</li>
+          </ul></div>
+        <div class="bt" data-bt3></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nvkq" data-n="2"></div>
+        <div data-concept="c4"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 4. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Trang tính 3. Tìm hiểu giống cây</div>
+        <div class="reading">1. Em hãy tạo một trang tính mới trong bảng tính của dự án, đặt tên là <b>3. Tìm hiểu giống cây</b>. Tiến hành nhập dữ liệu là danh sách các loại cây cụ thể và đơn giá. Định dạng cho trang tính như Hình 7.10 và lưu lại kết quả.<br>2. Nhập công thức <b>= D4 * E4</b> vào ô F4. Sao chép ô F4 xuống các ô từ F5 đến F19 để tính giá trị của cột Thành tiền. (Dữ liệu Hình 7.10 đã nhập sẵn trên bảng mô phỏng.)</div>
+        <div class="bt" data-bt4></div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Căn lề, diện tích rừng</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div class="reading">Câu 2. Dữ liệu diện tích phủ rừng các tỉnh vùng Đông Bắc (Hình 7.11, đơn vị: ha) đã nhập sẵn trên bảng mô phỏng.</div>
+        <div class="bt" data-bt5></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g7"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var N = function(s){ return (s || "").replace(/\s+/g, "").toUpperCase(); };
+      var NOTE = "Gõ phím hoặc dùng vùng nhập dữ liệu để nhập, nhấn Enter. Công thức bắt đầu bằng dấu =. Sao chép: chọn ô → Sao chép (Ctrl+C) → chọn ô/vùng đích → Dán (Ctrl+V).";
+      BangTinh($("[data-bt1]"), {title:"Bảng tính mô phỏng: kiểu dữ liệu (như Hình 7.1, 7.2)", cols:5, rows:8, widths:[100,130,40,140,72], note:NOTE,
+        data:{A2:"Họ tên", B2:"Nguyễn Văn Hùng", A3:"Ngày sinh", B3:"3/5/2010", A4:"Quê quán", B4:"Hải Phòng", A5:"Điểm Toán", B5:"8.5", A6:"Điểm Ngữ văn", B6:"9", D4:"Tam giác cạnh 2; 1.5; 2.5", D5:"Chu vi tam giác", E5:"=2+1.5+2.5"}});
+      var B2 = {A2:"Bảng 2. Dự kiến số lượng cây cần trồng", A3:"STT", B3:"Loại cây", C3:"Vị trí", D3:"Số lượng", E3:"Tổng số",
+        A4:"1", B4:"Cây hoa", C4:"25", D4:"10", A5:"2", B5:"Cây ăn quả", C5:"20", D5:"5", A6:"3", B6:"Cây bóng mát", C6:"50", D6:"3"};
+      BangTinh($("[data-bt2]"), {title:"Bảng tính mô phỏng: Bảng 2. Dự kiến số lượng cây cần trồng", cols:5, rows:7, widths:[40,110,60,72,72], note:NOTE, data:B2,
+        check:function(x){ var d = x.d; return [
+          ["E4 dùng công thức với địa chỉ ô (=C4*D4)", N(d.E4) === "=C4*D4"],
+          ["Sao chép E4 xuống E5, E6 (=C5*D5, =C6*D6)", N(d.E5) === "=C5*D5" && N(d.E6) === "=C6*D6"],
+          ["Sửa số liệu ở cột C hoặc D và thấy cột E tự động cập nhật", N(d.E4) === "=C4*D4" && (d.C4 !== "25" || d.D4 !== "10" || d.C5 !== "20" || d.D5 !== "5" || d.C6 !== "50" || d.D6 !== "3")]]; }});
+      BangTinh($("[data-bt3]"), {title:"Thực hành: trang tính 2. Dự kiến số lượng cây", cols:5, rows:8, widths:[40,72,60,72,60], note:NOTE + " Kéo vạch giữa các tên cột để đổi độ rộng cột.", data:B2, sheet:"Sheet2",
+        check:function(x){ var d = x.d, f = function(k){ return x.f[k] || {}; };
+          return [["Đổi tên trang tính thành 2. Dự kiến số lượng cây", x.sheet.trim().toLowerCase() === "2. dự kiến số lượng cây"],
+            ["E4 =C4*D4, sao chép xuống E5, E6", N(d.E4) === "=C4*D4" && N(d.E5) === "=C5*D5" && N(d.E6) === "=C6*D6"],
+            ["E7 =E4+E5+E6 (kết quả 500)", /^=E4\+E5\+E6$|^=E5\+E4\+E6$|^=E4\+E6\+E5$|^=E6\+E5\+E4$|^=E5\+E6\+E4$|^=E6\+E4\+E5$/.test(N(d.E7)) && x.val("E7") === 500],
+            ["A2 và hàng 3 (A3:E3): chữ đậm, nền vàng", ["A2","A3","B3","C3","D3","E3"].every(function(k){ return f(k).b && f(k).fill; })],
+            ["Cột STT (A4:A6) căn giữa", ["A4","A5","A6"].every(function(k){ return f(k).al === "center"; })],
+            ["Cột B đủ rộng để hiện hết tên loại cây và tiêu đề", x.w[1] >= 110]]; }});
+      var T = [["Cây hoa","Hoa Mười giờ",25000,20],["","Hoa Dạ yến thảo",45000,23],["","Hoa Dừa cạn",15500,43],["","Hoa Cúc vàng",30500,33],["","Hoa Hồng",54000,32],
+        ["Cây ăn quả","Bưởi",75000,21],["","Xoài",85000,17],["","Vú sữa",45000,19],["","Khế",34500,22],["","Chanh",25900,20],["","Táo",38500,32],
+        ["Cây bóng mát","Bằng lăng",54600,11],["","Phượng vĩ",72500,14],["","Bàng",80000,20],["","Sưa đỏ",120000,15],["","Muồng",65000,16]];
+      var D3 = {A2:"3. Giá thành các loại cây", A3:"STT", B3:"Loại cây", C3:"Tên cây", D3:"Đơn giá", E3:"Số lượng", F3:"Thành tiền"};
+      T.forEach(function(t, i){ var r = i + 4; D3["A" + r] = String(i + 1); if (t[0]) D3["B" + r] = t[0]; D3["C" + r] = t[1]; D3["D" + r] = String(t[2]); D3["E" + r] = String(t[3]); });
+      var FM = {}; ["A3","B3","C3","D3","E3","F3"].forEach(function(k){ FM[k] = {b:true, fill:true}; }); FM.A2 = {b:true}; for (var r = 4; r <= 19; r++) FM["A" + r] = {al:"center"};
+      BangTinh($("[data-bt4]"), {title:"Luyện tập: trang tính 3. Tìm hiểu giống cây (Hình 7.10)", cols:6, rows:20, widths:[40,100,120,72,72,90], note:NOTE, data:D3, fmt:FM, sheet:"3. Tìm hiểu giống cây",
+        check:function(x){ var d = x.d, ok = true; for (var r = 5; r <= 19; r++) if (N(d["F" + r]) !== "=D" + r + "*E" + r) ok = false;
+          return [["F4 =D4*E4 (kết quả 500000)", N(d.F4) === "=D4*E4"], ["Sao chép F4 xuống F5:F19", ok]]; }});
+      var R5 = [["Tuyên Quang","233.193","191.496"],["Cao Bằng","353.259","20.026"],["Lạng Sơn","293.601","238.055"],["Quảng Ninh","122.657","247.68"],["Thái Nguyên","76.481","111.064"]];
+      var D5 = {A1:"DIỆN TÍCH PHỦ RỪNG CÁC TỈNH VÙNG ĐÔNG BẮC", A2:"Đơn vị tính: ha", A3:"Tỉnh", B3:"Rừng tự nhiên", C3:"Rừng trồng", D3:"Tổng diện tích"};
+      R5.forEach(function(t, i){ D5["A" + (i + 4)] = t[0]; D5["B" + (i + 4)] = t[1]; D5["C" + (i + 4)] = t[2]; });
+      BangTinh($("[data-bt5]"), {title:"Vận dụng: diện tích rừng (Hình 7.11)", cols:4, rows:9, widths:[110,100,100,110], note:NOTE, data:D5, fmt:{A1:{b:true}, A3:{b:true, fill:true}, B3:{b:true, fill:true}, C3:{b:true, fill:true}, D3:{b:true, fill:true}},
+        check:function(x){ var d = x.d, ok = true; for (var r = 4; r <= 8; r++) { var v = N(d["D" + r]); if (v !== "=B" + r + "+C" + r && v !== "=C" + r + "+B" + r) ok = false; }
+          return [["D4: công thức tổng diện tích Tuyên Quang (424.689)", x.val("D4") === 424.689 && N(d.D4)[0] === "=" && /B4/.test(N(d.D4)) && /C4/.test(N(d.D4))], ["Sao chép xuống D5:D8 cho các tỉnh còn lại", ok]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 7 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=22"></script>
+</body>
+</html>
