@@ -98,7 +98,10 @@ const BODY = {
       const lab = el("span", null, esc(name)); const hint = el("span", {class:"hint"}); lab.appendChild(hint);
       const seg = el("div", {class:"seg", role:"group", "aria-label":"Chọn nhóm cho " + name});
       const bs = cats.map((c, ci) => { const val = ci === t.cats.length ? -1 : ci;
-        const b = el("button", {type:"button", "aria-pressed":"false", class: val === -1 ? "unsure" : ""}, esc(c));
+        /* Nút "?" = em chưa chắc, để thầy cô biết chỗ cần giải thích; nhãn dài thì ghi rõ chữ */
+        const b = val === -1
+          ? el("button", {type:"button", "aria-pressed":"false", class:"unsure", title:"Em chưa chắc câu này", "aria-label":"Chưa chắc"}, wide ? "? Em chưa chắc" : "?")
+          : el("button", {type:"button", "aria-pressed":"false", class:""}, esc(c));
         b.addEventListener("click", () => { if (S.sub[id]) return; (S.sort[id] = S.sort[id] || {})[i] = val; changed(); renderAll(); }); seg.appendChild(b); return {b, val}; });
       r.append(lab, seg); box.appendChild(r); return {r, bs, hint};
     });
