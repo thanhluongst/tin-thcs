@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Đạo đức và văn hoá trong sử dụng công nghệ kĩ thuật số · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=21">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 3. Đạo đức, pháp luật và văn hoá trong môi trường số</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>4</b></div><h1><span class="sr-only">Bài 4. </span>Đạo đức và văn hoá trong sử dụng công nghệ kĩ thuật số</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nhận biết và giải thích được một số biểu hiện vi phạm đạo đức và pháp luật, biểu hiện thiếu văn hoá khi sử dụng công nghệ kĩ thuật số.</li>
+        <li>Bảo đảm được các sản phẩm số do bản thân tạo ra thể hiện được đạo đức, tính văn hoá và không vi phạm pháp luật.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Sản phẩm số cần trung thực, có văn hoá, đúng pháp luật">
+      <span class="node io">Trung thực</span><span class="arr">·</span>
+      <span class="node io">Có văn hoá</span><span class="arr">·</span>
+      <span class="node io">Tôn trọng bản quyền</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Biểu hiện vi phạm</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Tạo sản phẩm số</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> An nên làm theo cách nào?</div>
+        <div class="reading">Khoa chia sẻ cho An bức ảnh ruộng bậc thang mà mình đã chụp.<br><b>Trường hợp 1:</b> An không hỏi ý kiến Khoa, tự mình chỉnh sửa bức ảnh và sử dụng làm nền cho ảnh của mình rồi đưa lên trang cá nhân trên mạng xã hội. An viết chú thích cho bức ảnh: <i>Thật tuyệt khi được đến thăm nơi này.</i><br><b>Trường hợp 2:</b> An xin phép Khoa, chỉnh sửa lại bức ảnh cho đẹp hơn rồi đưa lên trang cá nhân trên mạng xã hội. An viết chú thích cho bức ảnh: <i>Đất nước ta thật là đẹp (người chụp Lê Khoa).</i></div>
+        <div data-task="kd1" data-n="1"></div>
+        <div data-task="kd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Biểu hiện vi phạm khi sử dụng công nghệ kĩ thuật số</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Biểu hiện nào là vi phạm?</div>
+        <div class="reading">Mỗi bạn tự nghĩ trước, sau đó cả nhóm thảo luận, thống nhất.</div>
+        <div data-task="hd1" data-n="1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Một số biểu hiện vi phạm</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 18–19). Công nghệ kĩ thuật số mang đến cho em rất nhiều lợi ích nhưng cũng tiềm ẩn những vấn nạn nhất định: những biểu hiện thiếu văn hoá, vi phạm đạo đức hoặc thậm chí vi phạm pháp luật của người sử dụng hay người tạo ra những nội dung số. Ví dụ: quay phim trong rạp chiếu phim; chụp ảnh ở nơi không cho phép (Hình 4.1); ghi âm trái phép các cuộc nói chuyện; tải về máy tính các tệp bài hát, video có bản quyền mà chưa được phép; sao chép thông tin từ một trang web và coi đó là của mình; sử dụng phần mềm bẻ khoá; phát trực tiếp (livestream) hoặc chia sẻ các vụ bạo lực học đường; đưa lên mạng thông tin cá nhân của người khác mà chưa được phép; tham gia, chia sẻ, quảng cáo cho các trang web cổ vũ bạo lực, đánh bạc,… Em cần tìm hiểu thông tin, trang bị cho mình những hiểu biết, những kiến thức pháp luật (Hình 4.2).</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+          <figure class="fig"><img src="hinh/h41.jpg" alt="Hai biển cấm: cấm quay phim, cấm chụp ảnh"><figcaption>Hình 4.1. Biển cấm quay phim, chụp ảnh</figcaption></figure>
+          <figure class="fig"><img src="hinh/h42.jpg" alt="Chương trình truyền hình với dòng chữ Vi phạm bản quyền, biết mà vẫn xem?"><figcaption>Hình 4.2. Một chương trình cung cấp kiến thức mà học sinh cần tìm hiểu</figcaption></figure>
+        </div>
+        <div data-task="bh" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 19</div>
+        <div data-task="p19a" data-n="1"></div>
+        <div data-task="p19b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Biểu hiện vi phạm</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Tuân thủ những quy định về đạo đức, văn hoá và pháp luật khi tạo ra sản phẩm số</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Những điều cần chú ý khi tạo sản phẩm số</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 19–20). Có nhiều dạng sản phẩm số mà em có thể tạo ra (Hình 4.3). Để bảo đảm sản phẩm số thể hiện được đạo đức, tính văn hoá và không vi phạm pháp luật, em cần chú ý:<ul><li><b>Luôn trung thực</b> trong quá trình tạo ra sản phẩm số: không sử dụng thông tin giả, thông tin không đáng tin cậy; không sao chép, chỉnh sửa thông tin của người khác rồi coi đó là của mình. Nếu An làm theo trường hợp 1 thì việc làm đó không trung thực.</li><li>Nên sử dụng <b>thông tin do mình tự tạo</b> (tự quay video, chụp ảnh, viết nội dung,…), không sử dụng các thông tin có bản quyền nếu chưa mua hoặc chưa xin phép.</li><li><b>Nội dung và hình thức</b> của sản phẩm không vi phạm các quy định, chuẩn mực về đạo đức, văn hoá: dùng ngôn ngữ lịch sự, không dùng hình ảnh giật gân, không tiết lộ thông tin cá nhân của người khác,…</li></ul></div>
+        <figure class="fig"><img src="hinh/h43.jpg" alt="Sơ đồ Sản phẩm số: poster, ảnh, truyện tự sáng tác, bài đăng mạng xã hội, bài giới thiệu sách phim, blog, tệp ghi âm giọng hát, vlog, video âm nhạc, trò chơi điện tử tự thiết kế"><figcaption>Hình 4.3. Các sản phẩm số được tạo bởi học sinh</figcaption></figure>
+        <div data-task="sp" data-n="1"></div>
+        <div data-concept="c2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 20</div>
+        <div class="reading">Em có cảnh báo và lời khuyên gì với bạn trong mỗi tình huống dưới đây?</div>
+        <div data-task="p20a" data-n="1"></div>
+        <div data-task="p20b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Tạo sản phẩm số đúng quy định</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Bài tập SGK trang 20</div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Sản phẩm số hướng dẫn các bạn</div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=21"></script>
+<script src="content.js?v=21"></script>
+<script src="../chung/outline.js?v=21"></script>
+<script src="../chung/api.js?v=21"></script>
+<script src="../chung/chieu.js?v=21"></script>
+<script src="../chung/hs.js?v=21"></script>
+</body>
+</html>
