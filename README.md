@@ -31,12 +31,28 @@ Quy ước được sinh tự động từ `danh-muc.js` và hiện ngay dưới
 | Thư mục và kho GitHub | `tin<lớp>-<slug>` | `tin7-phan-mem-may-tinh` |
 | Link | `https://thanhluongst.github.io/<kho>/` | `…/tin7-phan-mem-may-tinh/` |
 | `LESSON.id` trong `assets/content.js` | `tin<lớp>-bai<số>` | `tin7-bai2` |
-| Tiền tố cột trên Google Sheet (hàm `summary`) | `T<lớp>B<số>.` | `T7B2.kd1 · Mở đầu` |
+| Trang tính trên Google Sheet | trùng `LESSON.id` | `tin7-bai2` |
+| Tiền tố cột câu hỏi (hàm `summary`) | `T<lớp>B<số>.` | `T7B2.kd1 · Mở đầu` |
 | Khoá lưu trên trình duyệt (`KEY` trong `hs.js`) | `<id>-v1` | `tin7-bai2-v1` |
 
 `slug` là tên bài viết không dấu. Tên quá dài thì tự đặt ngắn lại ngay trong `danh-muc.js`, ví dụ `slug: "mang-xa-hoi"`.
 
-Mọi bài dùng **chung một Google Sheet và một Apps Script**, tức là cùng `API_URL` trong `config.js`. Bài làm được tách theo cột **Bài** (`LESSON.id`). Tiền tố `T<lớp>B<số>.` giữ cho cột câu hỏi của các bài không trùng nhau.
+## Google Sheet dùng chung cho cả trường
+
+Mọi bài dùng **chung một Google Sheet và một Apps Script**, tức là cùng `API_URL` trong `config.js`. Mã máy chủ nằm ở [`apps-script/Code.gs`](apps-script/Code.gs). Các kho bài học giữ bản sao giống hệt.
+
+- **Mỗi bài một trang tính**, đặt tên theo `LESSON.id`, tự tạo khi có bài nộp đầu tiên. Mỗi trang chỉ có khoảng 25 cột, mỗi nhóm hoặc học sinh một dòng, lọc lớp theo cột **Buổi**.
+- Hai trang `Chot` và `NhanXet` dùng chung cho mọi bài.
+- Phần chốt và nhận xét được lưu đệm (CacheService), nên khi nhiều lớp học cùng lúc, học sinh hỏi liên tục cũng không phải đọc Sheet.
+- **Ước tính cho 42 lớp, một năm học:**
+  - học theo nhóm: khoảng 5.500 dòng, chừng 0,15 triệu ô;
+  - học cá nhân: khoảng 28.000 dòng, chừng 0,7 triệu ô;
+  - cả hai đều rất xa giới hạn 10 triệu ô của Google Sheets.
+- **Mỗi năm học dùng một tệp mới:**
+  1. tạo Google Sheet mới;
+  2. dán `Code.gs`, đặt `MA_GIAO_VIEN`, triển khai;
+  3. thay `API_URL` trong `config.js` của các bài và đẩy lên lại.
+- **Nâng cấp từ bản cũ** (một trang `BaiLam` chung): xem mục *Nâng cấp Apps Script* trong README của từng bài. Tóm tắt: dán `Code.gs` mới, tạo phiên bản triển khai mới, chạy hàm `chuyenDuLieuCu` một lần.
 
 ## Quy trình làm một bài mới
 
