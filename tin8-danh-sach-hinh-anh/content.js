@@ -4,7 +4,7 @@
 const TASKS = {
   kd1:{type:"open", label:"Mở đầu", q:"Phiếu khảo sát của bạn An có một danh sách các nội dung Tin học được đánh số thứ tự. Theo em, An có cần gõ từng số thứ tự không? Nếu danh sách có hàng trăm mục thì làm thế nào để tiết kiệm thời gian và không bị nhầm thứ tự?",
     k:"Không cần gõ tay. Dùng chức năng <b>danh sách có thứ tự</b> (Numbering) của phần mềm soạn thảo: số thứ tự được <b>tự động tạo</b> và <b>tự động cập nhật</b> khi thêm, bớt mục, nên nhanh và không nhầm."},
-  hd1:{type:"mcq", label:"HĐ1 – Hai cách trình bày", q:"Quan sát hai cách trình bày “Các công việc cần làm cho dự án Thành lập CLB Tin học” (Hình 8a.2: viết liền thành đoạn; Hình 8a.3: chia thành danh sách các mục). Cách nào giúp người đọc dễ theo dõi hơn?",
+  hd1:{type:"mcq", label:"HĐ1 – Hai cách trình bày", q:"Quan sát Hình 8a.2 và Hình 8a.3. Cách trình bày nào giúp người đọc dễ theo dõi các công việc của dự án hơn?",
     o:["Cách viết liền thành đoạn văn (Hình 8a.2).","Cách trình bày dạng danh sách liệt kê (Hình 8a.3).","Hai cách như nhau.","Không cách nào dễ đọc."], a:1,
     k:"Cách trình bày <b>dạng danh sách liệt kê</b> (Hình 8a.3) chia nhỏ nội dung thành từng mục, có số thứ tự và dấu đầu dòng, giúp văn bản <b>rõ ràng</b>, người đọc tìm thông tin <b>nhanh, dễ dàng</b>."},
   kieu:{type:"sort", label:"Đọc hiểu – Chọn kiểu danh sách",
@@ -20,7 +20,7 @@ const TASKS = {
   p37b:{type:"mcq", label:"Câu hỏi tr.37 – câu 2", q:"Với danh sách có thứ tự gồm 4 mục (1. Ngôn ngữ lập trình; 2. Mạng máy tính; 3. Đồ hoạ máy tính; 4. Bảng tính điện tử), em đặt con trỏ soạn thảo ở cuối dòng thứ hai rồi nhấn phím Enter. Kết quả là:",
     o:["Danh sách không đổi, chỉ xuống dòng không có số.","Xuất hiện mục mới “3.” để trống; các mục sau tự đánh số lại thành 4 và 5.","Xuất hiện mục mới nhưng các mục sau vẫn giữ số 3 và 4.","Danh sách bị xoá số thứ tự."], a:1,
     k:"Nhấn Enter tạo một <b>mục mới</b> trong danh sách: mục mới mang số 3 (còn trống), Đồ hoạ máy tính thành 4, Bảng tính điện tử thành 5 – đúng như Hình 8a.4b. Thứ tự được <b>tự động cập nhật</b>."},
-  hd2a:{type:"open", label:"HĐ2 – Câu a, b", q:"Quan sát hai tờ rơi “Tuyển thành viên” của CLB Tin học: tờ thứ nhất chỉ có chữ (Hình 8a.5), tờ thứ hai có ảnh nền và hình đồ hoạ (Hình 8a.6). Mỗi tờ rơi gồm những thông tin dạng nào?",
+  hd2a:{type:"open", label:"HĐ2 – Câu a, b", q:"a) Tờ rơi ở Hình 8a.5 gồm những thông tin dạng nào? b) Tờ rơi ở Hình 8a.6 gồm những thông tin dạng nào?",
     k:"Tờ rơi Hình 8a.5 chỉ có thông tin dạng <b>văn bản</b> (chữ). Tờ rơi Hình 8a.6 có <b>văn bản</b>, <b>hình ảnh</b> (ảnh nền) và <b>hình đồ hoạ</b> (mũi tên, hình trang trí)."},
   hd2c:{type:"open", label:"HĐ2 – Câu c", q:"Em ấn tượng với tờ rơi nào hơn? Vì sao?",
     k:"Thường là tờ rơi <b>có hình minh hoạ</b> (Hình 8a.6): màu sắc bắt mắt, hình ảnh gợi chủ đề công nghệ, hình đồ hoạ làm nổi bật thông tin, thu hút người xem hơn."},
