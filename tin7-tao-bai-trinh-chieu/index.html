@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tạo bài trình chiếu · Tin học 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=22">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 7 · Chủ đề 4. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>11</b></div><h1><span class="sr-only">Bài 11. </span>Tạo bài trình chiếu</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nêu được một số chức năng cơ bản của phần mềm trình chiếu.</li>
+        <li>Tạo được một bài báo cáo có tiêu đề, cấu trúc phân cấp.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Phần mềm trình chiếu, tiêu đề, cấu trúc phân cấp">
+      <span class="node">Phần mềm trình chiếu</span>
+      <span class="node">Tiêu đề</span>
+      <span class="node io">Cấu trúc phân cấp</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 7A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 7A1-T11" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Chức năng</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Tiêu đề</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Phân cấp</a>
+    <a href="#phan-4" data-stage="phan-4"><span class="sn">2.4</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+        <script src="../chung/trinhchieu.js?v=2"></script>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Báo cáo dự án Trường học xanh</div>
+        <div class="reading">Giờ ra chơi, các bạn An, Minh và Khoa trao đổi về dự án <b>Trường học xanh</b> mà các bạn đang thực hiện.<br><b>An:</b> Việc khảo sát, thu thập thông tin và tính toán cho dự án đã xong. Bây giờ nhóm mình cần làm một bài báo cáo kết quả.<br><b>Minh:</b> Nhóm mình nên sử dụng phần mềm trình chiếu để tạo bài báo cáo.<br><b>Khoa:</b> Bài trình chiếu báo cáo cần có trang tiêu đề, mỗi trang nội dung nên có tiêu đề trang để giúp người nghe nhanh chóng hiểu được chủ đề và nội dung trình bày.<br><b>Minh:</b> Sử dụng cấu trúc phân cấp sẽ làm cho bố cục của bài báo cáo được mạch lạc, rõ ràng.<br><b>An:</b> Hay quá! Chúng ta phân công nhau làm từng phần việc nhé.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Một số chức năng cơ bản của phần mềm trình chiếu</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Một số chức năng cơ bản của phần mềm trình chiếu</div>
+        <div class="reading">1. Em đã biết gì về phần mềm trình chiếu? 2. Khi tạo một bài trình bày với nội dung gồm văn bản, hình ảnh và nhiều đối tượng khác, em chọn sử dụng phần mềm soạn thảo văn bản hay phần mềm trình chiếu? Vì sao?<br><br>Đọc mục <b>1</b> (SGK trang 55). Ở Lớp 3 và Lớp 4 các em đã biết <b>phần mềm trình chiếu</b> là phần mềm được thiết kế để cho phép người sử dụng trình bày thông tin như văn bản, hình ảnh, âm thanh và video dưới hình thức trình chiếu một cách hấp dẫn và hiệu quả. Phần mềm trình chiếu có các chức năng hỗ trợ người sử dụng tạo các bài trình chiếu:<ul><li><b>Tạo bài trình chiếu</b> lưu trên máy tính dưới dạng tệp tin. Chức năng này bao gồm soạn thảo, chỉnh sửa, định dạng văn bản. Mỗi bài trình chiếu gồm một hay nhiều trang chiếu (slide) được đánh số thứ tự. Thông tin trên mỗi trang có thể là văn bản, âm thanh, hình ảnh, biểu đồ hay video.</li><li><b>Trình chiếu</b> nội dung các trang chiếu lên màn hình hoặc màn chiếu rộng bằng máy chiếu (projector).</li></ul>Phần mềm trình chiếu có các hiệu ứng động, hiệu ứng chuyển trang làm cho nội dung trình bày thêm sinh động và hấp dẫn. Phần mềm trình chiếu thường được sử dụng để tạo bài trình chiếu phục vụ hội thảo, hội nghị, dạy học, quảng cáo, tạo các phần mềm giải trí như album với các hiệu ứng hoạt hình (ảnh, ca nhạc,…).</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 56</div>
+        <div data-task="p56" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Chức năng của phần mềm trình chiếu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Tiêu đề của bài trình chiếu</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Tạo tiêu đề của bài trình chiếu</div>
+        <div class="reading">1. Khi tạo bài trình chiếu, em thường trình bày các trang như thế nào? 2. Theo em, tiêu đề của bài trình chiếu nên đặt ở trang nào? Muốn làm nổi bật nội dung của mỗi trang thì cần làm như thế nào?<br><br>Đọc mục <b>2</b> (SGK trang 56). Một bài trình chiếu thường có nhiều trang được đánh số thứ tự. Trang đầu tiên là <b>trang tiêu đề</b>, còn lại là các <b>trang nội dung</b>. Nội dung trên các trang thường được bố trí thống nhất theo cùng một mẫu. Trang tiêu đề (Title Slide) cho biết chủ đề của bài trình chiếu. Trang tiêu đề còn có thêm thông tin như tên tác giả, ngày trình bày, địa điểm trình bày,… Trang này được ví như cổng vào bài trình chiếu, nó thu hút sự chú ý của người nghe ngay từ đầu. Trang nội dung thường có tiêu đề trang và nội dung (Title and Content). <b>Tiêu đề trang</b> được viết dưới dạng văn bản ở trên đầu mỗi trang. Tiêu đề trang là thành phần làm nổi bật nội dung cần trình bày. <b>Mẫu bố trí nội dung trang trình chiếu (layout)</b>: các phần mềm trình chiếu có sẵn các mẫu bố trí nội dung. Người sử dụng có thể sử dụng các mẫu này hoặc thay đổi bố trí nội dung của trang sao cho phù hợp. Em cũng có thể tự tạo mẫu bố trí cho trang chiếu.</div>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+        <div data-task="layout" data-n="3"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 57</div>
+        <div data-task="p57a" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Tiêu đề của bài trình chiếu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.3</span> Cấu trúc phân cấp</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 3</b> Cấu trúc phân cấp</div>
+        <div class="reading">Em hãy quan sát hai cách trình bày dự án Trường học xanh sau đây và cho biết cách trình bày nào dễ hiểu hơn?</div>
+        <div class="tbl-wrap"><table class="tbl" style="font-size:14px;max-width:640px"><thead><tr><th>Cách 1</th><th>Cách 2</th></tr></thead><tbody><tr>
+          <td style="vertical-align:top;line-height:1.6">Dự án Trường học xanh<br>- Ý tưởng<br>- Vai trò của cây xanh<br>- Đề xuất dự án<br>- Kế hoạch<br>- Khảo sát thực tế<br>- Thực hiện<br>- Phân công trồng và chăm sóc cây<br>- Thời gian<br>- Kết quả dự kiến<br>- Kết luận</td>
+          <td style="vertical-align:top;line-height:1.6">Dự án Trường học xanh<br>1. Ý tưởng<br>&emsp;- Vai trò của cây xanh<br>&emsp;- Đề xuất dự án<br>2. Kế hoạch<br>&emsp;2.1. Khảo sát thực tế<br>&emsp;2.2. Thực hiện<br>&emsp;&emsp;- Phân công trồng và chăm sóc cây<br>&emsp;&emsp;- Thời gian<br>&emsp;2.3. Kết quả dự kiến<br>3. Kết luận</td></tr></tbody></table></div>
+        <div class="reading">Trong Hoạt động 3, Cách 2 là hình thức trình bày theo cấu trúc phân cấp. Đây là một cấu trúc gồm danh sách nhiều cấp rất phổ biến trong soạn thảo văn bản, tạo các bài trình chiếu,… Cấu trúc phân cấp giúp truyền tải thông tin một cách mạch lạc, dễ hiểu và dễ quản lí. Người xem dễ dàng hiểu được bố cục của nội dung cần trình bày.</div>
+        <div data-task="hd3" data-n="1"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 57</div>
+        <div data-task="p57b" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Cấu trúc phân cấp</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-4">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.4</span> Thực hành: Tạo bài trình chiếu có tiêu đề, cấu trúc phân cấp</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Bài trình chiếu Trường học xanh</div>
+        <div class="reading"><b>Nhiệm vụ:</b> tạo bài trình chiếu báo cáo kết quả thực hiện dự án Trường học xanh của nhóm: bài trình chiếu có trang tiêu đề, các trang nội dung có tiêu đề trang; sử dụng cấu trúc phân cấp; lưu tệp với tên <b>Truonghocxanh.pptx</b>.<br><b>Hướng dẫn</b> (SGK minh hoạ bằng Microsoft PowerPoint 2016):
+          <ul>
+            <li><b>a) Tạo bài trình chiếu.</b> Bước 1. Khởi động PowerPoint. Phần mềm tự động tạo một bài trình chiếu mới; trang đầu tiên là trang tiêu đề: nhập chủ đề, tên bài trình chiếu vào <i>Click to add title</i>; nhập phụ đề (tên người thực hiện, thời gian,…) vào <i>Click to add subtitle</i> (Hình 11.1). Bước 2. Tạo các trang nội dung (Hình 11.2): nháy chuột vào <b>New Slide</b> để tạo trang mới; nháy chuột vào <b>Layout</b> để chọn mẫu bố trí cho trang; nhập tiêu đề của trang; nhập nội dung của trang.</li>
+            <li><b>b) Tạo cấu trúc phân cấp.</b> Bước 1. Đặt con trỏ soạn thảo ở đầu dòng cần tạo cấu trúc phân cấp (nếu cần tạo cấu trúc phân cấp giống nhau cho nhiều dòng em chọn đồng thời các dòng đó). Bước 2. Chọn lệnh <b>Increase List Level</b> (hoặc nhấn phím <b>Tab</b>) để tăng bậc phân cấp; chọn lệnh <b>Decrease List Level</b> (hoặc nhấn tổ hợp phím <b>Shift+Tab</b>) để giảm bậc phân cấp. Các dòng được tăng cấp sẽ tự động dịch chuyển sang phải một khoảng và giảm cỡ chữ; các dòng được giảm cấp sẽ tự động dịch chuyển sang trái một khoảng và tăng cỡ chữ.</li>
+            <li><b>Thay đổi màu sắc, kí hiệu đầu dòng:</b> đặt con trỏ soạn thảo ở đầu dòng cần thay đổi kí hiệu (hoặc chọn nhiều dòng); chọn Home, nháy chuột vào mũi tên bên phải lệnh <b>Bullets</b> hoặc <b>Numbering</b>, chọn <b>Bullets and Numbering...</b>; trong hộp thoại chọn <b>Bulleted</b> để thay đổi kí hiệu, <b>Numbered</b> để đánh số thứ tự, <b>Color</b> để đổi màu cho kí hiệu.</li>
+            <li><b>c) Lưu bài trình chiếu</b> với tên Truonghocxanh.pptx.</li>
+          </ul></div>
+        <figure class="fig"><img src="hinh/h111.jpg" alt="Trang tiêu đề: Click to add title và Click to add subtitle" style="max-width:560px"><figcaption>Hình 11.1. Trang tiêu đề</figcaption></figure>
+        <figure class="fig"><img src="hinh/h112.jpg" alt="Giao diện PowerPoint: nút New Slide, Layout, ô nhập tiêu đề trang và nội dung" style="max-width:560px"><figcaption>Hình 11.2. Trang nội dung</figcaption></figure>
+        <div class="reading">Làm trên phần mềm trình chiếu mô phỏng dưới đây: nhập trang tiêu đề như Hình 11.3, bấm <b>New Slide</b>, nhập tiêu đề <b>Nội dung trình bày</b> và các dòng như Hình 11.4 (mỗi dòng nhấn Enter). Sau đó đặt con trỏ vào dòng cần tăng cấp và nhấn <b>Tab</b> (giữ <b>Shift</b> và nháy để chọn nhiều dòng) cho đến khi giống Hình 11.8; đổi kí hiệu đầu dòng như Hình 11.9; bấm <b>Trình chiếu</b> để xem.</div>
+        <div data-tc1></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-task="nv3" data-n="3"></div>
+        <div data-task="nvkq" data-n="4"></div>
+        <div data-concept="c4"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 4. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Câu hỏi SGK trang 60</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Bài trình chiếu dự án của em</div>
+        <div class="reading">Có thể soạn thử trên phần mềm trình chiếu mô phỏng dưới đây (dùng cho cả Luyện tập câu 2) trước khi làm trên máy tính.</div>
+        <div data-tc2></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g7"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var bo = function(s){ return (s || "").normalize("NFC").trim().toLowerCase().replace(/\s+/g, " "); };
+      var MAU = [["Ý tưởng",1],["Vai trò của cây xanh",2],["Đề xuất dự án",2],["Kế hoạch",1],["Khảo sát",2],["Thực hiện",2],["Phân công",3],["Thời gian",3],["Kết quả dự kiến",2],["Kết luận",1]];
+      var NOTE = "Enter: thêm dòng · Tab / Shift+Tab: tăng / giảm cấp · Shift + nháy chuột hoặc Shift + ↑↓: chọn nhiều dòng · Backspace ở đầu dòng: nối với dòng trên.";
+      TrinhChieu($("[data-tc1]"), {title:"Phần mềm trình chiếu mô phỏng: Truonghocxanh", note:NOTE,
+        extra:[{label:"✍ Điền sẵn các dòng (Hình 11.7)", title:"Điền 10 dòng nội dung chưa phân cấp vào trang đang chọn", run:function(api){
+          var s = api.slides()[api.cur()]; if (s.layout !== "content") { api.say("Hãy chọn (hoặc tạo bằng New Slide) một trang nội dung trước.", true); return; }
+          s.lines = MAU.map(function(m){ return {t: m[0], lv: 1}; }); if (!s.title) s.title = "Nội dung trình bày"; api.say("Đã điền 10 dòng như Hình 11.7. Bây giờ tạo cấu trúc phân cấp bằng Tab, Shift+Tab."); }}],
+        check:function(x){ var S = x.slides, t = S[0] || {}, c = S.filter(function(s){ return s.layout === "content" && bo(s.title) === "nội dung trình bày"; })[0];
+          var L = c ? c.lines.filter(function(l){ return bo(l.t); }) : [], txt = L.length === MAU.length && MAU.every(function(m, i){ return bo(L[i].t).indexOf(bo(m[0])) === 0; });
+          return [["Trang 1 là trang tiêu đề: tiêu đề có “Trường học xanh”, phụ đề có tên người thực hiện, thời gian,…", t.layout === "title" && bo(t.title).indexOf("trường học xanh") >= 0 && bo(t.sub).length > 3],
+            ["Có trang nội dung (Title and Content) với tiêu đề trang “Nội dung trình bày”", !!c],
+            ["Trang nội dung có đủ 10 dòng như Hình 11.4 (Ý tưởng … Kết luận)", txt],
+            ["Cấu trúc phân cấp đúng như Hình 11.8 (3 cấp)", txt && MAU.every(function(m, i){ return L[i].lv === m[1]; })],
+            ["Đổi kí hiệu đầu dòng hoặc màu kí hiệu (như Hình 11.9)", !!c && c.lines.some(function(l){ return (l.b && l.b !== "•") || l.c; })],
+            ["Trình chiếu thử bài trình chiếu", x.log.indexOf("show") >= 0]]; }});
+      TrinhChieu($("[data-tc2]"), {title:"Phần mềm trình chiếu mô phỏng: bài của em", note:NOTE,
+        check:function(x){ var S = x.slides, cs = S.filter(function(s){ return s.layout === "content"; });
+          return [["Có trang tiêu đề (tên dự án, người thực hiện)", S[0] && S[0].layout === "title" && bo(S[0].title).length > 2 && bo(S[0].sub).length > 2],
+            ["Có ít nhất 2 trang nội dung, mỗi trang có tiêu đề trang", cs.length >= 2 && cs.every(function(s){ return bo(s.title).length > 1; })],
+            ["Có dùng cấu trúc phân cấp (dòng cấp 2 trở lên)", cs.some(function(s){ return s.lines.some(function(l){ return l.lv > 1 && bo(l.t); }); })]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 7 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=22"></script>
+</body>
+</html>
