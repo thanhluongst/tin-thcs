@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thuật toán tìm kiếm nhị phân · Tin học 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 7 · Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>15</b></div><h1><span class="sr-only">Bài 15. </span>Thuật toán tìm kiếm nhị phân</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Giải thích được thuật toán tìm kiếm nhị phân.</li>
+        <li>Biểu diễn và mô phỏng được hoạt động của thuật toán tìm kiếm nhị phân trên một bộ dữ liệu vào có kích thước nhỏ.</li>
+        <li>Giải thích được mối liên quan giữa sắp xếp và tìm kiếm, nêu được ví dụ minh hoạ.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Danh sách đã sắp xếp, chia đôi, đầu ra">
+      <span class="node">Danh sách đã sắp xếp</span>
+      <span class="node">Xét vị trí giữa, chia đôi</span>
+      <span class="node io">Vị trí / Không tìm thấy</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 7A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 7A1-T15" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Tìm kiếm nhị phân</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Sắp xếp và tìm kiếm</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+        <script src="../chung/timkiem.js?v=3"></script>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Tìm kiếm trong danh sách dài</div>
+        <div class="reading">Việc kinh doanh mở rộng, số lượng khách hàng của cửa hàng bán giống cây trồng nhà An lên đến hàng trăm người. Việc tìm kiếm tên khách hàng trong danh sách trở nên khó khăn. Em có gợi ý gì cho bạn An để việc tìm kiếm được dễ dàng hơn không?</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Thuật toán tìm kiếm nhị phân</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Tìm khách hàng tên “Trúc”</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 74–75). Khi danh sách khách hàng ngày càng nhiều, để thuận lợi cho việc tìm kiếm, An đã giúp mẹ soạn thảo danh sách khách hàng trên máy tính với tên khách hàng được sắp xếp theo thứ tự chữ cái. Giả sử An cần tìm địa chỉ của khách hàng tên là “Trúc” trong danh sách khách hàng như Hình 15.1. Khi danh sách đã được sắp xếp, An không cần tìm từ đầu mà so sánh ngay giá trị cần tìm với giá trị của vị trí ở giữa danh sách. Nếu giá trị cần tìm bằng giá trị ở vị trí giữa thì tìm thấy và dừng lại, nếu lớn hơn thì chỉ cần tìm ở nửa sau của danh sách, nếu nhỏ hơn thì tìm ở nửa đầu của danh sách. Lặp lại quá trình đó cho đến khi tìm thấy hoặc hết danh sách. Như vậy, tại mỗi bước lặp, thuật toán tìm kiếm thu hẹp danh sách tìm kiếm chỉ còn một nửa. Do đó thuật toán này có tên là <b>tìm kiếm nhị phân</b> (chia đôi).</div>
+        <div class="tbl-wrap"><table class="tbl" style="font-size:14px;max-width:560px">
+          <caption style="caption-side:top;text-align:left;font-style:italic;padding:4px 0">Hình 15.1. Danh sách khách hàng</caption>
+          <thead><tr><th>TT</th><th>Họ đệm</th><th>Tên</th><th>Địa chỉ</th></tr></thead>
+          <tbody><tr><td>1</td><td>Nguyễn</td><td>An</td><td>Số 48 đường Trưng Vương</td></tr><tr><td>2</td><td>Trần</td><td>Bình</td><td>Xóm 3, Thư Trai</td></tr><tr><td>3</td><td>Nguyễn</td><td>Hoà</td><td>69 Ngô Quyền</td></tr><tr><td>4</td><td>Kiều Thị</td><td>Liên</td><td>75 Lê Văn Tám</td></tr><tr><td>5</td><td>Hoàng</td><td>Mai</td><td>Số 3, tổ 7, Phúc Hoà</td></tr><tr><td>6</td><td>Ngô Hoàng</td><td>Phương</td><td>Xóm 6, Lục Xuân</td></tr><tr><td>7</td><td>Ngô Hà</td><td>Trang</td><td>Phương Độ, Phúc Thọ</td></tr><tr><td>8</td><td>Thanh</td><td>Trúc</td><td>Xóm 2, Lục Xuân</td></tr><tr><td>9</td><td>Trần Thanh</td><td>Tước</td><td>48 Hoàng Hoa Thám</td></tr></tbody>
+        </table></div>
+        <div class="reading">Các bước để An tìm khách hàng tên “Trúc”: <b>Bước 1.</b> Xét vị trí ở giữa của dãy, đó là vị trí số 5 (Mai). So sánh “Trúc” và “Mai”: vì “T” đứng sau “M” trong bảng chữ cái nên bỏ đi nửa đầu danh sách. <b>Bước 2.</b> Xét vị trí ở giữa của nửa sau của dãy là vị trí số 7 (Trang). Vì “Tru” đứng sau “Tra” trong bảng chữ cái nên bỏ đi nửa đầu danh sách. <b>Bước 3.</b> Xét vị trí ở giữa của nửa sau còn lại của dãy, đó là vị trí số 8: hai giá trị bằng nhau nên thuật toán kết thúc. Chạy thử trên bảng mô phỏng (bấm <b>▶ Bước lặp tiếp</b>).</div>
+        <div data-tk1></div>
+        <div data-task="vung" data-n="1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Sắp xếp và tìm kiếm</div>
+        <div class="reading">1. Em hãy cho biết thuật toán tìm kiếm tuần tự phải thực hiện bao nhiêu bước lặp để tìm được khách hàng tên “Trúc” trong danh sách ở Hình 15.1? Em hãy so sánh số bước lặp thực hiện của thuật toán tìm kiếm tuần tự với số bước lặp thực hiện tìm kiếm nhị phân. 2. Theo em trước khi thực hiện thuật toán tìm kiếm nhị phân, danh sách khách hàng cần thoả mãn điều kiện gì? Nếu không thoả mãn điều kiện đó, thuật toán tìm kiếm nhị phân có thực hiện được không?<br><i>Gợi ý: sau mỗi lần tìm, bảng mô phỏng cho biết luôn số bước lặp nếu dùng tìm kiếm tuần tự để so sánh.</i></div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Mô tả thuật toán bằng ngôn ngữ tự nhiên</div>
+        <div class="reading">Giả sử danh sách (dãy) đã được sắp xếp theo thứ tự từ nhỏ đến lớn và gọi <i>vùng tìm kiếm</i> là đoạn danh sách mà thuật toán tìm kiếm trên đó. Ban đầu, vùng tìm kiếm là toàn bộ danh sách.<ul>
+          <li>Bước 1. Nếu vùng tìm kiếm không có phần tử nào thì kết luận không tìm thấy và thuật toán kết thúc.</li>
+          <li>Bước 2. Xác định vị trí ở giữa của vùng tìm kiếm. Vị trí này chia vùng tìm kiếm thành hai nửa: nửa trước và nửa sau vị trí giữa. <i>(Vị trí giữa của vùng tìm kiếm bằng phần nguyên của (vị trí đầu + vị trí cuối)/2.)</i></li>
+          <li>Bước 3. Nếu giá trị cần tìm bằng giá trị ở vị trí giữa thì kết luận “giá trị cần tìm xuất hiện tại vị trí giữa” và kết thúc.</li>
+          <li>Bước 4. Nếu giá trị cần tìm nhỏ hơn giá trị ở vị trí giữa thì vùng tìm kiếm mới được thu hẹp lại, chỉ còn nửa trước của dãy. Ngược lại (nếu giá trị cần tìm lớn hơn giá trị ở vị trí giữa) vùng tìm kiếm mới được thu hẹp lại, chỉ còn nửa sau của dãy.</li>
+          <li>Bước 5. Lặp lại từ Bước 1 đến Bước 4 cho đến khi tìm thấy giá trị cần tìm (Bước 3) hoặc vùng tìm kiếm không còn phần tử nào (Bước 1).</li></ul>
+          <b>Lưu ý:</b> “nửa trước” và “nửa sau” không gồm phần tử giữa. Trong trường hợp so sánh kí tự thì đứng trước tương ứng là “nhỏ hơn”, kí tự đứng sau trong bảng chữ cái là “lớn hơn”.</div>
+        <div data-task="nn" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 76</div>
+        <div class="reading">Em hãy viết các bước lặp thực hiện thuật toán tìm kiếm nhị phân để tìm khách hàng tên “Hoà” trong danh sách ở Hình 15.1 (kiểm tra bằng bảng mô phỏng ở trên: nhập Hoà rồi bấm ↺ Làm lại).</div>
+        <div data-task="p76" data-n="1"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Thuật toán tìm kiếm nhị phân</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Sắp xếp và tìm kiếm</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Sắp xếp giúp tìm kiếm nhanh hơn</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 76–77). Trong ví dụ ở mục 1, khách hàng tên “Trúc” được tìm thấy sau 3 bước lặp thực hiện theo thuật toán tìm kiếm nhị phân, trong khi thuật toán tìm kiếm tuần tự phải thực hiện 8 bước lặp. Xét trường hợp có một khách hàng nào đó mà mẹ bạn An quên chưa ghi vào sổ, do đó tên khách hàng không có trong danh sách ở Hình 15.1. Khi phải tìm kiếm tên khách hàng này, thuật toán tìm kiếm tuần tự cần thực hiện 9 bước lặp để xét hết danh sách và kết luận “Không tìm thấy”, trong khi thuật toán tìm kiếm nhị phân chỉ mất 4 bước lặp. Như vậy, trong ví dụ trên, thuật toán tìm kiếm nhị phân thực hiện nhanh hơn thuật toán tìm kiếm tuần tự. Có được ưu điểm này là do trước khi thực hiện thuật toán tìm kiếm nhị phân, danh sách khách hàng cần tìm đã được sắp xếp. Nhờ việc danh sách đã được sắp xếp, tại mỗi bước lặp, thuật toán tìm kiếm nhị phân thu hẹp được phạm vi tìm kiếm chỉ còn một nửa.<br>Thử trên bảng mô phỏng ở mục 2.1 với một tên không có trong danh sách, ví dụ <b>Vân</b>.</div>
+        <div data-task="khong" data-n="1"></div>
+        <div data-concept="c3"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Trò chơi tìm số</div>
+        <div class="reading"><b>Chuẩn bị:</b> hai bạn chơi A, B và 10 tấm thẻ ghi 10 số khác nhau (các số đều nhỏ hơn 20). Giả sử A giữ 10 tấm thẻ và B là người tìm kiếm. <b>Yêu cầu:</b> bạn B sử dụng thuật toán tìm kiếm nhị phân để tìm một số nhỏ hơn 20 trong các tấm thẻ của bạn A. <b>Cách chơi:</b> Bước 1. A úp lần lượt 10 chiếc thẻ lên bàn theo thứ tự các số từ bé đến lớn. Bước 2. B cho A biết con số mình cần tìm. Bước 3. B chọn tấm thẻ ở vị trí giữa. Bước 4. A hé mở tấm thẻ và trả lời B bằng cách nói một trong ba cụm từ: “bằng nhau”, “lớn hơn” hoặc “bé hơn” tuỳ thuộc vào kết quả so sánh số bạn B cần tìm với số ở vị trí giữa của dãy. Bước 5. Tuỳ vào câu trả lời của A mà B chọn nửa dãy tiếp theo để tìm kiếm. Bước 6. Lặp lại các bước 3, 4, 5 cho đến khi B tìm thấy số cần tìm hoặc đã tìm hết dãy số. Bước 7. Hoán đổi vị trí của A và B trong lượt chơi tiếp theo.<br>Chơi thử trên máy: máy đóng vai A, em là B – nháy vào tấm thẻ ở vị trí giữa để lật.</div>
+        <div data-game></div>
+        <div data-task="hd2" data-n="1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 77</div>
+        <div data-task="p77" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Sắp xếp và tìm kiếm</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Tìm tên nước</div>
+        <div class="reading">1. Cho danh sách tên các nước sau đây: Bolivia, Albania, Scotland, Canada, Vietnam, Iceland, Portugal, Greenland, Germany. a) Em hãy sắp xếp danh sách tên các nước theo thứ tự trong bảng chữ cái. b) Em hãy liệt kê các bước lặp tìm kiếm tên nước <b>Iceland</b> trong danh sách đã sắp xếp theo thuật toán tìm kiếm nhị phân. c) Em hãy so sánh số bước lặp thực hiện tìm kiếm ở phần b với số bước lặp thực hiện tìm kiếm ở phần Luyện tập của bài 14.<br>2. Em hãy chỉ ra một bài toán tìm kiếm trong thực tế mà có thể thực hiện bằng thuật toán tìm kiếm nhị phân. Hãy thực hiện thuật toán tìm kiếm nhị phân để giải quyết bài toán đó.<br>Trên bảng mô phỏng, danh sách đang <b>chưa sắp xếp</b>: bấm <b>⇅ Sắp xếp danh sách</b> rồi mới tìm được.</div>
+        <div data-tk2></div>
+        <div data-task="lt1a" data-n="1"></div>
+        <div data-task="lt1b" data-n="2"></div>
+        <div data-task="lt1c" data-n="3"></div>
+        <div data-task="lt2" data-n="4"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Tra từ điển</div>
+        <div class="reading">Em tìm một từ tiếng Anh trong quyển từ điển theo cách nào? Tại sao em lại dùng cách đó? Thử tìm một từ trong “trang từ điển” mô phỏng dưới đây (có thể sửa danh sách từ).</div>
+        <div data-tk3></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var KH = [["Nguyễn","An","Số 48 đường Trưng Vương"],["Trần","Bình","Xóm 3, Thư Trai"],["Nguyễn","Hoà","69 Ngô Quyền"],["Kiều Thị","Liên","75 Lê Văn Tám"],["Hoàng","Mai","Số 3, tổ 7, Phúc Hoà"],["Ngô Hoàng","Phương","Xóm 6, Lục Xuân"],["Ngô Hà","Trang","Phương Độ, Phúc Thọ"],["Thanh","Trúc","Xóm 2, Lục Xuân"],["Trần Thanh","Tước","48 Hoàng Hoa Thám"]];
+      TimNhiPhan($("[data-tk1]"), {title:"Mô phỏng: tìm kiếm nhị phân trong danh sách khách hàng (Hình 15.1)", items:KH.map(function(x){ return {k:x[1], pre:x[0], v:x[2]}; }), target:"Trúc", kName:"Tên",
+        note:"Mỗi lần bấm “Bước lặp tiếp”: xác định vị trí giữa, so sánh, thu hẹp vùng tìm kiếm còn một nửa.",
+        check:function(x){ var L = x.log.filter(function(l){ return l.result; });
+          return [["Tìm “Trúc”: tìm thấy ở vị trí 8 sau 3 bước lặp", L.some(function(l){ return l.pos === 8 && l.steps === 3; })],
+            ["Tìm “Hoà” (câu hỏi trang 76): tìm thấy ở vị trí 3", L.some(function(l){ return l.pos === 3; })],
+            ["Tìm một tên không có trong danh sách: Không tìm thấy", L.some(function(l){ return l.result === "notfound"; })]]; }});
+      TroChoiTimSo($("[data-game]"), {title:"Trò chơi tìm số (máy là A, em là B)", note:"Nháy vào tấm thẻ ở vị trí giữa để lật. Thẻ mờ là đã bị loại.",
+        check:function(x){ return [["Chơi xong ít nhất 3 ván", x.log.length >= 3], ["Có ván tìm được số sau không quá 4 lượt lật", x.log.some(function(l){ return l.found && l.turns <= 4; })]]; }});
+      var NUOC = ["Bolivia","Albania","Scotland","Canada","Vietnam","Iceland","Portugal","Greenland","Germany"];
+      TimNhiPhan($("[data-tk2]"), {title:"Mô phỏng: tìm tên nước (Luyện tập)", items:NUOC.map(function(x){ return {k:x}; }), target:"Iceland", kName:"Tên nước",
+        check:function(x){ return [["Sắp xếp danh sách theo bảng chữ cái", x.sorted], ["Tìm “Iceland”: tìm thấy sau 3 bước lặp", x.log.some(function(l){ return l.result === "found" && l.steps === 3 && /iceland/i.test(l.target); })]]; }});
+      TimNhiPhan($("[data-tk3]"), {title:"Mô phỏng: trang từ điển", editable:true, kName:"Từ", target:"orange",
+        items:["apple","banana","book","cat","dog","house","lemon","mango","orange","pencil","school","teacher","tree","water","window"].map(function(x){ return {k:x}; })});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 7 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
