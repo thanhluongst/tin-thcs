@@ -57,7 +57,7 @@ Mọi bài dùng **chung một Google Sheet và một Apps Script**, tức là c
 ## Quy trình làm một bài mới
 
 1. Sao chép thư mục của bài làm gần nhất (hiện là `tin7-phan-mem-may-tinh`), **bỏ thư mục `.git`**, rồi đổi tên thư mục theo quy ước.
-2. Viết lại `assets/content.js`: câu hỏi SGK (`TASKS`), phần chốt (`CONCEPTS`), nhận xét mẫu (`NX_MAU`), tiến trình 4 bước (`STAGES`), `id`, `title` và tiền tố cột.
+2. Viết lại `assets/content.js`: câu hỏi SGK (`TASKS`), phần chốt (`CONCEPTS`), nhận xét mẫu (`NX_MAU`), tiến trình 4 bước (`STAGES`), `id`, `title` và tiền tố cột. Cuối mỗi bước có một mục **Ghi bài**: khung chốt `ghi:true` (`g1`–`g5`) chứa nội dung ngắn gọn để học sinh chép vào vở, kèm một dòng `{title:"Ghi bài", tasks:[], concept:"gN", ghi:true}` trong `STAGES` và một khối `<div class="act act-ghi">` cuối mỗi `<section>` trong `index.html`.
 3. Viết lại phần thân bài trong `index.html`, gồm tiêu đề (số bài trong ô `bai-badge`, tên bài trong `h1`), hộp **"Sau bài học này em sẽ"** (`.goals`, chép mục tiêu từ đầu bài trong SGK), mục lục và các `<section>`. Trang giáo viên tự đọc nội dung bài từ `index.html`. Trong `giaovien.html` chỉ cần đổi tên bài.
 4. Trong `assets/hs.js`, đổi `KEY`. Nếu bài có hình thì cắt hình từ SGK, bỏ vào `hinh/`.
 5. Chạy thử trên máy, rồi đổi `tt: "xong"` trong `danh-muc.js`.
