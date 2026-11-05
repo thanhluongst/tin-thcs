@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Quản lí dữ liệu trong máy tính · Tin học 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=22">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 7 · Chủ đề 1. Máy tính và cộng đồng</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>3</b></div><h1><span class="sr-only">Bài 3. </span>Quản lí dữ liệu trong máy tính</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Thao tác thành thạo với tệp và thư mục: tạo, sao chép, di chuyển, đổi tên, xoá tệp và thư mục.</li>
+        <li>Biết được chương trình cũng là dữ liệu, có thể được lưu trữ trong máy tính.</li>
+        <li>Nêu được ví dụ về biện pháp bảo vệ dữ liệu như sao lưu, phòng chống virus,…</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Tệp và thư mục, bảo vệ dữ liệu, thực hành">
+      <span class="node">Tệp và thư mục</span>
+      <span class="node">Bảo vệ dữ liệu</span>
+      <span class="node io">Thực hành</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 7A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 7A1-T3" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Tệp, thư mục</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Bảo vệ dữ liệu</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Đặt tên thư mục</div>
+        <div class="reading">Trong một chuyến du lịch cùng gia đình, em đã ghi chép lại thông tin và chụp nhiều ảnh kỉ niệm. Các hình ảnh và thông tin đó cần được lưu trữ. Hãy vẽ sơ đồ cây thư mục để chứa các tệp dữ liệu và đặt tên cho các thư mục đó sao cho dễ tìm kiếm và truy cập.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Tên tệp và thư mục trong máy tính</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Đặt tên tệp, thư mục</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 13). Khi làm bài tập dự án, số lượng tệp và thư mục có thể tăng lên nhanh chóng. Nếu không được tổ chức lưu trữ tốt, em có thể mất nhiều thời gian để tìm kiếm những gì mình cần. Trước khi lưu trữ, dữ liệu cần được <b>phân loại</b> để việc lưu trữ có trật tự, giúp việc tìm kiếm dữ liệu nhanh hơn. Nên đặt tên tệp và thư mục <b>đơn giản, dễ hiểu</b>, nhất là khi làm việc trong một dự án nhóm, để mọi thành viên đều có thể dễ dàng tìm thấy những gì họ cần. Hình 3.1 là ví dụ về một cách đặt tên tệp, thư mục và thư mục con khá hợp lí, vì nó cho em biết trong đó chứa những gì.<br><br><b>Các chương trình máy tính cũng được lưu trữ dưới dạng tệp giống như tệp dữ liệu.</b> Trong hệ điều hành Windows, chúng thường có phần mở rộng <b>.exe, .com, .bat, .msi</b>. Không nên xoá hay di chuyển những tệp này nếu không có lí do xác đáng vì chúng có thể cần thiết với một số hoạt động của máy tính.</div>
+        <figure class="fig"><img src="hinh/h31.jpg" alt="Cửa sổ File Explorer: thư mục DuLich chứa DiemDen và GiaDinh; DiemDen chứa BanNgay, BinhMinh, HoangHon và hai tệp PhaoHoa01.jpg, PhaoHoa02.jpg" style="max-width:560px"><figcaption>Hình 3.1. Thư mục và tệp</figcaption></figure>
+        <div data-task="ten" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 14</div>
+        <div data-task="p14a" data-n="1"></div>
+        <div data-task="p14b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Tên tệp và thư mục</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Các biện pháp bảo vệ dữ liệu</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Bảo vệ dữ liệu</div>
+        <div class="reading">Máy tính của em có nhiều dữ liệu quan trọng. Em muốn bảo vệ dữ liệu trong máy tính của mình thì: a) Em sẽ chọn cách bảo vệ dữ liệu nào? b) Tại sao em chọn cách đó?</div>
+        <div data-task="hd2" data-n="1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> a) Sao lưu dữ liệu</div>
+        <div class="reading">Đọc mục <b>2a</b> (SGK trang 14). Lưu trữ thông tin trong máy tính và trên Internet có nhiều rủi ro. Dưới đây là một số biện pháp chính để bảo vệ dữ liệu.<br><br>Dữ liệu cần được <b>sao lưu thường xuyên</b>. Sao lưu dữ liệu là tạo ra bản sao các tệp và thư mục rồi lưu chúng lên một thiết bị lưu trữ. Thiết bị lưu trữ đó cho phép em khôi phục lại dữ liệu nếu có điều gì đó xảy ra với bản gốc.<ul><li><b>Sao lưu cục bộ</b>: bản sao được đặt trên cùng máy tính chứa bản gốc hoặc trên các thiết bị lưu trữ như ổ cứng ngoài, USB,… Cách này giúp phục hồi nhanh chóng. Tuy nhiên, nếu xảy ra rủi ro cho thiết bị lưu trữ hoặc máy tính bị thất lạc, bản sao sẽ bị mất theo bản gốc.</li><li><b>Sao lưu từ xa</b>: bản sao được đặt bên ngoài máy tính chứa bản gốc, ví dụ ở một máy tính khác hoặc được đưa lên Internet nhờ công nghệ đám mây. Nếu máy tính bị hỏng thì bản sao lưu vẫn an toàn.</li></ul></div>
+        <div class="tbl-wrap"><table class="tbl" style="font-size:14px">
+          <caption style="caption-side:top;text-align:left;font-style:italic;padding:4px 0">Bảng 3.1. Ưu và nhược điểm của một số thiết bị lưu trữ</caption>
+          <thead><tr><th>Thiết bị lưu trữ</th><th>Ưu điểm</th><th>Nhược điểm</th></tr></thead>
+          <tbody>
+            <tr><td><b>Thẻ nhớ, USB</b></td><td>Nhỏ gọn. Tiện sử dụng. Khá bền.</td><td>Dễ bị thất lạc. Dễ lây nhiễm virus. Dữ liệu dễ bị hỏng nếu sử dụng không đúng cách.</td></tr>
+            <tr><td><b>Đĩa quang</b> (CD, DVD)</td><td>Chi phí thấp. Khó bị nhiễm virus.</td><td>Dễ hỏng dữ liệu. Dung lượng nhỏ. Khó ghi dữ liệu vì phải có đầu ghi. Khó cất giữ.</td></tr>
+            <tr><td><b>Ổ cứng ngoài</b></td><td>Dung lượng lớn. Tiện sử dụng.</td><td>Kích thước to và nặng, khó mang theo. Có thể hỏng dữ liệu nếu bị rơi.</td></tr>
+            <tr><td><b>Lưu trữ nhờ công nghệ đám mây</b></td><td>Truy cập được bằng bất kì máy nào có kết nối Internet. Sao lưu từ xa.</td><td>Cần kết nối Internet. Dịch vụ có thể không đáng tin cậy. Có thể bị tin tặc tấn công.</td></tr>
+          </tbody>
+        </table></div>
+        <div data-task="bang" data-n="1"></div>
+        <div data-task="saoluu" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> b) Mật khẩu · c) Phần mềm diệt virus</div>
+        <div class="reading">Đọc mục <b>2b</b> (SGK trang 15). Để bảo vệ dữ liệu, tránh bị người khác truy cập trái phép, em nên đặt <b>mật khẩu</b> cho tài khoản của mình trên máy tính. Tên tài khoản thường được đặt dựa trên tên người sử dụng, còn mật khẩu cần đặt theo cách riêng để giữ bí mật cho mình. Mật khẩu là một tài khoản bảo mật và nó có thể được thay đổi để người khác khó đoán.<ul><li><b>Mật khẩu mạnh</b>: dài ít nhất tám kí tự; bao gồm cả chữ số, chữ in hoa, chữ thường và các kí hiệu đặc biệt như @, #,…; không phải là một từ thông dụng.</li><li><b>Mật khẩu yếu</b>: tên mình hoặc tên người thân; từ hoặc cụm từ đặc biệt (ví dụ: “Hà Nội”, “12345678”); số điện thoại hoặc ngày sinh.</li></ul></div>
+        <div class="mk-box" data-mk>
+          <style>
+            .mk-box{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:8px}
+            .mk-box .t{font-weight:700}
+            .mk-box input{font:inherit;font-size:15px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;width:100%;max-width:320px;background:var(--bg,#fff);color:inherit}
+            .mk-box ul{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:14px}
+            .mk-box li::before{content:"○ ";opacity:.6}
+            .mk-box li.ok::before{content:"✓ ";color:#1c7c54;opacity:1;font-weight:700}
+            .mk-box li.ok{color:#1c7c54}
+            .mk-box .bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden;max-width:320px}
+            .mk-box .bar i{display:block;height:100%;width:0;transition:width .2s,background .2s}
+            .mk-box .kq{font-weight:700}
+            .mk-box .note{font-size:13px;opacity:.85}
+          </style>
+          <div class="t">Bảng kiểm tra mật khẩu</div>
+          <input data-in type="text" autocomplete="off" spellcheck="false" placeholder="Gõ thử một mật khẩu, ví dụ 2n#M1nhKh0a" aria-label="Mật khẩu thử">
+          <div class="bar"><i data-bar></i></div>
+          <div class="kq" data-kq aria-live="polite">Chưa nhập.</div>
+          <ul>
+            <li data-r="len">Dài ít nhất 8 kí tự</li>
+            <li data-r="so">Có chữ số</li>
+            <li data-r="hoa">Có chữ in hoa</li>
+            <li data-r="thuong">Có chữ thường</li>
+            <li data-r="kh">Có kí hiệu đặc biệt (@, #, !,…)</li>
+            <li data-r="pb">Không phải từ, dãy số thông dụng</li>
+          </ul>
+          <div class="note">Chỉ gõ thử, <b>không nhập mật khẩu thật</b> của em. Trang này không gửi nội dung ô này đi đâu.</div>
+          <script>
+          (function(){
+            var box = document.currentScript.parentNode, q = function(s){ return box.querySelector(s); };
+            var PB = ["12345678","123456789","1234567890","87654321","11111111","00000000","matkhau","password","qwerty","abc123","abcdef","hanoi","ha noi","iloveyou","admin"];
+            function check(){
+              var s = q("[data-in]").value, low = s.toLowerCase().replace(/[^a-z0-9 ]/g, "");
+              var r = {len: s.length >= 8, so: /\d/.test(s), hoa: /[A-ZÀ-Ỹ]/.test(s), thuong: /[a-zà-ỹ]/.test(s), kh: /[^A-Za-z0-9À-ỹ\s]/.test(s),
+                pb: !!s && !PB.some(function(w){ return low === w || low.indexOf(w) >= 0 && low.length - w.length < 3; }) && !/^\d+$/.test(s)};
+              var n = 0; Object.keys(r).forEach(function(k){ var li = q('[data-r="' + k + '"]'); li.classList.toggle("ok", r[k]); if (r[k]) n++; });
+              var kq = !s ? "Chưa nhập." : n === 6 ? "Mật khẩu mạnh" : n >= 4 ? "Mật khẩu trung bình" : "Mật khẩu yếu";
+              var col = !s ? "transparent" : n === 6 ? "#1c7c54" : n >= 4 ? "#d08a10" : "#c0392b";
+              q("[data-kq]").textContent = kq; q("[data-kq]").style.color = s ? col : "";
+              q("[data-bar]").style.width = (s ? Math.max(10, n / 6 * 100) : 0) + "%"; q("[data-bar]").style.background = col;
+            }
+            q("[data-in]").addEventListener("input", check); check();
+          })();
+          </script>
+        </div>
+        <div data-task="mk" data-n="1"></div>
+        <div class="reading">Đọc mục <b>2c</b> (SGK trang 15). Có những <b>phần mềm độc hại</b> có thể làm hỏng dữ liệu và các chương trình trong máy tính. Phần mềm độc có nhiều loại khác nhau như virus, sâu, phần mềm gián điệp,… <b>Phần mềm diệt virus</b> được thiết kế để phát hiện và diệt virus, phát hiện và chặn các cuộc tấn công từ phần mềm độc hại. Một số hệ điều hành được trang bị sẵn phần mềm diệt virus, chẳng hạn <b>Windows Defender</b> của Windows. Để dữ liệu được an toàn, em cần đảm bảo máy tính của mình đã được cài phần mềm diệt virus, phần mềm đó phải thường xuyên hoạt động và được <b>cập nhật</b>.</div>
+        <figure class="fig sm"><img src="hinh/h32.jpg" alt="Biểu tượng các phần mềm diệt virus: Kaspersky, AVG, Avira, Bkav, Avast"><figcaption>Hình 3.2. Biểu tượng của một số phần mềm diệt virus</figcaption></figure>
+        <div data-task="virus" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 16</div>
+        <div data-task="p16a" data-n="1"></div>
+        <div data-task="p16b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Bảo vệ dữ liệu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Thực hành: Quản lí dữ liệu trong máy tính</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Tạo và sắp xếp cây thư mục</div>
+        <div class="reading">Em hãy tạo cây thư mục như Hình 3.3 và thực hiện:<ul><li>Đổi tên thư mục “<b>HoangHon</b>” thành “<b>ChieuToi</b>”.</li><li>Di chuyển các tệp và thư mục con của thư mục “<b>BinhMinh</b>” sang thư mục “<b>BanNgay</b>”.</li><li>Xoá thư mục “<b>BinhMinh</b>”.</li></ul><b>Hướng dẫn.</b> Ứng dụng quản lí tệp giúp em tổ chức, sắp xếp các thư mục và các tệp trên ổ cứng. Trong Windows 10 là <b>File Explorer</b> (Windows 7 trở về trước gọi là Windows Explorer). Khi mở một thư mục, nội dung thư mục sẽ xuất hiện.<ul><li><b>a) Tạo thư mục</b>: trên màn hình nền, nháy nút phải chuột, chọn <b>New/Folder</b>. Thư mục mới có tên New Folder, em gõ tên mới, ví dụ “DuLich”. Trong DuLich, tạo tiếp các thư mục con theo cách trên cho đến khi hoàn thành cây thư mục.</li><li><b>b) Đổi tên, di chuyển, sao chép, xoá</b>: nháy nút phải chuột vào thư mục, chọn <b>Rename</b> để đổi tên; <b>Cut</b> và <b>Paste</b> để di chuyển; <b>Copy</b> và <b>Paste</b> để sao chép; <b>Delete</b> để xoá. Thực hiện tương tự với tệp.</li></ul></div>
+        <figure class="fig sm"><img src="hinh/h36.jpg" alt="Bảng chọn khi nháy nút phải chuột: Cut chuyển vào bộ nhớ, Copy sao chép vào bộ nhớ, Paste dán từ bộ nhớ ra, Delete xoá, Rename đổi tên" style="max-width:420px"><figcaption>Hình 3.6. Các lệnh đổi tên, di chuyển, sao chép, xoá,… thư mục</figcaption></figure>
+
+        <div class="fx" data-fx>
+          <style>
+            .fx{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:10px}
+            .fx .t{font-weight:700}
+            .fx .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+            .fx button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:5px 10px;cursor:pointer}
+            .fx button:hover:not(:disabled){border-color:var(--accent)}
+            .fx button:disabled{opacity:.4;cursor:default}
+            .fx input{font:inherit;font-size:14px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;width:11em;background:var(--bg,#fff);color:inherit}
+            .fx .tree{border:1px dashed var(--line);border-radius:8px;padding:8px 10px;font-size:15px;overflow-x:auto}
+            .fx .tree ul{list-style:none;margin:0;padding-left:22px;border-left:1px dotted var(--line)}
+            .fx .tree > ul{padding-left:0;border-left:0}
+            .fx .tree li{margin:2px 0}
+            .fx .tree span{cursor:pointer;padding:1px 6px;border-radius:5px;white-space:nowrap;display:inline-block}
+            .fx .tree span:hover{background:var(--accent-soft,#d6efe9)}
+            .fx .tree span.sel{background:var(--accent,#1f8a70);color:#fff}
+            .fx .tree span.cut{opacity:.5;font-style:italic}
+            .fx .msg{font-size:14px;min-height:1.3em}
+            .fx .ck{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:14px}
+            .fx .ck li::before{content:"☐ "}
+            .fx .ck li.ok::before{content:"☑ ";color:#1c7c54}
+            .fx .ck li.ok{color:#1c7c54;font-weight:600}
+          </style>
+          <div class="t">Bảng mô phỏng File Explorer (cây thư mục như Hình 3.3)</div>
+          <div class="bar">
+            <button type="button" data-a="new">📁 New/Folder</button>
+            <input data-name aria-label="Tên mới" placeholder="Tên mới">
+            <button type="button" data-a="rename">Rename</button>
+            <button type="button" data-a="cut">Cut</button>
+            <button type="button" data-a="copy">Copy</button>
+            <button type="button" data-a="paste">Paste</button>
+            <button type="button" data-a="delete">Delete</button>
+            <button type="button" data-a="reset">Trả về ban đầu</button>
+          </div>
+          <div class="tree" data-tree></div>
+          <div class="msg" data-msg aria-live="polite">Bấm vào một thư mục hoặc tệp để chọn, rồi bấm lệnh.</div>
+          <ul class="ck">
+            <li data-ck="0">Đổi tên HoangHon thành ChieuToi</li>
+            <li data-ck="1">Di chuyển các tệp và thư mục con của BinhMinh sang BanNgay</li>
+            <li data-ck="2">Xoá thư mục BinhMinh</li>
+          </ul>
+          <script>
+          (function(){
+            var box = document.currentScript.parentNode, q = function(s){ return box.querySelector(s); };
+            function F(n, c){ return {n:n, d:true, c:c || []}; }
+            function T(n){ return {n:n, d:false}; }
+            function start(){ return F("C:", [F("DuLich", [F("GiaDinh"), F("DiemDen", [F("BinhMinh", [T("BinhMinh01.jpg"), T("BinhMinh02.jpg"), F("Video", [T("MatTroiMoc.mp4")])]), F("BanNgay"), F("HoangHon"), T("PhaoHoa01.jpg"), T("PhaoHoa02.jpg")])]), F("HocTap")]); }
+            var root = start(), sel = null, clip = null, mode = "", BM = ["BinhMinh01.jpg","BinhMinh02.jpg","Video"];
+            function parent(x, p){ p = p || root; if (!p.c) return null; for (var i = 0; i < p.c.length; i++) { if (p.c[i] === x) return p; var r = parent(x, p.c[i]); if (r) return r; } return null; }
+            function inside(a, b){ while (b) { if (a === b) return true; b = parent(b); } return false; }
+            function find(p, n){ return p && p.c ? p.c.filter(function(x){ return x.n === n; })[0] : null; }
+            function clone(x){ return x.d ? {n:x.n, d:true, c:x.c.map(clone)} : {n:x.n, d:false}; }
+            function uniq(p, n){ if (!find(p, n)) return n; var i = 2, b = n.replace(/(\.[^.]+)$/, ""), e = n.slice(b.length); while (find(p, b + " (" + i + ")" + e)) i++; return b + " (" + i + ")" + e; }
+            function sortC(p){ p.c.sort(function(a, b){ return a.d === b.d ? a.n.localeCompare(b.n) : a.d ? -1 : 1; }); }
+            function say(s){ q("[data-msg]").textContent = s; }
+            function li(x){
+              var h = '<li><span data-id="' + ids.length + '" class="' + (x === sel ? "sel " : "") + (x === clip && mode === "cut" ? "cut" : "") + '">' + (x.d ? "📁 " : x.n.match(/\.mp4$/) ? "🎞️ " : "🖼️ ") + x.n.replace(/</g, "&lt;") + "</span>";
+              ids.push(x);
+              if (x.d && x.c.length) h += "<ul>" + x.c.map(li).join("") + "</ul>";
+              return h + "</li>";
+            }
+            var ids = [];
+            function draw(){
+              ids = []; q("[data-tree]").innerHTML = "<ul>" + li(root) + "</ul>";
+              q("[data-tree]").querySelectorAll("span").forEach(function(s){ s.addEventListener("click", function(){ sel = ids[+s.dataset.id]; q("[data-name]").value = sel === root ? "" : sel.n; draw(); }); });
+              var ok = !!sel && sel !== root;
+              q('[data-a="rename"]').disabled = q('[data-a="cut"]').disabled = q('[data-a="copy"]').disabled = q('[data-a="delete"]').disabled = !ok;
+              q('[data-a="paste"]').disabled = !clip; q('[data-a="new"]').disabled = !sel;
+              var dd = find(find(root, "DuLich"), "DiemDen"), bn = dd && find(dd, "BanNgay");
+              var c = [!!dd && !find(dd, "HoangHon") && !!find(dd, "ChieuToi"), !!bn && BM.every(function(n){ return find(bn, n); }), !!dd && !find(dd, "BinhMinh") && !!bn && BM.every(function(n){ return find(bn, n); })];
+              c.forEach(function(v, i){ q('[data-ck="' + i + '"]').classList.toggle("ok", v); });
+              if (c[0] && c[1] && c[2]) say("Hoàn thành cả ba yêu cầu! Em ghi kết quả vào câu hỏi bên dưới.");
+            }
+            box.querySelectorAll("[data-a]").forEach(function(b){ b.addEventListener("click", function(){
+              var a = b.dataset.a, nm = q("[data-name]").value.trim();
+              if (a === "reset") { root = start(); sel = null; clip = null; mode = ""; q("[data-name]").value = ""; say("Đã trả về cây thư mục ban đầu."); }
+              else if (a === "new") { var p = sel.d ? sel : parent(sel), f = F(uniq(p, "New Folder")); p.c.push(f); sortC(p); sel = f; q("[data-name]").value = f.n; q("[data-name]").select(); say("Đã tạo New Folder trong " + p.n + ". Gõ tên mới vào ô rồi bấm Rename."); }
+              else if (a === "rename") { if (!nm) { say("Gõ tên mới vào ô trước khi bấm Rename."); return; } var p2 = parent(sel); if (/[\\\/:*?"<>|]/.test(nm)) { say("Tên không được chứa các kí tự \\ / : * ? \" < > |"); return; } if (find(p2, nm) && find(p2, nm) !== sel) { say("Trong " + p2.n + " đã có " + nm + ". Hãy chọn tên khác."); return; } say("Đã đổi tên " + sel.n + " thành " + nm + "."); sel.n = nm; sortC(p2); }
+              else if (a === "cut" || a === "copy") { clip = sel; mode = a; say((a === "cut" ? "Cut: " : "Copy: ") + sel.n + " đã vào bộ nhớ. Chọn thư mục đích rồi bấm Paste."); }
+              else if (a === "paste") { var dst = !sel ? null : sel.d ? sel : parent(sel); if (!dst) { say("Chọn thư mục đích trước khi Paste."); return; }
+                if (mode === "cut" && inside(clip, dst)) { say("Không thể di chuyển một thư mục vào chính nó."); return; }
+                if (mode === "cut") { var op = parent(clip); if (!op) { say("Đối tượng trong bộ nhớ không còn nữa."); clip = null; draw(); return; } op.c.splice(op.c.indexOf(clip), 1); clip.n = uniq(dst, clip.n); dst.c.push(clip); sortC(dst); say("Đã di chuyển " + clip.n + " vào " + dst.n + "."); clip = null; mode = ""; }
+                else { var cp = clone(clip); cp.n = uniq(dst, cp.n); dst.c.push(cp); sortC(dst); say("Đã sao chép " + cp.n + " vào " + dst.n + ". Bản gốc vẫn còn."); } }
+              else if (a === "delete") { var p3 = parent(sel); p3.c.splice(p3.c.indexOf(sel), 1); if (clip && inside(sel, clip)) { clip = null; mode = ""; } say("Đã xoá " + sel.n + (sel.d && sel.c.length ? " cùng mọi thứ bên trong." : ".")); sel = null; q("[data-name]").value = ""; }
+              draw();
+            }); });
+            q("[data-name]").addEventListener("keydown", function(e){ if (e.key === "Enter" && sel && sel !== root) q('[data-a="rename"]').click(); });
+            draw();
+          })();
+          </script>
+        </div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="lenh" data-n="2"></div>
+        <div data-task="nvkq" data-n="3"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Câu hỏi SGK trang 17</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Sao lưu thư mục DuLich</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 7 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=22"></script>
+</body>
+</html>

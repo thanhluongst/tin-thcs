@@ -40,7 +40,7 @@ window.CHUONG_TRINH = [
     {so: "1", ten: "Máy tính và cộng đồng", bai: [
       {so: "1", ten: "Thiết bị vào – ra", tt: "dang", gc: "Có Google Sheet, nhận xét, khen"},
       {so: "2", ten: "Phần mềm máy tính", tt: "dang"},
-      {so: "3", ten: "Quản lí dữ liệu trong máy tính", slug: "quan-li-du-lieu"}]},
+      {so: "3", ten: "Quản lí dữ liệu trong máy tính", slug: "quan-li-du-lieu", tt: "dang"}]},
     {so: "2", ten: "Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin", bai: [
       {so: "4", ten: "Mạng xã hội và một số kênh trao đổi thông tin thông dụng trên Internet", slug: "mang-xa-hoi"}]},
     {so: "3", ten: "Đạo đức, pháp luật và văn hoá trong môi trường số", bai: [
