@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Trình bày dữ liệu bằng biểu đồ · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=21">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 4. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>7</b></div><h1><span class="sr-only">Bài 7. </span>Trình bày dữ liệu bằng biểu đồ</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nêu được một số tình huống thực tế cần sử dụng các chức năng tạo biểu đồ.</li>
+        <li>Thực hiện được các thao tác tạo biểu đồ của phần mềm bảng tính.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Ba loại biểu đồ và mục đích">
+      <span class="node">Cột: so sánh</span>
+      <span class="node">Đoạn thẳng: xu hướng</span>
+      <span class="node io">Quạt tròn: tỉ lệ %</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Các loại biểu đồ</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Tạo biểu đồ</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Bảng hay biểu đồ?</div>
+        <div class="reading">Hình 7.1 và Hình 7.2 mô tả hai cách trình bày kết quả khảo sát những nội dung Tin học mà các bạn học sinh lớp 8A muốn tìm hiểu thêm.</div>
+        <figure class="fig"><img src="hinh/h7172.jpg" alt="Bên trái: bảng tổng hợp kết quả khảo sát lớp 8A. Bên phải: biểu đồ cột Số học sinh quan tâm"><figcaption>Hình 7.1. Trình bày dữ liệu bằng bảng · Hình 7.2. Trình bày dữ liệu bằng biểu đồ</figcaption></figure>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Trình bày dữ liệu bằng biểu đồ</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Trình bày dữ liệu bằng biểu đồ</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Các loại biểu đồ</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 32–33). Biểu đồ được sử dụng để minh hoạ dữ liệu một cách trực quan, giúp em dễ so sánh hoặc dự đoán xu hướng tăng hay giảm của dữ liệu. Có nhiều loại biểu đồ, mỗi loại có một ý nghĩa riêng:<ul><li><b>Biểu đồ cột</b> thường được sử dụng để so sánh dữ liệu.</li><li><b>Biểu đồ đoạn thẳng</b> thường được sử dụng để quan sát xu hướng tăng giảm của dữ liệu theo thời gian hay quá trình nào đó (Hình 7.3).</li><li><b>Biểu đồ hình quạt tròn</b> rất hữu ích trong trường hợp cần so sánh các phần với tổng thể (Hình 7.4).</li></ul>Em có thể thử ngay trên <b>bảng tạo biểu đồ mô phỏng</b>: chọn bảng dữ liệu và loại biểu đồ, quan sát loại nào phù hợp.</div>
+        <figure class="fig"><img src="hinh/h7374.jpg" alt="Biểu đồ đoạn thẳng số ứng dụng tải về 2017–2020 và biểu đồ hình quạt tròn số học sinh quan tâm"><figcaption>Hình 7.3. Biểu đồ đoạn thẳng · Hình 7.4. Biểu đồ hình quạt tròn</figcaption></figure>
+        <div class="chm" data-chm>
+          <style>
+            .chm{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:10px}
+            .chm .t{font-weight:700}
+            .chm .ctl{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;font-size:14px}
+            .chm select{font:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg,#fff);color:inherit}
+            .chm .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+            .chm .seg button{font:inherit;font-size:13px;font-weight:600;border:0;background:transparent;color:inherit;padding:5px 12px;cursor:pointer}
+            .chm .seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+            .chm label.ck{display:inline-flex;gap:6px;align-items:center}
+            .chm svg{width:100%;height:auto;max-width:640px;justify-self:center;display:block;color:inherit}
+            .chm svg text{fill:currentColor;font:12px system-ui,sans-serif}
+            .chm svg .ttl{font-weight:700;font-size:14px}
+            .chm svg .ax{stroke:currentColor;opacity:.35}
+            .chm svg .grid{stroke:currentColor;opacity:.12}
+            .chm .note{font-size:13.5px;opacity:.9}
+          </style>
+          <div class="t">Bảng tạo biểu đồ mô phỏng</div>
+          <div class="ctl">
+            <label>Bảng dữ liệu <select data-ds>
+              <option value="0">Số học sinh quan tâm (Hình 7.1)</option>
+              <option value="1">Số học sinh dùng thiết bị số (Hình 7.8)</option>
+              <option value="2">Doanh thu phần mềm 2016–2020 (Hình 7.9)</option>
+            </select></label>
+            <span class="seg" role="group" aria-label="Loại biểu đồ"><button type="button" data-ty="col" aria-pressed="true">Cột</button><button type="button" data-ty="line" aria-pressed="false">Đoạn thẳng</button><button type="button" data-ty="pie" aria-pressed="false">Quạt tròn</button></span>
+            <label class="ck"><input type="checkbox" data-lbl checked> Nhãn dữ liệu</label>
+            <label class="ck"><input type="checkbox" data-pct checked> Phần trăm (quạt tròn)</label>
+          </div>
+          <svg viewBox="0 0 640 330" role="img" data-svg></svg>
+          <div class="note" data-note aria-live="polite"></div>
+          <script>
+          (function(){
+            var box = document.currentScript.parentNode, q = function(s){ return box.querySelector(s); };
+            var DS = [
+              {t:"Số học sinh quan tâm", u:"", k:["Ngôn ngữ lập trình","Mạng máy tính","Đồ hoạ máy tính","Bảng tính điện tử","Soạn thảo văn bản","Phần mềm trình chiếu"], v:[8,7,15,4,2,5], best:"col", why:"so sánh số học sinh giữa các nội dung"},
+              {t:"Số học sinh sử dụng thiết bị số", u:"", k:["Không sử dụng","Dưới 1 giờ","1–2 giờ","3–4 giờ","Từ 5 giờ trở lên"], v:[68,131,146,72,12], best:"col", why:"so sánh; dùng quạt tròn nếu cần tỉ lệ % trên tổng số học sinh"},
+              {t:"Doanh thu công nghiệp phần mềm (triệu USD)", u:"", k:["2016","2017","2018","2019","2020"], v:[3038,3779,4447,4932,5439], best:"line", why:"dữ liệu theo thời gian: đoạn thẳng cho thấy xu hướng, cột để so sánh từng năm"}
+            ];
+            var PAL = ["#2a78c2","#e0592a","#8a8f96","#e6a817","#4fa3d9","#3c9a4a"];
+            var ty = "col";
+            function fmt(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+            function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+            function wrap(s, x, y){ var w = s.split(" "), l1 = [], l2 = []; w.forEach(function(p){ (l1.join(" ").length + p.length < 12 && !l2.length ? l1 : l2).push(p); });
+              return '<text text-anchor="middle" x="' + x + '" y="' + y + '">' + esc(l1.join(" ")) + "</text>" + (l2.length ? '<text text-anchor="middle" x="' + x + '" y="' + (y + 14) + '">' + esc(l2.join(" ")) + "</text>" : ""); }
+            function draw(){
+              var d = DS[+q("[data-ds]").value], lbl = q("[data-lbl]").checked, pct = q("[data-pct]").checked;
+              var W = 640, H = 330, s = '<text class="ttl" text-anchor="middle" x="' + W / 2 + '" y="22">' + esc(d.t) + "</text>";
+              var tot = d.v.reduce(function(a, b){ return a + b; }, 0);
+              if (ty === "pie") {
+                var cx = 190, cy = 180, r = 120, a0 = -Math.PI / 2;
+                d.v.forEach(function(v, i){
+                  var a1 = a0 + 2 * Math.PI * v / tot, big = a1 - a0 > Math.PI ? 1 : 0;
+                  s += '<path fill="' + PAL[i % PAL.length] + '" stroke="#fff" stroke-width="1.5" d="M' + cx + "," + cy + " L" + (cx + r * Math.cos(a0)) + "," + (cy + r * Math.sin(a0)) + " A" + r + "," + r + " 0 " + big + " 1 " + (cx + r * Math.cos(a1)) + "," + (cy + r * Math.sin(a1)) + ' Z"/>';
+                  if (lbl) { var am = (a0 + a1) / 2, tx = cx + r * 0.66 * Math.cos(am), tyy = cy + r * 0.66 * Math.sin(am);
+                    s += '<text text-anchor="middle" x="' + tx + '" y="' + (tyy + 4) + '" style="fill:#fff;font-weight:700">' + (pct ? Math.round(100 * v / tot) + "%" : fmt(v)) + "</text>"; }
+                  a0 = a1;
+                });
+                d.k.forEach(function(k, i){ s += '<rect x="350" y="' + (70 + i * 26) + '" width="14" height="14" rx="3" fill="' + PAL[i % PAL.length] + '"/><text x="372" y="' + (82 + i * 26) + '">' + esc(k) + "</text>"; });
+              } else {
+                var L = 56, R = W - 20, T = 44, B = H - 52, max = Math.max.apply(null, d.v), step = Math.pow(10, Math.floor(Math.log10(max)));
+                if (max / step < 3) step /= 2; var top = Math.ceil(max / step) * step, n = d.v.length, bw = (R - L) / n;
+                for (var g = 0; g <= top; g += step) { var gy = B - (B - T) * g / top; s += '<line class="grid" x1="' + L + '" x2="' + R + '" y1="' + gy + '" y2="' + gy + '"/><text text-anchor="end" x="' + (L - 6) + '" y="' + (gy + 4) + '">' + fmt(g) + "</text>"; }
+                s += '<line class="ax" x1="' + L + '" x2="' + R + '" y1="' + B + '" y2="' + B + '"/>';
+                var pts = [];
+                d.v.forEach(function(v, i){
+                  var x = L + bw * (i + 0.5), y = B - (B - T) * v / top;
+                  if (ty === "col") s += '<rect x="' + (x - bw * 0.3) + '" y="' + y + '" width="' + bw * 0.6 + '" height="' + (B - y) + '" rx="2" fill="' + PAL[0] + '"/>';
+                  pts.push(x + "," + y);
+                  if (lbl) s += '<text text-anchor="middle" x="' + x + '" y="' + (y - 7) + '" style="font-weight:700">' + fmt(v) + "</text>";
+                  s += wrap(d.k[i], x, B + 16);
+                });
+                if (ty === "line") { s += '<polyline fill="none" stroke="' + PAL[0] + '" stroke-width="3" points="' + pts.join(" ") + '"/>'; pts.forEach(function(p){ var c = p.split(","); s += '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="4" fill="' + PAL[0] + '"/>'; }); }
+              }
+              q("[data-svg]").innerHTML = s;
+              var NAME = {col:"Biểu đồ cột", line:"Biểu đồ đoạn thẳng", pie:"Biểu đồ hình quạt tròn"};
+              q("[data-note]").textContent = NAME[ty] + ". Gợi ý cho bảng dữ liệu này: " + d.why + (ty === "pie" ? ". Quạt tròn so sánh mỗi phần với tổng " + fmt(tot) + "." : ".");
+            }
+            box.querySelectorAll("[data-ty]").forEach(function(b){ b.addEventListener("click", function(){ ty = b.dataset.ty; box.querySelectorAll("[data-ty]").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); }); draw(); }); });
+            box.querySelectorAll("select,input").forEach(function(e){ e.addEventListener("change", draw); });
+            draw();
+          })();
+          </script>
+        </div>
+        <div data-task="loai" data-n="3"></div>
+        <div data-task="it" data-n="4"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 33</div>
+        <div data-task="p33" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Các loại biểu đồ</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Tạo biểu đồ</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> a) Tạo biểu đồ cột</div>
+        <div class="reading"><b>Nhiệm vụ:</b> tạo biểu đồ cột so sánh trực quan số học sinh quan tâm các nội dung Tin học như Hình 7.2.<br><b>Bước 1.</b> Khởi động phần mềm bảng tính và nhập dữ liệu như bảng trong Hình 7.1. <b>Bước 2.</b> Chọn vùng dữ liệu B2:C8. <b>Bước 3.</b> Trong thẻ <b>Insert</b>, tại nhóm <b>Charts</b>, chọn lệnh <b>Insert Column or Bar Chart</b>. <b>Bước 4.</b> Trong nhóm biểu đồ <b>2-D Column</b>, chọn kiểu <b>Clustered Column</b>. <b>Bước 5.</b> Bổ sung thông tin cho biểu đồ: chọn biểu đồ, chọn nút lệnh <b>Chart Elements</b> ở góc trên bên phải, chọn các loại thông tin (Hình 7.6).</div>
+        <div data-task="bc" data-n="1"></div>
+        <div data-task="ce" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> b) Tạo biểu đồ hình quạt tròn</div>
+        <div class="reading"><b>Nhiệm vụ:</b> tạo biểu đồ hình quạt tròn như Hình 7.4 để so sánh trực quan tỉ lệ phần trăm số học sinh của mỗi nội dung Tin học trên tổng số học sinh khảo sát.<br><b>Bước 1.</b> Chọn vùng dữ liệu B2:C8. <b>Bước 2.</b> Trong thẻ Insert, nhóm Charts, chọn lệnh <b>Insert Pie or Doughnut Chart</b>. <b>Bước 3.</b> Trong nhóm <b>2-D Pie</b>, chọn kiểu <b>Pie</b>. <b>Bước 4.</b> Bổ sung thông tin: để hiển thị nhãn dữ liệu là tỉ lệ phần trăm, chọn <b>More Options…</b> (Hình 7.7), trong khung Label Options đánh dấu chọn <b>Percentage</b>.</div>
+        <div data-task="pt" data-n="3"></div>
+        <div data-task="pt2" data-n="4"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Tạo biểu đồ</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập 1</b> Thời gian sử dụng thiết bị số</div>
+        <div class="reading">Mở tệp <b>TGSDThietbiso.xlsx</b> đã lưu ở Bài 6. Dùng hàm SUM để tính tổng số học sinh sử dụng thiết bị số trong mỗi khoảng thời gian (kết quả tương tự Hình 7.8: Không sử dụng 68; Dưới 1 giờ 131; 1–2 giờ 146; 3–4 giờ 72; Từ 5 giờ trở lên 12) rồi vẽ biểu đồ cột và biểu đồ hình quạt tròn. Có thể kiểm tra nhanh trên bảng tạo biểu đồ mô phỏng ở mục 1.</div>
+        <div data-task="lt1a" data-n="1"></div>
+        <div data-task="lt1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập 2</b> Doanh thu công nghiệp phần mềm</div>
+        <figure class="fig"><img src="hinh/h79.jpg" alt="Biểu đồ cột doanh thu công nghiệp phần mềm: 2016 3.038, 2017 3.779, 2018 4.447, 2019 4.932, 2020 5.439 triệu USD"><figcaption>Hình 7.9. Doanh thu công nghiệp phần mềm giai đoạn 2016 – 2020 (Theo: Sách trắng Công nghệ thông tin năm 2021 – Bộ Thông tin và Truyền thông)</figcaption></figure>
+        <div data-task="lt2a" data-n="3"></div>
+        <div data-task="lt2bc" data-n="4"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Biểu đồ đoạn thẳng</div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=21"></script>
+<script src="content.js?v=21"></script>
+<script src="../chung/outline.js?v=21"></script>
+<script src="../chung/api.js?v=21"></script>
+<script src="../chung/chieu.js?v=21"></script>
+<script src="../chung/hs.js?v=21"></script>
+</body>
+</html>

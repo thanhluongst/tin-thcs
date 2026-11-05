@@ -70,7 +70,7 @@ window.CHUONG_TRINH = [
     {so: "4", ten: "Ứng dụng tin học", bai: [
       {so: "5", ten: "Sử dụng bảng tính giải quyết bài toán thực tế", slug: "bang-tinh-bai-toan-thuc-te", tt: "dang"},
       {so: "6", ten: "Sắp xếp và lọc dữ liệu", tt: "dang"},
-      {so: "7", ten: "Trình bày dữ liệu bằng biểu đồ", slug: "bieu-do"}]},
+      {so: "7", ten: "Trình bày dữ liệu bằng biểu đồ", slug: "bieu-do", tt: "dang"}]},
     {so: "4a", nhom: "a", ten: "Soạn thảo văn bản và trình chiếu nâng cao", bai: [
       {so: "8a", ten: "Làm việc với danh sách dạng liệt kê và hình ảnh trong văn bản", slug: "danh-sach-hinh-anh"},
       {so: "9a", ten: "Tạo đầu trang, chân trang cho văn bản", slug: "dau-trang-chan-trang"},
