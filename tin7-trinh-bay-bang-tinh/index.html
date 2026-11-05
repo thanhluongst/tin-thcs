@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Trình bày bảng tính · Tin học 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=22">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 7 · Chủ đề 4. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>9</b></div><h1><span class="sr-only">Bài 9. </span>Trình bày bảng tính</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Biết và thực hiện được một số chức năng định dạng dữ liệu số và trình bày bảng tính.</li>
+        <li>Áp dụng được một số hàm tính toán dữ liệu như SUM, COUNT, AVERAGE, MIN, MAX vào dự án Trường học xanh.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Định dạng số, trình bày bảng tính, hoàn thiện dự án">
+      <span class="node">Định dạng số</span>
+      <span class="node">Trình bày bảng tính</span>
+      <span class="node io">Hoàn thiện dự án</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 7A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 7A1-T9" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Định dạng số</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Trình bày</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Tính chất hàm</a>
+    <a href="#phan-4" data-stage="phan-4"><span class="sn">2.4</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+        <script src="../chung/bangtinh.js?v=3"></script>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Nhận xét bảng tính dự án</div>
+        <div class="reading">Quan sát một phần bảng tính của dự án <b>Trường học xanh</b> trong Hình 9.1, em có nhận xét gì? Có cần chỉnh sửa, định dạng hay trình bày dữ liệu cho đẹp hơn không?</div>
+        <figure class="fig"><img src="hinh/h91.jpg" alt="Bảng dự kiến phân bổ cây: cột Trung bình có 11.66666667, cột Chi phí ghi 1400000.00" style="max-width:640px"><figcaption>Hình 9.1. Một bảng dữ liệu của dự án Trường học xanh</figcaption></figure>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Định dạng dữ liệu số</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Làm quen với lệnh định dạng dữ liệu (Format Cells)</div>
+        <div class="reading">1. Cột dữ liệu Trung bình cần điều chỉnh gì để hiển thị dễ đọc, dễ so sánh hơn? 2. Dữ liệu tại cột Chi phí nên trình bày lại như thế nào để phù hợp với dữ liệu là số tiền?<br><br><b>a) Định dạng dữ liệu số.</b> Dữ liệu số trong bảng tính được hiểu là các số nguyên hoặc số thập phân (là số có phần số nguyên và phần thập phân). Tất cả các phần mềm bảng tính đều cho phép thiết lập cách định dạng thể hiện các số này. Ví dụ chỉ cho phép hiện bao nhiêu chữ số thập phân, hoặc quy định dùng dấu “,” phân tách hàng nghìn, hàng triệu,… Để thực hiện định dạng các số tại một ô hoặc vùng dữ liệu, em cần chọn vùng dữ liệu và chọn <b>Home</b>, nháy chuột vào mũi tên bên cạnh nhóm lệnh <b>Number</b> để mở cửa sổ <b>Format Cells</b>. Sau đó em nhập các tham số định dạng kiểu dữ liệu số thực trong cửa sổ Format Cells như Hình 9.2: chọn số chữ số thập phân; nháy chuột chọn dùng dấu “,” ngăn cách hàng nghìn, hàng triệu; nháy nút <b>OK</b>.</div>
+        <figure class="fig"><img src="hinh/h92.jpg" alt="Cửa sổ Format Cells thẻ Number: Decimal places 2, Use 1000 Separator, nút OK" style="max-width:480px"><figcaption>Hình 9.2. Cửa sổ Format Cells</figcaption></figure>
+        <div class="reading">Thử trên bảng mô phỏng: chọn vùng E4:E8 (Trung bình) → bấm <b>Format Cells</b> → Number, 2 chữ số thập phân → OK. Làm tương tự với vùng F4:F8 (Chi phí), chọn thêm <b>Use 1000 Separator</b>.</div>
+        <div class="bt" data-bt1></div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+        <div data-task="so" data-n="3"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> b) Phần trăm · c) Ngày tháng</div>
+        <div class="reading"><b>b) Định dạng dữ liệu kiểu phần trăm.</b> Khi nói đến tỉ lệ phần trăm chúng ta hiểu là các tỉ lệ giữa hai giá trị, ví dụ a/b. Muốn mô tả tỉ lệ này thành các số phần trăm, chúng ta sẽ tính (a/b) × 100(%). Phần mềm bảng tính có lệnh để hiển thị các giá trị (là tỉ lệ giữa hai số a, b nào đó) để giá trị này thể hiện trên bảng tính là số phần trăm. Thao tác: đánh dấu vùng dữ liệu, trong cửa sổ Format Cells, chọn Number, chọn kiểu <b>Percentage</b>, nháy chuột chọn OK.</div>
+        <div class="bt" data-bt2></div>
+        <div data-task="pct" data-n="1"></div>
+        <div class="reading"><b>c) Định dạng dữ liệu ngày tháng.</b> Các phần mềm bảng tính cho phép nhập dữ liệu ngày tháng theo khuôn dạng: <b>mm/dd/yyyy</b>, tức là nhập tháng, sau đó nhập ngày, sau đó là năm, các số cách nhau bởi dấu “/” hoặc “–”. Mặc định dữ liệu ngày tháng cũng thể hiện trên màn hình dưới dạng “mm/dd/yyyy”. Muốn thay đổi lại cách thể hiện ngày tháng: đánh dấu vùng dữ liệu, trong cửa sổ Format Cells chọn <b>Number</b> → <b>Date</b> → Locale <b>Vietnamese</b> → chọn kiểu ngày/tháng/năm → <b>OK</b> (Hình 9.5). Lưu ý: việc chỉnh sửa chỉ thay đổi cách hiển thị, còn việc nhập dữ liệu vẫn cần tuân theo thứ tự mặc định của phần mềm.<br><br><b>Lưu ý:</b> Dữ liệu ngày tháng có thể thực hiện các phép cộng với số nguyên (mỗi số nguyên được tính là một ngày) và phép trừ hai dữ liệu ngày tháng (Hình 9.6).</div>
+        <figure class="fig"><img src="hinh/h95.jpg" alt="Format Cells: chọn Number, chọn Date, Locale Vietnamese, chọn kiểu ngày/tháng/năm, nháy OK" style="max-width:520px"><figcaption>Hình 9.5. Cách thiết lập hiển thị ngày tháng của Việt Nam</figcaption></figure>
+        <div class="bt" data-bt3></div>
+        <div data-task="ngay" data-n="2"></div>
+        <div data-task="phep" data-n="3"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Định dạng dữ liệu số</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Trình bày bảng tính</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Tìm hiểu một số lệnh trình bày bảng tính</div>
+        <div class="reading">1. Theo em việc định dạng dữ liệu và trình bày bảng tính có khác nhau không? 2. Các lệnh trình bày bảng tính hay định dạng dữ liệu có làm thay đổi dữ liệu trên bảng tính không?<br><br><b>a) Các lệnh chèn, xoá, ẩn, hiện hàng và cột.</b>
+          <ul>
+            <li><b>Xoá hàng, cột:</b> nháy chuột vào tên của cột hoặc hàng để chọn cột hoặc hàng muốn xoá. Nháy nút phải chuột vào chỗ chọn, chọn <b>Delete</b>. Có thể chọn nhiều hàng (cột) để xoá đồng thời.</li>
+            <li><b>Chèn thêm một hàng, cột mới:</b> chọn hàng (dưới hàng muốn chèn) hoặc cột (bên phải cột muốn chèn). Nháy nút phải chuột vào chỗ chọn, chọn lệnh <b>Insert</b>. Hàng mới sẽ được chèn vào bên trên hàng em chọn, cột mới sẽ được chèn vào bên trái cột em chọn.</li>
+            <li><b>Làm ẩn, hiện hàng hoặc cột:</b> trong khi làm việc, một số hàng hoặc cột của bảng tính có thể ẩn đi với mục đích làm gọn bảng tính, dễ quan sát. Muốn ẩn hàng hoặc cột, nháy nút phải chuột vào chỗ chọn và chọn <b>Hide</b>. Muốn hiển thị lại, em chọn các hàng, cột xung quanh vị trí hàng, cột bị ẩn đi, nháy nút phải chuột và chọn <b>Unhide</b>.</li>
+          </ul>
+          <b>b) Lệnh gộp các ô của một vùng dữ liệu.</b> Đánh dấu vùng dữ liệu (các ô muốn gộp), chọn <b>Home/Alignment/Merge &amp; Center</b>. Lưu ý: sau khi gộp, ô kết quả sẽ có địa chỉ là ô đầu tiên bên trái của vùng đã gộp và lưu kết quả của ô này. Dữ liệu trong các ô khác sẽ bị xoá khi gộp.</div>
+        <div class="reading">Thử trên bảng mô phỏng (bảng như Hình 9.8): nháy tên cột hoặc tên hàng để chọn (kéo trên tên để chọn nhiều), rồi bấm <b>Ẩn</b>, <b>Hiện</b>, <b>Chèn</b>, <b>Xoá hàng/cột</b>; đánh dấu B4:B8 rồi bấm <b>Gộp ô</b>.</div>
+        <div class="bt" data-bt4></div>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+        <div data-task="lenh" data-n="3"></div>
+        <div data-task="gop" data-n="4"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Trình bày bảng tính</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.3</span> Tính chất của các hàm trên bảng tính</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 3</b> Tìm hiểu thêm tính chất một số hàm tính toán cơ bản</div>
+        <div class="reading">Giả sử nhóm em lập bảng dữ liệu như Hình 9.12 để theo dõi tiến độ thực hiện dự án Trường học xanh. Dữ liệu được nhập vào bảng có thể là số liệu cụ thể hoặc có thể ghi “Không” nếu lớp không có cây này, hoặc ghi “Đang làm” nếu lớp đã thực hiện nhưng chưa có số liệu, ghi “???” nếu chưa biết thông tin gì. Cột cuối cùng luôn tính Tổng số cây theo từng loại (ô J5 là =SUM(C5:I5)), hàng cuối sẽ đếm số loại cây đã trồng của mỗi lớp (ô H9 là =COUNT(H4:H8)). Các kết quả của bảng dữ liệu này có luôn đúng hay không? Vì sao?<br><br>Các hàm tính toán của bảng tính điện tử như SUM, AVERAGE, COUNT, MIN, MAX sẽ chỉ tính toán trên các ô chứa dữ liệu số và bỏ qua các ô chứa dữ liệu dạng văn bản hoặc ô trống. Tính chất đặc biệt này giúp cho bảng dữ liệu theo dõi quá trình thực hiện dự án như Hình 9.12 sẽ luôn cho kết quả đúng.</div>
+        <div class="bt" data-bt5></div>
+        <div data-task="hd3" data-n="1"></div>
+        <div data-task="p49" data-n="2"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Tính chất của các hàm</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-4">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.4</span> Thực hành: Hoàn thiện dữ liệu dự án Trường học xanh</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Trang tính 5. Tổng kết</div>
+        <div class="reading"><b>Nhiệm vụ:</b> tạo trang tính mới để nhập dữ liệu dự kiến phân bổ cây; nhập và sao chép dữ liệu; thiết lập công thức tính chi phí trồng mỗi loại cây và chi phí của toàn bộ dự án; định dạng dữ liệu.<br><b>Hướng dẫn:</b>
+          <ul>
+            <li><b>a) Tạo trang tính mới:</b> mở tệp THXanh.xlsx, tạo thêm trang tính mới đặt tên <b>5. Tổng kết</b>.</li>
+            <li><b>b) Nhập và sao chép dữ liệu:</b> sao chép toàn bộ dữ liệu của trang tính 4. Dự kiến kết quả sang trang tính 5. Tổng kết (bảng mô phỏng đã có sẵn). Sửa lại tên bảng tại ô A2 là: <b>Bảng 5. Dự kiến phân bổ cây dự án Trường học xanh</b>.</li>
+            <li><b>c) Tính chi phí trồng mỗi loại cây và của toàn bộ dự án:</b> nháy chuột chọn cột D (cột của lớp 7A), chọn <b>Insert</b> để chèn thêm cột; đặt tiêu đề cho cột mới tại ô D3 là <b>Đơn giá</b>; sao chép đơn giá các loại cây từ trang tính 3. Tìm hiểu giống cây sang cột Đơn giá (chú ý các hàng trống giữa các loại cây — trên bảng mô phỏng bấm nút <b>Sao chép đơn giá từ trang tính 3</b>); tạo thêm cột <b>Chi phí</b> bên phải cột Trung bình (cột N); nhập công thức <b>Chi phí = Đơn giá × Tổng số cây</b> cho các ô trong cột Chi phí; tính tổng chi phí mỗi loại cây và toàn bộ dự án tại các ô N9, N17, N24, N25 (nhập trực tiếp hoặc sao chép công thức từ các ô E9, E17, E24, E25).</li>
+            <li><b>d) Định dạng dữ liệu cho trang tính</b> (có thể theo mẫu Hình 9.13) và lưu kết quả.</li>
+          </ul></div>
+        <div class="bt" data-bt6></div>
+        <figure class="fig"><img src="hinh/h913.jpg" alt="Trang tính 5. Tổng kết: cột Đơn giá, Chi phí, tổng chi phí" style="max-width:640px"><figcaption>Hình 9.13. Trang tính 5. Tổng kết (để đối chiếu)</figcaption></figure>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-task="nvkq" data-n="3"></div>
+        <div data-concept="c4"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 4. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Câu hỏi SGK trang 50</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Đọc bảng và tính tỉ lệ phần trăm</div>
+        <div class="reading">Có thể làm ngay trên bảng mô phỏng ở phần Thực hành: câu 2 nhập công thức vào cột O rồi định dạng Percentage.</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g7"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var N = function(s){ return (s || "").replace(/\s+/g, "").toUpperCase(); };
+      var NOTE = "Chọn ô hoặc vùng rồi bấm lệnh. Nháy tên hàng/cột để chọn cả hàng/cột. Format Cells: chọn kiểu, số chữ số thập phân, bấm OK.";
+      var TF = ["copy","paste","|","fmt","|","b","fill","left","center","right","|","reset"];
+      var nf = function(x, k){ return (x.f[k] || {}).nf || {}; };
+      /* 1. Hình 9.1 rút gọn */
+      BangTinh($("[data-bt1]"), {title:"Bảng tính mô phỏng: định dạng dữ liệu số (Hình 9.1)", cols:6, rows:8, widths:[38,120,70,90,100,110], note:NOTE, tools:TF,
+        data:{A1:"DỰ ÁN TRƯỜNG HỌC XANH", A3:"STT", B3:"Tên cây", C3:"Đơn giá", D3:"Tổng số cây", E3:"Trung bình", F3:"Chi phí",
+          A4:"1", B4:"Hoa Mười giờ", C4:"25000", D4:"56", E4:"=D4/4", A5:"2", B5:"Hoa Dạ yến thảo", C5:"45000", D5:"35", E5:"=D5/3",
+          A6:"3", B6:"Hoa Dừa cạn", C6:"15500", D6:"63", E6:"=D6/5", A7:"4", B7:"Hoa Cúc vàng", C7:"30500", D7:"75", E7:"=D7/5", A8:"5", B8:"Hoa Hồng", C8:"54000", D8:"58", E8:"=D8/4",
+          F4:"=C4*D4", F5:"=C5*D5", F6:"=C6*D6", F7:"=C7*D7", F8:"=C8*D8"},
+        fmt:{A1:{b:true, green:true}, A3:{b:true, fill:true}, B3:{b:true, fill:true}, C3:{b:true, fill:true}, D3:{b:true, fill:true}, E3:{b:true, fill:true}, F3:{b:true, fill:true},
+          F4:{nf:{t:"num", dp:2, sep:false}}, F5:{nf:{t:"num", dp:2, sep:false}}, F6:{nf:{t:"num", dp:2, sep:false}}, F7:{nf:{t:"num", dp:2, sep:false}}, F8:{nf:{t:"num", dp:2, sep:false}}},
+        check:function(x){ var r = [4,5,6,7,8];
+          return [["Trung bình (E4:E8): kiểu Number, 1 hoặc 2 chữ số thập phân", r.every(function(i){ var o = nf(x, "E" + i); return o.t === "num" && o.dp >= 1 && o.dp <= 2; })],
+            ["Chi phí (F4:F8): có dấu phân tách hàng nghìn", r.every(function(i){ return nf(x, "F" + i).sep; })]]; }});
+      /* 2. Hình 9.3 – phần trăm */
+      BangTinh($("[data-bt2]"), {title:"Bảng tính mô phỏng: tỉ lệ phần trăm (Hình 9.3, 9.4)", cols:5, rows:8, widths:[38,120,100,110,90], note:"Nhập công thức =D4/C4 vào E4, sao chép xuống E5:E8, rồi định dạng E4:E8 kiểu Percentage, 2 chữ số thập phân.", tools:TF,
+        data:{A1:"DỰ ÁN TRƯỜNG HỌC XANH", A2:"Tiến độ thực hiện dự án", A3:"STT", B3:"Tên cây", C3:"Số cây dự kiến", D3:"Số cây đã trồng", E3:"Tỉ lệ %",
+          A4:"1", B4:"Hoa Mười giờ", C4:"56", D4:"55", A5:"2", B5:"Hoa Dạ yến thảo", C5:"35", D5:"42", A6:"3", B6:"Hoa Dừa cạn", C6:"63", D6:"49", A7:"4", B7:"Hoa Cúc vàng", C7:"75", D7:"63", A8:"5", B8:"Hoa Hồng", C8:"58", D8:"70"},
+        fmt:{A1:{b:true, green:true}, A3:{b:true, fill:true}, B3:{b:true, fill:true}, C3:{b:true, fill:true}, D3:{b:true, fill:true}, E3:{b:true, fill:true}},
+        check:function(x){ var r = [4,5,6,7,8];
+          return [["E4:E8 = Số cây đã trồng / Số cây dự kiến (=D4/C4,…)", r.every(function(i){ return N(x.d["E" + i]) === "=D" + i + "/C" + i; })],
+            ["E4:E8 kiểu Percentage, 2 chữ số thập phân (98.21%, 120.00%,…)", r.every(function(i){ var o = nf(x, "E" + i); return o.t === "pct" && o.dp === 2; })]]; }});
+      /* 3. Hình 9.6 – ngày tháng */
+      BangTinh($("[data-bt3]"), {title:"Bảng tính mô phỏng: ngày tháng (Hình 9.6)", cols:4, rows:4, widths:[110,110,110,200], tools:TF,
+        note:"Ô A2 nhập 1/3/2020 (tức ngày 3 tháng 1 năm 2020, nhập theo tháng/ngày/năm). Định dạng các ô ngày tháng (A2, C2, A3, B3) kiểu Date (Việt Nam). Ô C3 là số ngày nên giữ General: nếu định dạng C3 kiểu Date, số 16 sẽ hiện thành ngày 16/01/1900. Thử nhập 15/12/2020 vào D2: phần mềm coi là văn bản.",
+        data:{A2:"1/3/2020", B2:"30", C2:"=A2+B2", A3:"3/15/2021", B3:"3/31/2021", C3:"=B3-A3", D1:"Ghi chú", D2:"Phép cộng: ngày + 30 ngày", D3:"Phép trừ: hai ngày"},
+        check:function(x){ return [["A2, C2, A3, B3 hiển thị kiểu Việt Nam dd/mm/yyyy", ["A2","C2","A3","B3"].every(function(k){ return nf(x, k).t === "date"; })],
+          ["C2 = 02/02/2020 và C3 = 16 (ngày)", x.text("C2") === "02/02/2020" && x.val("C3") === 16]]; }});
+      /* 4. Hình 9.7–9.9 – chèn, xoá, ẩn, hiện, gộp */
+      BangTinh($("[data-bt4]"), {title:"Bảng tính mô phỏng: chèn, xoá, ẩn, hiện, gộp ô (Hình 9.7–9.9)", cols:5, rows:9, widths:[38,90,120,46,46],
+        tools:["insert","del","hide","unhide","merge","|","b","fill","center","|","reset"], note:"Nháy tên cột (A, B, C…) hoặc tên hàng (1, 2, 3…) để chọn cả cột, cả hàng; kéo trên tên để chọn nhiều. Vạch kép trên tên hàng/cột cho biết chỗ có hàng/cột bị ẩn.",
+        data:{A2:"Bảng 4. Kết quả dự án Trường học xanh", A3:"STT", B3:"Loại cây", C3:"Tên cây", D3:"7A", E3:"7B", A4:"1", B4:"Cây hoa", C4:"Hoa Mười giờ", D4:"10",
+          A5:"2", C5:"Hoa Dạ yến thảo", E5:"12", A6:"3", C6:"Hoa Dừa cạn", D6:"16", A7:"4", C7:"Hoa Cúc vàng", D7:"14", E7:"20", A8:"5", C8:"Hoa Hồng", E8:"15", D9:"=SUM(D4:D8)", E9:"=SUM(E4:E8)"},
+        fmt:{A2:{b:true}, A3:{b:true, fill:true}, B3:{b:true, fill:true}, C3:{b:true, fill:true}, D3:{b:true, fill:true}, E3:{b:true, fill:true}},
+        check:function(x){ var m = (x.f.B4 || {}).m, L = x.log.join(" ");
+          return [["Gộp vùng B4:B8 (Merge & Center), chữ “Cây hoa” ở giữa", !!m && m[0] === 1 && m[1] === 5 && x.d.B4 === "Cây hoa"],
+            ["Ẩn một cột hoặc một số hàng (Hide)", /hide-(col|row)/.test(L.replace(/unhide-\w+/g, ""))],
+            ["Hiện lại hàng, cột đã ẩn (Unhide), không còn hàng, cột nào bị ẩn", /unhide/.test(L) && !Object.keys(x.hr).length && !Object.keys(x.hc).length],
+            ["Chèn thêm một cột (Insert) – ví dụ cột 7C sau cột 7B", /insert-col/.test(L)]]; }});
+      /* 5. Hình 9.12 */
+      var H912 = {A1:"DỰ ÁN TRƯỜNG HỌC XANH", A2:"Tiến độ thực tế các lớp", A3:"STT", B3:"Tên cây", C3:"7A", D3:"7B", E3:"7C", F3:"7D", G3:"7E", H3:"7G", I3:"7H", J3:"Tổng số cây",
+        A4:"1", B4:"Hoa Mười giờ", C4:"10", D4:"Không", E4:"15", F4:"Không", G4:"10", H4:"14", I4:"???",
+        A5:"2", B5:"Hoa Dạ yến thảo", C5:"Đang làm", D5:"12", E5:"12", F5:"11", G5:"???", H5:"Không",
+        A6:"3", B6:"Hoa Dừa cạn", C6:"16", D6:"Đang làm", E6:"12", F6:"???", G6:"Không", H6:"10", I6:"???",
+        A7:"4", B7:"Hoa Cúc vàng", D7:"20", E7:"Đang làm", F7:"Không", G7:"Đang làm", H7:"12", I7:"13",
+        A8:"5", B8:"Hoa Hồng", C8:"Không", D8:"???", E8:"???", F8:"10", G8:"13", H8:"???", I8:"Không", L3:"Câu hỏi tr.49", L4:"a) =COUNT(C6:I6)", L5:"b) =AVERAGE(C7:I7)", L6:"c) =MAX(C4:I8)", L7:"d) =SUM(C4:I8)", M3:"Kết quả"};
+      ["J4","J5","J6","J7","J8"].forEach(function(k, i){ H912[k] = "=SUM(C" + (i + 4) + ":I" + (i + 4) + ")"; });
+      "CDEFGHI".split("").forEach(function(c){ H912[c + "9"] = "=COUNT(" + c + "4:" + c + "8)"; });
+      var F912 = {A1:{b:true, green:true, big:true}, A2:{b:true}}; "ABCDEFGHIJ".split("").forEach(function(c){ F912[c + "3"] = {b:true, fill:true}; F912[c + "9"] = {b:true}; }); ["J4","J5","J6","J7","J8"].forEach(function(k){ F912[k] = {b:true}; }); F912.L3 = {b:true}; F912.M3 = {b:true};
+      BangTinh($("[data-bt5]"), {title:"Bảng tính mô phỏng: tiến độ thực tế (Hình 9.12)", cols:13, rows:9, widths:[34,110,58,58,58,58,58,58,58,80,20,140,70], data:H912, fmt:F912,
+        note:"Nháy J5, H9 để xem công thức. Thử sửa một ô “???” thành số và quan sát cột J, hàng 9 tự cập nhật. Nhập 4 công thức của câu hỏi trang 49 vào M4:M7.",
+        check:function(x){ var v = function(k){ return x.val(k); }, has = function(k, fn){ return N(x.d[k]).indexOf("=" + fn + "(") === 0; };
+          return [["M4: =COUNT(C6:I6) → 3", has("M4","COUNT") && v("M4") === 3], ["M5: =AVERAGE(C7:I7) → 15", has("M5","AVERAGE") && v("M5") === 15],
+            ["M6: =MAX(C4:I8) → 20", has("M6","MAX") && v("M6") === 20], ["M7: =SUM(C4:I8) → 190", has("M7","SUM") && v("M7") === 190]]; }});
+      /* 6. Thực hành: dữ liệu trang tính 4 (kết quả Bài 8) */
+      var ROWS = [[4,1,"Cây hoa","Hoa Mười giờ",{D:10,F:16,H:16,I:14},25000],[5,2,"","Hoa Dạ yến thảo",{E:12,F:12,G:11},45000],[6,3,"","Hoa Dừa cạn",{D:16,F:12,G:10,I:10,J:15},15500],[7,4,"","Hoa Cúc vàng",{D:14,E:20,H:16,I:12,J:13},30500],[8,5,"","Hoa Hồng",{E:15,G:10,H:13,J:20},54000],
+        [11,6,"Cây ăn quả","Bưởi",{D:9,F:10,H:12,I:15,J:5},75000],[12,7,"","Xoài",{D:7,E:10,G:7,H:10,J:2},85000],[13,8,"","Vú sữa",{E:5,F:12,I:5},45000],[14,9,"","Khế",{F:13,J:10},34500],[15,10,"","Chanh",{D:5,E:12,G:10,H:7,I:6},25900],[16,11,"","Táo",{E:5,G:12},38500],
+        [19,12,"Cây bóng mát","Bằng lăng",{D:5,F:5,G:7,H:10,J:5},54600],[20,13,"","Phượng vĩ",{E:6,F:7,G:4,H:5,I:10},72500],[21,14,"","Bàng",{D:7,E:7,F:4,G:2,J:3},80000],[22,15,"","Sưa đỏ",{E:8,F:5,H:3,I:5},120000],[23,16,"","Muồng",{D:10,F:8,G:11,J:10},65000]];
+      var CL = "DEFGHIJ".split(""), H4 = {A1:"DỰ ÁN TRƯỜNG HỌC XANH", A2:"Bảng 4. Dự kiến phân bổ cây cho các lớp", A3:"STT", B3:"Loại cây", C3:"Tên cây", D3:"7A", E3:"7B", F3:"7C", G3:"7D", H3:"7E", I3:"7G", J3:"7H", K3:"Tổng số cây", L3:"Trung bình", B25:"Tổng số cây dự kiến theo lớp:"};
+      var F4 = {A1:{b:true, green:true, big:true}, A2:{b:true}};
+      "ABCDEFGHIJKL".split("").forEach(function(c){ F4[c + "3"] = {b:true, fill:true}; });
+      ROWS.forEach(function(t){ var r = t[0]; H4["A" + r] = String(t[1]); if (t[2]) H4["B" + r] = t[2]; H4["C" + r] = t[3]; Object.keys(t[4]).forEach(function(c){ H4[c + r] = String(t[4][c]); }); });
+      [[9,4,8],[17,11,16],[24,19,23]].forEach(function(z){ CL.forEach(function(c){ H4[c + z[0]] = "=SUM(" + c + z[1] + ":" + c + z[2] + ")"; F4[c + z[0]] = {b:true}; }); });
+      CL.forEach(function(c){ H4[c + "25"] = "=" + c + "9+" + c + "17+" + c + "24"; F4[c + "25"] = {b:true}; });
+      [4,5,6,7,8,9,11,12,13,14,15,16,17,19,20,21,22,23,24,25].forEach(function(r){ H4["K" + r] = "=SUM(D" + r + ":J" + r + ")"; H4["L" + r] = "=AVERAGE(D" + r + ":J" + r + ")"; F4["K" + r] = {b:true}; });
+      var PRICE = {}; ROWS.forEach(function(t){ PRICE[t[3]] = t[5]; });
+      BangTinh($("[data-bt6]"), {title:"Thực hành: trang tính 5. Tổng kết", cols:13, rows:26, widths:[34,92,112,36,36,36,36,36,36,36,82,92,100], data:H4, fmt:F4, sheet:"5. Tổng kết",
+        tools:["copy","paste","insert","del","merge","|","fmt","|","b","fill","left","center","right","|","reset"],
+        note:"Chèn cột: nháy tên cột D để chọn cả cột rồi bấm Chèn. Sao chép công thức: chọn ô → Sao chép → chọn vùng đích → Dán.",
+        extra:[{label:"📄 Sao chép đơn giá từ trang tính 3", title:"Điền đơn giá vào cột Đơn giá theo đúng tên cây", run:function(api){
+          var col = null; "ABCDEFGHIJKLMN".split("").forEach(function(c){ if (!col && (api.raw(c + "3") || "").trim().toLowerCase() === "đơn giá") col = c; });
+          if (!col) { api.say("Chưa có cột Đơn giá. Hãy chèn cột D và nhập tiêu đề Đơn giá ở ô D3 trước.", true); return; }
+          var n = 0; for (var r = 4; r <= 30; r++) { var name = api.raw("C" + r); if (name && PRICE[name]) { api.set(col + r, String(PRICE[name])); n++; } }
+          api.say("Đã sao chép đơn giá của " + n + " loại cây vào cột " + col + ", đúng hàng của từng cây (bỏ qua các hàng trống).", false); }}],
+        check:function(x){ var d = x.d, items = [4,5,6,7,8,11,12,13,14,15,16,19,20,21,22,23];
+          var ok5 = items.every(function(r){ var v = N(d["N" + r]); return v[0] === "=" && /D/.test(v) && /L/.test(v) && Math.abs(x.val("N" + r) - x.val("D" + r) * x.val("L" + r)) < 1e-6 && x.val("N" + r) > 0; });
+          return [
+            ["A2: Bảng 5. Dự kiến phân bổ cây dự án Trường học xanh", (d.A2 || "").trim().toLowerCase() === "bảng 5. dự kiến phân bổ cây dự án trường học xanh"],
+            ["Chèn cột D, tiêu đề Đơn giá (cột 7A chuyển sang E)", (d.D3 || "").trim().toLowerCase() === "đơn giá" && d.E3 === "7A"],
+            ["Đơn giá đủ 16 loại cây", items.every(function(r){ return PRICE[d["C" + r]] && +d["D" + r] === PRICE[d["C" + r]]; })],
+            ["N3: Chi phí", (d.N3 || "").trim().toLowerCase() === "chi phí"],
+            ["Chi phí từng loại cây = Đơn giá × Tổng số cây (=D4*L4,…)", ok5],
+            ["N9, N17, N24 tổng chi phí mỗi nhóm; N25 tổng dự án = 30,692,200", Math.abs(x.val("N9") - 9371000) < 1e-6 && Math.abs(x.val("N17") - 10359000) < 1e-6 && Math.abs(x.val("N24") - 10962200) < 1e-6 && Math.abs(x.val("N25") - 30692200) < 1e-6 && N(d.N25)[0] === "="],
+            ["Định dạng cột Chi phí (N4:N25) kiểu Number, có dấu phân tách hàng nghìn", items.concat([9,17,24,25]).every(function(r){ var o = nf(x, "N" + r); return o.t === "num" && o.sep; })]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 7 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=22"></script>
+</body>
+</html>
