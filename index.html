@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tin học THCS · Trang học tương tác</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lexend:wght@500;600;700&display=swap">
+<style>
+:root{
+  --bg:#f3f7f6; --surface:#fff; --sunk:#e7efed; --line:#cddbd8;
+  --fg:#15302c; --muted:#58706b;
+  --accent:#0f7a6c; --accent-ink:#fff; --accent-soft:#d6efe9;
+  --s-chua:#8a9a96; --s-soan:#a16207; --s-soan-bg:#fdf2d3;
+  --s-xong:#1d4ed8; --s-xong-bg:#e1eafd; --s-dang:#15803d; --s-dang-bg:#dcf3e3;
+  --font-display:"Lexend","Be Vietnam Pro",system-ui,sans-serif;
+  --font-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1716; --surface:#152220; --sunk:#1b2b28; --line:#2b403c;
+  --fg:#e3efec; --muted:#9bb3ad; --accent:#3cc2ad; --accent-ink:#06201c; --accent-soft:#173a35;
+  --s-chua:#7d918c; --s-soan:#e8b64c; --s-soan-bg:#3a2e10;
+  --s-xong:#7aa7ff; --s-xong-bg:#17284a; --s-dang:#4ade80; --s-dang-bg:#14301f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1716; --surface:#152220; --sunk:#1b2b28; --line:#2b403c;
+  --fg:#e3efec; --muted:#9bb3ad; --accent:#3cc2ad; --accent-ink:#06201c; --accent-soft:#173a35;
+  --s-chua:#7d918c; --s-soan:#e8b64c; --s-soan-bg:#3a2e10;
+  --s-xong:#7aa7ff; --s-xong-bg:#17284a; --s-dang:#4ade80; --s-dang-bg:#14301f; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.55}
+a{color:var(--accent)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header{background:var(--surface);border-bottom:1px solid var(--line);padding:28px 0 20px}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--font-display);font-size:clamp(24px,4vw,34px);margin:4px 0 8px;line-height:1.2}
+.lead{margin:0;color:var(--muted);max-width:68ch}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg);cursor:pointer;text-align:left;font:inherit;color:inherit}
+.stat[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.stat b{display:block;font-family:var(--font-display);font-size:22px;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.bar{display:flex;height:8px;border-radius:99px;overflow:hidden;background:var(--sunk)}
+.bar i{display:block}
+.bar .dang{background:var(--s-dang)}.bar .xong{background:var(--s-xong)}.bar .soan{background:var(--s-soan)}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.tab{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:99px;padding:5px 14px;cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tab small{font-weight:500;opacity:.8;margin-left:4px;font-variant-numeric:tabular-nums}
+#q{margin-left:auto;font:inherit;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);min-width:0;width:220px;max-width:100%}
+@media (max-width:640px){#q{margin-left:0;width:100%}}
+main{padding:20px 0 40px}
+.grade{margin-bottom:28px}
+.grade-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.grade-head h2{font-family:var(--font-display);margin:0;font-size:24px}
+.grade-head .bar{flex:1;min-width:120px;max-width:320px}
+.grade-head .muted{color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+.topic{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.topic h3{margin:0;padding:10px 14px;font-size:15px;background:var(--sunk);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.topic h3 .opt{font-size:12px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.lesson{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:9px 14px;border-top:1px solid var(--line)}
+.lesson:first-of-type{border-top:0}
+.num{font-family:var(--font-display);font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.title{font-weight:500;min-width:0}
+.meta{grid-column:2/4;font-size:12.5px;color:var(--muted);display:flex;gap:4px 12px;flex-wrap:wrap}
+.meta code{font-size:12px;background:var(--sunk);padding:0 5px;border-radius:4px;overflow-wrap:anywhere}
+.links{display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.links a{font-size:13px;font-weight:600;text-decoration:none;border:1px solid var(--line);padding:2px 9px;border-radius:6px;white-space:nowrap}
+.links a:hover{border-color:var(--accent)}
+.badge{font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.b-chua{color:var(--s-chua);border:1px dashed var(--s-chua)}
+.b-soan{color:var(--s-soan);background:var(--s-soan-bg)}
+.b-xong{color:var(--s-xong);background:var(--s-xong-bg)}
+.b-dang{color:var(--s-dang);background:var(--s-dang-bg)}
+@media (max-width:560px){.lesson{grid-template-columns:44px minmax(0,1fr)}.links{grid-column:2;justify-content:flex-start}.meta{grid-column:2}}
+.empty{color:var(--muted);padding:24px 0}
+footer{color:var(--muted);font-size:13px;padding:0 0 32px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Kết nối tri thức với cuộc sống · Nghiên cứu bài học</div>
+    <h1>Tin học THCS: trang học tương tác</h1>
+    <p class="lead">Danh mục toàn bộ bài học Tin học 6–9. Mỗi bài có trang học sinh để nộp câu trả lời và trang giáo viên để theo dõi, nhận xét, chốt kiến thức.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Chọn lớp">
+  <div class="wrap" id="tabs">
+    <input id="q" type="search" placeholder="Tìm bài…" aria-label="Tìm bài theo tên">
+  </div>
+</nav>
+<main><div class="wrap" id="list"></div></main>
+<footer><div class="wrap">Cập nhật trạng thái trong tệp <code>danh-muc.js</code>. Quy ước đặt tên xem <code>README.md</code>.</div></footer>
+<script src="danh-muc.js"></script>
+<script>
+(function(){
+"use strict";
+const TT = {chua:"Chưa làm", soan:"Đang soạn", xong:"Chưa đăng", dang:"Đã đăng"};
+const ORDER = ["dang","xong","soan","chua"];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fold = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase();
+const DATA = window.CHUONG_TRINH;
+const all = [];
+DATA.forEach(L => L.chuDe.forEach(cd => cd.bai.forEach(b => all.push(b))));
+
+const store = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch(e) { return null; } };
+let lop = store("hub-lop") || "all", tt = "", q = "";
+
+function count(list){ const c = {chua:0, soan:0, xong:0, dang:0}; list.forEach(b => c[b.tt]++); return c; }
+function bar(c, n){ return '<div class="bar" aria-hidden="true">' + ["dang","xong","soan"].map(k => '<i class="' + k + '" style="width:' + (100 * c[k] / n) + '%"></i>').join("") + "</div>"; }
+
+function renderStats(){
+  const c = count(all);
+  document.getElementById("stats").innerHTML = ORDER.map(k =>
+    '<button class="stat" type="button" data-tt="' + k + '" aria-pressed="' + (tt === k) + '"><b>' + c[k] + '</b><span>' + TT[k] + "</span></button>").join("");
+  document.querySelectorAll(".stat").forEach(b => b.onclick = () => { tt = tt === b.dataset.tt ? "" : b.dataset.tt; render(); });
+}
+function renderTabs(){
+  const host = document.getElementById("tabs"), qBox = document.getElementById("q");
+  host.querySelectorAll(".tab").forEach(t => t.remove());
+  const opts = [["all","Tất cả", all.length]].concat(DATA.map(L => [String(L.lop), "Lớp " + L.lop, all.filter(b => b.lop === L.lop).length]));
+  opts.forEach(([v, lab, n]) => {
+    const b = document.createElement("button"); b.className = "tab"; b.type = "button";
+    b.setAttribute("aria-pressed", String(lop === v)); b.innerHTML = esc(lab) + "<small>" + n + "</small>";
+    b.onclick = () => { lop = v; store("hub-lop", v); render(); };
+    host.insertBefore(b, qBox);
+  });
+}
+function lessonRow(b){
+  const links = b.tt === "dang"
+    ? '<a href="' + esc(b.url) + '" target="_blank" rel="noopener">Học sinh</a><a href="' + esc(b.url) + 'giaovien.html" target="_blank" rel="noopener">Giáo viên</a>' : "";
+  return '<div class="lesson"><span class="num">' + esc(b.so) + '</span><span class="title">' + esc(b.ten) + "</span>"
+    + '<span class="links">' + links + '<span class="badge b-' + b.tt + '">' + TT[b.tt] + "</span></span>"
+    + '<span class="meta"><span>Thư mục <code>' + esc(b.repo) + '</code></span><span>id <code>' + esc(b.id) + "</code></span>"
+    + (b.gc ? "<span>" + esc(b.gc) + "</span>" : "") + "</span></div>";
+}
+function render(){
+  renderStats(); renderTabs();
+  const out = [];
+  const nq = fold(q.trim());
+  DATA.forEach(L => {
+    if (lop !== "all" && String(L.lop) !== lop) return;
+    const lessons = all.filter(b => b.lop === L.lop), c = count(lessons), done = c.dang + c.xong;
+    let topics = "";
+    L.chuDe.forEach(cd => {
+      const rows = cd.bai.filter(b => (!tt || b.tt === tt) && (!nq || fold(b.ten + " bai " + b.so).includes(nq)));
+      if (!rows.length) return;
+      topics += '<section class="topic"><h3>Chủ đề ' + esc(cd.so) + ". " + esc(cd.ten)
+        + (cd.nhom ? '<span class="opt">Tự chọn nhóm ' + cd.nhom + "</span>" : "") + "</h3>" + rows.map(lessonRow).join("") + "</section>";
+    });
+    if (!topics) return;
+    out.push('<section class="grade" id="lop-' + L.lop + '"><div class="grade-head"><h2>Tin học ' + L.lop + "</h2>" + bar(c, lessons.length)
+      + '<span class="muted">' + done + "/" + lessons.length + " bài đã có trang</span></div>" + topics + "</section>");
+  });
+  document.getElementById("list").innerHTML = out.join("") || '<p class="empty">Không có bài nào khớp.</p>';
+}
+document.getElementById("q").addEventListener("input", e => { q = e.target.value; render(); });
+render();
+})();
+</script>
+</body>
+</html>
