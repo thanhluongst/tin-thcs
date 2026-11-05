@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sắp xếp và lọc dữ liệu · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=21">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 4. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>6</b></div><h1><span class="sr-only">Bài 6. </span>Sắp xếp và lọc dữ liệu</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Sử dụng được phần mềm bảng tính trợ giúp giải quyết bài toán thực tế.</li>
+        <li>Nêu được một số tình huống thực tế cần sử dụng các chức năng sắp xếp và lọc dữ liệu.</li>
+        <li>Thực hiện được các thao tác lọc, sắp xếp dữ liệu của phần mềm bảng tính.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Hai chức năng: sắp xếp và lọc dữ liệu">
+      <span class="node io">Sắp xếp: đổi thứ tự hàng</span>
+      <span class="node io">Lọc: chỉ hiện hàng thoả điều kiện</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Bài toán thực tế</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Sắp xếp</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Lọc</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Phiếu khảo sát</div>
+        <div class="reading">Chung niềm yêu thích môn Tin học, nhóm các bạn học sinh lớp 8A đã cùng nhau thực hiện dự án <b>Thành lập CLB Tin học</b>. Trước tiên, các bạn thực hiện khảo sát về những nội dung Tin học mà học sinh trong lớp muốn tìm hiểu thêm (Hình 6.1). Từ dữ liệu khảo sát thu được, sẽ tiến hành xử lí dữ liệu (sắp xếp danh sách, lọc ra các bạn học sinh cùng muốn tìm hiểu mỗi nội dung tin học,…) để thu được các thông tin cần thiết làm căn cứ tổ chức các hoạt động của CLB.</div>
+        <figure class="fig sm"><img src="hinh/h61.jpg" alt="Phiếu khảo sát: họ và tên, tổ, chọn một nội dung Tin học muốn tìm hiểu thêm trong 6 nội dung"><figcaption>Hình 6.1. Phiếu khảo sát</figcaption></figure>
+        <div data-task="hd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Sử dụng phần mềm bảng tính trợ giúp giải quyết bài toán thực tế</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Bảng kết quả khảo sát lớp 8A</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 27–28). Mỗi phiếu khảo sát được trả lời là một hàng dữ liệu trong bảng tính; họ tên học sinh được tách thành hai phần Họ đệm và Tên. Mục đích của việc khảo sát là thu thập thông tin để quyết định CLB Tin học sẽ được tổ chức như thế nào, ví dụ: (1) Họ và tên học sinh cần được sắp xếp theo thứ tự bảng chữ cái để dễ tìm kiếm; (2) Ở mỗi nội dung Tin học, danh sách học sinh muốn tìm hiểu là những ai? (3) Nội dung nào có nhiều học sinh lựa chọn nhất? (4) Với mỗi nội dung, học sinh thuộc những tổ nào để có căn cứ chia nhóm học tập? Dùng <b>bảng mô phỏng</b> dưới đây để thử sắp xếp và lọc.</div>
+        <div class="sl" data-sl>
+          <style>
+            .sl{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:10px}
+            .sl .t{font-weight:700}
+            .sl .ctl{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;font-size:14px}
+            .sl select{font:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg,#fff);color:inherit}
+            .sl button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:4px 10px;cursor:pointer}
+            .sl button:hover{border-color:var(--accent)}
+            .sl table{border-collapse:collapse;width:100%;font-size:14px}
+            .sl th,.sl td{border:1px solid var(--line);padding:4px 8px;text-align:left}
+            .sl th{background:var(--sunk,#eef3f2)}
+            .sl td.c{text-align:center}
+            .sl .cap{font-size:13px;opacity:.85}
+            .sl fieldset{border:1px dashed var(--line);border-radius:8px;padding:6px 10px;margin:0;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+            .sl legend{font-size:12.5px;font-weight:700;padding:0 4px}
+          </style>
+          <div class="t">Bảng mô phỏng: Bảng kết quả khảo sát lớp 8A</div>
+          <div class="ctl">
+            <fieldset><legend>Sắp xếp (Sort)</legend>
+              <label>Sort by <select data-k1><option value="">(không)</option><option value="tt">TT</option><option value="ten">Tên</option><option value="ho">Họ đệm</option><option value="to">Tổ</option><option value="nd">Nội dung</option></select></label>
+              <select data-o1 aria-label="Thứ tự tiêu chí 1"><option value="1">A to Z / nhỏ → lớn</option><option value="-1">Z to A / lớn → nhỏ</option></select>
+              <label>Then by <select data-k2><option value="">(không)</option><option value="ten">Tên</option><option value="ho">Họ đệm</option><option value="to">Tổ</option></select></label>
+              <label>Then by <select data-k3><option value="">(không)</option><option value="ten">Tên</option><option value="ho">Họ đệm</option></select></label>
+            </fieldset>
+            <fieldset><legend>Lọc (Filter)</legend>
+              <label>Nội dung <select data-fn><option value="">(Select All)</option></select></label>
+              <label>Tổ <select data-ft><option value="">(Select All)</option><option>1</option><option>2</option><option>3</option></select></label>
+            </fieldset>
+            <button type="button" data-reset>Trả về ban đầu</button>
+          </div>
+          <div class="tbl-wrap"><table><thead><tr><th>TT</th><th>Họ đệm</th><th>Tên</th><th>Tổ</th><th>Nội dung</th></tr></thead><tbody data-body></tbody></table></div>
+          <div class="cap" data-cap aria-live="polite"></div>
+          <script>
+          (function(){
+            var box = document.currentScript.parentNode, q = function(s){ return box.querySelector(s); };
+            var D = [[1,"Phạm Hoàng Bảo","An",1,"Mạng máy tính"],[2,"Trương Thanh","Hà",2,"Soạn thảo văn bản"],[3,"Vũ Thị Minh","An",3,"Ngôn ngữ lập trình"],[4,"Đỗ Minh","Giang",2,"Bảng tính điện tử"],[5,"Trần Minh","Châu",2,"Ngôn ngữ lập trình"],[6,"Ngô Hà","Trang",1,"Đồ hoạ máy tính"],[7,"Dương Gia","Khánh",3,"Phần mềm trình chiếu"],[8,"Đặng Mai","Trang",1,"Ngôn ngữ lập trình"],[9,"Phùng Khánh","Toàn",1,"Ngôn ngữ lập trình"],[10,"Phạm Ngọc","Linh",3,"Đồ hoạ máy tính"]];
+            var IDX = {tt:0, ho:1, ten:2, to:3, nd:4};
+            var nds = []; D.forEach(function(r){ if (nds.indexOf(r[4]) < 0) nds.push(r[4]); });
+            nds.sort(function(a, b){ return a.localeCompare(b, "vi"); }).forEach(function(n){ var o = document.createElement("option"); o.textContent = n; q("[data-fn]").appendChild(o); });
+            function cmp(a, b, k){ var i = IDX[k], x = a[i], y = b[i]; return typeof x === "number" ? x - y : String(x).localeCompare(String(y), "vi"); }
+            function upd(){
+              var k1 = q("[data-k1]").value, o1 = +q("[data-o1]").value, k2 = q("[data-k2]").value, k3 = q("[data-k3]").value, fn = q("[data-fn]").value, ft = q("[data-ft]").value;
+              var rows = D.filter(function(r){ return (!fn || r[4] === fn) && (!ft || String(r[3]) === ft); });
+              if (k1) rows.sort(function(a, b){ return o1 * cmp(a, b, k1) || (k2 ? cmp(a, b, k2) : 0) || (k3 ? cmp(a, b, k3) : 0); });
+              q("[data-body]").innerHTML = rows.map(function(r){ return '<tr><td class="c">' + r[0] + "</td><td>" + r[1] + "</td><td>" + r[2] + '</td><td class="c">' + r[3] + "</td><td>" + r[4] + "</td></tr>"; }).join("");
+              var hidden = D.length - rows.length;
+              q("[data-cap]").textContent = "Đang hiển thị " + rows.length + "/" + D.length + " học sinh" + (hidden ? " (" + hidden + " hàng bị ẩn do lọc, không bị xoá)." : ".") + " Bảng mô phỏng sắp xếp đúng thứ tự tiếng Việt; Excel sắp xếp theo bảng mã Unicode nên có thể hơi khác.";
+            }
+            box.querySelectorAll("select").forEach(function(s){ s.addEventListener("change", upd); });
+            q("[data-reset]").addEventListener("click", function(){ box.querySelectorAll("select").forEach(function(s){ s.selectedIndex = 0; }); upd(); });
+            upd();
+          })();
+          </script>
+        </div>
+        <div data-task="cn" data-n="1"></div>
+        <div data-task="nd" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 28</div>
+        <div data-task="p28" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Bài toán thực tế</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Sắp xếp dữ liệu</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> a) Sắp xếp dữ liệu theo một tiêu chí</div>
+        <div class="reading"><b>Nhiệm vụ:</b> sắp xếp cột Tên của Bảng kết quả khảo sát lớp 8A theo thứ tự bảng chữ cái.<br><b>Bước 1.</b> Chọn vùng dữ liệu cần sắp xếp là A2:E12. Trong vùng dữ liệu này, hàng 2 là hàng tiêu đề của bảng, các hàng còn lại là dữ liệu cần sắp xếp.<br><b>Bước 2.</b> Trong thẻ <b>Data</b>, tại nhóm <b>Sort &amp; Filter</b>, chọn lệnh <b>Sort</b> để mở hộp thoại Sort. Thực hiện như Hình 6.3. Chọn <b>OK</b>.</div>
+        <figure class="fig"><img src="hinh/h63.jpg" alt="Hộp thoại Sort: chọn My data has headers, Sort by Tên, Order A to Z"><figcaption>Hình 6.3. Sắp xếp bảng dữ liệu theo một tiêu chí</figcaption></figure>
+        <div data-task="sx1" data-n="1"></div>
+        <div data-task="hd" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> b) Sắp xếp dữ liệu theo nhiều tiêu chí</div>
+        <div class="reading">Có hai học sinh cùng tên là Trang, nhưng bạn Ngô Hà Trang được sắp xếp trước bạn Đặng Mai Trang, trong khi chữ N đứng sau chữ Đ trong bảng chữ cái. Để danh sách hiển thị đúng, em cần bổ sung thêm tiêu chí thứ hai là sắp xếp <b>Họ đệm</b>: mở hộp thoại Sort, chọn <b>Add Level</b> để thêm tiêu chí, ở dòng <b>Then by</b> chọn cột Họ đệm (Hình 6.5). <i>Lưu ý:</i> chọn <b>Delete Level</b> nếu muốn xoá bỏ tiêu chí sắp xếp. Em có thể thử trên bảng mô phỏng ở mục 1.</div>
+        <div data-task="sx2" data-n="3"></div>
+        <div data-task="p30" data-n="4"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Sắp xếp dữ liệu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Thực hành: Lọc dữ liệu</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Nhiệm vụ 1, 2: Lọc dữ liệu</div>
+        <div class="reading">Chức năng lọc dữ liệu của phần mềm bảng tính được sử dụng để chọn và chỉ hiển thị các dòng thoả mãn các điều kiện nào đó.<br><b>Nhiệm vụ 1 (lọc theo một tiêu chí):</b> lọc danh sách học sinh theo từng nội dung Tin học mà học sinh lựa chọn.<br><b>Bước 1.</b> Chọn vùng dữ liệu cần lọc là A2:E12. <b>Bước 2.</b> Trong thẻ <b>Data</b>, tại nhóm Sort &amp; Filter, chọn lệnh <b>Filter</b>; nút lọc xuất hiện ở tất cả các ô thuộc dòng tiêu đề. <b>Bước 3.</b> Thực hiện lọc theo Hình 6.7, chọn OK. <b>Bước 4.</b> Để bỏ lọc, chọn <b>Select All</b>.<br><b>Nhiệm vụ 2 (lọc theo nhiều tiêu chí):</b> lọc danh sách học sinh của Tổ 1 muốn tìm hiểu nội dung Đồ hoạ máy tính: trong cột Nội dung chọn Đồ hoạ máy tính, trong cột Tổ chọn 1.</div>
+        <figure class="fig sm"><img src="hinh/h67.jpg" alt="Nút lọc ở cột Nội dung, danh sách các giá trị, chọn Ngôn ngữ lập trình"><figcaption>Hình 6.7. Các bước lọc danh sách học sinh theo từng nội dung</figcaption></figure>
+        <div data-task="loc1" data-n="1"></div>
+        <div data-task="loc2" data-n="2"></div>
+        <div data-task="an" data-n="3"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Lọc dữ liệu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Thời gian sử dụng thiết bị số</div>
+        <div class="reading">Để phục vụ cho việc thành lập CLB Tin học của trường, các bạn đã thực hiện khảo sát trong khối 8 về số giờ mỗi ngày sử dụng thiết bị số ngoài giờ học ở trường (Hình 6.9). Em hãy: a) Tạo bảng dữ liệu, lưu tệp với tên <b>TGSDThietbiso.xlsx</b>; b) Sắp xếp theo thứ tự giá trị giảm dần của cột Không sử dụng; c) Sắp xếp theo hai tiêu chí: giảm dần của cột Không sử dụng, nếu bằng nhau thì giảm dần của cột Dưới 1 giờ; d) Lọc danh sách các lớp không có học sinh sử dụng thiết bị số từ 5 giờ trở lên.</div>
+        <div class="tbl-wrap"><table class="tbl"><caption style="caption-side:top;font-weight:700;padding:4px">Hình 6.9. Kết quả khảo sát thời gian sử dụng thiết bị số mỗi ngày của học sinh khối 8</caption><thead><tr><th>TT</th><th>Lớp</th><th>Không sử dụng</th><th>Dưới 1 giờ</th><th>1–2 giờ</th><th>3–4 giờ</th><th>Từ 5 giờ trở lên</th></tr></thead><tbody>
+          <tr><td>1</td><td>8A1</td><td>8</td><td>12</td><td>15</td><td>7</td><td>1</td></tr>
+          <tr><td>2</td><td>8A2</td><td>7</td><td>10</td><td>17</td><td>6</td><td></td></tr>
+          <tr><td>3</td><td>8A3</td><td>6</td><td>13</td><td>15</td><td>8</td><td>2</td></tr>
+          <tr><td>4</td><td>8A4</td><td>8</td><td>11</td><td>10</td><td>9</td><td>3</td></tr>
+          <tr><td>5</td><td>8A5</td><td>8</td><td>10</td><td>12</td><td>11</td><td></td></tr>
+          <tr><td>6</td><td>8A6</td><td>7</td><td>12</td><td>14</td><td>8</td><td></td></tr>
+          <tr><td>7</td><td>8A7</td><td>5</td><td>20</td><td>15</td><td>9</td><td></td></tr>
+          <tr><td>8</td><td>8A8</td><td>9</td><td>16</td><td>17</td><td>7</td><td></td></tr>
+          <tr><td>9</td><td>8A9</td><td>6</td><td>12</td><td>15</td><td>4</td><td>2</td></tr>
+          <tr><td>10</td><td>8A10</td><td>4</td><td>15</td><td>16</td><td>3</td><td>4</td></tr>
+        </tbody></table></div>
+        <div data-task="ltb" data-n="1"></div>
+        <div data-task="ltd" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Lọc theo điều kiện số</div>
+        <div class="reading">Ngoài các chức năng lọc mà em đã tìm hiểu, phần mềm bảng tính còn có chức năng lọc theo điều kiện. Khi nháy chuột vào nút lệnh lọc dữ liệu, em còn thấy tuỳ chọn <b>Number Filters</b> (hoặc <b>Text Filters</b>) nếu phần lớn các ô trong cột đó chứa dữ liệu số (hoặc kí tự). Em hãy mở tệp <b>TGSDThietbiso.xlsx</b>, tìm hiểu chức năng Number Filters để lọc danh sách các lớp có số học sinh sử dụng thiết bị số từ 3 đến 4 giờ lớn hơn hoặc bằng 10 học sinh.</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=21"></script>
+<script src="content.js?v=21"></script>
+<script src="../chung/outline.js?v=21"></script>
+<script src="../chung/api.js?v=21"></script>
+<script src="../chung/chieu.js?v=21"></script>
+<script src="../chung/hs.js?v=21"></script>
+</body>
+</html>
