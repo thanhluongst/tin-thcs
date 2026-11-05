@@ -2,7 +2,8 @@
    BangTinh(phần tử, tuỳ chọn) — chọn ô/vùng/hàng/cột, nhập, sửa, xoá, tự căn chỉnh, định dạng, độ rộng cột,
    đổi tên trang tính, công thức (+ - * / ^, ngoặc, địa chỉ ô, vùng), hàm SUM AVERAGE MIN MAX COUNT,
    tự động tính lại, sao chép công thức (địa chỉ tương đối), chèn/xoá hàng, cột, ẩn/hiện hàng, cột,
-   gộp ô (Merge & Center), Format Cells (Number, Percentage, Date kiểu Việt Nam), cộng trừ ngày tháng.
+   gộp ô (Merge & Center), Format Cells (Number, Percentage, Date kiểu Việt Nam), cộng trừ ngày tháng,
+   kẻ đường viền/khung (Border), màu nền, xem trước khi in (không có đường lưới).
    Tuỳ chọn: title, note, cols, rows, widths[], data{A1:"…"}, fmt{A1:{b,fill,al,nf,m}}, sheet, tools[], extra[{label,title,run(api)}],
              check(x) → [[nhãn, đúng?],…]
    x = {d, f, sheet, w, hr, hc, log, C, R, val(địa chỉ), text(địa chỉ): chữ hiển thị} */
@@ -17,6 +18,10 @@ var CSS = ".bt{border:1px solid var(--line);border-radius:12px;padding:10px;marg
  + ".bt .fc .h{font-weight:700}.bt .fc .row{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}"
  + ".bt .fc input[type=number]{width:4em;font:inherit;padding:1px 4px}.bt .fc .smp{font:600 14px Consolas,monospace;border:1px solid #ccc;background:#fff;padding:2px 8px;min-width:120px}"
  + ".bt .fc button{font:inherit;font-size:13px;border:1px solid #888;background:#fff;border-radius:5px;padding:2px 14px;cursor:pointer}"
+ + ".bt .pal{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px}.bt .pal button{width:26px;height:22px;border:1px solid #888;border-radius:4px;cursor:pointer;padding:0}"
+ + ".bt .pv{border:1px solid #999;background:#e9e9e9;padding:10px;display:grid;gap:6px;overflow:auto;max-height:520px}.bt .pv .pg{background:#fff;color:#111;padding:18px 22px;box-shadow:0 1px 4px rgba(0,0,0,.3);justify-self:start;min-width:300px}"
+ + ".bt .pv table{border-collapse:collapse;font:12px/1.3 Calibri,'Be Vietnam Pro',Arial,sans-serif;background:#fff}.bt .pv td{border:0;padding:1px 4px;white-space:nowrap;height:18px}"
+ + ".bt .pv .h{font-weight:700;color:#333;font-size:13.5px;display:flex;gap:10px;align-items:center}.bt .pv .h button{font:inherit;font-size:13px;border:1px solid #888;background:#fff;border-radius:5px;padding:1px 12px;cursor:pointer;font-weight:400}"
  + ".bt .fb{display:flex;gap:6px;align-items:center}"
  + ".bt .nb{font:600 13px/1.6 Consolas,monospace;border:1px solid var(--line);border-radius:4px;padding:2px 6px;min-width:88px;text-align:center;background:var(--bg,#fff)}"
  + ".bt .fx{font-style:italic;font-weight:700;opacity:.6}"
@@ -44,6 +49,8 @@ var TOOLS = {
   del:['➖ Xoá hàng/cột','Xoá (Delete) các hàng hoặc cột đang chọn (nháy tên hàng/cột để chọn)'],
   hide:['🙈 Ẩn','Ẩn (Hide) các hàng hoặc cột đang chọn'], unhide:['👁 Hiện','Hiện lại (Unhide): chọn các hàng/cột xung quanh vị trí bị ẩn'],
   merge:['⬌ Gộp ô','Merge & Center: gộp các ô của vùng và căn giữa'], fmt:['🔢 Format Cells','Định dạng dữ liệu số, phần trăm, ngày tháng'],
+  border:['▦ Kẻ viền','Format Cells → Border: kẻ đường viền ô và khung bao quanh vùng'], fillc:['🎨 Màu nền','Chọn màu nền cho ô'],
+  print:['🖨 Xem trước khi in','File/Print: xem trang in (đang chọn vùng thì in vùng chọn – Print Selection)'],
   b:['<b>B</b>','Chữ đậm'], i:['<i>I</i>','Chữ nghiêng'], big:['A⁺','Tăng cỡ chữ'], green:['<span style="color:#1d8a3a;font-weight:700">A</span>','Chữ xanh lá'],
   fill:['🟨 Nền','Màu nền vàng'], left:['⇤','Căn trái'], center:['↔','Căn giữa'], right:['⇥','Căn phải'], reset:['Làm lại','Làm lại từ đầu']
 };
@@ -177,6 +184,9 @@ window.BangTinh = function(box, opt){
     + '<div class="row" data-fdt hidden><label>Type: <select><option>dd/mm/yyyy (14/03/2012)</option></select></label><label>Locale: <select><option>Vietnamese</option></select></label></div>'
     + '<div class="row">Sample: <span class="smp" data-smp></span></div>'
     + '<div class="row"><button type="button" data-fok>OK</button><button type="button" data-fno>Cancel</button></div></div>'
+    + '<div class="fc" data-bd hidden><div class="h">Format Cells · Border</div><div class="row">Presets: <button type="button" data-bp="none">None</button><button type="button" data-bp="outline">Outline</button><button type="button" data-bp="inside">Inside</button><button type="button" data-bp="all">Outline + Inside</button><button type="button" data-bp="x">Đóng</button></div><div class="row" style="font-size:12.5px">None: không kẻ khung · Outline: kẻ khung bên ngoài · Inside: kẻ đường viền ô bên trong</div></div>'
+    + '<div class="pal" data-pal hidden>Màu nền: <button type="button" data-pc="#ffe94d" style="background:#ffe94d" title="Vàng"></button><button type="button" data-pc="#f4a340" style="background:#f4a340" title="Cam"></button><button type="button" data-pc="#3e9b5a" style="background:#3e9b5a" title="Xanh lá đậm"></button><button type="button" data-pc="#a9dcb5" style="background:#a9dcb5" title="Xanh lá nhạt"></button><button type="button" data-pc="#9cc3f0" style="background:#9cc3f0" title="Xanh dương nhạt"></button><button type="button" data-pc="#f3b6c8" style="background:#f3b6c8" title="Hồng"></button><button type="button" data-pc="" style="background:#fff" title="Không màu">✕</button></div>'
+    + '<div class="pv" data-pv hidden></div>'
     + '<div class="fb"><span class="nb" data-nb>A1</span><span class="fx">fx</span><input data-in aria-label="Vùng nhập dữ liệu" placeholder="Vùng nhập dữ liệu (công thức bắt đầu bằng =)" autocomplete="off" spellcheck="false"></div>'
     + '<div class="gw"><table data-g></table></div>'
     + '<div class="tabs"><span class="tab" data-tab title="Nháy đúp để đổi tên"></span></div>'
@@ -191,6 +201,33 @@ window.BangTinh = function(box, opt){
       if (c >= c0 && c < c0 + m[0] && r >= r0 && r < r0 + m[1]) return [c0, r0, c0 + m[0] - 1, r0 + m[1] - 1]; } return null; }
   function wholeRows(g){ return g[0] === 0 && g[2] === C - 1; }
   function wholeCols(g){ return g[1] === 0 && g[3] === R - 1; }
+  var BL = "1px solid #222";
+  function bstyle(c, r, F){ var x = "", m = F.m, c1 = m ? c + m[0] - 1 : c, r1 = m ? r + m[1] - 1 : r, Fb = f[k(c, r1)] || {}, Fr = f[k(c1, r)] || {};
+    if (F.bt) x += "border-top:" + BL + ";"; if (F.bl) x += "border-left:" + BL + ";"; if (Fb.bb) x += "border-bottom:" + BL + ";"; if (Fr.br) x += "border-right:" + BL + ";"; return x; }
+  function border(t){ var g = rg();
+    for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {};
+      if (t === "none") { delete F.bt; delete F.bb; delete F.bl; delete F.br; continue; }
+      if (t === "outline" || t === "all") { if (r === g[1]) F.bt = 1; if (r === g[3]) F.bb = 1; if (c === g[0]) F.bl = 1; if (c === g[2]) F.br = 1; }
+      if (t === "inside" || t === "all") { if (r > g[1]) F.bt = 1; if (r < g[3]) F.bb = 1; if (c > g[0]) F.bl = 1; if (c < g[2]) F.br = 1; } }
+    log.push("border-" + t); say({none:"Đã bỏ đường kẻ", outline:"Đã kẻ khung bao quanh", inside:"Đã kẻ đường viền các ô bên trong", all:"Đã kẻ khung và đường viền các ô"}[t] + " vùng " + q("[data-nb]").textContent + "."); draw(); }
+  function used(){ var c0 = 1e9, r0 = 1e9, c1 = -1, r1 = -1; Object.keys(d).forEach(function(key){ var m = /^([A-Z]+)(\d+)$/.exec(key), c = colIdx(m[1]), r = +m[2] - 1; c0 = Math.min(c0, c); r0 = Math.min(r0, r); c1 = Math.max(c1, c); r1 = Math.max(r1, r); });
+    return c1 < 0 ? [0, 0, 0, 0] : [c0, r0, c1, r1]; }
+  function preview(){
+    var g = rg(), sel = (g[0] !== g[2] || g[1] !== g[3]) && !mergeAt(a[0], a[1]), z = sel ? g : used(), cov = {}, h = "", c, r;
+    Object.keys(f).forEach(function(key){ var m = f[key].m; if (!m) return; var mm = /^([A-Z]+)(\d+)$/.exec(key), c0 = colIdx(mm[1]), r0 = +mm[2] - 1;
+      for (c = c0; c < c0 + m[0]; c++) for (r = r0; r < r0 + m[1]; r++) if (c !== c0 || r !== r0) cov[k(c, r)] = 1; });
+    for (r = z[1]; r <= z[3]; r++) { if (hr[r]) continue; h += "<tr>";
+      for (c = z[0]; c <= z[2]; c++) { if (hc[c]) continue; var key = k(c, r); if (cov[key]) continue; var v = val(key), F = f[key] || {}, span = "",
+        st = "text-align:" + (F.al || (typeof v === "number" ? "right" : "left")) + ";min-width:" + Math.round(w[c] * 0.8) + "px;";
+        if (F.b) st += "font-weight:700;"; if (F.i) st += "font-style:italic;"; if (F.big) st += "font-size:15px;"; if (F.green) st += "color:#1d8a3a;"; if (F.fill) st += "background:" + (F.fill === true ? "#ffe94d" : F.fill) + ";"; st += bstyle(c, r, F);
+        if (F.m) { var cs = 0, rs = 0, x; for (x = c; x < c + F.m[0] && x <= z[2]; x++) if (!hc[x]) cs++; for (x = r; x < r + F.m[1] && x <= z[3]; x++) if (!hr[x]) rs++; span = " colspan='" + cs + "' rowspan='" + rs + "'"; st += "vertical-align:middle;"; }
+        h += "<td style='" + st + "'" + span + ">" + text(key).replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</td>"; }
+      h += "</tr>"; }
+    var pv = q("[data-pv]"), hcs = Object.keys(hc).map(Number).sort(function(x, y){ return x - y; });
+    pv.innerHTML = "<div class='h'>🖨 Xem trước khi in · " + (sel ? "Print Selection (" + k(z[0], z[1]) + ":" + k(z[2], z[3]) + ")" : "Print Active Sheets") + " · A4<button type='button' data-pvx>Đóng</button></div>"
+      + "<div class='pg'><table>" + h + "</table></div><div style='font-size:12.5px;color:#333'>Trên giấy in không có các đường lưới của trang tính, chỉ có những đường viền, khung em đã kẻ" + (hcs.length ? "; các cột, hàng bị ẩn không được in" : "") + ".</div>";
+    pv.hidden = false; pv.querySelector("[data-pvx]").addEventListener("click", function(){ pv.hidden = true; box.focus(); });
+    log.push("print:" + hcs.join(",") + (sel ? ":sel" : "")); say("Đã mở xem trước khi in. Muốn in thật, em dùng lệnh File/Print (Ctrl+P) trong phần mềm bảng tính."); draw(); }
   function draw(){
     var g = rg(), cov = {};
     Object.keys(f).forEach(function(key){ var m = f[key].m; if (!m) return; var mm = /^([A-Z]+)(\d+)$/.exec(key), c0 = colIdx(mm[1]), r0 = +mm[2] - 1;
@@ -205,7 +242,7 @@ window.BangTinh = function(box, opt){
       for (c = 0; c < C; c++) { if (hc[c]) continue; var key = k(c, r); if (cov[key]) continue;
         var v = val(key), F = f[key] || {}, err = typeof v === "string" && v[0] === "#" && (d[key] || "")[0] === "=",
           al = F.al || (typeof v === "number" || err ? "right" : "left"), st = "text-align:" + al + ";", span = "";
-        if (F.b) st += "font-weight:700;"; if (F.i) st += "font-style:italic;"; if (F.big) st += "font-size:17px;"; if (F.green) st += "color:#1d8a3a;"; if (F.fill) st += "background:#ffe94d;";
+        if (F.b) st += "font-weight:700;"; if (F.i) st += "font-style:italic;"; if (F.big) st += "font-size:17px;"; if (F.green) st += "color:#1d8a3a;"; if (F.fill) st += "background:" + (F.fill === true ? "#ffe94d" : F.fill) + ";"; st += bstyle(c, r, F);
         if (F.m) { var cs = 0, rs = 0, x; for (x = c; x < c + F.m[0]; x++) if (!hc[x]) cs++; for (x = r; x < r + F.m[1]; x++) if (!hr[x]) rs++; span = " colspan='" + cs + "' rowspan='" + rs + "'"; st += "vertical-align:middle;"; }
         var inC = clip && c >= clip.g[0] && c <= clip.g[2] && r >= clip.g[1] && r <= clip.g[3];
         var inP = pick && c >= pick.g[0] && c <= pick.g[2] && r >= pick.g[1] && r <= pick.g[3];
@@ -345,7 +382,7 @@ window.BangTinh = function(box, opt){
   });
   box.querySelectorAll("[data-f]").forEach(function(b){ b.addEventListener("click", function(){
     var t = b.dataset.f, g = rg();
-    if (t === "reset") { reset(); fc.hidden = true; say("Đã làm lại từ đầu."); draw(); return; }
+    if (t === "reset") { reset(); fc.hidden = true; q("[data-bd]").hidden = true; q("[data-pal]").hidden = true; q("[data-pv]").hidden = true; say("Đã làm lại từ đầu."); draw(); return; }
     if (t === "copy") { copy(); box.focus(); return; }
     if (t === "paste") { paste(); box.focus(); return; }
     if (t === "insert") { insert(); box.focus(); return; }
@@ -353,11 +390,18 @@ window.BangTinh = function(box, opt){
     if (t === "hide" || t === "unhide") { hide(t === "hide"); box.focus(); return; }
     if (t === "merge") { merge(); box.focus(); return; }
     if (t === "fmt") { if (fc.hidden) fcOpen(); else fc.hidden = true; return; }
+    if (t === "border") { q("[data-bd]").hidden = !q("[data-bd]").hidden; return; }
+    if (t === "fillc") { q("[data-pal]").hidden = !q("[data-pal]").hidden; return; }
+    if (t === "print") { preview(); return; }
     var first = f[k(g[0], g[1])] || {}, on = !first[t];
     for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {};
       if (t === "left" || t === "center" || t === "right") F.al = t; else F[t] = on; }
     say("Đã định dạng " + q("[data-nb]").textContent + "."); draw(); box.focus();
   }); });
+  box.querySelectorAll("[data-bp]").forEach(function(b){ b.addEventListener("click", function(){ if (b.dataset.bp === "x") { q("[data-bd]").hidden = true; } else border(b.dataset.bp); box.focus(); }); });
+  box.querySelectorAll("[data-pc]").forEach(function(b){ b.addEventListener("click", function(){ var g = rg(), col = b.dataset.pc;
+    for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {}; if (col) F.fill = col; else delete F.fill; }
+    say(col ? "Đã tô màu nền vùng " + q("[data-nb]").textContent + "." : "Đã bỏ màu nền."); draw(); box.focus(); }); });
   var api = {val: val, text: text, raw: function(key){ return d[key]; }, set: function(key, v){ if (v) d[key] = v; else delete d[key]; }, redraw: function(){ draw(); }, say: say};
   box.querySelectorAll("[data-x]").forEach(function(b){ b.addEventListener("click", function(){ opt.extra[+b.dataset.x].run(api); draw(); box.focus(); }); });
   q("[data-tab]").addEventListener("dblclick", function(){

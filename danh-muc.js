@@ -50,7 +50,7 @@ window.CHUONG_TRINH = [
       {so: "7", ten: "Tính toán tự động trên bảng tính", slug: "tinh-toan-tu-dong", tt: "dang"},
       {so: "8", ten: "Công cụ hỗ trợ tính toán", tt: "dang"},
       {so: "9", ten: "Trình bày bảng tính", tt: "dang"},
-      {so: "10", ten: "Hoàn thiện bảng tính"},
+      {so: "10", ten: "Hoàn thiện bảng tính", tt: "dang"},
       {so: "11", ten: "Tạo bài trình chiếu"},
       {so: "12", ten: "Định dạng đối tượng trên trang chiếu", slug: "dinh-dang-trang-chieu"},
       {so: "13", ten: "Thực hành tổng hợp: Hoàn thiện bài trình chiếu"}]},
