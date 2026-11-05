@@ -61,7 +61,7 @@ window.CHUONG_TRINH = [
   ]},
   {lop: 8, chuDe: [
     {so: "1", ten: "Máy tính và cộng đồng", bai: [
-      {so: "1", ten: "Lược sử công cụ tính toán"}]},
+      {so: "1", ten: "Lược sử công cụ tính toán", tt: "dang"}]},
     {so: "2", ten: "Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin", bai: [
       {so: "2", ten: "Thông tin trong môi trường số"},
       {so: "3", ten: "Thực hành: Khai thác thông tin số"}]},
