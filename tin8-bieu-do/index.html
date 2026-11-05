@@ -6,7 +6,7 @@
 <title>Trình bày dữ liệu bằng biểu đồ · Tin học 8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="../chung/style.css?v=24">
+<link rel="stylesheet" href="../chung/style.css?v=27">
 </head>
 <body>
 <header class="hero">
@@ -137,6 +137,9 @@
         <div class="chm" data-chm>
           <style>
             .chm{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:10px}
+            .chm>*{min-width:0}
+            .chm .ctl>*{min-width:0;max-width:100%}
+            .chm .ctl select{max-width:100%}
             .chm .t{font-weight:700}
             .chm .ctl{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;font-size:14px}
             .chm select{font:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg,#fff);color:inherit}

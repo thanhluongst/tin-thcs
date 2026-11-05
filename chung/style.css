@@ -147,7 +147,13 @@ textarea[readonly]{background:var(--sunk)}
 @media (max-width:620px){.match{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .match.wide{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:620px){.match.wide{grid-template-columns:1fr}}
-.match.wide select{max-width:60%}
+.match.wide{grid-template-columns:1fr}
+.match.wide label{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,46%);gap:10px}
+.match.wide select{max-width:100%;width:100%;min-width:0}
+.match select{max-width:100%;min-width:0}
+.match label span{min-width:0;overflow-wrap:anywhere}
+@media (max-width:620px){.match.wide label{grid-template-columns:1fr;gap:4px}}
+@media (max-width:420px){.match{grid-template-columns:1fr}}
 .match label{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-size:14px}
 .match label.right{border-color:var(--ok);background:var(--ok-soft)}
 .match label.wrong{border-color:var(--bad);background:var(--bad-soft)}
@@ -498,3 +504,8 @@ html.chieu-on,html.chieu-on body{overflow:hidden}
 .concept-wrap .btn-row .btn{flex:1 1 200px}
 .chieu .chieu-page .gh{line-height:calc(var(--lh) / 1.15);margin-top:0}
 .chieu .chieu-page .gh:not(:first-child){margin-top:calc(var(--lh) / 1.15)}
+
+/* Không để nội dung dài (đường link, bảng mô phỏng) đẩy cột bài học rộng hơn màn hình điện thoại */
+main .wrap,.part,.act,.act>*,.q,.q>*{min-width:0}
+.reading,.q-text,.concept,.fig figcaption{overflow-wrap:anywhere}
+main select{max-width:100%}
