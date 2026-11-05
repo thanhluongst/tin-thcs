@@ -8,7 +8,9 @@
    - Insert/Pictures: chèn hình từ thư viện; kéo thả để di chuyển, nút góc để đổi kích thước giữ tỉ lệ, nút cạnh để đổi chiều ngang/dọc;
      Bring Forward / Send Backward; Picture Border; Delete để xoá hình.
    - Dán (Ctrl+V) văn bản nhiều đoạn vào khung nội dung; tệp văn bản mẫu (opt.doc) để sao chép; Undo; trình chiếu toàn màn hình.
-   Tuỳ chọn: title, note, slides[], tools[] ("slides","para","font","design","insert","show"), doc{name, paras[]}, extra[], check(x)
+   - Animations: hiệu ứng cho đối tượng (Appear, Fade, Fly In, Float In, Wipe, Zoom), Start (On Click / With / After Previous), Duration,
+     Animation Pane (đổi thứ tự, xoá), Preview; Transitions: hiệu ứng chuyển trang, Apply To All.
+   Tuỳ chọn: title, note, slides[], tools[] ("slides","para","font","design","insert","anim","trans","show"), doc{name, html}, extra[], check(x)
    x = {slides:[{layout, title, sub, lines:[{t, lv, b, c}], theme, bg, tf:{title,sub,body}, imgs:[{g,x,y,w,h,back,bd}]}], log:[…]} */
 (function(){
 "use strict";
@@ -44,7 +46,17 @@ var CSS = ".tc{border:1px solid var(--line);border-radius:12px;padding:10px;marg
  + ".tc-show{position:fixed;inset:0;z-index:9999;background:#111;display:grid;place-items:center;cursor:pointer}"
  + ".tc-show .sl{width:min(96vw,170vh);border:0;border-radius:0;box-shadow:none}.tc-show .sl .bd{border-color:transparent}"
  + ".tc-show .hint{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);color:#ccc;font:13px sans-serif}"
- + ".tc .stx{white-space:pre-line;overflow-wrap:anywhere}";
+ + ".tc .stx{white-space:pre-line;overflow-wrap:anywhere}"
+ + ".tc .pane{border:1px solid #d6d6d6;background:#fbfbfb;color:#222;border-radius:8px;padding:6px 8px;font-size:13px;display:grid;gap:3px}"
+ + ".tc .pane .h{font-weight:700;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.tc .pane .h span{font-weight:400;color:#666}"
+ + ".tc .pane .r{display:flex;gap:6px;align-items:center;padding:2px 4px;border-radius:4px;cursor:pointer}.tc .pane .r.on{background:#fde3d6}"
+ + ".tc .pane .r b{min-width:1.6em;color:#c4501b}.tc .pane .r em{flex:1;font-style:normal}.tc .pane button{font:inherit;font-size:12px;border:1px solid #bbb;background:#fff;border-radius:4px;padding:0 6px;cursor:pointer}"
+ + ".tc .th .star{position:absolute;left:0;bottom:-2px;font-size:10px;color:#c4501b}"
+ + "@keyframes tc-fade{from{opacity:0}to{opacity:1}}@keyframes tc-fly{from{transform:translateY(130%);opacity:.3}to{transform:none;opacity:1}}"
+ + "@keyframes tc-float{from{transform:translateY(40%);opacity:0}to{transform:none;opacity:1}}@keyframes tc-wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}"
+ + "@keyframes tc-zoom{from{transform:scale(.2);opacity:0}to{transform:none;opacity:1}}"
+ + "@keyframes tr-fade{from{opacity:0}to{opacity:1}}@keyframes tr-push{from{transform:translateX(100%)}to{transform:none}}@keyframes tr-wipe{from{clip-path:inset(0 0 0 100%)}to{clip-path:inset(0)}}"
+ + "@keyframes tr-split{from{clip-path:inset(0 50% 0 50%)}to{clip-path:inset(0)}}@keyframes tr-zoom{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}";
 function addCss(){ var s = document.getElementById("trinhchieu-css"); if (!s) { s = document.createElement("style"); s.id = "trinhchieu-css"; document.head.appendChild(s); } s.textContent = CSS; }
 var PT = 0.1042;                    /* 1 pt = 0.1042 % bề rộng trang chiếu 16:9 (13,33 in) */
 var LV = [0, 1, 0.85, 0.75, 0.68, 0.62];
@@ -70,13 +82,18 @@ var GALLERY = [
 ];
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
-function blank(lay){ var s = lay === "title" ? {layout:"title", title:"", sub:""} : lay === "only" ? {layout:"only", title:""} : {layout:"content", title:"", lines:[{t:"", lv:1}]}; s.theme = 0; s.tf = {}; s.imgs = []; return s; }
-function norm(s){ if (!s.tf) s.tf = {}; if (!s.imgs) s.imgs = []; if (s.theme == null) s.theme = 0; return s; }
+function blank(lay){ var s = lay === "title" ? {layout:"title", title:"", sub:""} : lay === "only" ? {layout:"only", title:""} : {layout:"content", title:"", lines:[{t:"", lv:1}]}; s.theme = 0; s.tf = {}; s.imgs = []; s.anim = []; return s; }
+function norm(s){ if (!s.tf) s.tf = {}; if (!s.imgs) s.imgs = []; if (s.theme == null) s.theme = 0; if (!s.anim) s.anim = []; return s; }
 function mark(lines, i){ var L = lines[i], b = L.b || "•";
   if (b !== "1." && b !== "a.") return b;
   var n = 1; for (var j = i - 1; j >= 0; j--) { if (lines[j].lv < L.lv) break; if (lines[j].lv === L.lv) { if ((lines[j].b || "•") === b) n++; else break; } }
   return b === "1." ? n + "." : String.fromCharCode(96 + n) + "."; }
 var DEF_TOOLS = ["slides","para","show"];
+var EFFECTS = [["appear","Appear"],["fade","Fade"],["fly","Fly In"],["float","Float In"],["wipe","Wipe"],["zoom","Zoom"]];
+var TRANS = [["","None"],["fade","Fade"],["push","Push"],["wipe","Wipe"],["split","Split"],["zoom","Zoom"]];
+var STARTS = {click:"On Click", "with":"With Previous", after:"After Previous"};
+function effName(e){ for (var i = 0; i < EFFECTS.length; i++) if (EFFECTS[i][0] === e) return EFFECTS[i][1]; return e; }
+function trName(e){ for (var i = 0; i < TRANS.length; i++) if (TRANS[i][0] === e) return TRANS[i][1]; return e; }
 
 window.TrinhChieu = function(box, opt){
   addCss(); opt = opt || {};
@@ -111,6 +128,13 @@ window.TrinhChieu = function(box, opt){
     + '<select data-bd title="Format/Picture Styles/Picture Border: viền hình"><option value="-">Viền hình…</option><option value="">Không viền</option><option value="#ffffff">Trắng</option><option value="#000000">Đen</option><option value="#2e7d32">Xanh lá</option><option value="#c0392b">Đỏ</option></select>'
     + '<button type="button" data-a="delpic" title="Xoá hình đang chọn (Delete)">✕ Xoá hình</button><span class="sep"></span>';
   if (has("font") || has("insert")) R += '<button type="button" data-a="paste" title="Home/Paste (Ctrl+V): dán văn bản đã sao chép">📋 Paste</button><button type="button" data-a="undo" title="Undo (Ctrl+Z): khôi phục lại">↶ Undo</button><span class="sep"></span>';
+  if (has("anim")) R += '<span class="lb">Animations</span><select data-eff title="Chọn hiệu ứng cho đối tượng đang chọn (nháy vào tiêu đề, khung nội dung hoặc hình ảnh trước)"><option value="">Hiệu ứng…</option>' + EFFECTS.map(function(x){ return '<option value="' + x[0] + '">' + x[1] + "</option>"; }).join("") + '<option value="none">✕ Bỏ hiệu ứng</option></select>'
+    + '<select data-start title="Start: cách đối tượng xuất hiện"><option value="">Start…</option><option value="click">On Click</option><option value="with">With Previous</option><option value="after">After Previous</option></select>'
+    + '<select data-dur title="Duration: thời lượng hiệu ứng"><option value="">Duration…</option><option value="0.5">0,5 giây</option><option value="1">1 giây</option><option value="2">2 giây</option></select>'
+    + '<button type="button" data-a="preview" title="Preview: xem trước hiệu ứng của trang">👁 Preview</button><span class="sep"></span>';
+  if (has("trans")) R += '<span class="lb">Transitions</span><select data-tr title="Hiệu ứng chuyển trang cho trang đang chọn"><option value="-">Chuyển trang…</option>' + TRANS.map(function(x){ return '<option value="' + x[0] + '">' + x[1] + "</option>"; }).join("") + "</select>"
+    + '<select data-trd title="Duration: thời lượng chuyển trang"><option value="">Thời lượng…</option><option value="0.5">0,5 giây</option><option value="1">1 giây</option><option value="2">2 giây</option></select>'
+    + '<button type="button" data-a="trall" title="Apply To All: áp dụng hiệu ứng chuyển trang này cho tất cả các trang">Apply To All</button><span class="sep"></span>';
   if (has("show")) R += '<button type="button" data-a="show" title="Trình chiếu từ trang đầu (F5)">▶ Trình chiếu</button>';
   R += '<button type="button" data-a="reset">Làm lại</button>' + (opt.extra || []).map(function(x, i){ return '<button type="button" data-x="' + i + '" title="' + esc(x.title || "") + '">' + x.label + "</button>"; }).join("");
 
@@ -119,6 +143,7 @@ window.TrinhChieu = function(box, opt){
     + (opt.doc ? '<div class="dh">📄 <b>' + esc(opt.doc.name) + "</b> (tệp văn bản) – bôi đen phần cần sao chép rồi bấm <button type='button' data-a='copydoc'>Copy (Ctrl+C)</button></div><div class='doc' data-doc>" + opt.doc.html + "</div>" : "")
     + '<div class="rb">' + R + "</div>"
     + '<div class="pop" data-gal hidden><b>Insert Picture:</b> chọn một hình để chèn vào trang đang chọn' + GALLERY.map(function(g, i){ return '<img src="' + g.src + '" alt="' + g.n + '" title="' + g.n + '" data-g="' + i + '">'; }).join("") + '<button type="button" data-a="galx">Đóng</button></div>'
+    + (has("anim") ? '<div class="pane" data-pane></div>' : "")
     + '<div class="wk"><div class="th" data-th></div><div data-ed></div></div>'
     + '<div class="msg" data-msg aria-live="polite"></div>'
     + (opt.check ? '<ul class="ck" data-ck></ul>' : "")
@@ -127,16 +152,16 @@ window.TrinhChieu = function(box, opt){
 
   /* ---------- Vẽ trang ---------- */
   function imgsHtml(s, back, live){ return s.imgs.map(function(im, i){ if (!!im.back !== back) return "";
-    return '<img src="' + GALLERY[im.g].src + '" alt="" ' + (live ? 'data-im="' + i + '" ' : "") + 'style="left:' + im.x + "%;top:" + im.y + "%;width:" + im.w + "%;height:" + im.h + "%;z-index:" + (back ? 1 : 3) + ";" + (im.bd ? "border:0.6cqw solid " + im.bd + ";box-sizing:border-box;" : "") + '">'; }).join(""); }
+    return '<img src="' + GALLERY[im.g].src + '" alt="" ' + (live ? 'data-im="' + i + '" ' : 'data-o="img:' + i + '" ') + 'style="left:' + im.x + "%;top:" + im.y + "%;width:" + im.w + "%;height:" + im.h + "%;z-index:" + (back ? 1 : 3) + ";" + (im.bd ? "border:0.6cqw solid " + im.bd + ";box-sizing:border-box;" : "") + '">'; }).join(""); }
   function lineHtml(s, i, live){ var L = s.lines[i], F = tf(s, "body"), T = th(s), st = css(F, LV[L.lv]) + "padding-left:" + ((L.lv - 1) * 4.2) + "cqw";
     return '<div class="ln' + (live && sel && i >= sel[0] && i <= sel[1] ? " sel" : "") + '" style="' + st + '"><span class="bu" style="color:' + (L.c || T.ac || F.color) + ';font-style:normal;font-weight:400">' + esc(mark(s.lines, i)) + "</span>"
       + (live ? '<textarea rows="1" data-li="' + i + '" placeholder="' + (i === 0 && s.lines.length === 1 ? "Click to add text" : "") + '" aria-label="Dòng ' + (i + 1) + '" style="font:inherit;color:inherit;text-align:inherit">' + esc(L.t) + "</textarea>" : '<span class="stx" style="flex:1">' + esc(L.t) + "</span>") + "</div>"; }
   function slideHtml(s, live){
     var h = '<div class="sl' + (s.layout === "title" ? " ti" : "") + '" style="' + bgcss(s) + '">' + imgsHtml(s, true, live) + '<div class="tx">';
     var FT = tf(s, "title");
-    h += live ? '<textarea rows="1" class="tt" data-tt placeholder="Click to add title" aria-label="Tiêu đề" style="' + css(FT) + '">' + esc(s.title) + "</textarea>" : '<div class="stx" style="' + css(FT) + 'padding:2px 4px">' + esc(s.title) + "</div>";
-    if (s.layout === "title") { var FS = tf(s, "sub"); h += live ? '<textarea rows="2" class="sb" data-sb placeholder="Click to add subtitle" aria-label="Phụ đề" style="' + css(FS) + '">' + esc(s.sub) + "</textarea>" : '<div class="stx" style="' + css(FS) + 'padding:2px 4px">' + esc(s.sub) + "</div>"; }
-    if (s.layout === "content") h += '<div class="bd">' + s.lines.map(function(L, i){ return lineHtml(s, i, live); }).join("") + "</div>";
+    h += live ? '<textarea rows="1" class="tt" data-tt placeholder="Click to add title" aria-label="Tiêu đề" style="' + css(FT) + '">' + esc(s.title) + "</textarea>" : '<div class="stx" data-o="title" style="' + css(FT) + 'padding:2px 4px">' + esc(s.title) + "</div>";
+    if (s.layout === "title") { var FS = tf(s, "sub"); h += live ? '<textarea rows="2" class="sb" data-sb placeholder="Click to add subtitle" aria-label="Phụ đề" style="' + css(FS) + '">' + esc(s.sub) + "</textarea>" : '<div class="stx" data-o="sub" style="' + css(FS) + 'padding:2px 4px">' + esc(s.sub) + "</div>"; }
+    if (s.layout === "content") h += '<div class="bd"' + (live ? "" : ' data-o="body"') + ">" + s.lines.map(function(L, i){ return lineHtml(s, i, live); }).join("") + "</div>";
     h += "</div>" + imgsHtml(s, false, live);
     if (live && imgSel != null && s.imgs[imgSel]) { var im = s.imgs[imgSel];
       h += '<div class="fr" data-fr style="left:' + im.x + "%;top:" + im.y + "%;width:" + im.w + "%;height:" + im.h + '%"><i data-h="r" style="right:-6px;top:calc(50% - 5px);cursor:ew-resize"></i><i data-h="b" style="bottom:-6px;left:calc(50% - 5px);cursor:ns-resize"></i><i data-h="br" style="right:-6px;bottom:-6px;cursor:nwse-resize"></i><i data-h="t" style="top:-6px;left:calc(50% - 5px);cursor:ns-resize"></i><i data-h="l" style="left:-6px;top:calc(50% - 5px);cursor:ew-resize"></i></div>'; }
@@ -144,7 +169,7 @@ window.TrinhChieu = function(box, opt){
   function mini(s){ var T = th(s), x = '<span style="position:relative;z-index:2"><b style="color:' + T.tc + '">' + esc(s.title || (s.layout === "title" ? "(Trang tiêu đề)" : "(Chưa có tiêu đề)")) + "</b>";
     if (s.layout === "title") x += "<br>" + esc((s.sub || "").split("\n")[0]); else if (s.lines) x += s.lines.slice(0, 6).map(function(L){ return "<br>" + "&nbsp;".repeat((L.lv - 1) * 3) + "• " + esc(L.t.slice(0, 40)); }).join("");
     return '<span class="mini" style="' + bgcss(s) + "color:" + T.bc + '">' + s.imgs.map(function(im){ return '<img src="' + GALLERY[im.g].src + '" alt="" style="position:absolute;left:' + im.x + "%;top:" + im.y + "%;width:" + im.w + "%;height:" + im.h + "%;z-index:" + (im.back ? 1 : 3) + '">'; }).join("") + x + "</span></span>"; }
-  function thumbs(){ q("[data-th]").innerHTML = S.map(function(s, i){ return '<button type="button" data-s="' + i + '" class="' + (i === cur ? "on" : "") + (ms[i] ? " ms" : "") + '"><span class="n">' + (i + 1) + "</span>" + mini(s) + "</button>"; }).join("");
+  function thumbs(){ q("[data-th]").innerHTML = S.map(function(s, i){ return '<button type="button" data-s="' + i + '" class="' + (i === cur ? "on" : "") + (ms[i] ? " ms" : "") + '"><span class="n" style="position:relative">' + (i + 1) + ((s.anim && s.anim.length) || s.tr ? '<span class="star" title="Có hiệu ứng">★</span>' : "") + "</span>" + mini(s) + "</button>"; }).join("");
     box.querySelectorAll("[data-s]").forEach(function(b){ b.addEventListener("click", function(ev){ var i = +b.dataset.s;
       if (ev.ctrlKey || ev.metaKey) { if (ms[i]) delete ms[i]; else ms[i] = 1; ms[cur] = 1; say("Đã chọn " + Object.keys(ms).length + " trang (giữ Ctrl để chọn nhiều trang). Mẫu định dạng sẽ áp dụng cho các trang này."); }
       else ms = {};
@@ -152,7 +177,21 @@ window.TrinhChieu = function(box, opt){
   function check(){ if (opt.check) q("[data-ck]").innerHTML = opt.check({slides: S, log: log}).map(function(x){ return "<li class='" + (x[1] ? "ok" : "") + "'>" + x[0] + "</li>"; }).join(""); }
   function fit(el){ el.style.height = "auto"; el.style.height = el.scrollHeight + "px"; }
   function focusLine(i, pos){ var el = q('[data-li="' + i + '"]'); if (el) { el.focus(); var p = pos == null ? el.value.length : pos; el.setSelectionRange(p, p); } }
-  function draw(fi, pos){ thumbs(); var s = S[cur]; q("[data-ed]").innerHTML = slideHtml(s, true); bind(); check(); box.querySelectorAll(".sl textarea").forEach(fit); if (fi != null) focusLine(fi, pos); }
+  var paneSel = null;
+  function oName(s, o){ if (o === "title") return "Tiêu đề"; if (o === "sub") return "Phụ đề"; if (o === "body") return "Khung nội dung"; return "Hình ảnh " + (+o.split(":")[1] + 1); }
+  function curObj(){ return lastBox === "img" && imgSel != null ? "img:" + imgSel : (lastBox === "sub" && S[cur].layout === "title") ? "sub" : (lastBox === "body" && S[cur].layout === "content") ? "body" : "title"; }
+  function pane(){ var el = q("[data-pane]"); if (!el) return; var s = S[cur];
+    el.innerHTML = '<div class="h">Animation Pane · trang ' + (cur + 1) + '<span>Chuyển trang: ' + (s.tr ? trName(s.tr.e) + " (" + s.tr.d + " giây)" : "None") + "</span></div>"
+      + (s.anim.length ? s.anim.map(function(a, i){ return '<div class="r' + (paneSel === i ? " on" : "") + '" data-pi="' + i + '"><b>' + (i + 1) + '.</b><em>★ ' + oName(s, a.o) + " – " + effName(a.e) + " (" + STARTS[a.st] + ", " + a.d + " giây)</em>"
+        + '<button type="button" data-pm="up" title="Move Earlier">▲</button><button type="button" data-pm="dn" title="Move Later">▼</button><button type="button" data-pm="x" title="Xoá hiệu ứng">✕</button></div>'; }).join("")
+        : '<div style="color:#666">Chưa có hiệu ứng. Nháy chọn một đối tượng trên trang rồi chọn hiệu ứng.</div>');
+    el.querySelectorAll("[data-pi]").forEach(function(r){ var i = +r.dataset.pi;
+      r.addEventListener("click", function(ev){ var m = ev.target.dataset && ev.target.dataset.pm;
+        if (m === "x") { snap(); s.anim.splice(i, 1); paneSel = null; log.push("unanim"); say("Đã xoá hiệu ứng."); }
+        else if (m === "up" || m === "dn") { var j = i + (m === "up" ? -1 : 1); if (j < 0 || j >= s.anim.length) return; snap(); var t = s.anim[i]; s.anim[i] = s.anim[j]; s.anim[j] = t; paneSel = j; log.push("reorder"); say("Đã thay đổi thứ tự xuất hiện (Reorder Animation)."); }
+        else { paneSel = paneSel === i ? null : i; say(paneSel == null ? "" : "Đã chọn hiệu ứng " + (i + 1) + ". Có thể đổi Start, Duration hoặc thứ tự."); }
+        draw(); }); }); }
+  function draw(fi, pos){ thumbs(); var s = S[cur]; if (paneSel != null && !s.anim[paneSel]) paneSel = null; pane(); q("[data-ed]").innerHTML = slideHtml(s, true); bind(); check(); box.querySelectorAll(".sl textarea").forEach(fit); if (fi != null) focusLine(fi, pos); }
   function range(i){ return sel ? sel : [i, i]; }
   function level(d, i){ var s = S[cur]; if (s.layout !== "content") { say("Trang này không có khung nội dung dạng danh sách.", true); return; }
     snap(); var r = range(i == null ? 0 : i), ok = 0; for (var j = r[0]; j <= r[1]; j++) { var nv = s.lines[j].lv + d; if (nv >= 1 && nv <= 5) { s.lines[j].lv = nv; ok++; } }
@@ -216,14 +255,14 @@ window.TrinhChieu = function(box, opt){
   box.addEventListener("keydown", function(ev){
     if ((ev.key === "Delete" || ev.key === "Backspace") && imgSel != null && !/TEXTAREA|INPUT|SELECT/.test(ev.target.tagName)) { ev.preventDefault(); delPic(); }
     if ((ev.ctrlKey || ev.metaKey) && /^[zZ]$/.test(ev.key) && !/TEXTAREA|INPUT/.test(ev.target.tagName)) { ev.preventDefault(); undo(); } });
-  function delPic(){ var s = S[cur]; if (imgSel == null || !s.imgs[imgSel]) { say("Hãy nháy chọn hình ảnh trước.", true); return; } snap(); s.imgs.splice(imgSel, 1); imgSel = null; log.push("delpic"); say("Đã xoá hình ảnh."); draw(); }
+  function delPic(){ var s = S[cur]; if (imgSel == null || !s.imgs[imgSel]) { say("Hãy nháy chọn hình ảnh trước.", true); return; } snap(); var gone = imgSel; s.imgs.splice(gone, 1); s.anim = s.anim.filter(function(a){ return a.o !== "img:" + gone; }).map(function(a){ var m = /^img:(\d+)$/.exec(a.o); if (m && +m[1] > gone) a.o = "img:" + (+m[1] - 1); return a; }); imgSel = null; log.push("delpic"); say("Đã xoá hình ảnh."); draw(); }
   function undo(){ if (!hist.length) { say("Không còn thao tác để khôi phục.", true); return; } var o = JSON.parse(hist.pop()); S = o.S; cur = Math.min(o.cur, S.length - 1); imgSel = null; sel = null; log.push("undo"); say("Đã khôi phục lại (Undo)."); draw(); }
   function needImg(){ if (imgSel == null || !S[cur].imgs[imgSel]) { say("Hãy nháy chọn hình ảnh trên trang trước.", true); return false; } return true; }
 
   /* ---------- Nút lệnh ---------- */
   box.querySelectorAll("[data-a]").forEach(function(b){ b.addEventListener("mousedown", function(ev){ if (b.tagName === "BUTTON") ev.preventDefault(); });
     b.addEventListener("click", function(){ var a = b.dataset.a, s = S[cur];
-    if (a === "new") { snap(); S.splice(cur + 1, 0, blank("content")); S[cur + 1].theme = s.theme; cur++; sel = null; imgSel = null; ms = {}; log.push("new"); say("Đã thêm trang " + (cur + 1) + " với mẫu bố trí Title and Content. Nháy vào Click to add title để nhập tiêu đề trang."); draw(); return; }
+    if (a === "new") { snap(); S.splice(cur + 1, 0, blank("content")); S[cur + 1].theme = s.theme; if (s.tr) S[cur + 1].tr = {e: s.tr.e, d: s.tr.d}; cur++; sel = null; imgSel = null; ms = {}; log.push("new"); say("Đã thêm trang " + (cur + 1) + " với mẫu bố trí Title and Content. Nháy vào Click to add title để nhập tiêu đề trang."); draw(); return; }
     if (a === "delslide") { if (S.length === 1) { say("Bài trình chiếu phải có ít nhất một trang.", true); return; } snap(); S.splice(cur, 1); cur = Math.min(cur, S.length - 1); sel = null; imgSel = null; ms = {}; say("Đã xoá trang."); draw(); return; }
     if (a === "inc" || a === "dec") { level(a === "inc" ? 1 : -1, lastLine); return; }
     if (a === "b" || a === "i") { fmtBox(function(o, cur){ o[a] = !cur[a]; }); return; }
@@ -238,7 +277,9 @@ window.TrinhChieu = function(box, opt){
     if (a === "copydoc") { var t = String(window.getSelection ? window.getSelection() : ""); var dc = q("[data-doc]");
       if (!t.trim() || !dc.contains(window.getSelection().anchorNode)) { say("Hãy bôi đen (chọn) phần văn bản cần sao chép trong tệp văn bản trước.", true); return; }
       clip = t; log.push("copy"); say("Đã sao chép (Copy) " + t.trim().split(/\s+/).length + " từ. Đặt con trỏ vào khung cần dán trên trang chiếu rồi bấm Paste (Ctrl+V)."); return; }
-    if (a === "show") { show(); return; }
+    if (a === "show") { show(0); return; }
+    if (a === "preview") { show(cur, true); return; }
+    if (a === "trall") { if (!s.tr) { say("Hãy chọn hiệu ứng chuyển trang cho trang này trước.", true); return; } snap(); S.forEach(function(x){ x.tr = {e: s.tr.e, d: s.tr.d}; }); log.push("trall"); say("Đã áp dụng hiệu ứng chuyển trang " + trName(s.tr.e) + " cho tất cả " + S.length + " trang (Apply To All)."); draw(); return; }
     if (a === "reset") { reset(); q("[data-gal]") && (q("[data-gal]").hidden = true); say("Đã làm lại từ đầu."); draw(); }
   }); });
   function sel1(name, fn){ var el = q(name); if (el) el.addEventListener("change", function(){ var v = this.value; this.value = this.options[0].value; if (v === "" && this.options[0].value === "") return; if (v === "-") return; fn(v); }); }
@@ -259,13 +300,44 @@ window.TrinhChieu = function(box, opt){
     log.push("theme"); say("Đã áp dụng mẫu định dạng " + THEMES[t].n + " cho " + (keys.length > 1 ? keys.length + " trang đã chọn" : "tất cả các trang") + ". Bấm Undo để khôi phục mẫu trước đó."); draw(); }); });
   box.querySelectorAll("[data-g]").forEach(function(im){ im.addEventListener("click", function(){ var s = S[cur]; snap(); s.imgs.push({g: +im.dataset.g, x: 25, y: 16, w: 50, h: +(50 * (16 / 9) * (3 / 4)).toFixed(2)});
     imgSel = s.imgs.length - 1; q("[data-gal]").hidden = true; box.focus({preventScroll: true}); log.push("pic"); say("Đã chèn hình ảnh vào trang " + (cur + 1) + ". Hình đang che văn bản: dùng Send Backward để đưa hình xuống dưới, kéo thả để đổi vị trí, kéo nút góc để đổi kích thước."); draw(); }); });
-  function show(){ var i = 0, ov = document.createElement("div"); ov.className = "tc-show"; ov.tabIndex = 0; document.body.appendChild(ov); log.push("show");
-    function paint(){ ov.innerHTML = slideHtml(S[i], false) + '<div class="hint">Trang ' + (i + 1) + "/" + S.length + " · nháy chuột, → hoặc Space: trang sau · ←: trang trước · Esc: thoát</div>"; }
-    function close(){ document.removeEventListener("keydown", key); ov.remove(); say("Đã kết thúc trình chiếu."); check(); }
-    function key(ev){ if (ev.key === "Escape") close(); else if (ev.key === "ArrowRight" || ev.key === " " || ev.key === "PageDown" || ev.key === "Enter") { ev.preventDefault(); if (i < S.length - 1) { i++; paint(); } else close(); }
-      else if (ev.key === "ArrowLeft" || ev.key === "PageUp") { ev.preventDefault(); if (i > 0) { i--; paint(); } } }
-    ov.addEventListener("click", function(){ if (i < S.length - 1) { i++; paint(); } else close(); });
+  /* Trình chiếu: hiệu ứng chuyển trang, hiệu ứng đối tượng theo nhóm (On Click mở nhóm mới; With / After Previous đi cùng nhóm) */
+  function groups(s){ var gs = [], g = null, t = 0, last = 0;
+    (s.anim || []).forEach(function(a){ if (a.st === "click" || !g) { g = {click: a.st === "click", items: []}; gs.push(g); t = 0; last = 0; }
+      var start = a.st === "after" ? last : a.st === "with" ? t : 0; if (a.st !== "with") t = start; g.items.push({a: a, at: start}); last = start + a.d; });
+    if (gs.length && gs[0].click === false) gs[0].auto = true; return gs; }
+  function show(from, preview){ var i = from || 0, ov = document.createElement("div"), gs = [], gi = 0, timers = [], done = false; ov.className = "tc-show"; ov.tabIndex = 0; document.body.appendChild(ov); log.push(preview ? "preview" : "show");
+    function later(fn, ms){ timers.push(setTimeout(fn, ms)); }
+    function runGroup(g, extra){ var end = 0; g.items.forEach(function(it){ var el = ov.querySelector('[data-o="' + it.a.o + '"]'); if (!el) return; end = Math.max(end, it.at + it.a.d);
+      later(function(){ el.style.visibility = "visible"; if (it.a.e !== "appear") el.style.animation = "tc-" + it.a.e + " " + it.a.d + "s both"; }, (extra + it.at) * 1000); }); return extra + end; }
+    function paint(){ timers.forEach(clearTimeout); timers = []; var s = S[i]; gs = groups(s); gi = 0;
+      ov.innerHTML = slideHtml(s, false) + '<div class="hint">' + (preview ? "Preview hiệu ứng trang " + (i + 1) : "Trang " + (i + 1) + "/" + S.length + " · nháy chuột, → hoặc Space: tiếp · ←: trang trước · Esc: thoát") + "</div>";
+      (s.anim || []).forEach(function(a){ var el = ov.querySelector('[data-o="' + a.o + '"]'); if (el) el.style.visibility = "hidden"; });
+      var sl = ov.querySelector(".sl"), td = s.tr ? s.tr.d : 0; if (s.tr) sl.style.animation = "tr-" + s.tr.e + " " + td + "s both";
+      if (gs[0] && gs[0].auto) { runGroup(gs[0], td); gi = 1; }
+      if (preview) auto(td); }
+    function auto(t0){ var t = t0 + (gs[0] && gs[0].auto ? groups(S[i])[0].items.reduce(function(m, it){ return Math.max(m, it.at + it.a.d); }, 0) : 0) + 0.5;
+      for (var k = gi; k < gs.length; k++) { (function(g, at){ later(function(){ runGroup(g, 0); }, at * 1000); })(gs[k], t); t += g_end(gs[k]) + 0.5; }
+      gi = gs.length; later(close, (t + 0.8) * 1000); }
+    function g_end(g){ return g.items.reduce(function(m, it){ return Math.max(m, it.at + it.a.d); }, 0); }
+    function next(){ if (preview) return; if (gi < gs.length) { runGroup(gs[gi], 0); gi++; return; } if (i < S.length - 1) { i++; paint(); } else close(); }
+    function close(){ if (done) return; done = true; timers.forEach(clearTimeout); document.removeEventListener("keydown", key); ov.remove(); say(preview ? "Đã xem trước hiệu ứng (Preview)." : "Đã kết thúc trình chiếu."); check(); }
+    function key(ev){ if (ev.key === "Escape") close(); else if (ev.key === "ArrowRight" || ev.key === " " || ev.key === "PageDown" || ev.key === "Enter") { ev.preventDefault(); next(); }
+      else if (ev.key === "ArrowLeft" || ev.key === "PageUp") { ev.preventDefault(); if (!preview && i > 0) { i--; paint(); } } }
+    ov.addEventListener("click", function(){ if (preview) close(); else next(); });
     document.addEventListener("keydown", key); paint(); ov.focus(); }
+  function needAnimSel(){ var s = S[cur]; if (paneSel != null && s.anim[paneSel]) return s.anim[paneSel]; var o = curObj(); for (var i = 0; i < s.anim.length; i++) if (s.anim[i].o === o) return s.anim[i];
+    say("Hãy chọn một hiệu ứng trong Animation Pane (hoặc nháy vào đối tượng đã có hiệu ứng) trước.", true); return null; }
+  var effSel = q("[data-eff]"); if (effSel) effSel.addEventListener("change", function(){ var v = this.value; this.value = ""; if (!v) return; var s = S[cur], o = curObj();
+    if (o === "body" && s.layout !== "content") o = "title";
+    snap(); var a = null; for (var i = 0; i < s.anim.length; i++) if (s.anim[i].o === o) a = s.anim[i];
+    if (v === "none") { s.anim = s.anim.filter(function(x){ return x.o !== o; }); log.push("unanim"); say("Đã bỏ hiệu ứng của " + oName(s, o) + "."); draw(); return; }
+    if (a) a.e = v; else { a = {o: o, e: v, st: "click", d: 1}; s.anim.push(a); } paneSel = s.anim.indexOf(a); log.push("anim");
+    say("Đã tạo hiệu ứng " + effName(v) + " cho " + oName(s, o) + " (thứ tự " + (paneSel + 1) + "). Bấm Preview để xem trước."); draw(); });
+  var stSel = q("[data-start]"); if (stSel) stSel.addEventListener("change", function(){ var v = this.value; this.value = ""; if (!v) return; var a = needAnimSel(); if (!a) return; snap(); a.st = v; log.push("timing"); say("Đã chọn cách xuất hiện: " + STARTS[v] + "."); draw(); });
+  var duSel = q("[data-dur]"); if (duSel) duSel.addEventListener("change", function(){ var v = this.value; this.value = ""; if (!v) return; var a = needAnimSel(); if (!a) return; snap(); a.d = +v; log.push("timing"); say("Đã đặt thời lượng hiệu ứng " + v + " giây."); draw(); });
+  var trSel = q("[data-tr]"); if (trSel) trSel.addEventListener("change", function(){ var v = this.value; this.value = "-"; if (v === "-") return; var s = S[cur]; snap();
+    if (v) s.tr = {e: v, d: s.tr ? s.tr.d : 1}; else delete s.tr; log.push("trans"); say(v ? "Đã tạo hiệu ứng chuyển trang " + trName(v) + " cho trang " + (cur + 1) + ". Bấm Apply To All để dùng thống nhất cho tất cả các trang." : "Đã bỏ hiệu ứng chuyển trang."); draw(); });
+  var trd = q("[data-trd]"); if (trd) trd.addEventListener("change", function(){ var v = this.value; this.value = ""; if (!v) return; var s = S[cur]; if (!s.tr) { say("Trang này chưa có hiệu ứng chuyển trang.", true); return; } snap(); s.tr.d = +v; log.push("trans"); draw(); });
   var api = {slides: function(){ return S; }, cur: function(){ return cur; }, say: say, redraw: function(){ draw(); }};
   box.querySelectorAll("[data-x]").forEach(function(b){ b.addEventListener("click", function(){ opt.extra[+b.dataset.x].run(api); draw(); }); });
   draw();
