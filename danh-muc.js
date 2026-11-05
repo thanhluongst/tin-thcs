@@ -135,9 +135,9 @@ window.CHUONG_TRINH = [
     b.lop = L.lop; b.chuDe = cd;
     b.tt = b.tt || "chua";
     b.slug = b.slug || slug(b.ten);
-    b.repo = b.repo || "tin" + L.lop + "-" + b.slug;            /* thư mục / kho GitHub */
+    b.repo = b.repo || "tin" + L.lop + "-" + b.slug;            /* thư mục của bài */
     b.id = "tin" + L.lop + "-bai" + b.so;                        /* LESSON.id trong content.js */
     b.cot = "T" + L.lop + "B" + b.so + ".";                       /* tiền tố cột trên Google Sheet */
-    b.url = "https://" + window.GITHUB_USER + ".github.io/" + b.repo + "/";
+    b.url = b.repo + "/";                                         /* thư mục của bài trong kho tin-thcs */
   })));
 })();

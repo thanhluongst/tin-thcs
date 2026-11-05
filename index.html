@@ -87,6 +87,33 @@ header{border-bottom:6px solid var(--accent)}
 .topic{border:1.5px solid var(--accent);border-radius:16px}
 .topic h3{background:var(--accent);color:#fff}
 .topic h3 .opt{color:#fff;border-color:rgba(255,255,255,.6)}
+/* Thống kê theo bài */
+.tk{background:var(--surface);border:1.5px solid var(--accent);border-radius:16px;padding:14px;margin-bottom:24px}
+.tk-head{display:flex;gap:8px 12px;align-items:center;flex-wrap:wrap}
+.tk-head h2{font-family:var(--font-display);font-size:20px;margin:0;margin-right:auto}
+.tk-head input{font:inherit;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);width:150px}
+.btn{font:inherit;font-weight:600;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:5px 14px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.tk-msg{font-size:14px;color:var(--muted);margin:8px 0 0}
+.tk-msg.bad{color:#b42318}
+.tk-sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+@media (max-width:640px){.tk-sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tk-sum div{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--bg)}
+.tk-sum b{display:block;font-family:var(--font-display);font-size:22px;font-variant-numeric:tabular-nums}
+.tk-sum span{font-size:13px;color:var(--muted)}
+.tk-wrap{overflow-x:auto;margin-top:12px}
+.tk table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.tk th,.tk td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.tk th:first-child,.tk td:first-child{text-align:left;white-space:normal;min-width:200px}
+.tk thead th{font-size:12.5px;color:var(--muted);font-weight:600}
+.tk tbody tr.bai{cursor:pointer}
+.tk tbody tr.bai:hover{background:var(--sunk)}
+.tk tr.ct td{background:var(--bg);font-size:13px}
+.tk .pc{display:inline-flex;align-items:center;gap:6px}
+.tk .pc i{display:inline-block;width:56px;height:6px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.tk .pc i b{display:block;height:100%;background:var(--s-dang)}
+.tk .sm{color:var(--muted);font-size:12.5px}
+.tk-meta{color:var(--s-dang);font-weight:600}
 </style>
 </head>
 <body>
@@ -103,9 +130,24 @@ header{border-bottom:6px solid var(--accent)}
     <input id="q" type="search" placeholder="Tìm bài…" aria-label="Tìm bài theo tên">
   </div>
 </nav>
-<main><div class="wrap" id="list"></div></main>
+<main><div class="wrap">
+  <section class="tk" id="tk" aria-labelledby="tk-h">
+    <div class="tk-head">
+      <h2 id="tk-h">Thống kê theo bài</h2>
+      <label for="tk-pin" class="sm">Mã giáo viên</label>
+      <input id="tk-pin" type="password" autocomplete="off">
+      <button class="btn" id="tk-go" type="button">Xem thống kê</button>
+      <button class="btn ghost" id="tk-csv" type="button" hidden>Tải CSV</button>
+    </div>
+    <p class="tk-msg" id="tk-msg">Nhập mã giáo viên để xem số buổi đã dạy, số lượt nộp và mức hoàn thành của từng bài (lấy từ Google Sheet dùng chung).</p>
+    <div id="tk-body"></div>
+  </section>
+  <div id="list"></div>
+</div></main>
 <footer><div class="wrap">Cập nhật trạng thái trong tệp <code>danh-muc.js</code>. Quy ước đặt tên xem <code>README.md</code>.</div></footer>
 <script src="danh-muc.js"></script>
+<script src="chung/config.js"></script>
+<script src="chung/api.js"></script>
 <script>
 (function(){
 "use strict";
@@ -146,7 +188,8 @@ function lessonRow(b){
   return '<div class="lesson"><span class="num">' + esc(b.so) + '</span><span class="title">' + esc(b.ten) + "</span>"
     + '<span class="links">' + links + '<span class="badge b-' + b.tt + '">' + TT[b.tt] + "</span></span>"
     + '<span class="meta"><span>Thư mục <code>' + esc(b.repo) + '</code></span><span>id <code>' + esc(b.id) + "</code></span>"
-    + (b.gc ? "<span>" + esc(b.gc) + "</span>" : "") + "</span></div>";
+    + (b.gc ? "<span>" + esc(b.gc) + "</span>" : "")
+    + (TK[b.id] ? '<span class="tk-meta">' + TK[b.id].buoi.length + " buổi · " + TK[b.id].nop + " lượt nộp</span>" : "") + "</span></div>";
 }
 function render(){
   renderStats(); renderTabs();
@@ -168,8 +211,70 @@ function render(){
   });
   document.getElementById("list").innerHTML = out.join("") || '<p class="empty">Không có bài nào khớp.</p>';
 }
+/* ---------- Thống kê theo bài ---------- */
+let TK = {};
+const BY_ID = {}; all.forEach(b => BY_ID[b.id] = b);
+const ss = (k, v) => { try { if (v === undefined) return sessionStorage.getItem(k); if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch(e) { return null; } };
+const fmtD = t => t ? new Date(t).toLocaleDateString("vi-VN", {day: "2-digit", month: "2-digit", year: "numeric"}) : "–";
+const pct = (x, cau, n) => cau && n ? Math.round(100 * x / (cau * n)) : null;
+const pcHtml = p => p == null ? '<span class="sm">–</span>' : '<span class="pc"><i><b style="width:' + p + '%"></b></i>' + p + "%</span>";
+function tenBai(id){ const b = BY_ID[id]; return b ? "Tin " + b.lop + " – Bài " + b.so + ". " + b.ten : id; }
+function sortKey(id){ const b = BY_ID[id]; return b ? b.lop * 1000 + all.indexOf(b) : 1e9; }
+let tkRows = [];
+function renderTK(){
+  const host = document.getElementById("tk-body");
+  if (!tkRows.length) { host.innerHTML = '<p class="tk-msg">Chưa có bài nào được nộp.</p>'; return; }
+  const sum = tkRows.reduce((a, r) => (a.buoi += r.buoi.length, a.nop += r.nop, a.last = Math.max(a.last, r.last), a), {buoi: 0, nop: 0, last: 0});
+  let h = '<div class="tk-sum"><div><b>' + tkRows.length + '</b><span>Bài đã dạy</span></div><div><b>' + sum.buoi + '</b><span>Buổi học</span></div><div><b>'
+    + sum.nop + '</b><span>Lượt nộp (nhóm / HS)</span></div><div><b>' + fmtD(sum.last) + "</b><span>Nộp gần nhất</span></div></div>";
+  h += '<div class="tk-wrap"><table><thead><tr><th>Bài</th><th>Số câu</th><th>Buổi</th><th>Lượt nộp</th><th>Hoàn thành TB</th><th>Nộp đủ câu</th><th>Gần nhất</th></tr></thead><tbody>';
+  tkRows.forEach((r, i) => {
+    h += '<tr class="bai" data-i="' + i + '" tabindex="0" aria-expanded="false"><td>' + esc(tenBai(r.bai)) + '</td><td>' + (r.cau || "–") + "</td><td>" + r.buoi.length + "</td><td>" + r.nop
+      + "</td><td>" + pcHtml(pct(r.tong, r.cau, r.nop)) + "</td><td>" + (r.cau ? r.du + "/" + r.nop : "–") + "</td><td>" + fmtD(r.last) + "</td></tr>";
+    r.buoi.forEach(b => {
+      h += '<tr class="ct" data-p="' + i + '" hidden><td>&nbsp;&nbsp;Buổi <b>' + esc(b.ma) + '</b> <span class="sm">' + fmtD(b.dau) + (b.cuoi && fmtD(b.cuoi) !== fmtD(b.dau) ? " → " + fmtD(b.cuoi) : "")
+        + "</span></td><td></td><td></td><td>" + b.nhom + "</td><td>" + pcHtml(pct(b.tong, r.cau, b.nhom)) + "</td><td>" + (r.cau ? b.du + "/" + b.nhom : "–") + "</td><td>" + fmtD(b.cuoi) + "</td></tr>";
+    });
+  });
+  host.innerHTML = h + '</tbody></table></div><p class="tk-msg">Bấm vào một bài để xem từng buổi học. “Hoàn thành TB”: tỉ lệ câu đã nộp trên tổng số câu, tính trung bình các nhóm / học sinh.</p>';
+  host.querySelectorAll("tr.bai").forEach(tr => {
+    const tg = () => { const open = tr.getAttribute("aria-expanded") !== "true"; tr.setAttribute("aria-expanded", String(open));
+      host.querySelectorAll('tr.ct[data-p="' + tr.dataset.i + '"]').forEach(x => x.hidden = !open); };
+    tr.onclick = tg; tr.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tg(); } };
+  });
+}
+function csv(){
+  const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const lines = [["Lớp", "Bài", "Tên bài", "Mã bài", "Số câu", "Buổi", "Ngày đầu", "Ngày cuối", "Lượt nộp", "Hoàn thành TB (%)", "Nộp đủ câu"].map(q).join(",")];
+  tkRows.forEach(r => { const b = BY_ID[r.bai] || {};
+    r.buoi.forEach(x => lines.push([b.lop || "", b.so || "", b.ten || "", r.bai, r.cau, x.ma, fmtD(x.dau), fmtD(x.cuoi), x.nhom, pct(x.tong, r.cau, x.nhom) ?? "", r.cau ? x.du : ""].map(q).join(","))); });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["\ufeff" + lines.join("\r\n")], {type: "text/csv;charset=utf-8"}));
+  a.download = "thong-ke-theo-bai-" + new Date().toISOString().slice(0, 10) + ".csv"; a.click();
+}
+async function loadTK(pin){
+  const msg = document.getElementById("tk-msg"), go = document.getElementById("tk-go");
+  msg.className = "tk-msg"; msg.textContent = "Đang tải thống kê…"; go.disabled = true;
+  try {
+    const rows = await window.API.stats(pin);
+    ss("hub-pin", pin);
+    tkRows = rows.filter(r => r.nop > 0).sort((a, b) => sortKey(a.bai) - sortKey(b.bai));
+    TK = {}; tkRows.forEach(r => TK[r.bai] = r);
+    msg.textContent = "Cập nhật lúc " + new Date().toLocaleTimeString("vi-VN") + (window.API.demo ? " (chế độ thử: dữ liệu trong trình duyệt này)" : "") + ".";
+    document.getElementById("tk-csv").hidden = !tkRows.length;
+    go.textContent = "Tải lại";
+    renderTK(); render();
+  } catch (e) {
+    msg.className = "tk-msg bad"; msg.textContent = e.message;
+    if (/Sai mã/i.test(e.message)) ss("hub-pin", null);
+  } finally { go.disabled = false; }
+}
+document.getElementById("tk-go").onclick = () => { const v = document.getElementById("tk-pin").value.trim() || ss("hub-pin"); if (v) loadTK(v); else document.getElementById("tk-pin").focus(); };
+document.getElementById("tk-pin").addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("tk-go").click(); });
+document.getElementById("tk-csv").onclick = csv;
 document.getElementById("q").addEventListener("input", e => { q = e.target.value; render(); });
 render();
+if (ss("hub-pin")) loadTK(ss("hub-pin"));
 })();
 </script>
 </body>

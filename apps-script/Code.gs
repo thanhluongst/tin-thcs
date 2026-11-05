@@ -52,6 +52,7 @@ function doPost(e) {
       case "submit": saveSubmission_(b); return {};
       case "setReveal": checkPin_(b.pin); setReveal_(id_(b.bai), id_(b.buoi), b.rev); return {};
       case "comment": checkPin_(b.pin); return { nx: setComment_(b) };
+      case "stats": checkPin_(b.pin); return { bai: getStats_() };
       default: throw new Error("Hành động không hợp lệ");
     }
   });
@@ -235,6 +236,32 @@ function setComment_(b) {
   } finally {
     lock.releaseLock();
   }
+}
+
+/* ---------- Thống kê theo bài (trang mục lục tin-thcs) ----------
+   Đọc mọi trang tính có tên dạng "tin9-bai2": số buổi, số lượt nộp, mức hoàn thành.
+   Số câu của bài = số cột câu hỏi (các cột sau cột "Dữ liệu"). */
+const BAI_RE = /^tin\d+-bai[0-9a-z]+$/;
+function getStats_() {
+  const out = [];
+  SpreadsheetApp.getActive().getSheets().forEach(sh => {
+    const bai = sh.getName();
+    if (!BAI_RE.test(bai)) return;
+    const cau = Math.max(0, sh.getLastColumn() - BASE_HEADERS.length);
+    const buoi = {};
+    let nop = 0, tong = 0, du = 0, last = 0;
+    rows_(sh).forEach(v => {
+      if (String(v[1]) !== bai) return;
+      const ma = String(v[2]), sub = Number(v[6]) || 0, t = v[5] instanceof Date ? v[5].getTime() : 0;
+      const b = buoi[ma] = buoi[ma] || { ma: ma, nhom: 0, tong: 0, du: 0, dau: t || 0, cuoi: 0 };
+      b.nhom++; b.tong += sub; if (cau && sub >= cau) b.du++;
+      if (t && (!b.dau || t < b.dau)) b.dau = t; if (t > b.cuoi) b.cuoi = t;
+      nop++; tong += sub; if (cau && sub >= cau) du++; if (t > last) last = t;
+    });
+    out.push({ bai: bai, cau: cau, nop: nop, tong: tong, du: du, last: last,
+      buoi: Object.keys(buoi).map(k => buoi[k]).sort((a, b) => b.cuoi - a.cuoi) });
+  });
+  return out;
 }
 
 /* ---------- Chốt kiến thức ---------- */
