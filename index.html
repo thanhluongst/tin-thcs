@@ -145,7 +145,8 @@ header{border-bottom:6px solid var(--accent)}
   <div id="list"></div>
 </div></main>
 <footer><div class="wrap">Cập nhật trạng thái trong tệp <code>danh-muc.js</code>. Quy ước đặt tên xem <code>README.md</code>.</div></footer>
-<script src="danh-muc.js"></script>
+<!-- Luôn tải danh mục mới nhất (GitHub Pages cho trình duyệt giữ tệp cũ tới 10 phút) -->
+<script>document.write('<script src="danh-muc.js?t=' + Date.now() + '"><\/script>');</script>
 <script src="chung/config.js"></script>
 <script src="chung/api.js"></script>
 <script>
