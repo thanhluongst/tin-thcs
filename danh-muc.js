@@ -48,7 +48,7 @@ window.CHUONG_TRINH = [
     {so: "4", ten: "Ứng dụng tin học", bai: [
       {so: "6", ten: "Làm quen với phần mềm bảng tính", slug: "phan-mem-bang-tinh", tt: "dang"},
       {so: "7", ten: "Tính toán tự động trên bảng tính", slug: "tinh-toan-tu-dong", tt: "dang"},
-      {so: "8", ten: "Công cụ hỗ trợ tính toán"},
+      {so: "8", ten: "Công cụ hỗ trợ tính toán", tt: "dang"},
       {so: "9", ten: "Trình bày bảng tính"},
       {so: "10", ten: "Hoàn thiện bảng tính"},
       {so: "11", ten: "Tạo bài trình chiếu"},

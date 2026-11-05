@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Công cụ hỗ trợ tính toán · Tin học 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=22">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 7 · Chủ đề 4. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>8</b></div><h1><span class="sr-only">Bài 8. </span>Công cụ hỗ trợ tính toán</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Thực hiện được một số phép toán thông dụng, sử dụng được một số hàm đơn giản như MAX, MIN, SUM, AVERAGE, COUNT,…</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Hàm, các hàm đơn giản, thực hành">
+      <span class="node">Hàm</span>
+      <span class="node">SUM · AVERAGE · MIN · MAX · COUNT</span>
+      <span class="node io">Thực hành</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 7A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 7A1-T8" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Hàm</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Một số hàm</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+        <script src="../chung/bangtinh.js?v=2"></script>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Hàm hỗ trợ tính toán</div>
+        <div class="reading">Trong bài trước em đã biết cách tính toán theo công thức trên trang tính. Phần mềm bảng tính còn có các hàm giúp em tính toán. Trong phần mềm bảng tính, <b>hàm</b> là công thức (hoặc kết hợp nhiều công thức) được định nghĩa từ trước. Hàm được sử dụng để thực hiện tính toán theo công thức với các giá trị dữ liệu cụ thể. Phần mềm bảng tính có rất nhiều hàm có sẵn hỗ trợ tính toán, ví dụ hàm tính tổng, hàm đếm, hàm tính giá trị trung bình,… Trong dự án <b>Trường học xanh</b> có cần dùng các hàm này để tính toán không, chúng ta hãy cùng tìm hiểu nhé.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Hàm trong bảng tính</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Hàm trong bảng tính</div>
+        <div class="reading">Em hãy quan sát công thức là hàm trong Hình 8.1 và Hình 8.2 (chú ý quan sát kĩ công thức trong vùng nhập dữ liệu) và trả lời các câu hỏi sau: 1. Tên của hàm là gì? 2. Ý nghĩa của hàm là gì? 3. Hàm có bao nhiêu tham số, các tham số của hàm là gì?</div>
+        <figure class="fig"><img src="hinh/h812.jpg" alt="Hình 8.1: ô E6 có công thức =SUM(B5:D7), kết quả 24. Hình 8.2: ô E6 có công thức =AVERAGE(B5:C7), kết quả 5" style="max-width:600px"><figcaption>Hình 8.1. Hàm SUM · Hình 8.2. Hàm AVERAGE</figcaption></figure>
+        <div data-task="hd1" data-n="1"></div>
+        <div class="reading">Mỗi hàm trong bảng tính sẽ được xác định bởi:<ul><li>Tên của hàm (ví dụ SUM).</li><li>Ý nghĩa hàm (ví dụ tính tổng).</li><li>Các tham số của hàm có thể là dãy bao gồm các số, địa chỉ ô, địa chỉ vùng dữ liệu được viết cách nhau bởi dấu “,” hoặc dấu “;”.</li></ul>Cách sử dụng hàm: <b>= &lt;tên hàm&gt;(&lt;các tham số&gt;)</b></div>
+        <div class="bt" data-bt1></div>
+        <div data-task="cuphap" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Nhập hàm</div>
+        <div class="reading">Theo em, nhập hàm vào bảng tính có giống như nhập dữ liệu thông thường không?<br><br>Quan sát bảng dữ liệu phân bổ các cây hoa cho khối lớp 7 như trong Hình 8.3. Chúng ta sẽ nhập hàm tại các ô từ C9 đến I9 để tính tổng các cây được phân bổ cho mỗi lớp.<ul><li><b>Bước 1.</b> Nháy chuột vào ô C9 hoặc vùng nhập dữ liệu để nhập hàm.</li><li><b>Bước 2.</b> Nhập <b>=SUM(</b>, sau đó dùng chuột đánh dấu vùng dữ liệu cần tính tổng (vùng C4:C8), gõ dấu đóng ngoặc “)” để đóng hàm. Nhấn <b>Enter</b> để kết thúc. Kết quả sẽ hiện ngay trên ô C9.</li></ul>Tương tự nhập hàm tính tổng cho các lớp khác tại các ô từ D9 đến I9. Có thể sao chép công thức đã có từ ô C9 sang các ô từ D9 đến I9.</div>
+        <figure class="fig"><img src="hinh/h834.jpg" alt="Hình 8.3: bảng dự kiến phân bổ cây hoa, ô C9 được chọn. Hình 8.4: ô C9 có =SUM(C4:C8), vùng C4:C8 được đánh dấu" style="max-width:520px"><figcaption>Hình 8.3. Chuẩn bị nhập hàm · Hình 8.4. Vị trí nhập hàm</figcaption></figure>
+        <div class="reading">Làm trên bảng mô phỏng: nháy C9, gõ <b>=SUM(</b>, rồi <b>kéo chuột chọn C4:C8</b> trên bảng (địa chỉ vùng tự hiện trong công thức), gõ “)” và nhấn Enter. Sau đó sao chép C9 sang D9:I9.</div>
+        <div class="bt" data-bt2></div>
+        <div data-task="hd2" data-n="1"></div>
+        <div data-task="saochep" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 41</div>
+        <div data-task="p41a" data-n="1"></div>
+        <div data-task="p41b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Hàm trong bảng tính</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Một số hàm tính toán đơn giản</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 3</b> Làm quen với một số hàm tính toán đơn giản</div>
+        <div class="reading">Em hãy xem lại dữ liệu của dự án Trường học xanh và cho biết em cần tính toán những gì? Các yêu cầu tính toán đó có thể diễn tả bằng các hàm như thế nào?<br><br>Sử dụng các hàm <b>SUM</b> (tính tổng), <b>AVERAGE</b> (tính trung bình cộng), <b>MIN</b> (tìm giá trị nhỏ nhất), <b>MAX</b> (tìm giá trị lớn nhất), <b>COUNT</b> (đếm) để thực hiện các yêu cầu. Lưu ý, tất cả các hàm này đều có cú pháp sử dụng tương tự như hàm SUM đã biết. Quan sát trang tính Dự kiến phân bổ cây hoa cho các lớp, tính toán để trả lời các câu hỏi tại cột J bằng cách nhập công thức tại các ô từ K4 đến K8 tương ứng (Bảng 8.1).</div>
+        <div data-task="hd3" data-n="1"></div>
+        <div class="tbl-wrap"><table class="tbl" style="font-size:14px;max-width:640px">
+          <caption style="caption-side:top;text-align:left;font-style:italic;padding:4px 0">Bảng 8.1. Các công thức cần nhập</caption>
+          <thead><tr><th>Yêu cầu tính toán</th><th>Công thức tính</th><th>Kết quả</th></tr></thead>
+          <tbody><tr><td>Trung bình mỗi lớp sẽ trồng bao nhiêu cây?</td><td>=AVERAGE(C4:I8)</td><td>13.6667</td></tr>
+          <tr><td>Số cây hoa Dừa cạn lớn nhất một lớp sẽ trồng là bao nhiêu?</td><td>=MAX(C6:I6)</td><td></td></tr>
+          <tr><td>Số cây hoa Mười giờ ít nhất một lớp sẽ trồng là bao nhiêu?</td><td>=MIN(C4:I4)</td><td></td></tr>
+          <tr><td>Bao nhiêu lớp sẽ trồng hoa Hồng?</td><td>=COUNT(C8:I8)</td><td></td></tr>
+          <tr><td>Lớp 7B sẽ trồng bao nhiêu loại hoa?</td><td>=COUNT(D4:D8)</td><td></td></tr></tbody>
+        </table></div>
+        <div class="bt" data-bt3></div>
+        <div data-task="b81" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Cú pháp một số hàm (Bảng 8.2)</div>
+        <div class="tbl-wrap"><table class="tbl" style="font-size:14px">
+          <caption style="caption-side:top;text-align:left;font-style:italic;padding:4px 0">Bảng 8.2. Cú pháp một số hàm</caption>
+          <thead><tr><th>Tên hàm</th><th>Cách viết</th><th>Ý nghĩa</th><th>Ví dụ</th></tr></thead>
+          <tbody>
+            <tr><td><b>SUM</b></td><td>SUM(v1,v2,...)</td><td>Tính <b>tổng</b> các giá trị số có trong các ô, vùng hoặc số có trong danh sách v1, v2,…</td><td>SUM(C3:E5)<br>SUM(D4:H4,15,K10)</td></tr>
+            <tr><td><b>AVERAGE</b></td><td>AVERAGE(v1,v2,...)</td><td>Tính <b>trung bình cộng</b> các giá trị số có trong các ô, vùng hoặc số có trong danh sách v1, v2,…</td><td>AVERAGE(B2:E6)<br>AVERAGE(10,12,1)</td></tr>
+            <tr><td><b>MIN</b></td><td>MIN(v1,v2,...)</td><td>Tìm <b>giá trị nhỏ nhất</b> trong các giá trị số có trong các ô, vùng hoặc số có trong danh sách v1, v2,…</td><td>MIN(A1:B10)<br>MIN(C2,B3,10)</td></tr>
+            <tr><td><b>MAX</b></td><td>MAX(v1,v2,...)</td><td>Tìm <b>giá trị lớn nhất</b> trong các giá trị số có trong các ô, vùng hoặc số có trong danh sách v1, v2,…</td><td>MAX(B1:E1)<br>MAX(2,A1:B5)</td></tr>
+            <tr><td><b>COUNT</b></td><td>COUNT(v1,v2,...)</td><td><b>Đếm</b> số các giá trị là số có trong các ô, vùng hoặc số có trong danh sách v1, v2,…</td><td>COUNT(B3:E10)<br>COUNT(1,2)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="reading"><b>Lưu ý:</b><ul><li>Tất cả các hàm trên đều chỉ xử lí các ô có dữ liệu số có trong tham số của hàm. Hàm sẽ bỏ qua các ô dữ liệu chứa văn bản hoặc ô trống.</li><li>Các phần mềm bảng tính thường dùng dấu chấm “.” để ngăn cách phần nguyên và phần thập phân, dùng dấu phẩy “,” để ngăn cách các chữ số hàng nghìn, hàng triệu,…</li></ul></div>
+        <div data-task="yn" data-n="1"></div>
+        <div data-task="p42" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Một số hàm đơn giản</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Thực hành: Tính toán trên dữ liệu trồng cây thực tế</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Trang tính 4. Dự kiến kết quả</div>
+        <div class="reading"><b>Nhiệm vụ:</b> tạo trang tính mới để nhập dữ liệu dự kiến kết quả thực hiện dự án; nhập và sao chép dữ liệu; thiết lập công thức tính tổng số cây mỗi loại và tổng số cây các loại mà mỗi lớp trồng được; định dạng dữ liệu.<br><b>Hướng dẫn:</b>
+          <ul>
+            <li><b>a) Tạo trang tính mới:</b> mở tệp THXanh.xlsx, tạo thêm một trang tính mới đặt tên <b>4. Dự kiến kết quả</b>.</li>
+            <li><b>b) Nhập và sao chép dữ liệu:</b> nhập tại ô A2: <b>Bảng 4. Dự kiến phân bổ cây cho các lớp</b>; sao chép vùng A3:C19 của trang tính 3. Tìm hiểu giống cây sang trang tính mới tại A3; nhập dữ liệu phân bổ cho các lớp như Hình 8.6 (bảng mô phỏng đã nhập sẵn).</li>
+            <li><b>c) Tính tổng số cây mỗi loại mà mỗi lớp trồng được:</b> chèn thêm hai hàng trống ở trên hàng 9 (chọn cả hàng 9, nháy nút phải chuột tại hàng 9 và chọn lệnh <b>Insert</b>, làm hai lần); tương tự chèn hai hàng trống ở trên hàng có số thứ tự 12. Tại ô D9 nhập <b>=SUM(D4:D8)</b> rồi sao chép sang các ô bên cạnh ứng với các lớp 7B, 7C, 7D, 7E, 7G, 7H. Thực hiện tương tự để tính tổng số cây ăn quả và cây bóng mát mà mỗi lớp đã trồng.</li>
+            <li><b>d) Tính tổng số cây các loại mà mỗi lớp trồng được:</b> tại ô D25 nhập <b>=D9+D17+D24</b>, sao chép sang E25:J25. Tại hàng 3, bên cạnh cột 7H tạo thêm hai cột <b>Tổng số cây</b> và <b>Trung bình</b>. Tại ô K4 nhập <b>=SUM(D4:J4)</b>; tại ô L4 nhập <b>=AVERAGE(D4:J4)</b>. Sao chép K4 xuống đến K25, L4 xuống đến L25, sau đó xoá dữ liệu tại các hàng trống (K10, K18, L10, L18).</li>
+            <li><b>e) Định dạng:</b> chữ in đậm cho tiêu đề bảng; hàng tiêu đề (hàng 3) chữ in đậm và nền màu vàng; chữ in đậm cho tất cả các ô chứa dữ liệu tổng hợp. Lưu lại kết quả.</li>
+          </ul>Trên bảng mô phỏng: chọn một ô ở hàng 9 rồi bấm <b>Chèn hàng</b> (hai lần), tương tự với hàng có STT 12.</div>
+        <div class="bt" data-bt4></div>
+        <figure class="fig"><img src="hinh/h87.jpg" alt="Kết quả trang tính 4: các hàng tổng 9, 17, 24, 25 và cột Tổng số cây, Trung bình" style="max-width:640px"><figcaption>Hình 8.7. Kết quả trang tính 4 (để đối chiếu)</figcaption></figure>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-task="nvkq" data-n="3"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Câu hỏi SGK trang 44</div>
+        <div class="reading">Có thể làm câu 1 và câu 3 ngay trên bảng mô phỏng ở phần Thực hành.</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+        <div data-task="lt3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Chi tiêu của gia đình</div>
+        <div class="reading">Em hãy tạo bảng tính và nhập dữ liệu ghi lại các khoản chi tiêu của gia đình em trong một tháng (có thể thử trước trên bảng mô phỏng dưới đây). Sử dụng các hàm để tính toán và trả lời các câu hỏi. Em hãy chia sẻ với bố mẹ những kết quả em tính toán được để cùng cân đối chi tiêu gia đình sao cho hợp lí.</div>
+        <div class="bt" data-bt5></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var N = function(s){ return (s || "").replace(/\s+/g, "").toUpperCase(); };
+      var NOTE = "Gõ phím hoặc dùng vùng nhập dữ liệu để nhập, nhấn Enter. Khi đang gõ công thức (sau dấu = hoặc dấu “(”), kéo chuột trên bảng để đưa địa chỉ vùng vào. Sao chép: chọn ô → Sao chép (Ctrl+C) → chọn vùng đích → Dán (Ctrl+V).";
+      var CL = ["D","E","F","G","H","I","J"];
+      BangTinh($("[data-bt1]"), {title:"Bảng tính mô phỏng (như Hình 8.1)", cols:6, rows:8, widths:[70,80,80,80,110,72], note:NOTE + " Thử nhập =AVERAGE(B5:D7), =MAX(B5:D7), =MIN(B5:D7), =COUNT(B5:D7) vào các ô F5, F6,…",
+        data:{A2:"Số cây hoa đã trồng của tổ 3", B4:"Hoa hồng", C4:"Hoa lan", D4:"Hoa cúc", E5:"Tổng số cây hoa", A5:"Bình", B5:"2", C5:"5", D5:"3", A6:"Hòa", B6:"1", C6:"2", D6:"4", A7:"Hương", B7:"3", C7:"1", D7:"3", E6:"=SUM(B5:D7)"}});
+      /* Hình 8.3: C..I = 7A 7B 7C 7D 7E 7G 7H */
+      var H83 = {A1:"Dự kiến phân bổ cây hoa cho các lớp", A3:"STT", B3:"Tên cây", C3:"7A", D3:"7B", E3:"7C", F3:"7D", G3:"7E", H3:"7G", I3:"7H",
+        A4:"1", B4:"Hoa Mười giờ", C4:"10", E4:"16", G4:"16", H4:"14",
+        A5:"2", B5:"Hoa Dạ yến thảo", D5:"12", E5:"12", F5:"11",
+        A6:"3", B6:"Hoa Dừa cạn", C6:"16", E6:"12", F6:"10", H6:"10", I6:"15",
+        A7:"4", B7:"Hoa Cúc vàng", C7:"14", D7:"20", G7:"16", H7:"12", I7:"13",
+        A8:"5", B8:"Hoa Hồng", D8:"15", F8:"10", G8:"13", I8:"20"};
+      var F83 = {}; ["A3","B3","C3","D3","E3","F3","G3","H3","I3"].forEach(function(x){ F83[x] = {b:true, fill:true}; }); F83.A1 = {b:true};
+      BangTinh($("[data-bt2]"), {title:"Hoạt động 2: tính tổng số cây hoa mỗi lớp (Hình 8.3)", cols:9, rows:9, widths:[40,120,46,46,46,46,46,46,46], note:NOTE, data:H83, fmt:F83,
+        check:function(x){ var d = x.d, ok = true; "CDEFGHI".split("").forEach(function(c){ if (N(d[c + "9"]) !== "=SUM(" + c + "4:" + c + "8)") ok = false; });
+          return [["C9 =SUM(C4:C8) (kết quả 40)", N(d.C9) === "=SUM(C4:C8)"], ["Sao chép C9 sang D9:I9", ok]]; }});
+      var H85 = JSON.parse(JSON.stringify(H83)); H85.J3 = "Câu hỏi"; H85.K3 = "Kết quả";
+      H85.J4 = "Trung bình mỗi lớp sẽ trồng bao nhiêu cây?"; H85.J5 = "Số cây hoa Dừa cạn lớn nhất một lớp sẽ trồng?"; H85.J6 = "Số cây hoa Mười giờ ít nhất một lớp sẽ trồng?"; H85.J7 = "Bao nhiêu lớp sẽ trồng hoa Hồng?"; H85.J8 = "Lớp 7B sẽ trồng bao nhiêu loại hoa?";
+      var F85 = JSON.parse(JSON.stringify(F83)); F85.J3 = {b:true, fill:true}; F85.K3 = {b:true, fill:true};
+      BangTinh($("[data-bt3]"), {title:"Hoạt động 3: nhập các công thức Bảng 8.1 vào K4:K8", cols:11, rows:8, widths:[40,120,40,40,40,40,40,40,40,300,80], note:NOTE, data:H85, fmt:F85,
+        check:function(x){ var v = function(k){ return x.val(k); }, hasF = function(k, fn){ return N(x.d[k]).indexOf("=" + fn + "(") === 0; };
+          return [["K4: =AVERAGE(C4:I8) → 13.6667", hasF("K4","AVERAGE") && Math.abs(v("K4") - 287 / 21) < 1e-9],
+            ["K5: =MAX(C6:I6) → 16", hasF("K5","MAX") && v("K5") === 16], ["K6: =MIN(C4:I4) → 10", hasF("K6","MIN") && v("K6") === 10],
+            ["K7: =COUNT(C8:I8) → 4", hasF("K7","COUNT") && v("K7") === 4], ["K8: =COUNT(D4:D8) → 3", hasF("K8","COUNT") && v("K8") === 3]]; }});
+      /* Hình 8.6: D..J = 7A 7B 7C 7D 7E 7G 7H; hàng 4–8 cây hoa, 9–14 cây ăn quả, 15–19 cây bóng mát */
+      var ROWS = [["Cây hoa","Hoa Mười giờ",{D:10,F:16,H:16,I:14}],["","Hoa Dạ yến thảo",{E:12,F:12,G:11}],["","Hoa Dừa cạn",{D:16,F:12,G:10,I:10,J:15}],["","Hoa Cúc vàng",{D:14,E:20,H:16,I:12,J:13}],["","Hoa Hồng",{E:15,G:10,H:13,J:20}],
+        ["Cây ăn quả","Bưởi",{D:9,F:10,H:12,I:15,J:5}],["","Xoài",{D:7,E:10,G:7,H:10,J:2}],["","Vú sữa",{E:5,F:12,I:5}],["","Khế",{F:13,J:10}],["","Chanh",{D:5,E:12,G:10,H:7,I:6}],["","Táo",{E:5,G:12}],
+        ["Cây bóng mát","Bằng lăng",{D:5,F:5,G:7,H:10,J:5}],["","Phượng vĩ",{E:6,F:7,G:4,H:5,I:10}],["","Bàng",{D:7,E:7,F:4,G:2,J:3}],["","Sưa đỏ",{E:8,F:5,H:3,I:5}],["","Muồng",{D:10,F:8,G:11,J:10}]];
+      var H86 = {A3:"STT", B3:"Loại cây", C3:"Tên cây", D3:"7A", E3:"7B", F3:"7C", G3:"7D", H3:"7E", I3:"7G", J3:"7H"};
+      ROWS.forEach(function(t, i){ var r = i + 4; H86["A" + r] = String(i + 1); if (t[0]) H86["B" + r] = t[0]; H86["C" + r] = t[1]; Object.keys(t[2]).forEach(function(c){ H86[c + r] = String(t[2][c]); }); });
+      function allCols(fnc){ return CL.every(fnc); }
+      BangTinh($("[data-bt4]"), {title:"Thực hành: trang tính 4. Dự kiến kết quả (Hình 8.6)", cols:12, rows:22, widths:[38,96,120,40,40,40,40,40,40,40,90,90], note:NOTE, data:H86, sheet:"4. Dự kiến kết quả",
+        tools:["copy","paste","insert","|","b","fill","left","center","right","|","reset"],
+        check:function(x){ var d = x.d, F = function(k){ return x.f[k] || {}; };
+          var rowsK = [4,5,6,7,8,9,11,12,13,14,15,16,17,19,20,21,22,23,24,25];
+          var bold = [9,17,24,25].every(function(r){ return CL.concat(["K"]).every(function(c){ return F(c + r).b; }); });
+          return [
+            ["A2: Bảng 4. Dự kiến phân bổ cây cho các lớp", (d.A2 || "").trim().toLowerCase() === "bảng 4. dự kiến phân bổ cây cho các lớp"],
+            ["Chèn 2 hàng trống trên hàng 9 và 2 hàng trên STT 12 (Bưởi ở hàng 11, Bằng lăng ở hàng 19)", d.C11 === "Bưởi" && d.C19 === "Bằng lăng" && !d.C9 && !d.C10 && !d.C17 && !d.C18],
+            ["Hàng 9: D9 =SUM(D4:D8), sao chép sang E9:J9", allCols(function(c){ return N(d[c + "9"]) === "=SUM(" + c + "4:" + c + "8)"; })],
+            ["Hàng 17 (cây ăn quả) và hàng 24 (cây bóng mát) tính tổng tương tự", allCols(function(c){ return N(d[c + "17"]) === "=SUM(" + c + "11:" + c + "16)" && N(d[c + "24"]) === "=SUM(" + c + "19:" + c + "23)"; })],
+            ["Hàng 25: D25 =D9+D17+D24, sao chép sang E25:J25", allCols(function(c){ return N(d[c + "25"]) === "=" + c + "9+" + c + "17+" + c + "24"; })],
+            ["K3: Tổng số cây, L3: Trung bình", (d.K3 || "").trim().toLowerCase() === "tổng số cây" && (d.L3 || "").trim().toLowerCase() === "trung bình"],
+            ["Cột K: =SUM(D4:J4) từ K4 đến K25, xoá K10, K18", rowsK.every(function(r){ return N(d["K" + r]) === "=SUM(D" + r + ":J" + r + ")"; }) && !d.K10 && !d.K18],
+            ["Cột L: =AVERAGE(D4:J4) từ L4 đến L25, xoá L10, L18", rowsK.every(function(r){ return N(d["L" + r]) === "=AVERAGE(D" + r + ":J" + r + ")"; }) && !d.L10 && !d.L18],
+            ["Định dạng: A2 đậm; hàng 3 (A3:L3) đậm, nền vàng; các ô tổng hợp (hàng 9, 17, 24, 25) đậm", F("A2").b && "ABCDEFGHIJKL".split("").every(function(c){ return F(c + "3").b && F(c + "3").fill; }) && bold],
+            ["Kết quả: K25 = 623 (tổng số cây cả khối)", x.val("K25") === 623]]; }});
+      BangTinh($("[data-bt5]"), {title:"Vận dụng: chi tiêu của gia đình trong một tháng", cols:5, rows:14, widths:[160,100,30,190,110], note:NOTE + " Số tiền nhập không có dấu chấm ngăn cách, ví dụ 1500000. Nhập công thức trả lời vào cột E.",
+        data:{A1:"Khoản chi", B1:"Số tiền (đồng)", A2:"Tiền điện", A3:"Tiền nước", A4:"Tiền ăn", A5:"Học phí, sách vở", A6:"Xăng xe", A7:"Internet, điện thoại", D2:"a) Tổng chi một tháng:", D3:"b) Khoản chi nhiều nhất:", D4:"   Khoản chi ít nhất:", D5:"c) Số khoản đã chi:", D6:"d) Trung bình mỗi ngày:"},
+        fmt:{A1:{b:true, fill:true}, B1:{b:true, fill:true}}});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 7 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=22"></script>
+</body>
+</html>
