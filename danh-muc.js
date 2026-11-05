@@ -96,7 +96,7 @@ window.CHUONG_TRINH = [
       {so: "2", ten: "Thông tin trong giải quyết vấn đề", slug: "thong-tin-giai-quyet-van-de", tt: "dang"},
       {so: "3", ten: "Thực hành: Đánh giá chất lượng thông tin", tt: "dang"}]},
     {so: "3", ten: "Đạo đức, pháp luật và văn hoá trong môi trường số", bai: [
-      {so: "4", ten: "Một số vấn đề pháp lí về sử dụng dịch vụ Internet", slug: "phap-li-dich-vu-internet"}]},
+      {so: "4", ten: "Một số vấn đề pháp lí về sử dụng dịch vụ Internet", slug: "phap-li-dich-vu-internet", tt: "dang"}]},
     {so: "4", ten: "Ứng dụng tin học", bai: [
       {so: "5", ten: "Tìm hiểu phần mềm mô phỏng"},
       {so: "6", ten: "Thực hành: Khai thác phần mềm mô phỏng"},
