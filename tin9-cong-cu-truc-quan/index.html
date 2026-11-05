@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Công cụ trực quan trình bày thông tin · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=21">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 4. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>8</b></div><h1><span class="sr-only">Bài 8. </span>Thực hành: Sử dụng công cụ trực quan trình bày thông tin trong trao đổi và hợp tác</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Sử dụng được hình ảnh, biểu đồ, video một cách hợp lí.</li>
+        <li>Tạo được sơ đồ tư duy có đính kèm văn bản, hình ảnh, video và trang tính.</li>
+        <li>Tạo được bài trình chiếu có sử dụng hình ảnh, biểu đồ và video hợp lí.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Ba nhiệm vụ thực hành">
+      <span class="node">NV1: Sơ đồ tư duy có đính kèm</span><span class="arr">→</span>
+      <span class="node">NV2: Trình bày, phân công</span><span class="arr">→</span>
+      <span class="node io">NV3: Bài trình chiếu</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Sơ đồ tư duy</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Trình bày</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Bài trình chiếu</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Nhớ lại Bài 7</div>
+        <div class="reading">Trong Bài 7 em đã biết cách sử dụng sơ đồ tư duy và bài trình chiếu trong trao đổi và hợp tác, biết cách sử dụng hình ảnh, biểu đồ và video hợp lí. Bài học này hướng dẫn em tạo sơ đồ tư duy có dữ liệu đính kèm và bài trình chiếu sử dụng hình ảnh, biểu đồ, video hợp lí, đồng thời thực hành sử dụng chúng trong trao đổi, hợp tác.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.1</span> Nhiệm vụ 1. Sử dụng phần mềm tạo sơ đồ tư duy có đính kèm dữ liệu</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Chuẩn bị</b> Dữ liệu đính kèm</div>
+        <div class="reading">Sử dụng phần mềm tạo sơ đồ tư duy như minh hoạ trong Hình 7.1 với dữ liệu đính kèm đã chuẩn bị hoặc được cung cấp:<ul><li>Tệp bảng tính <b>KinhPhi.xlsx</b> để tính toán chi phí triển lãm (Hình 8.1).</li><li>Tệp hình ảnh <b>Pascaline.png</b> minh hoạ cho máy tính cơ học Pascaline.</li><li>Tệp văn bản <b>CharlesBabbage.docx</b> chứa tiểu sử nhà khoa học Charles Babbage.</li><li>Đường liên kết đến video về nhà khoa học Charles Babbage trên Internet.</li></ul></div>
+        <figure class="fig"><img src="hinh/h81.jpg" alt="Bảng tính chi phí: in ảnh màu 8 × 8 000 = 64 000; in nội dung chú thích 8 × 1 000 = 8 000; văn phòng phẩm 50 000; tổng 122 000"><figcaption>Hình 8.1. Bảng tính chi phí cho phần nội dung Lược sử công cụ tính toán</figcaption></figure>
+        <div data-task="kp" data-n="1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Tạo sơ đồ, đính kèm tệp và liên kết</div>
+        <div class="reading"><b>a) Tạo sơ đồ tư duy:</b> khởi động MindMaple Lite, tạo sơ đồ với chủ đề chính và các nhánh như Hình 7.1, lưu với tên <b>LuocSu.emm</b>.<br><b>b) Đính kèm tệp:</b> chọn nhánh cần đính kèm → <b>Insert/Attachment/Attachment</b> (Hình 8.2) → chọn tệp trong hộp thoại Open → <b>Open</b>. Biểu tượng tệp đính kèm xuất hiện ở nhánh của sơ đồ.<br><b>c) Đính kèm đường liên kết:</b> chọn nhánh → <b>Insert/Hyperlink</b> → sao chép đường liên kết đến video vào ô <b>Link to</b> → <b>OK</b>.</div>
+        <figure class="fig"><img src="hinh/h82.jpg" alt="Thẻ Insert của MindMaple với nút Attachment và lệnh Attachment"><figcaption>Hình 8.2. Đính kèm tệp vào sơ đồ tư duy</figcaption></figure>
+        <div data-task="lenh" data-n="2"></div>
+        <div data-task="dk" data-n="3"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Báo cáo</b> Kết quả Nhiệm vụ 1</div>
+        <div data-task="nv1" data-n="4"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Nhiệm vụ 1</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Nhiệm vụ 2. Trình bày sơ đồ tư duy</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Trình bày sơ đồ tư duy trước nhóm</div>
+        <div class="reading"><ul><li>Lựa chọn một trong các cách sử dụng sơ đồ tư duy để trình bày thông tin (đã học ở Bài 7). Chọn một thành viên đóng vai trò trưởng nhóm trình bày nội dung chuẩn bị về <b>Lược sử công cụ tính toán</b>.</li><li>Trao đổi, thảo luận để bổ sung thêm nội dung cần chuẩn bị.</li><li>Phân công công việc để các thành viên tiếp tục hoàn thành những nội dung cần chuẩn bị.</li></ul></div>
+        <div data-task="tb" data-n="1"></div>
+        <div data-task="pc" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Nhiệm vụ 2</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Nhiệm vụ 3. Tạo bài trình chiếu có sử dụng hình ảnh, sơ đồ, video hợp lí</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Sơ đồ dòng thời gian</div>
+        <div class="reading">Sử dụng mẫu có sẵn (tìm trên Internet hoặc giáo viên cung cấp) để tạo sơ đồ dòng thời gian về Lược sử công cụ tính toán tương tự Hình 8.6.</div>
+        <figure class="fig"><img src="hinh/h86.jpg" alt="Dòng thời gian: 1642 Blaise Pascal, 1833 Charles Babbage, 1945 ENIAC, 1959 IBM 7090, 1964 IBM System/360, 1973 Micral, 2007 iPhone"><figcaption>Hình 8.6. Sơ đồ dòng thời gian Lược sử công cụ tính toán</figcaption></figure>
+        <div data-task="tg" data-n="1"></div>
+        <div data-task="cc" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Tạo bài trình chiếu</div>
+        <div class="reading"><ul><li>Khởi động phần mềm trình chiếu, tạo trang tiêu đề <b>Lược sử công cụ tính toán</b>.</li><li>Tạo trang dàn ý (Hình 8.5): 1. Mở đầu; 2. Dòng thời gian lược sử công cụ tính toán; 3. Blaise Pascal và máy tính cơ học đầu tiên; 4. Charles Babbage và máy tính đa năng; 5. Các thế hệ máy tính điện tử.</li><li>Tạo sơ đồ dòng thời gian (Hình 8.6).</li><li>Tạo trang về Blaise Pascal, chèn hình ảnh máy tính Pascaline.</li><li>Tạo trang về Charles Babbage, chọn <b>Insert</b>, chọn <b>Video/Insert Video from This Device</b> để chèn video minh hoạ.</li><li>Lưu bài trình chiếu với tên <b>LuocSuMayTinh</b>.</li></ul></div>
+        <div data-task="dv" data-n="3"></div>
+        <div data-task="nv3" data-n="4"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Nhiệm vụ 3</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Trình bày và chỉnh sửa bài trình chiếu LuocSuMayTinh</div>
+        <div data-task="lta" data-n="1"></div>
+        <div data-task="ltb" data-n="2"></div>
+        <div data-task="ltc" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Các thế hệ máy tính</div>
+        <div class="reading">Em hãy sử dụng phần mềm để bổ sung vào bài trình chiếu <b>LuocSuMayTinh</b> nội dung về đặc điểm của máy tính từng thế hệ. Yêu cầu: sử dụng công cụ trực quan một cách hợp lí. Sau đó phân công một bạn trong nhóm chia sẻ bài trình chiếu với các bạn khác để cùng hoàn chỉnh sản phẩm cho <b>Triển lãm tin học</b>.</div>
+        <div data-task="th" data-n="1"></div>
+        <div data-task="vd1" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=21"></script>
+<script src="content.js?v=21"></script>
+<script src="../chung/outline.js?v=21"></script>
+<script src="../chung/api.js?v=21"></script>
+<script src="../chung/chieu.js?v=21"></script>
+<script src="../chung/hs.js?v=21"></script>
+</body>
+</html>
