@@ -7,10 +7,10 @@
 "use strict";
 var CSS = ".tk{border:1px solid var(--line);border-radius:12px;padding:10px;margin:10px 0;display:grid;gap:10px;min-width:0}"
  + ".tk .t{font-weight:700}.tk .note{font-size:13px;opacity:.85}.tk .msg{font-size:14px;min-height:2.6em;background:var(--sunk);border-radius:8px;padding:6px 10px}"
- + ".tk .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}"
- + ".tk .bar input,.tk .bar select{font:inherit;font-size:14px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg,#fff);color:inherit;min-width:0}"
- + ".tk .bar button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--surface,#fff);color:inherit;border-radius:8px;padding:5px 12px;cursor:pointer}"
- + ".tk .bar button.pri{background:var(--accent,#1f8a70);border-color:var(--accent,#1f8a70);color:#fff}.tk .bar button:disabled{opacity:.45;cursor:default}"
+ + ".tk .xbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}"
+ + ".tk .xbar input,.tk .xbar select{font:inherit;font-size:14px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg,#fff);color:inherit;min-width:0}"
+ + ".tk .xbar button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--surface,#fff);color:inherit;border-radius:8px;padding:5px 12px;cursor:pointer}"
+ + ".tk .xbar button.pri{background:var(--accent,#1f8a70);border-color:var(--accent,#1f8a70);color:#fff}.tk .xbar button:disabled{opacity:.45;cursor:default}"
  + ".tk .cards{display:flex;flex-wrap:wrap;gap:6px}"
  + ".tk .cd{border:2px solid var(--line);border-radius:8px;padding:4px 8px;min-width:76px;background:var(--surface,#fff);font-size:13.5px;transition:background .2s,border-color .2s}"
  + ".tk .cd small{display:block;font-size:11px;opacity:.65}.tk .cd b{display:block}"
@@ -56,8 +56,8 @@ window.TimKiem = function(box, opt){
   var items = (opt.items || []).slice(), kName = opt.kName || "Giá trị", vName = opt.vName || "", log = [], st, timer = null;
   box.classList.add("tk");
   box.innerHTML = '<div class="t">' + esc(opt.title || "Mô phỏng thuật toán tìm kiếm tuần tự") + "</div>"
-    + (opt.editable ? '<details><summary style="cursor:pointer;font-size:14px">✎ Sửa danh sách (mỗi dòng một phần tử' + (vName ? ", dạng: " + esc(kName) + " | " + esc(vName) : "") + ")</summary><textarea data-ed></textarea><div class='bar'><button type='button' data-a='apply'>Dùng danh sách này</button></div></details>" : "")
-    + '<div class="bar"><label>Cần tìm: <input data-tg value="' + esc(opt.target || "") + '" placeholder="' + esc(kName) + ' cần tìm" style="width:12em"></label>'
+    + (opt.editable ? '<details><summary style="cursor:pointer;font-size:14px">✎ Sửa danh sách (mỗi dòng một phần tử' + (vName ? ", dạng: " + esc(kName) + " | " + esc(vName) : "") + ")</summary><textarea data-ed></textarea><div class='xbar'><button type='button' data-a='apply'>Dùng danh sách này</button></div></details>" : "")
+    + '<div class="xbar"><label>Cần tìm: <input data-tg value="' + esc(opt.target || "") + '" placeholder="' + esc(kName) + ' cần tìm" style="width:12em"></label>'
     + '<button type="button" class="pri" data-a="step">▶ Bước tiếp</button><button type="button" data-a="auto">⏩ Chạy tự động</button><button type="button" data-a="reset">↺ Làm lại</button></div>'
     + '<div class="cards" data-cards></div>'
     + '<div class="msg" data-msg aria-live="polite"></div>'
@@ -136,8 +136,8 @@ window.TimNhiPhan = function(box, opt){
   var items = (opt.items || []).slice(), kName = opt.kName || "Giá trị", vName = opt.vName || "", log = [], st, timer = null, q = function(s){ return box.querySelector(s); };
   box.classList.add("tk");
   box.innerHTML = '<div class="t">' + esc(opt.title || "Mô phỏng thuật toán tìm kiếm nhị phân") + "</div>"
-    + (opt.editable ? '<details><summary style="cursor:pointer;font-size:14px">✎ Sửa danh sách (mỗi dòng một phần tử)</summary><textarea data-ed></textarea><div class="bar"><button type="button" data-a="apply">Dùng danh sách này</button></div></details>' : "")
-    + '<div class="bar"><label>Cần tìm: <input data-tg value="' + esc(opt.target || "") + '" placeholder="' + esc(kName) + ' cần tìm" style="width:11em"></label>'
+    + (opt.editable ? '<details><summary style="cursor:pointer;font-size:14px">✎ Sửa danh sách (mỗi dòng một phần tử)</summary><textarea data-ed></textarea><div class="xbar"><button type="button" data-a="apply">Dùng danh sách này</button></div></details>' : "")
+    + '<div class="xbar"><label>Cần tìm: <input data-tg value="' + esc(opt.target || "") + '" placeholder="' + esc(kName) + ' cần tìm" style="width:11em"></label>'
     + '<button type="button" class="pri" data-a="step">▶ Bước lặp tiếp</button><button type="button" data-a="auto">⏩ Chạy tự động</button><button type="button" data-a="reset">↺ Làm lại</button>'
     + '<button type="button" data-a="sort" title="Sắp xếp danh sách tăng dần (theo bảng chữ cái hoặc từ nhỏ đến lớn)">⇅ Sắp xếp danh sách</button></div>'
     + '<div class="cards" data-cards></div>'
@@ -195,7 +195,7 @@ window.TroChoiTimSo = function(box, opt){
   var nums, target, lo, hi, opened, turns, done, log = [], q = function(s){ return box.querySelector(s); };
   box.classList.add("tk");
   box.innerHTML = '<div class="t">' + esc(opt.title || "Trò chơi tìm số") + "</div>"
-    + '<div class="bar"><button type="button" class="pri" data-a="new">🎲 Ván mới (A chọn 10 số, B chọn số cần tìm)</button><label>Số B cần tìm: <select data-tg></select></label></div>'
+    + '<div class="xbar"><button type="button" class="pri" data-a="new">🎲 Ván mới (A chọn 10 số, B chọn số cần tìm)</button><label>Số B cần tìm: <select data-tg></select></label></div>'
     + '<div class="cards" data-cards></div><div class="msg" data-msg aria-live="polite"></div>'
     + (opt.check ? '<ul class="ck" data-ck></ul>' : "") + '<div class="note">' + (opt.note || "") + "</div>";
   function newGame(){ var pool = []; for (var i = 1; i < 20; i++) pool.push(i); pool.sort(function(){ return Math.random() - .5; });

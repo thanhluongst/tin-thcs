@@ -57,7 +57,7 @@ window.CHUONG_TRINH = [
     {so: "5", ten: "Giải quyết vấn đề với sự trợ giúp của máy tính", bai: [
       {so: "14", ten: "Thuật toán tìm kiếm tuần tự", tt: "dang"},
       {so: "15", ten: "Thuật toán tìm kiếm nhị phân", tt: "dang"},
-      {so: "16", ten: "Thuật toán sắp xếp"}]}
+      {so: "16", ten: "Thuật toán sắp xếp", tt: "dang"}]}
   ]},
   {lop: 8, chuDe: [
     {so: "1", ten: "Máy tính và cộng đồng", bai: [
