@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ứng xử trên mạng · Tin học 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=22">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 7 · Chủ đề 3. Đạo đức, pháp luật và văn hoá trong môi trường số</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>5</b></div><h1><span class="sr-only">Bài 5. </span>Ứng xử trên mạng</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Thực hiện được giao tiếp qua mạng theo đúng quy tắc và bằng ngôn ngữ lịch sự, thể hiện ứng xử có văn hoá.</li>
+        <li>Nêu được ví dụ truy cập không hợp lệ vào các nguồn thông tin; biết cách ứng xử hợp lí khi gặp những thông tin trên mạng có nội dung xấu, không phù hợp lứa tuổi.</li>
+        <li>Biết được tác hại của bệnh nghiện Internet, từ đó có ý thức phòng tránh.</li>
+        <li>Biết nhờ người lớn giúp đỡ, tư vấn khi cần thiết trong quá trình ứng xử trên mạng.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Giao tiếp văn hoá, tránh thông tin xấu, phòng nghiện Internet">
+      <span class="node">Giao tiếp văn hoá</span>
+      <span class="node">Tránh thông tin xấu</span>
+      <span class="node io">Phòng nghiện Internet</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 7A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 7A1-T5" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Giao tiếp văn hoá</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thông tin xấu</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Nghiện Internet</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Internet có hai mặt</div>
+        <div class="reading">Internet có vai trò to lớn trong cuộc sống hiện nay. Internet tác động tích cực đến nhiều mặt của xã hội. Bên cạnh đó Internet cũng có các tác động tiêu cực. Trên thế giới cũng như ở Việt Nam, ngày càng xảy ra nhiều sự việc đau lòng liên quan đến việc sử dụng mạng. Các nguyên nhân thường do <b>bắt nạt trên mạng</b>, <b>nghiện Internet</b>, nghiện trò chơi trực tuyến,… Ứng xử trên mạng có văn hoá và đúng quy tắc, sử dụng Internet hợp lí sẽ giúp mỗi chúng ta có một cuộc sống văn minh, an toàn hơn.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Giao tiếp, ứng xử có văn hoá qua mạng</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Ngôn ngữ giao tiếp qua mạng</div>
+        <div class="reading">1. Em biết những phương thức giao tiếp qua mạng nào? Em đã từng sử dụng những phương thức nào?<br>2. Theo em những đặc điểm khác nhau giữa giao tiếp gặp gỡ trực tiếp và giao tiếp qua mạng là gì?<br>3. Tại sao có những bạn khi giao tiếp qua mạng lại thiếu văn minh hơn so với khi giao tiếp trực tiếp?</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+        <div data-task="hd1c" data-n="3"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Nên hay không nên?</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 23). Khi chưa có mạng Internet, phương thức giao tiếp chủ yếu của chúng ta là nói chuyện trực tiếp, gọi điện thoại, gửi thư qua bưu điện,… Ngày nay, với sự phổ biến của Internet và mạng xã hội, giao tiếp qua mạng được nhiều người ưa thích sử dụng. Một số phương thức giao tiếp qua mạng phổ biến là: gửi và nhận thư điện tử, gửi và nhận tin nhắn, nói chuyện trực tuyến thông qua các ứng dụng, trên các diễn đàn, trên mạng xã hội,… Các mối quan hệ qua mạng thường có phạm vi rộng, đa dạng và khó kiểm soát hơn trong đời thực. Vì vậy, để trở thành người giao tiếp lịch sự, ứng xử có văn hoá qua mạng, mỗi người cần xác định cho mình những điều <b>nên</b> và <b>không nên</b>.<br><br>Em hãy cùng các bạn thảo luận những điều các em nghĩ là nên và không nên làm khi giao tiếp qua mạng rồi sắp xếp vào hai nhóm tương ứng.</div>
+        <div data-task="hd2" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 24</div>
+        <div data-task="p24a" data-n="1"></div>
+        <div data-task="p24b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Giao tiếp có văn hoá qua mạng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Làm gì khi gặp thông tin có nội dung xấu trên mạng?</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 3</b> Xử lí tình huống khi đang truy cập mạng</div>
+        <div class="reading">Khi em đang truy cập mạng, máy tính thỉnh thoảng lại hiện lên những trang web có nội dung bạo lực, nội dung không phù hợp với lứa tuổi của em, em sẽ làm gì?</div>
+        <div data-task="hd3" data-n="1"></div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 24). Em biết có bao nhiêu trang web trên Internet không? Không ai có câu trả lời chính xác. Con số ước đoán là có hàng tỉ trang web và mỗi ngày lại có rất nhiều trang web mới xuất hiện. Chúng ta dễ dàng tìm kiếm những thông tin hữu ích phục vụ học tập, giải trí, mua sắm,… từ các trang web. Tuy nhiên, cũng có nhiều trang web chứa nội dung xấu, thông tin không phù hợp với lứa tuổi mà chúng ta cần tránh. Ví dụ: các trang web có nội dung không lành mạnh; có thông tin về cờ bạc, chất gây nghiện; có thông tin kích động bạo lực;… Sử dụng <b>phần mềm chặn truy cập</b> trang web xấu là một cách bảo vệ người sử dụng trên mạng. Tuy nhiên, <b>tự xây dựng ý thức tốt</b> cho bản thân khi sử dụng mạng chính là công cụ bảo vệ tốt nhất.</div>
+        <figure class="fig sm"><img src="hinh/h51.jpg" alt="Bạn nhỏ ngồi trước máy tính, màn hình hiện cảnh báo: Bạn không được phép truy cập trang web này"><figcaption>Hình 5.1. Cần tránh xa những trang thông tin có nội dung không phù hợp</figcaption></figure>
+        <div data-concept="c2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 25</div>
+        <div data-task="p25" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Gặp thông tin xấu trên mạng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.3</span> Tác hại và cách phòng tránh bệnh nghiện Internet</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 4</b> Nghiện Internet – Biểu hiện và tác hại</div>
+        <div class="reading">1. Trung bình một ngày em sử dụng máy tính bao nhiêu giờ?<br>2. Em có chơi trò chơi điện tử và sử dụng mạng xã hội không? Nếu có thì khoảng bao nhiêu giờ một tuần?<br>3. Theo em các biểu hiện và tác hại của bệnh nghiện Internet là gì?</div>
+        <div data-task="hd4a" data-n="1"></div>
+        <div data-task="hd4b" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Tác hại và lời khuyên</div>
+        <div class="reading">Đọc mục <b>3</b> (SGK trang 25–26). Nếu chúng ta thiếu ý thức, không quản lí đúng việc sử dụng thiết bị điện tử của mình, những tác hại tiềm tàng mà Internet gây ra là rất lớn. Chơi trò chơi điện tử quá nhiều, sử dụng mạng xã hội liên tục sẽ làm ảnh hưởng tới mối quan hệ với gia đình và bạn bè, tới việc học tập của bản thân thì được coi là biểu hiện của <b>bệnh nghiện Internet</b>. Một số tác hại ảnh hưởng tới người nghiện Internet:
+          <ul>
+            <li><b>Thiếu giao tiếp với thế giới xung quanh</b>: dùng Internet quá nhiều dẫn tới chán ăn, sụt cân, không ngủ được, thể lực giảm sút, không muốn giao tiếp với ai, chỉ muốn ở một mình trong phòng với thiết bị kết nối Internet.</li>
+            <li><b>Khó tập trung vào công việc, học tập</b>: việc gián đoạn lặp đi lặp lại ảnh hưởng đến sự tập trung. Nếu cứ 10 phút lại xem điện thoại hay kiểm tra tin nhắn, liệu chúng ta có tập trung vào việc học được không?</li>
+            <li><b>Tăng nguy cơ tham gia vào các vụ bắt nạt trên mạng</b>: người nghiện Internet dễ có hành vi hung hăng, cố ý làm tổn thương hoặc đe doạ người khác: phát tán tin đồn sai, để lại tin nhắn nói xấu, chia sẻ ảnh và thông tin cá nhân của người khác khi không được đồng ý.</li>
+            <li><b>Dễ bị dẫn dắt đến các trang thông tin xấu</b>: trên mạng, thông tin lan truyền rộng rãi, khó kiểm soát; nhiều trang có nội dung xấu có thể được gửi tới một cách vô tình hay cố ý.</li>
+            <li><b>Dễ bị nghiện trò chơi trực tuyến</b>: người nghiện thường phải chơi trong thời gian dài để đạt mục tiêu trò chơi đưa ra; dần dẫn tới tâm trạng dễ cáu gắt, lầm lì, ít nói; những lúc không được chơi thì thấy thiếu thốn, bồn chồn, khó chịu.</li>
+          </ul></div>
+        <figure class="fig"><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><img src="hinh/h52.jpg" alt="Bạn gái ngồi ôm gối buồn bã, xung quanh là các tin nhắn Béo, Ngu ngốc, Xấu xí" style="max-width:260px"><img src="hinh/h53.jpg" alt="Người lớn kéo tay bạn nhỏ đang mải chơi trò chơi trên máy tính" style="max-width:260px"></div><figcaption>Hình 5.2. Nhắn tin nói xấu người khác là một hình thức bắt nạt trên mạng · Hình 5.3. Người nghiện trò chơi trực tuyến sẽ bị tàn phá sức khoẻ thể chất và tinh thần</figcaption></figure>
+        <div data-task="tachai" data-n="1"></div>
+
+        <div class="tk" data-tk>
+          <style>
+            .tk{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:8px}
+            .tk .t{font-weight:700}
+            .tk .q{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:14.5px;padding:4px 0;border-bottom:1px dotted var(--line)}
+            .tk .q span{flex:1 1 260px}
+            .tk button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:3px 12px;cursor:pointer}
+            .tk button.on{background:var(--accent,#1f8a70);border-color:var(--accent,#1f8a70);color:#fff}
+            .tk .kq{font-weight:600;min-height:1.3em}
+            .tk .note{font-size:13px;opacity:.85}
+          </style>
+          <div class="t">Tự kiểm tra: Em có các biểu hiện nào trong các hành vi sau đây?</div>
+          <div class="note">Phần này chỉ để em tự soi lại mình, <b>không gửi lên cho thầy cô</b>.</div>
+          <div data-qs></div>
+          <div class="kq" data-kq aria-live="polite"></div>
+          <script>
+          (function(){
+            var box = document.currentScript.parentNode, q = function(s){ return box.querySelector(s); };
+            var Q = ["a) Bỏ bê việc học hành để lên mạng.","b) Hay thức khuya để sử dụng mạng.","c) Thấy tức giận, cáu kỉnh khi không được sử dụng máy tính.","d) Nói dối khi có người hỏi về thời gian em truy cập mạng.","e) Thích dành thời gian trên mạng hơn là với gia đình, bạn bè.","f) Mất hứng thú với những hoạt động thú vị trước đây, khi em chưa sử dụng mạng."], v = {};
+            q("[data-qs]").innerHTML = Q.map(function(s, i){ return '<div class="q"><span>' + s + '</span><button type="button" data-i="' + i + '" data-v="1">Có</button><button type="button" data-i="' + i + '" data-v="0">Không</button></div>'; }).join("");
+            box.querySelectorAll("[data-i]").forEach(function(b){ b.addEventListener("click", function(){ v[b.dataset.i] = +b.dataset.v; draw(); }); });
+            function draw(){
+              box.querySelectorAll("[data-i]").forEach(function(b){ b.classList.toggle("on", v[b.dataset.i] === +b.dataset.v); });
+              var n = Object.keys(v).length, co = Object.keys(v).filter(function(k){ return v[k] === 1; }).length;
+              q("[data-kq]").textContent = n < Q.length ? "Em đã trả lời " + n + "/" + Q.length + " câu." :
+                co === 0 ? "Chúc mừng em! Hầu hết các câu trả lời của em là Không." :
+                co <= 2 ? "Em có " + co + " biểu hiện. Hãy chú ý giới hạn thời gian dùng mạng nhé." :
+                "Em có " + co + " biểu hiện. Em nên chia sẻ với bố mẹ, thầy cô và áp dụng các lời khuyên bên dưới.";
+            }
+            draw();
+          })();
+          </script>
+        </div>
+
+        <div class="reading">Để không biến mình thành một người nghiện Internet, em hãy tham khảo một số lời khuyên dưới đây:</div>
+        <div class="tbl-wrap"><table class="tbl" style="font-size:14px">
+          <thead><tr><th>Chia sẻ</th><th>Rời xa</th><th>Giới hạn</th><th>Theo đuổi</th></tr></thead>
+          <tbody><tr>
+            <td>Tìm một người tin tưởng để thường xuyên chia sẻ, tâm sự. Bố mẹ, thầy cô, anh chị em ruột là những người phù hợp nhất.</td>
+            <td>Di chuyển máy tính khỏi phòng riêng của mình, ví dụ tới nơi sinh hoạt chung của gia đình, để được mọi người giúp theo dõi thời gian sử dụng Internet.</td>
+            <td>Cài đặt phần mềm giới hạn thời gian sử dụng Internet. Điều này giúp quản lí thời gian sử dụng mạng phù hợp.</td>
+            <td>Tìm và theo đuổi những sở thích, thói quen tốt như đọc sách, chơi thể thao, tham gia dự án làm từ thiện.</td>
+          </tr></tbody>
+        </table></div>
+        <div class="reading"><b>Góc cha mẹ.</b> Cha mẹ cần bảo vệ con cái. Hãy cởi mở giao tiếp với con, hướng dẫn con sử dụng Internet một cách an toàn, đúng mức thay vì cấm đoán.</div>
+        <div data-task="loikhuyen" data-n="2"></div>
+        <div data-concept="c3"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 5</b> Hồi sinh cây</div>
+        <div class="reading">Người bị bệnh nghiện Internet có thể được ví như một cái cây có nguy cơ úa tàn. Em hãy cùng các bạn trong nhóm vẽ một cây tương tự lên một tờ giấy to để tạo một tấm áp phích bằng cách vẽ thêm lá, hoa cho cây và ghi trên đó những điều nên làm để phòng tránh bệnh nghiện Internet, giúp cây xanh tươi trở lại. Có thể thử trước trên bảng dưới đây.</div>
+        <div class="cay" data-cay>
+          <style>
+            .cay{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:10px;grid-template-columns:minmax(200px,280px) 1fr;align-items:start}
+            @media (max-width:640px){.cay{grid-template-columns:1fr}}
+            .cay svg{width:100%;height:auto;display:block;background:#f4f9f6;border-radius:10px}
+            .cay .ds{display:grid;gap:6px}
+            .cay .t{font-weight:700}
+            .cay button{font:inherit;font-size:13.5px;text-align:left;border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:5px 10px;cursor:pointer}
+            .cay button.good{background:#e3f4ea;border-color:#3f9a64}
+            .cay button.bad{background:#fbe9e7;border-color:#c0392b;text-decoration:line-through}
+            .cay input{font:inherit;font-size:14px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg,#fff);color:inherit;min-width:0;flex:1}
+            .cay .msg{font-size:14px;min-height:1.3em}
+            .cay .leaf{transition:opacity .4s,transform .4s;transform-box:fill-box;transform-origin:center}
+            .cay .leaf.off{opacity:0;transform:scale(.2)}
+          </style>
+          <svg viewBox="0 0 200 230" role="img" aria-label="Cái cây, mỗi việc làm tốt thêm một chiếc lá hoặc bông hoa">
+            <path d="M88 228 L94 120 L70 80 M94 120 L118 70 M96 150 L130 112 M92 140 L58 118 M118 70 L132 40 M118 70 L100 36 M70 80 L56 52 M70 80 L82 46" stroke="#8a6a3f" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <path d="M86 228 L112 228 L104 150 L94 150 Z" fill="#8a6a3f"/>
+            <g data-leaves></g>
+          </svg>
+          <div class="ds">
+            <div class="t">Chọn những việc nên làm (việc đúng thêm lá, việc sai làm rụng lá)</div>
+            <div data-ds style="display:grid;gap:5px"></div>
+            <div style="display:flex;gap:6px"><input data-own placeholder="Việc nên làm của nhóm em…" aria-label="Việc nên làm"><button type="button" data-add>Thêm lá</button></div>
+            <div class="msg" data-msg aria-live="polite"></div>
+            <div><button type="button" data-reset>Làm lại</button></div>
+          </div>
+          <script>
+          (function(){
+            var box = document.currentScript.parentNode, q = function(s){ return box.querySelector(s); };
+            var DS = [["Đặt giới hạn mỗi ngày chỉ dùng máy khoảng 1 giờ",1],["Thức khuya chơi trò chơi trực tuyến",0],["Để máy tính ở phòng khách của gia đình",1],["Chơi thể thao, đá bóng cùng bạn bè",1],["Mang điện thoại vào bàn ăn để lướt mạng",0],["Đọc sách mỗi tối trước khi ngủ",1],["Tắt thông báo điện thoại khi học bài",1],["Bỏ bữa để chơi tiếp trò chơi",0],["Trò chuyện, tâm sự với bố mẹ",1],["Tham gia hoạt động tình nguyện, từ thiện",1]];
+            var POS = [[56,46],[82,40],[100,30],[132,34],[70,74],[118,62],[56,112],[132,106],[140,60],[44,70],[110,96],[80,100],[150,86],[38,96],[96,58],[124,128]];
+            var ch, own;
+            function init(){ ch = {}; own = []; }
+            function draw(){
+              q("[data-ds]").innerHTML = DS.map(function(d, i){ return '<button type="button" data-i="' + i + '" class="' + (ch[i] ? (d[1] ? "good" : "bad") : "") + '">' + (ch[i] ? (d[1] ? "🌿 " : "✗ ") : "") + d[0] + "</button>"; }).join("");
+              box.querySelectorAll("[data-i]").forEach(function(b){ b.addEventListener("click", function(){ var i = +b.dataset.i; ch[i] = !ch[i];
+                q("[data-msg]").textContent = ch[i] ? (DS[i][1] ? "Đúng rồi! Cây có thêm một chiếc lá." : "Việc này làm cây rụng mất hai chiếc lá! Đây là việc không nên làm. Bấm lại để bỏ chọn.") : ""; draw(); }); });
+              var n = Math.max(0, DS.filter(function(d, i){ return ch[i] && d[1]; }).length + own.length - 2 * DS.filter(function(d, i){ return ch[i] && !d[1]; }).length), h = "";
+              POS.forEach(function(p, i){ var on = i < n, fl = i >= 7;
+                h += fl ? '<g class="leaf' + (on ? "" : " off") + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="7" fill="#f2a7c3"/><circle cx="' + p[0] + '" cy="' + p[1] + '" r="2.6" fill="#f7d34a"/></g>'
+                        : '<ellipse class="leaf' + (on ? "" : " off") + '" cx="' + p[0] + '" cy="' + p[1] + '" rx="15" ry="9" fill="#4caf6e" transform="rotate(' + (i * 37 % 60 - 30) + " " + p[0] + " " + p[1] + ')"/>'; });
+              q("[data-leaves]").innerHTML = h;
+              if (n >= 7 && !Object.keys(ch).some(function(i){ return ch[i] && !DS[i][1]; })) q("[data-msg]").textContent = "Cây đã xanh tươi trở lại và nở hoa! Nhóm em ghi các việc này vào câu trả lời bên dưới.";
+            }
+            q("[data-add]").addEventListener("click", function(){ var s = q("[data-own]").value.trim(); if (!s) return; own.push(s); q("[data-own]").value = ""; q("[data-msg]").textContent = "Đã thêm lá: " + s; draw(); });
+            q("[data-own]").addEventListener("keydown", function(e){ if (e.key === "Enter") q("[data-add]").click(); });
+            q("[data-reset]").addEventListener("click", function(){ init(); q("[data-msg]").textContent = ""; draw(); });
+            init(); draw();
+          })();
+          </script>
+        </div>
+        <div data-task="hd5" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Bệnh nghiện Internet</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Câu hỏi SGK trang 27</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Sản phẩm nhóm, giúp bạn</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 7 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=22"></script>
+</body>
+</html>
