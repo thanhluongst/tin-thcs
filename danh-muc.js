@@ -52,7 +52,7 @@ window.CHUONG_TRINH = [
       {so: "9", ten: "Trình bày bảng tính", tt: "dang"},
       {so: "10", ten: "Hoàn thiện bảng tính", tt: "dang"},
       {so: "11", ten: "Tạo bài trình chiếu", tt: "dang"},
-      {so: "12", ten: "Định dạng đối tượng trên trang chiếu", slug: "dinh-dang-trang-chieu"},
+      {so: "12", ten: "Định dạng đối tượng trên trang chiếu", slug: "dinh-dang-trang-chieu", tt: "dang"},
       {so: "13", ten: "Thực hành tổng hợp: Hoàn thiện bài trình chiếu"}]},
     {so: "5", ten: "Giải quyết vấn đề với sự trợ giúp của máy tính", bai: [
       {so: "14", ten: "Thuật toán tìm kiếm tuần tự"},
