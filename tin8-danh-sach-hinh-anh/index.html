@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Danh sách liệt kê và hình ảnh trong văn bản · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=21">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 4a. Soạn thảo văn bản và trình chiếu nâng cao</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>8a</b></div><h1><span class="sr-only">Bài 8a. </span>Làm việc với danh sách dạng liệt kê và hình ảnh trong văn bản</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Thực hiện được các thao tác: tạo danh sách dạng liệt kê; chèn thêm, xoá bỏ, co dãn hình ảnh; vẽ hình đồ hoạ trong văn bản,…</li>
+        <li>Tạo được sản phẩm là văn bản có tính thẩm mĩ phục vụ nhu cầu thực tế.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Danh sách liệt kê, hình ảnh, hình đồ hoạ">
+      <span class="node">Danh sách liệt kê</span>
+      <span class="node">Hình ảnh</span>
+      <span class="node io">Hình đồ hoạ</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Danh sách liệt kê</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Hình ảnh, đồ hoạ</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Phiếu khảo sát của An</div>
+        <div class="reading">Bạn An được giao thiết kế <b>Phiếu khảo sát</b> cho dự án Thành lập CLB Tin học (giống phiếu ở Bài 6, có thêm dòng Lớp). Trong phiếu có một danh sách các nội dung Tin học được đánh số từ 1 đến 6, mỗi dòng có một ô vuông ☐ để đánh dấu.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Danh sách dạng liệt kê</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Tác dụng của danh sách dạng liệt kê</div>
+        <div class="reading">So sánh hai cách trình bày các công việc của dự án (SGK Hình 8a.2 và 8a.3):</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:8px 0">
+          <div style="border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px"><b>Cách 1: viết liền</b><br>Khảo sát: tạo phiếu; phát phiếu; thu phiếu. Xử lí dữ liệu: nhập vào bảng tính; lọc, sắp xếp, vẽ biểu đồ; rút ra kết luận. Quảng cáo: làm tờ rơi; phát tờ rơi. Ra mắt CLB: làm bài trình chiếu; làm tài liệu.</div>
+          <div style="border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px"><b>Cách 2: danh sách liệt kê</b><ol style="margin:4px 0 0;padding-left:22px"><li>Khảo sát<ul><li>Tạo phiếu</li><li>Phát phiếu</li><li>Thu phiếu</li></ul></li><li>Xử lí dữ liệu<ul><li>Nhập vào bảng tính</li><li>Lọc, sắp xếp, vẽ biểu đồ</li></ul></li><li>Quảng cáo</li><li>Ra mắt CLB</li></ol></div>
+        </div>
+        <div data-task="hd1" data-n="1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Hai kiểu danh sách dạng liệt kê</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 36–37). Phần mềm soạn thảo có hai kiểu danh sách dạng liệt kê: <b>danh sách dấu đầu dòng</b> (mỗi đoạn bắt đầu bằng một dấu như •, ➢, ✓) và <b>danh sách có thứ tự</b> (mỗi đoạn bắt đầu bằng số hoặc chữ cái và dấu chấm hay dấu ngoặc đơn). Mỗi mục là một đoạn văn bản, tạo ra khi nhấn <b>Enter</b>; dấu đầu dòng và số thứ tự được tạo, cập nhật tự động. Hai kiểu có thể dùng kết hợp. Hãy thử trong <b>bảng mô phỏng</b> dưới đây.</div>
+        <div class="lst" data-lst>
+          <style>
+            .lst{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:10px}
+            .lst .t{font-weight:700}
+            .lst .ctl{display:flex;gap:8px 12px;flex-wrap:wrap;align-items:center;font-size:14px}
+            .lst select,.lst input{font:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg,#fff);color:inherit}
+            .lst button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:4px 10px;cursor:pointer}
+            .lst button:hover{border-color:var(--accent)}
+            .lst .doc{border:1px dashed var(--line);border-radius:8px;padding:10px 14px;min-height:80px;font-size:15px}
+            .lst .doc li{padding:2px 0}
+            .lst .doc li.cur{background:var(--accent-soft,#d6efe9);border-radius:4px}
+            .lst .note{font-size:13.5px;opacity:.9}
+          </style>
+          <div class="t">Bảng mô phỏng danh sách dạng liệt kê</div>
+          <div class="ctl">
+            <label>Kiểu <select data-ty>
+              <option value="decimal">Có thứ tự: 1. 2. 3.</option>
+              <option value="paren">Có thứ tự: 1) 2) 3)</option>
+              <option value="lower-alpha">Có thứ tự: a. b. c.</option>
+              <option value="upper-roman">Có thứ tự: I. II. III.</option>
+              <option value="disc">Dấu đầu dòng: •</option>
+              <option value="arrow">Dấu đầu dòng: ➢</option>
+              <option value="check">Dấu đầu dòng: ✓</option>
+            </select></label>
+            <label>Mục mới <input data-new value="Mục mới" style="width:9em"></label>
+            <button type="button" data-enter>Nhấn Enter sau mục đang chọn</button>
+            <button type="button" data-del>Xoá mục đang chọn</button>
+            <button type="button" data-reset>Trả về ban đầu</button>
+          </div>
+          <div class="doc" data-doc></div>
+          <div class="note" data-note aria-live="polite">Bấm vào một mục để chọn, rồi thử “Nhấn Enter” hoặc “Xoá”: số thứ tự tự động cập nhật.</div>
+          <script>
+          (function(){
+            var box = document.currentScript.parentNode, q = function(s){ return box.querySelector(s); };
+            var START = ["Ngôn ngữ lập trình","Mạng máy tính","Đồ hoạ máy tính","Bảng tính điện tử"], items = START.slice(), cur = 1;
+            function roman(n){ var r = "", m = [[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]]; m.forEach(function(p){ while (n >= p[0]) { r += p[1]; n -= p[0]; } }); return r; }
+            function mark(i){ var t = q("[data-ty]").value, n = i + 1;
+              return t === "decimal" ? n + "." : t === "paren" ? n + ")" : t === "lower-alpha" ? String.fromCharCode(96 + n) + "." : t === "upper-roman" ? roman(n) + "." : t === "disc" ? "•" : t === "arrow" ? "➢" : "✓"; }
+            function draw(){
+              q("[data-doc]").innerHTML = items.map(function(s, i){ return '<li data-i="' + i + '" class="' + (i === cur ? "cur" : "") + '" style="list-style:none;cursor:pointer"><b style="display:inline-block;min-width:2.2em">' + mark(i) + "</b>" + (s ? s.replace(/</g, "&lt;") : '<i style="opacity:.5">(trống)</i>') + "</li>"; }).join("");
+              q("[data-doc]").querySelectorAll("li").forEach(function(li){ li.addEventListener("click", function(){ cur = +li.dataset.i; draw(); }); });
+            }
+            q("[data-ty]").addEventListener("change", draw);
+            q("[data-enter]").addEventListener("click", function(){ items.splice(cur + 1, 0, q("[data-new]").value.trim()); cur++; q("[data-note]").textContent = "Đã thêm mục mới ở vị trí " + (cur + 1) + ". Các mục phía sau tự động đánh số lại."; draw(); });
+            q("[data-del]").addEventListener("click", function(){ if (!items.length) return; items.splice(cur, 1); cur = Math.max(0, Math.min(cur, items.length - 1)); q("[data-note]").textContent = "Đã xoá một mục. Số thứ tự tự động cập nhật."; draw(); });
+            q("[data-reset]").addEventListener("click", function(){ items = START.slice(); cur = 1; q("[data-ty]").selectedIndex = 0; q("[data-note]").textContent = "Bấm vào một mục để chọn, rồi thử “Nhấn Enter” hoặc “Xoá”: số thứ tự tự động cập nhật."; draw(); });
+            draw();
+          })();
+          </script>
+        </div>
+        <div data-task="kieu" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 37</div>
+        <div class="reading">Câu 2 có thể kiểm tra ngay trên bảng mô phỏng: chọn mục 2 rồi bấm “Nhấn Enter”.</div>
+        <div data-task="p37a" data-n="1"></div>
+        <div data-task="p37b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Danh sách dạng liệt kê</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Làm việc với hình ảnh minh hoạ và vẽ hình đồ hoạ</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Hiệu quả của hình ảnh minh hoạ</div>
+        <div class="reading">SGK có hai mẫu tờ rơi “Tuyển thành viên” của CLB Tin học với cùng nội dung (thời gian 15 giờ, phòng 305, nhà A): Hình 8a.5 chỉ gồm chữ trên nền trắng; Hình 8a.6 có ảnh nền màu xanh chủ đề công nghệ, chữ màu vàng và các hình mũi tên cong. Đọc mục <b>2</b> (SGK trang 38): bên cạnh công cụ xử lí văn bản, phần mềm soạn thảo còn có <b>công cụ xử lí hình ảnh</b> (chèn, xoá, thay đổi kích thước, vị trí ảnh) và thư viện mẫu để <b>vẽ hình đồ hoạ</b>.</div>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2c" data-n="2"></div>
+        <div data-task="hd2d" data-n="3"></div>
+        <div data-concept="c2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 39</div>
+        <div data-task="p39" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Hình ảnh và hình đồ hoạ</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Thực hành: Tạo sản phẩm là văn bản phục vụ nhu cầu thực tế</h2></div>
+
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ 1</b> Tạo Phiếu khảo sát</div>
+        <div class="reading">Dùng phần mềm soạn thảo (SGK minh hoạ bằng Microsoft Word 2016):<ul><li><b>a)</b> Khởi động phần mềm, nhập nội dung phiếu khảo sát. Kí hiệu ☐ nhập bằng <b>Insert → Symbol</b>.</li><li><b>b)</b> Tạo danh sách có thứ tự: chọn các đoạn văn bản → thẻ <b>Home</b> → nháy tam giác nhỏ cạnh lệnh <b>Numbering</b> → chọn kiểu danh sách.</li><li><b>c)</b> Lưu tệp: <b>File → Save</b>, tên <b>PhieuKhaoSat.docx</b>.</li></ul></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="ki" data-n="2"></div>
+      </div>
+
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ 2</b> Tạo tờ rơi tuyển thành viên CLB Tin học</div>
+        <div class="reading">Tờ rơi mẫu gồm: ảnh nền, văn bản, hình đồ hoạ; văn bản và hình đồ hoạ nằm ở lớp trên, ảnh nền ở lớp dưới.<ul><li><b>a)</b> Nhập nội dung tờ rơi (như tờ rơi chỉ có chữ).</li><li><b>b)</b> Chèn ảnh nền: <b>Insert → Picture</b>. Để ảnh nằm dưới chữ: chọn ảnh → <b>Format → Arrange → Wrap Text → Behind Text</b>. Kéo hình vuông nhỏ ở góc dưới bên phải ảnh để ảnh phủ kín tờ rơi.</li><li><b>c)</b> Vẽ hình mũi tên: <b>Insert → Shapes → Block Arrows</b>, kéo thả chuột để vẽ; đổi màu: <b>Format → Shape Fill</b> → vàng. Muốn xoá: chọn đối tượng rồi nhấn Delete.</li><li><b>d)</b> Chỉnh vị trí dòng chữ “TUYỂN THÀNH VIÊN”, đổi màu chữ sang vàng; chèn ảnh nhỏ ở góc trên bên phải, đặt Wrap Text → <b>Square</b>.</li><li><b>e)</b> Lưu tệp với tên <b>TuyenThanhVien.docx</b>.</li></ul></div>
+        <div data-task="nv2a" data-n="3"></div>
+        <div data-task="nv2b" data-n="4"></div>
+        <div data-task="nv2c" data-n="5"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Văn bản dự án CLB Tin học</div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Mẫu danh sách mới và tờ rơi CLB</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=21"></script>
+<script src="content.js?v=21"></script>
+<script src="../chung/outline.js?v=21"></script>
+<script src="../chung/api.js?v=21"></script>
+<script src="../chung/chieu.js?v=21"></script>
+<script src="../chung/hs.js?v=21"></script>
+</body>
+</html>

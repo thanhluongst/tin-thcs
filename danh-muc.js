@@ -72,7 +72,7 @@ window.CHUONG_TRINH = [
       {so: "6", ten: "Sắp xếp và lọc dữ liệu", tt: "dang"},
       {so: "7", ten: "Trình bày dữ liệu bằng biểu đồ", slug: "bieu-do", tt: "dang"}]},
     {so: "4a", nhom: "a", ten: "Soạn thảo văn bản và trình chiếu nâng cao", bai: [
-      {so: "8a", ten: "Làm việc với danh sách dạng liệt kê và hình ảnh trong văn bản", slug: "danh-sach-hinh-anh"},
+      {so: "8a", ten: "Làm việc với danh sách dạng liệt kê và hình ảnh trong văn bản", slug: "danh-sach-hinh-anh", tt: "dang"},
       {so: "9a", ten: "Tạo đầu trang, chân trang cho văn bản", slug: "dau-trang-chan-trang"},
       {so: "10a", ten: "Định dạng nâng cao cho trang chiếu", slug: "trang-chieu-nang-cao"},
       {so: "11a", ten: "Sử dụng bản mẫu tạo bài trình chiếu", slug: "ban-mau-trinh-chieu"}]},
