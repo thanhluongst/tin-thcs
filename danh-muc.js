@@ -116,7 +116,7 @@ window.CHUONG_TRINH = [
       {so: "13b", ten: "Biên tập và xuất video"}]},
     {so: "5", ten: "Giải quyết vấn đề với sự trợ giúp của máy tính", bai: [
       {so: "14", ten: "Giải quyết vấn đề", tt: "dang"},
-      {so: "15", ten: "Bài toán tin học"},
+      {so: "15", ten: "Bài toán tin học", tt: "dang"},
       {so: "16", ten: "Thực hành: Lập chương trình máy tính"}]},
     {so: "6", ten: "Tin học và định hướng nghề nghiệp", bai: [
       {so: "17", ten: "Tin học và thế giới nghề nghiệp", slug: "the-gioi-nghe-nghiep"}]}

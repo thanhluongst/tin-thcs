@@ -25,7 +25,7 @@ const TASKS = {
     k:"1) Tìm hiểu: mục tiêu (học THPT, trung cấp nghề…), điểm số, sở thích, điều kiện gia đình. 2) Phân tích: các yếu tố khoảng cách, học phí, điểm chuẩn, ngành học… 3) Lựa chọn: so sánh, chọn trường phù hợp nhất (và nguyện vọng dự phòng). 4) Thực hiện: ôn thi, nộp hồ sơ. 5) Đánh giá: xem kết quả, điều chỉnh nguyện vọng nếu cần."},
   hd2:{type:"open", label:"HĐ2 – Thuật toán bám tường", q:"Em hãy mô tả thuật toán xác định hướng di chuyển của robot, biết robot chỉ thực hiện được: 1. phát hiện xung quanh (trái, phải, phía trước) có tường hay không; 2. quay trái hoặc quay phải một góc 90°; 3. tiến (đi thẳng) một bước về phía trước.",
     k:"Lặp lại cho đến khi tìm thấy lối ra: nếu bên phải không có tường thì quay phải 90° và tiến một bước; nếu không thì: nếu phía trước không có tường thì tiến một bước, nếu không thì quay trái 90°."},
-  sd:{type:"mcq", label:"Đọc hiểu – Sơ đồ khối (Hình 14.3b)", q:"Trong sơ đồ khối thuật toán bám tường, khi câu hỏi “Có tường bên phải?” có kết quả là <b>sai</b> thì robot làm gì?",
+  sd:{type:"mcq", label:"Đọc hiểu – Sơ đồ khối (Hình 14.3b)", q:"Trong sơ đồ khối thuật toán bám tường, khi câu hỏi “Có tường bên phải?” có kết quả là “sai” thì robot làm gì?",
     o:["Quay phải 90° rồi tiến một bước.","Tiến một bước.","Quay trái 90°.","Kết thúc."], a:0,
     k:"Bên phải không có tường → <b>quay phải 90°, tiến một bước</b>, rồi quay lại câu hỏi “Đến đích?”."},
   p78:{type:"open", label:"Câu hỏi tr.78", q:"Em hãy mô tả giải pháp chọn trường sau khi tốt nghiệp THCS dưới dạng liệt kê các bước hoặc sơ đồ khối.",

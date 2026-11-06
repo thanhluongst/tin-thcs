@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bài toán tin học · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>15</b></div><h1><span class="sr-only">Bài 15. </span>Bài toán tin học</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Giải thích được trong quy trình giải quyết vấn đề có những bước (những vấn đề nhỏ hơn) có thể chuyển giao cho máy tính thực hiện, nêu được ví dụ minh hoạ.</li>
+        <li>Giải thích được khái niệm bài toán trong tin học là một nhiệm vụ có thể giao cho máy tính thực hiện, nêu được ví dụ minh hoạ.</li>
+        <li>Nêu được quy trình con người giao bài toán cho máy tính giải quyết.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Bốn bước giải bài toán tin học">
+      <span class="node">Xác định bài toán</span>
+      <span class="node">Xây dựng thuật toán</span>
+      <span class="node">Cài đặt thuật toán</span>
+      <span class="node io">Gỡ lỗi, hiệu chỉnh</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Bài toán tin học</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Giải bài toán tin học</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Máy tính và việc tính lương</div>
+        <div class="reading">Tính lương là một phần của những vấn đề mà doanh nghiệp cần phải giải quyết. Việc trả lương thoả đáng và kịp thời thể hiện tính chuyên nghiệp và có trách nhiệm của doanh nghiệp, đem lại sự hài lòng cho nhân viên, động viên họ làm việc chăm chỉ, đạt hiệu quả cao. Qua ví dụ về bài toán tính lương, em sẽ biết cách chuyển nhiều nhiệm vụ trong thực tế thành một bài toán trong tin học và giao cho máy tính thực hiện.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Bài toán tin học</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Nhiệm vụ của máy tính</div>
+        <div class="reading">Với những doanh nghiệp lớn có nhiều loại hình lao động, việc thanh toán tiền lương cần phải tuân theo một quy trình chặt chẽ giữa các bộ phận. Hình 15.1 mô tả một quy trình thanh toán tiền lương. Theo em, bước nào trong quy trình đó có thể giao cho máy tính thực hiện?</div>
+        <figure class="fig sm"><img src="hinh/h151.jpg" alt="Quy trình: Bắt đầu, Chấm công, Tính toán tiền lương, Lập phiếu chi lương, Thanh toán tiền lương, Lưu hồ sơ, Kết thúc"><figcaption>Hình 15.1. Quy trình thanh toán tiền lương</figcaption></figure>
+        <div data-task="hd1" data-n="1"></div>
+        <div class="reading">Mỗi quy trình thanh toán tiền lương là một giải pháp để một doanh nghiệp giải quyết vấn đề trả lương cho người lao động, đồng thời lưu trữ đủ dữ liệu để tính toán hiệu quả kinh doanh và đối chiếu dữ liệu khi cần thiết. Trong quy trình ở Hình 15.1, bước tính toán tiền lương thường được giao cho máy tính thực hiện. Như vậy, em có thể thấy trong quy trình giải quyết vấn đề có những bước (những vấn đề nhỏ hơn) có thể chuyển giao cho máy tính thực hiện.</div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Bài toán tính lương</div>
+        <div class="reading">Hằng tuần, một công ti phải tính lương cho các nhân viên của mình. Tiền lương của một nhân viên theo tuần phụ thuộc vào mức lương theo giờ và số giờ làm việc mỗi tuần. Số giờ lao động của một nhân viên tối thiểu là một giờ và tối đa là 60 giờ mỗi tuần. Định mức làm việc của nhân viên là 40 giờ/tuần. Mỗi giờ vượt định mức nhân viên được trả gấp 1,5 lần mức lương của họ. Hãy trình bày các bước giải quyết vấn đề tính lương của công ti.</div>
+        <div data-task="hd2" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Đầu vào và đầu ra</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 80). Trong Hoạt động 2, quy trình tính lương cho nhân viên, sau khi lược bỏ những bước không cần sử dụng máy tính như chấm công hay xây dựng công thức tính toán,… chỉ còn lại bài toán tính toán. Bài toán tính toán đó có thể giao cho máy tính thực hiện nên còn được gọi là bài toán tin học. Bài toán tin học được xác định bởi <b>đầu vào</b> và <b>đầu ra</b> như minh hoạ trong Hình 15.2.
+          <ul><li><b>Đầu vào</b> là những giá trị cho trước. Ví dụ: mức lương và số giờ làm việc trong tuần của một nhân viên.</li><li><b>Đầu ra</b> là giá trị phải tìm hoặc kết quả của hành động. Ví dụ: tiền lương theo tuần của nhân viên đó.</li></ul></div>
+        <figure class="fig sm"><img src="hinh/h152.jpg" alt="Đầu vào muc_luong, tgian_laodong đi vào khối Tính lương, đầu ra là tien_luong"><figcaption>Hình 15.2. Đầu vào và đầu ra của bài toán tính lương</figcaption></figure>
+        <div class="reading">Ví dụ về một số bài toán tin học: 1) Giải phương trình ax² + bx + c = 0: đầu vào là các hệ số a, b, c; giá trị đầu ra là nghiệm của phương trình (nếu có) hoặc thông báo “phương trình vô nghiệm”. 2) Tính ước số chung lớn nhất của hai số nguyên: đầu vào là hai số nguyên a và b; giá trị đầu ra là ước số chung lớn nhất của a và b (nếu chúng không đồng thời bằng 0) hoặc thông báo “không có ước chung lớn nhất” (nếu a = b = 0). Tuy nhiên, máy tính không chỉ tính toán với những giá trị là số mà còn có thể xử lí cả những dữ liệu khác như văn bản, hình ảnh, âm thanh,… Chẳng hạn: dịch từ tiếng Việt sang tiếng Anh. Đầu vào là văn bản (câu) tiếng Việt. Đầu ra là văn bản (câu) tiếng Anh tương ứng dưới dạng văn bản hoặc âm thanh.</div>
+        <div data-task="dv" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 80</div>
+        <div class="reading">Hãy mô tả đầu vào và đầu ra của bài toán xác định một số nguyên dương có phải số nguyên tố hay không.</div>
+        <div data-task="p80" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Bài toán tin học</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Giải bài toán tin học</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 3</b> Tính lương bằng máy tính</div>
+        <div class="reading">Em hãy nêu các bước để chuyển bài toán tính lương (trong Hoạt động 2) cho máy tính thực hiện bằng cách lập chương trình.</div>
+        <div data-task="hd3" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Quy trình giải bài toán tin học</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 80–81). Việc giải một bài toán tin học cũng trải qua những bước tương tự quy trình giải quyết vấn đề được nêu trong Bài 14. Với bài toán tính lương bằng máy tính, em cần thực hiện các việc sau:
+          <ul>
+            <li><b>1) Xác định bài toán:</b> xác định đầu vào, đầu ra. Chẳng hạn, đầu vào là hai giá trị mức lương (muc_luong) và số giờ làm việc (tgian_laodong) của nhân viên. Đầu ra là tiền lương (tien_luong) của nhân viên.</li>
+            <li><b>2) Xây dựng thuật toán:</b> chia bài toán thành những bài toán nhỏ hơn bằng cách trả lời hai câu hỏi: (1) Để giải bài toán, cần phải qua những bước nào? (2) Các bước đó cần phải được thực hiện theo thứ tự nào? Chẳng hạn, ban đầu, bài toán tính lương có thể chia thành ba bước và được thực hiện tuần tự như sau: <i>Bước 1.</i> Nhập dữ liệu đã cho (đầu vào): muc_luong và tgian_laodong. <i>Bước 2.</i> Xử lí dữ liệu đã cho để tính giá trị cần biết (đầu ra là) tien_luong. <i>Bước 3.</i> Xuất giá trị đầu ra tìm được: tien_luong. Việc chia nhỏ cần được tiếp tục cho đến khi mỗi bước có thể được chuyển thành một câu lệnh máy tính thực hiện được. Thuật toán cần được mô tả bằng cách chỉ sử dụng những cấu trúc điều khiển cơ bản (tuần tự, rẽ nhánh và lặp). Chẳng hạn, thuật toán tính lương có thể được mô tả như Hình 15.3.</li>
+          </ul></div>
+        <figure class="fig sm"><img src="hinh/h153.jpg" alt="Sơ đồ khối: Bắt đầu, Nhập muc_luong, Nhập tgian_laodong, kiểm tra 1 ≤ tgian_laodong ≤ 60, sai thì nhập lại; kiểm tra tgian_laodong > 40: đúng thì tgian_dmuc ← 40, tgian_vuot ← tgian_laodong − 40; sai thì tgian_dmuc ← tgian_laodong, tgian_vuot ← 0; rồi luong_dmuc ← tgian_dmuc × muc_luong, luong_vuot ← tgian_vuot × muc_luong × 1,5, tien_luong ← luong_dmuc + luong_vuot; Xuất tien_luong; Kết thúc"><figcaption>Hình 15.3. Thuật toán tính lương</figcaption></figure>
+        <div class="reading">
+          <ul>
+            <li><b>3) Cài đặt thuật toán:</b> Việc cài đặt thuật toán thành chương trình máy tính là bước thực hiện giải pháp. Có những cách cài đặt khác nhau của cùng một thuật toán. Em cũng có thể bổ sung biến để giảm bớt thời gian tính toán. Trong bài toán tính lương, các biến luong_dmuc và luong_vuot được sử dụng để lưu trữ các giá trị trung gian trong quá trình tính toán.</li>
+            <li><b>4) Gỡ lỗi và hiệu chỉnh chương trình:</b> Sau khi chương trình được cài đặt, em cần chạy chương trình với những dữ liệu khác nhau, gỡ lỗi và hiệu chỉnh để có một chương trình chạy tốt. Gỡ lỗi và hiệu chỉnh những bước cần thiết của việc lập trình.</li>
+          </ul></div>
+        <div data-task="q4" data-n="1"></div>
+        <div data-task="q4m" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Chạy thử</b> Thuật toán tính lương (Hình 15.3)</div>
+        <div class="reading">Thuật toán ở Hình 15.3 được viết lại dưới dạng liệt kê các bước. Nhập <b>mức lương</b> (nghìn đồng/giờ) và <b>số giờ làm việc</b>, cách nhau bởi dấu phẩy, rồi chạy thử. Hãy thử cả trường hợp số giờ không quá 40, trên 40 và số giờ không hợp lệ (ví dụ <i>50, 70, 45</i>: số giờ 70 bị loại, phải nhập lại).</div>
+        <div data-tt1></div>
+        <div data-task="luong" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Ví dụ</b> Tìm số lớn nhất</div>
+        <div class="reading">Chúng ta hãy cùng giải một bài toán tin học khác: <b>Tìm và hiển thị giá trị lớn nhất của những số nguyên dương được nhập vào từ bàn phím.</b> Số lượng các số trong dãy không được biết trước khi nhập dữ liệu, chỉ biết rằng quá trình nhập các số sẽ kết thúc khi nhập vào số 0. Yêu cầu chỉ sử dụng một biến số nguyên để nhập dữ liệu đầu vào.
+          <br><b>1) Xác định bài toán.</b> Đầu vào: x là số nguyên dương được nhập nhiều lần từ bàn phím, kết thúc bởi số 0. Đầu ra: max là số lớn nhất trong các giá trị đã nhập.
+          <br><b>2) Xây dựng thuật toán.</b> Bài toán chỉ sử dụng một biến x để nhập dữ liệu nhiều lần. Vì vậy, x được xử lí ngay sau khi nhập, sau đó được dành để tiếp tục nhập giá trị tiếp theo. Khi đó thuật toán có thể mô tả thành ba bước thực hiện tuần tự: 1. Gán cho max giá trị bằng 0. 2. Lặp nhiều lần thao tác: nhập x và gán lại max theo giá trị x nhận được. 3. In kết quả. Thao tác nhập giá trị của x và xử lí giá trị đó được đặt trong một vòng lặp. Trong vòng lặp đó: điều kiện kết thúc vòng lặp (x = 0); thân lặp: nhập x và so sánh nó với max để thay thế max nếu (x &gt; max); giá trị khởi đầu vòng lặp: max = 0 để có thể thay đổi khi số nguyên dương đầu tiên được nhập.
+          <br><i>Lưu ý:</i> Các số x nhập vào là số nguyên dương nên số lớn nhất max tìm được cũng là một số nguyên dương. Trường hợp không có số nguyên dương nào được nhập, max không có dữ liệu để so sánh nên không thay đổi. Vì vậy, nếu sau vòng lặp max = 0 thì hiển thị “Không có dữ liệu!”. Trường hợp có số âm được nhập vào sẽ không được tính nhưng dù có đem so sánh thì cũng không làm sai kết quả. Thuật toán tính số lớn nhất max được mô tả bằng cách liệt kê các bước như trong Hình 15.4a và bằng sơ đồ khối như trong Hình 15.4b. (Việc cài đặt thuật toán và gỡ lỗi sẽ được thực hiện ở Nhiệm vụ 2 trong Bài 16.)</div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start">
+        <figure class="fig sm"><img src="hinh/h154a.jpg" alt="Liệt kê các bước: 1. Bắt đầu; 2. max ← 0; 3. Nhập x; 4. Lặp cho đến khi x = 0: 4.1. Nếu x > max thì max ← x; 4.2. Nhập x; 5. Nếu max = 0 thì xuất Không có dữ liệu, ngược lại xuất max; 6. Kết thúc"><figcaption>Hình 15.4a. Liệt kê các bước</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h154b.jpg" alt="Sơ đồ khối tương ứng của thuật toán tìm số lớn nhất"><figcaption>Hình 15.4b. Sơ đồ khối</figcaption></figure>
+        </div>
+        <div class="reading"><b>Chạy thử thuật toán Hình 15.4:</b> nhập dãy số kết thúc bởi số 0, chạy từng bước và theo dõi giá trị của <i>x</i>, <i>max</i> trong bảng. Thử thêm trường hợp chỉ nhập số 0, và trường hợp có số âm.</div>
+        <div data-tt2></div>
+        <div data-task="mx" data-n="1"></div>
+        <div data-task="mx0" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 82</div>
+        <div class="reading">Bài toán tin học được xem như một vấn đề cần giải quyết. Khi đó, bước nào trong quy trình giải bài toán tin học tương ứng với bước thực hiện giải pháp trong giải quyết vấn đề? A. Xác định bài toán. B. Xây dựng thuật toán. C. Cài đặt thuật toán. D. Gỡ lỗi và hiệu chỉnh chương trình.</div>
+        <div data-task="p82" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Giải bài toán tin học</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Thuật toán kiểm tra số nguyên tố</div>
+        <div class="reading">Vẽ sơ đồ của thuật toán giải bài toán xác định một số có phải số nguyên tố hay không bằng cách chỉ sử dụng những cấu trúc điều khiển cơ bản.</div>
+        <div class="reading"><b>Kiểm tra sơ đồ của em:</b> sau khi vẽ xong, hãy so sánh với thuật toán mẫu dưới đây (dạng liệt kê các bước) và chạy thử với một số giá trị của n như 1, 2, 9, 13, 25, 97. Sơ đồ của em có cho cùng kết quả không?</div>
+        <div data-tt3></div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Bài toán sắp xếp</div>
+        <div class="reading">1. Hãy mô tả đầu vào, đầu ra của bài toán sắp xếp một dãy số theo thứ tự tăng dần. 2. Vẽ sơ đồ khối của giải thuật sắp xếp nổi bọt để sắp xếp một dãy số theo thứ tự tăng dần.</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div class="reading"><b>Nhắc lại sắp xếp nổi bọt</b> (đã học ở Tin học 7) trên mô phỏng dưới đây trước khi vẽ sơ đồ khối.</div>
+        <div data-sx></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/thuattoan.js?v=1"></script>
+    <script src="../chung/sapxep.js?v=4"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var I = function(s){ return "<i>" + s + "</i>"; };
+      var LUONG = [
+        {n:"1.", t:"Bắt đầu"},
+        {n:"2.", t:"Nhập " + I("muc_luong"), inp:"muc_luong"},
+        {n:"3.", t:"Nhập " + I("tgian_laodong"), inp:"tgian_laodong"},
+        {n:"4.", t:"Nếu không (1 ≤ " + I("tgian_laodong") + " ≤ 60) thì quay lại bước 3", f:function(e, note){ var ok = e.tgian_laodong >= 1 && e.tgian_laodong <= 60; note("1 ≤ tgian_laodong ≤ 60: " + (ok ? "đúng" : "sai → nhập lại")); return ok ? undefined : 2; }},
+        {n:"5.", t:"Nếu " + I("tgian_laodong") + " &gt; 40 thì", f:function(e, note){ var ok = e.tgian_laodong > 40; note("tgian_laodong > 40: " + (ok ? "đúng" : "sai")); return ok ? undefined : 8; }},
+        {t:I("tgian_dmuc") + " ← 40", ind:2, f:function(e){ e.tgian_dmuc = 40; }},
+        {t:I("tgian_vuot") + " ← " + I("tgian_laodong") + " − 40", ind:2, f:function(e){ e.tgian_vuot = e.tgian_laodong - 40; return 10; }},
+        {t:"ngược lại", ind:1},
+        {t:I("tgian_dmuc") + " ← " + I("tgian_laodong"), ind:2, f:function(e){ e.tgian_dmuc = e.tgian_laodong; }},
+        {t:I("tgian_vuot") + " ← 0", ind:2, f:function(e){ e.tgian_vuot = 0; }},
+        {n:"6.", t:I("luong_dmuc") + " ← " + I("tgian_dmuc") + " * " + I("muc_luong"), f:function(e){ e.luong_dmuc = e.tgian_dmuc * e.muc_luong; }},
+        {n:"7.", t:I("luong_vuot") + " ← " + I("tgian_vuot") + " * " + I("muc_luong") + " * 1,5", f:function(e){ e.luong_vuot = e.tgian_vuot * e.muc_luong * 1.5; }},
+        {n:"8.", t:I("tien_luong") + " ← " + I("luong_dmuc") + " + " + I("luong_vuot"), f:function(e){ e.tien_luong = e.luong_dmuc + e.luong_vuot; }},
+        {n:"9.", t:"Xuất " + I("tien_luong"), out:function(e){ return String(+e.tien_luong.toFixed(6)).replace(".", ","); }},
+        {n:"10.", t:"Kết thúc", end:true}];
+      var runsOk = function(x, fn){ return x.runs.some(function(r){ return r.done && fn(r); }); };
+      ThuatToan($("[data-tt1]"), {title:"Thuật toán tính lương", input:"50, 45", inputHint:"muc_luong, tgian_laodong",
+        vars:["muc_luong","tgian_laodong","tgian_dmuc","tgian_vuot","luong_dmuc","luong_vuot","tien_luong"], lines:LUONG,
+        check:function(x){ return [["Chạy với số giờ trên 40 (có giờ vượt định mức)", runsOk(x, function(r){ return r.inputs[r.used - 1] > 40; })],
+          ["Chạy với số giờ không quá 40", runsOk(x, function(r){ var t = r.inputs[r.used - 1]; return t >= 1 && t <= 40; })],
+          ["Thử số giờ không hợp lệ (ngoài 1–60) để thấy thuật toán yêu cầu nhập lại", x.runs.some(function(r){ return r.inputs.slice(1, Math.max(2, r.used)).some(function(t){ return t < 1 || t > 60; }); })]]; }});
+      var MAX = [
+        {n:"1.", t:"Bắt đầu"},
+        {n:"2.", t:I("max") + " ← 0", f:function(e){ e.max = 0; }},
+        {n:"3.", t:"Nhập " + I("x"), inp:"x"},
+        {n:"4.", t:"Lặp cho đến khi " + I("x") + " = 0", f:function(e, note){ if (e.x === 0) { note("x = 0: đúng → kết thúc lặp"); return 7; } note("x = 0: sai → thực hiện thân lặp"); }},
+        {n:"4.1.", t:"Nếu " + I("x") + " &gt; " + I("max") + " thì", ind:1, f:function(e, note){ var ok = e.x > e.max; note("x > max: " + (ok ? "đúng" : "sai")); return ok ? undefined : 6; }},
+        {t:I("max") + " ← " + I("x"), ind:3, f:function(e){ e.max = e.x; }},
+        {n:"4.2.", t:"Nhập " + I("x"), ind:1, inp:"x", f:function(){ return 3; }},
+        {n:"5.", t:"Nếu " + I("max") + " = 0 thì", f:function(e, note){ note("max = 0: " + (e.max === 0 ? "đúng" : "sai")); return e.max === 0 ? 8 : 10; }},
+        {t:"xuất “Không có dữ liệu”", ind:2, out:function(){ return "Không có dữ liệu"; }, f:function(){ return 11; }},
+        {t:"ngược lại", ind:1},
+        {t:"xuất " + I("max"), ind:2, out:function(e){ return String(e.max); }},
+        {n:"6.", t:"Kết thúc", end:true}];
+      ThuatToan($("[data-tt2]"), {title:"Thuật toán tìm số lớn nhất (Hình 15.4)", input:"7, 3, 12, 5, 0", inputHint:"Dãy số nguyên dương, kết thúc bởi số 0", vars:["x","max"], lines:MAX,
+        check:function(x){ return [["Chạy với một dãy có ít nhất 3 số nguyên dương", runsOk(x, function(r){ return r.inputs.slice(0, r.used - 1).filter(function(v){ return v > 0; }).length >= 3; })],
+          ["Chạy khi chỉ nhập số 0 → “Không có dữ liệu”", runsOk(x, function(r){ return r.used === 1 && r.outputs[0] === "Không có dữ liệu"; })],
+          ["Chạy với dãy có số âm", runsOk(x, function(r){ return r.inputs.slice(0, r.used).some(function(v){ return v < 0; }); })]]; }});
+      var NT = [
+        {n:"1.", t:"Bắt đầu"},
+        {n:"2.", t:"Nhập " + I("n"), inp:"n"},
+        {n:"3.", t:"Nếu " + I("n") + " &lt; 2 thì", f:function(e, note){ var ok = e.n < 2; note("n < 2: " + (ok ? "đúng" : "sai")); return ok ? undefined : 4; }},
+        {t:"xuất “" + I("n") + " không phải số nguyên tố”, kết thúc", ind:2, out:function(e){ return e.n + " không phải số nguyên tố"; }, f:function(){ return "end"; }},
+        {n:"4.", t:I("i") + " ← 2", f:function(e){ e.i = 2; }},
+        {n:"5.", t:"Lặp khi " + I("i") + " × " + I("i") + " ≤ " + I("n"), f:function(e, note){ var ok = e.i * e.i <= e.n; note("i × i = " + e.i * e.i + " ≤ n: " + (ok ? "đúng → thực hiện thân lặp" : "sai → kết thúc lặp")); return ok ? undefined : 9; }},
+        {n:"5.1.", t:"Nếu " + I("n") + " chia hết cho " + I("i") + " thì", ind:1, f:function(e, note){ var ok = e.n % e.i === 0; note("n chia hết cho i: " + (ok ? "đúng" : "sai")); return ok ? undefined : 8; }},
+        {t:"xuất “" + I("n") + " không phải số nguyên tố”, kết thúc", ind:3, out:function(e){ return e.n + " không phải số nguyên tố"; }, f:function(){ return "end"; }},
+        {n:"5.2.", t:I("i") + " ← " + I("i") + " + 1", ind:1, f:function(e){ e.i = e.i + 1; return 5; }},
+        {n:"6.", t:"Xuất “" + I("n") + " là số nguyên tố”", out:function(e){ return e.n + " là số nguyên tố"; }},
+        {n:"7.", t:"Kết thúc", end:true}];
+      ThuatToan($("[data-tt3]"), {title:"Thuật toán mẫu: kiểm tra số nguyên tố", input:"13", inputHint:"Một số nguyên dương n", vars:["n","i"], lines:NT,
+        check:function(x){ return [["Chạy với một số nguyên tố", runsOk(x, function(r){ return / là số nguyên tố/.test(r.outputs[0] || ""); })],
+          ["Chạy với một hợp số", runsOk(x, function(r){ return /không phải/.test(r.outputs[0] || "") && r.inputs[0] >= 2; })],
+          ["Chạy với n = 1", runsOk(x, function(r){ return r.inputs[0] === 1; })]]; }});
+      SapXep($("[data-sx]"), {title:"Sắp xếp nổi bọt – thứ tự tăng dần", algo:"bubble", items:[5, 2, 8, 1, 6], order:"asc", edit:"nums"});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
