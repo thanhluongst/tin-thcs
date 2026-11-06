@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Đầu trang, chân trang · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 4a. Soạn thảo văn bản và trình chiếu nâng cao</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>9a</b></div><h1><span class="sr-only">Bài 9a. </span>Tạo đầu trang, chân trang cho văn bản</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Thực hiện được các thao tác: đánh số trang, thêm đầu trang và chân trang.</li>
+        <li>Tạo được sản phẩm là văn bản có tính thẩm mĩ phục vụ nhu cầu thực tế.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Đầu trang, nội dung văn bản, chân trang">
+      <span class="node">Đầu trang</span>
+      <span class="node">Nội dung văn bản</span>
+      <span class="node io">Chân trang, số trang</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Đầu trang, chân trang</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Đánh số trang</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> So sánh hai trang văn bản</div>
+        <div class="reading">Em hãy quan sát Hình 9a.1, Hình 9a.2 và tìm ra những phần khác nhau trong hai trang văn bản. Trong các cuốn sách, truyện em đã đọc có các thành phần văn bản đó không? Tác dụng của chúng là gì?</div>
+        <figure class="fig"><img src="hinh/h912.jpg" alt="Hai trang văn bản Dự án thành lập CLB Tin học giống nhau; trang thứ hai có thêm dòng Tài liệu dự án ở trên cùng bên phải, số trang 1 và dòng CLB Tin học ở dưới cùng"><figcaption>Hình 9a.1. Trang văn bản · Hình 9a.2. Trang văn bản</figcaption></figure>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Đầu trang và chân trang</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Đầu trang và chân trang cho em biết gì?</div>
+        <div class="reading">Trong trang văn bản ở Hình 9a.2, phần văn bản màu cam có nội dung “Tài liệu dự án” và “CLB Tin học” cho em biết điều gì?</div>
+        <div data-task="hd1" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Đầu trang (Header) và chân trang (Footer)</div>
+        <figure class="fig sm"><img src="hinh/h93.jpg" alt="Sơ đồ trang: đầu trang ở trên cùng, nội dung văn bản ở giữa, chân trang ở dưới cùng"><figcaption>Hình 9a.3. Vị trí của đầu trang và chân trang</figcaption></figure>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 42–43). Đầu trang (Header) và chân trang (Footer) lần lượt là phần trên cùng (phần lề trên) và dưới cùng (phần lề dưới) của văn bản. Chúng là các phần riêng biệt với văn bản chính (Hình 9a.3) và thường được sử dụng để chứa chú thích, số trang, tên văn bản, tên tác giả,… Đầu trang và chân trang cũng có thể chứa hình ảnh hay hình đồ hoạ. Các thông tin đặt trong phần đầu trang và chân trang sẽ tự động xuất hiện ở tất cả các trang. Nhờ vậy, em có thể cố định một số thông tin cần xuyên suốt cả văn bản. Đầu trang và chân trang thường chứa thông tin ngắn gọn về văn bản giúp phân loại, kiểm soát các trang trong văn bản. Ngoài ra thông tin ở đầu trang và chân trang còn giúp trang văn bản chuyên nghiệp và đẹp hơn nhờ cách sắp xếp thông tin hay các hình ảnh trang trí. Ví dụ: trang văn bản trong Hình 9a.2 có thông tin trong phần đầu trang và chân trang cho người đọc biết tên của văn bản là “Tài liệu dự án”, trang hiện tại là trang số “1” và văn bản thuộc về “CLB Tin học”.<br>Thử trên mô phỏng: bấm <b>Header ▾ → Blank</b>, gõ một dòng chữ — dòng chữ tự xuất hiện ở <b>cả hai trang</b>.</div>
+        <div data-dc1></div>
+        <div data-task="vitri" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 43</div>
+        <div class="reading">Em hãy chọn những phương án đúng trong các phương án sau.</div>
+        <div data-task="p43" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Đầu trang và chân trang</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Đánh số trang</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Số trang trong văn bản</div>
+        <div class="reading">Trong các cuốn sách giáo khoa, sách văn học, truyện mà em đọc, em có nhìn thấy số trang của sách không? Số trang sách thường nằm ở đâu?</div>
+        <div data-task="hd2" data-n="1"></div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 43). Các tài liệu dạng văn bản, nhất là các văn bản dài thường đánh số trang để người đọc dễ theo dõi. Phần mềm soạn thảo văn bản có chức năng đánh số trang tự động cho văn bản. Số trang thường được đặt ở đầu trang hoặc chân trang. Em có thể lựa chọn đặt số trang ở vị trí bên trái, bên phải hoặc giữa.<br>Thử đặt số trang ở đủ 4 vị trí như Hình 9a.4 bằng <b>Page Number ▾</b> (Top of Page: đầu trang, Bottom of Page: chân trang).</div>
+        <figure class="fig"><img src="hinh/h94.jpg" alt="Bốn cách đặt số trang 10: đầu trang ở giữa, đầu trang bên trái, đầu trang bên phải, chân trang ở giữa"><figcaption>Hình 9a.4. Ví dụ cách đặt số trang</figcaption></figure>
+        <div data-dc2></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 44</div>
+        <div data-task="p44" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Đánh số trang</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Thực hành: Đánh số trang, thêm đầu trang và chân trang</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Văn bản CLBTinhoc.docx</div>
+        <div class="reading">Em hãy mở tệp <b>CLBTinhoc.docx</b> mà em đã tạo ở Bài 8a (phần Luyện tập), bổ sung thêm nội dung, đánh số trang, thêm đầu trang và chân trang cho văn bản theo mẫu trong Hình 9a.5.</div>
+        <figure class="fig"><img src="hinh/h95.jpg" alt="Hai trang văn bản: đầu trang có dòng Tài liệu dự án màu cam, chữ nghiêng, bên phải; chân trang có số trang ở giữa và dòng CLB Tin học bên phải; trang 2 là Phiếu khảo sát"><figcaption>Hình 9a.5. Văn bản sau khi bổ sung nội dung, đánh số trang, thêm đầu trang và chân trang</figcaption></figure>
+        <div class="reading"><b>Hướng dẫn</b> (SGK minh hoạ bằng Microsoft Word):<ul>
+          <li>Mở tệp CLBTinhoc.docx.</li>
+          <li>Chọn <b>Insert</b>, trong nhóm lệnh <b>Header &amp; Footer</b>, nháy chuột chọn lệnh tương ứng (Hình 9a.6).</li>
+          <li>Sau khi chọn <b>Page Number</b>, chọn <b>Bottom of Page / Plain Number 2</b> để đánh số trang vào vị trí giữa, bên dưới trang văn bản.</li>
+          <li>Sau khi chọn <b>Header</b>, chọn <b>Blank</b> rồi nhập nội dung “Tài liệu dự án” vào ô [Type here], căn phải và tạo chữ in nghiêng, màu cam.</li>
+          <li>Sau khi chọn <b>Footer</b>, chọn <b>Blank</b> rồi nhập nội dung “CLB Tin học” vào ô [Type here], căn phải và tạo chữ in nghiêng, màu cam.</li>
+          <li>Nháy chuột chọn lệnh <b>Close Header and Footer</b> để hoàn thành việc đánh số trang, thêm đầu trang và chân trang.</li>
+          <li>Lưu văn bản.</li></ul>
+          <i>Lưu ý:</i> Em có thể thay đổi vị trí, căn lề, thay đổi cỡ chữ, phông chữ, màu sắc,… cho phần văn bản mà em nhập vào đầu trang và chân trang. Cách làm giống như với văn bản trong phần nội dung.</div>
+        <figure class="fig"><img src="hinh/h96.jpg" alt="Nhóm lệnh Header và Footer trên thẻ Insert: Header để thêm đầu trang, Footer để thêm chân trang, Page Number để đánh số trang"><figcaption>Hình 9a.6. Nhóm lệnh Header &amp; Footer</figcaption></figure>
+        <div class="reading">Làm thử trên mô phỏng trước khi làm trên máy tính:</div>
+        <div data-dc3></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-task="nv3" data-n="3"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Tên nhóm và số trang bên trái</div>
+        <div class="reading">Em hãy mở tệp CLBTinhoc.docx và thực hiện các yêu cầu sau đây: a) Bổ sung thêm tên người hoặc tên nhóm thực hiện dự án vào đầu trang. b) Đặt lại số trang vào vị trí bên trái của chân trang.<br>Mô phỏng dưới đây bắt đầu từ kết quả của phần Thực hành. Gợi ý: <b>nháy đúp</b> vào đầu trang để sửa; muốn có chữ ở cả bên trái và bên phải, dùng mẫu <b>Blank (Three Columns)</b>.</div>
+        <div data-dc4></div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Đường thẳng ở đầu trang, chân trang</div>
+        <div class="reading">Em hãy tìm hiểu cách thêm hình ảnh, hình đồ hoạ vào chân trang và đầu trang rồi bổ sung vào đầu trang và chân trang trong tệp CLBTinhoc.docx một đường thẳng theo mẫu như Hình 9a.7.</div>
+        <figure class="fig"><img src="hinh/h97.jpg" alt="Hai trang văn bản: đầu trang có Nhóm 1 bên trái, Tài liệu dự án bên phải và một đường thẳng màu đỏ bên dưới; chân trang có đường thẳng bên trên, số trang bên trái, CLB Tin học bên phải"><figcaption>Hình 9a.7. Mẫu bổ sung đường thẳng vào đầu trang, chân trang</figcaption></figure>
+        <div class="reading">Trên mô phỏng: khi đang sửa đầu trang (hoặc chân trang), bấm <b>Shapes: đường thẳng</b>.</div>
+        <div data-dc5></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script src="../chung/vanban.js?v=6"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var CAM = "#ed7d31";
+      function txt(o){ return o.on ? (o.mode === "blank" ? [o.text] : [o.L, o.C, o.R]).join(" ") : ""; }
+      function at(o, s, al){ if (!o.on) return false; var re = new RegExp(s, "i"); return o.mode === "blank" ? o.al === al && re.test(o.text) : re.test(o[al] || ""); }
+      function fmt(o){ return o.it && o.col === CAM; }
+      DauChanTrang($("[data-dc1]"), {title:"Mô phỏng: đầu trang, chân trang tự xuất hiện ở mọi trang",
+        check:function(x){ return [["Tạo đầu trang có nội dung", !!txt(x.h).trim()], ["Tạo chân trang có nội dung", !!txt(x.f).trim()]]; }});
+      DauChanTrang($("[data-dc2]"), {title:"Mô phỏng: các cách đặt số trang (Hình 9a.4)",
+        check:function(x){ var p = x.ev.pos; return [["Đầu trang, giữa", !!p["top-C"]], ["Đầu trang, bên trái", !!p["top-L"]], ["Đầu trang, bên phải", !!p["top-R"]], ["Chân trang, giữa", !!p["bottom-C"]]]; }});
+      var NV = function(x){ return [["Số trang ở giữa chân trang (Bottom of Page / Plain Number 2)", !!x.pn && x.pn.pos === "bottom" && x.pn.al === "C"],
+          ["Đầu trang “Tài liệu dự án”, căn phải", at(x.h, "tài liệu dự án", "R")], ["Đầu trang chữ nghiêng, màu cam", fmt(x.h)],
+          ["Chân trang “CLB Tin học”, căn phải", at(x.f, "clb tin học", "R")], ["Chân trang chữ nghiêng, màu cam", fmt(x.f)],
+          ["Chọn Close Header and Footer", !x.edit && !!x.ev.closed]]; };
+      DauChanTrang($("[data-dc3]"), {title:"Mô phỏng Nhiệm vụ: văn bản như Hình 9a.5", check:NV});
+      var DONE = {h:{on:true, mode:"blank", text:"Tài liệu dự án", al:"R", it:true, col:"#ed7d31"}, f:{on:true, mode:"blank", text:"CLB Tin học", al:"R", it:true, col:"#ed7d31"}, pn:{pos:"bottom", al:"C"}};
+      DauChanTrang($("[data-dc4]"), {title:"Mô phỏng Luyện tập", start:DONE,
+        check:function(x){ var t = txt(x.h); return [["a) Đầu trang có thêm tên người/tên nhóm (vẫn giữ “Tài liệu dự án”)", /tài liệu dự án/i.test(t) && t.replace(/tài liệu dự án/i, "").trim().length >= 2],
+          ["b) Số trang ở bên trái chân trang (Plain Number 1)", !!x.pn && x.pn.pos === "bottom" && x.pn.al === "L"], ["Chọn Close Header and Footer", !x.edit && !!x.ev.closed]]; }});
+      DauChanTrang($("[data-dc5]"), {title:"Mô phỏng Vận dụng: như Hình 9a.7", start:{h:{on:true, mode:"three", L:"Nhóm 1", R:"Tài liệu dự án", it:true, col:"#c00000"}, f:{on:true, mode:"blank", text:"CLB Tin học", al:"R", it:true, col:"#c00000"}, pn:{pos:"bottom", al:"L"}},
+        check:function(x){ return [["Đường thẳng dưới đầu trang", x.h.on && x.h.line], ["Đường thẳng trên chân trang", x.f.on && x.f.line], ["Chọn Close Header and Footer", !x.edit && !!x.ev.closed]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

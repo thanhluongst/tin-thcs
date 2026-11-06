@@ -4,7 +4,8 @@
      tuỳ chọn custom: tự tạo mẫu dấu đầu dòng, mẫu thứ tự.
      Tuỳ chọn: title, note, lines ([chữ, kiểu "num"|"bul"|"", mức 0|1]), num (kiểu số mặc định), bul, custom,
                check(x) → [[nhãn, đúng?],…]; x = {lines, num, bul, ev}
-   ToRoi(box, tuỳ chọn) — tờ rơi: ảnh nền (Wrap Text, kích thước), hình mũi tên (kéo thả, Shape Fill), màu chữ, ảnh nhỏ (Square). */
+   ToRoi(box, tuỳ chọn) — tờ rơi: ảnh nền (Wrap Text, kích thước), hình mũi tên (kéo thả, Shape Fill), màu chữ, ảnh nhỏ (Square).
+   DauChanTrang(box, tuỳ chọn) — đầu trang, chân trang, số trang (Tin 8 Bài 9a). */
 (function(){
 "use strict";
 var CSS = ".vb{border:1px solid var(--line);border-radius:12px;padding:10px;margin:10px 0;display:grid;gap:8px;min-width:0}"
@@ -233,6 +234,107 @@ window.ToRoi = function(box, opt){
     drag.el.style.left = sh.x + "%"; drag.el.style.top = sh.y + "%"; drag.moved = true; });
   fly.addEventListener("pointerup", function(){ if (drag) { if (drag.moved) { ev.move = true; say("Đã di chuyển hình."); } else say("Đã chọn hình mũi tên. Có thể đổi màu (Shape Fill) hoặc Delete."); drag = null; draw(); } });
   reset();
+  return {info: info};
+};
+
+/* ---------- ĐẦU TRANG, CHÂN TRANG, SỐ TRANG (Tin 8 Bài 9a) ----------
+   DauChanTrang(box, tuỳ chọn): Insert → Header / Footer / Page Number như Word; tự lặp lại trên mọi trang.
+   Tuỳ chọn: title, note, start (trạng thái ban đầu), check(x) → [[nhãn, đúng?],…]; x = {h, f, pn, edit, ev} */
+var CSS2 = ".vb .vb-pages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:640px}@media (max-width:520px){.vb .vb-pages{grid-template-columns:1fr;max-width:300px}}"
+ + ".vb .vb-pg{position:relative;aspect-ratio:210/297;background:#fff;color:#111;border:1px solid #c9ced6;box-shadow:0 2px 6px rgba(0,0,0,.1);font-family:'Times New Roman',serif;overflow:hidden}"
+ + ".vb .vb-hf{position:absolute;left:0;right:0;padding:3% 9%;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:4px;font-size:10px;min-height:7%;cursor:pointer;box-sizing:border-box}"
+ + ".vb .vb-hf.vb-h{top:0}.vb .vb-hf.vb-f{bottom:0}.vb .vb-hf>span:nth-child(1){text-align:left}.vb .vb-hf>span:nth-child(2){text-align:center}.vb .vb-hf>span:nth-child(3){text-align:right}"
+ + ".vb .vb-hf .vb-ph{color:#7a7a7a;background:#e8e8e8;padding:0 3px;font-style:normal;font-weight:400}"
+ + ".vb .vb-hf.vb-ed{outline:1px dashed #2f6fb3;outline-offset:-2px;background:rgba(47,111,179,.05)}"
+ + ".vb .vb-hf .vb-lab{position:absolute;left:4px;font:9px sans-serif;color:#fff;background:#2f6fb3;padding:0 4px;border-radius:2px}.vb .vb-hf.vb-h .vb-lab{bottom:-12px}.vb .vb-hf.vb-f .vb-lab{top:-12px}"
+ + ".vb .vb-hl{position:absolute;left:9%;right:9%;height:0;border-top:1.5px solid}"
+ + ".vb .vb-body{position:absolute;left:9%;right:9%;top:13%;bottom:12%;font-size:7.6px;line-height:1.45;transition:opacity .2s}.vb .vb-body.vb-dim{opacity:.35}"
+ + ".vb .vb-body h4{margin:2px 0 4px;text-align:center;font-size:10.5px;line-height:1.2}.vb .vb-body p{margin:0}.vb .vb-body .vb-i{padding-left:9px}.vb .vb-body .vb-ii{padding-left:20px}"
+ + ".vb .vb-menu{display:none;flex-wrap:wrap;gap:6px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface,#fff)}.vb .vb-menu.vb-open{display:flex}"
+ + ".vb .vb-menu b{width:100%;font-size:12.5px}"
+ + ".vb .vb-tools{display:none;gap:6px;flex-wrap:wrap;align-items:center;background:#e8f1fb;border:1px solid #b9d3ef;border-radius:8px;padding:6px;color:#111}.vb .vb-tools.vb-open{display:flex}"
+ + ".vb .vb-tools label{font-size:13px;display:inline-flex;gap:4px;align-items:center}";
+var BODY1 = '<h4>DỰ ÁN<br>THÀNH LẬP CLB TIN HỌC</h4><p><b>A. Các công việc cần làm</b></p><p>1) Khảo sát:</p><p class="vb-ii">• Tạo Phiếu khảo sát.</p><p class="vb-ii">• Phát Phiếu khảo sát.</p><p class="vb-ii">• Thu Phiếu khảo sát.</p>'
+ + '<p>2) Xử lí dữ liệu:</p><p class="vb-ii">• Nhập dữ liệu vào phần mềm bảng tính.</p><p class="vb-ii">• Lọc, sắp xếp dữ liệu, tạo biểu đồ.</p><p class="vb-ii">• Từ kết quả xử lí đưa ra kết luận.</p>'
+ + '<p>3) Quảng cáo và tuyển thành viên:</p><p class="vb-ii">• Tạo tờ rơi quảng cáo và tuyển thành viên.</p><p class="vb-ii">• Phát tờ rơi đến học sinh trong trường.</p>'
+ + '<p>4) Tổ chức buổi ra mắt CLB Tin học:</p><p class="vb-ii">• Tạo bài trình chiếu.</p><p class="vb-ii">• Tạo tài liệu CLB.</p><p><b>B. Phân công thực hiện</b></p><p class="vb-i">Phụ lục 1</p>';
+var BODY2 = '<p><b>C. Tài liệu dự án</b></p><h4>PHIẾU KHẢO SÁT</h4><p>Họ và tên: ................................</p><p>Lớp: ......................................</p>'
+ + '<p>Bạn mong muốn tìm hiểu thêm nội dung nào của môn Tin học? (Chọn một nội dung)</p>'
+ + ["Ngôn ngữ lập trình","Mạng máy tính","Đồ hoạ máy tính","Bảng tính điện tử","Soạn thảo văn bản","Phần mềm trình chiếu"].map(function(t, i){ return '<p class="vb-i" style="display:flex;justify-content:space-between"><span>' + (i + 1) + ". " + t + "</span><span>☐</span></p>"; }).join("");
+var HCOL = [["#111111","Đen"],["#ed7d31","Cam"],["#2f6fb3","Xanh"],["#c00000","Đỏ"]];
+function blankHF(){ return {on: false, mode: "blank", text: "", al: "L", L: "", C: "", R: "", it: false, b: false, col: "#111111", line: false}; }
+window.DauChanTrang = function(box, opt){
+  addCss(); opt = opt || {};
+  var s0 = document.getElementById("vanban-css2"); if (!s0) { s0 = document.createElement("style"); s0.id = "vanban-css2"; document.head.appendChild(s0); } s0.textContent = CSS2;
+  var S, ev, q = function(x){ return box.querySelector(x); };
+  function init(){ S = {h: blankHF(), f: blankHF(), pn: null, edit: null}; if (opt.start) { var st = JSON.parse(JSON.stringify(opt.start)); ["h","f"].forEach(function(k){ if (st[k]) S[k] = Object.assign(blankHF(), st[k]); }); S.pn = st.pn || null; } ev = {pos: {}}; }
+  box.classList.add("vb");
+  box.innerHTML = '<div class="vb-t">' + esc(opt.title || "Mô phỏng đầu trang, chân trang") + "</div>"
+    + '<div class="vb-rib"><div class="vb-grp"><small>Insert · Header &amp; Footer</small><button type="button" data-m="h">Header ▾</button><button type="button" data-m="f">Footer ▾</button><button type="button" data-m="p">Page Number ▾</button></div>'
+    + '<div class="vb-grp"><small>Làm lại</small><button type="button" data-a="reset">↺ Ban đầu</button></div></div>'
+    + '<div class="vb-menu" data-menu="h"><b>Header</b><button type="button" data-a="hBlank">Blank</button><button type="button" data-a="hThree">Blank (Three Columns)</button><button type="button" data-a="hEdit">Edit Header</button><button type="button" data-a="hRemove">Remove Header</button></div>'
+    + '<div class="vb-menu" data-menu="f"><b>Footer</b><button type="button" data-a="fBlank">Blank</button><button type="button" data-a="fThree">Blank (Three Columns)</button><button type="button" data-a="fEdit">Edit Footer</button><button type="button" data-a="fRemove">Remove Footer</button></div>'
+    + '<div class="vb-menu" data-menu="p"><b>Top of Page</b><button type="button" data-pn="top-L">Plain Number 1 (trái)</button><button type="button" data-pn="top-C">Plain Number 2 (giữa)</button><button type="button" data-pn="top-R">Plain Number 3 (phải)</button>'
+    + '<b>Bottom of Page</b><button type="button" data-pn="bottom-L">Plain Number 1 (trái)</button><button type="button" data-pn="bottom-C">Plain Number 2 (giữa)</button><button type="button" data-pn="bottom-R">Plain Number 3 (phải)</button><button type="button" data-pn="">Remove Page Numbers</button></div>'
+    + '<div class="vb-tools" data-tools></div>'
+    + '<div class="vb-pages" data-pages></div>'
+    + '<div class="vb-msg" data-msg aria-live="polite"></div>'
+    + (opt.check ? '<ul class="vb-ck" data-ckl></ul>' : "") + '<div class="vb-note">' + (opt.note || "Nháy đúp vào phần trên cùng hoặc dưới cùng của trang để sửa đầu trang/chân trang (giống Word).") + "</div>";
+  function say(t){ q("[data-msg]").textContent = t; }
+  function slots(k, page){
+    var o = S[k], sl = {L: "", C: "", R: ""}, sty = 'style="color:' + o.col + ";" + (o.it ? "font-style:italic;" : "") + (o.b ? "font-weight:700;" : "") + '"';
+    var ph = S.edit === k ? '<span class="vb-ph">[Type here]</span>' : "";
+    if (o.on) { if (o.mode === "blank") sl[o.al] = o.text ? "<span " + sty + ">" + esc(o.text) + "</span>" : ph;
+      else ["L","C","R"].forEach(function(a){ sl[a] = o[a] ? "<span " + sty + ">" + esc(o[a]) + "</span>" : ph; }); }
+    if (S.pn && S.pn.pos === (k === "h" ? "top" : "bottom")) { var n = '<span style="color:' + (o.on ? o.col : "#111") + '">' + page + "</span>"; sl[S.pn.al] = sl[S.pn.al] ? (S.pn.al === "R" ? sl[S.pn.al] + "&nbsp;&nbsp;" + n : n + "&nbsp;&nbsp;" + sl[S.pn.al]) : n; }
+    return sl;
+  }
+  function hf(k, page){ var sl = slots(k, page), ed = S.edit === k;
+    return '<div class="vb-hf vb-' + k + (ed ? " vb-ed" : "") + '" data-hf="' + k + '" title="Nháy đúp để sửa ' + (k === "h" ? "đầu trang" : "chân trang") + '"><span>' + sl.L + "</span><span>" + sl.C + "</span><span>" + sl.R + "</span>" + (ed ? '<i class="vb-lab">' + (k === "h" ? "Header" : "Footer") + "</i>" : "") + "</div>"
+      + (S[k].on && S[k].line ? '<div class="vb-hl" style="border-color:' + S[k].col + ";" + (k === "h" ? "top:11%" : "bottom:9.5%") + '"></div>' : ""); }
+  function tools(){
+    var t = q("[data-tools]"), k = S.edit; if (!k) { t.classList.remove("vb-open"); t.innerHTML = ""; return; }
+    var o = S[k], nm = k === "h" ? "Header" : "Footer";
+    var fields = o.mode === "blank"
+      ? '<label>Nội dung ' + nm + ' <input type="text" data-tx="text" size="16" value="' + esc(o.text) + '" placeholder="Type here"></label>'
+        + ' <span>Căn lề:</span><button type="button" data-al="L" class="' + (o.al === "L" ? "vb-on" : "") + '">⯇ Trái</button><button type="button" data-al="C" class="' + (o.al === "C" ? "vb-on" : "") + '">Giữa</button><button type="button" data-al="R" class="' + (o.al === "R" ? "vb-on" : "") + '">Phải ⯈</button>'
+      : ["L","C","R"].map(function(a){ return '<label>' + {L: "Trái", C: "Giữa", R: "Phải"}[a] + ' <input type="text" data-tx="' + a + '" size="9" value="' + esc(o[a]) + '"></label>'; }).join(" ");
+    t.innerHTML = '<b style="font-size:13px;width:100%">Header &amp; Footer Tools – đang sửa ' + (k === "h" ? "đầu trang" : "chân trang") + "</b>" + fields
+      + ' <button type="button" data-st="it" class="' + (o.it ? "vb-on" : "") + '"><i>I</i> Nghiêng</button><button type="button" data-st="b" class="' + (o.b ? "vb-on" : "") + '"><b>B</b> Đậm</button>'
+      + ' <span>Màu chữ:</span>' + HCOL.map(function(c){ return '<button type="button" class="vb-sw" data-col="' + c[0] + '" title="' + c[1] + '" aria-label="Màu ' + c[1] + '" style="background:' + c[0] + (o.col === c[0] ? ";outline:2px solid #2f6fb3;outline-offset:1px" : "") + '"></button>'; }).join(" ")
+      + ' <button type="button" data-st="line" class="' + (o.line ? "vb-on" : "") + '">― Shapes: đường thẳng ' + (k === "h" ? "dưới đầu trang" : "trên chân trang") + "</button>"
+      + ' <button type="button" class="pri" data-a="close" style="background:#c00000;color:#fff;border-color:#c00000">✕ Close Header and Footer</button>';
+    t.classList.add("vb-open");
+  }
+  function info(){ return {h: S.h, f: S.f, pn: S.pn, edit: S.edit, ev: ev}; }
+  function draw(){
+    q("[data-pages]").innerHTML = [BODY1, BODY2].map(function(b, i){ return '<div class="vb-pg" aria-label="Trang ' + (i + 1) + '">' + hf("h", i + 1) + '<div class="vb-body' + (S.edit ? " vb-dim" : "") + '">' + b + "</div>" + hf("f", i + 1) + "</div>"; }).join("");
+    tools(); ck();
+  }
+  function ck(){ if (opt.check) q("[data-ckl]").innerHTML = opt.check(info()).map(function(x){ return "<li class='" + (x[1] ? "vb-ok" : "") + "'>" + x[0] + "</li>"; }).join(""); }
+  function menus(open){ box.querySelectorAll(".vb-menu").forEach(function(m){ m.classList.toggle("vb-open", m.dataset.menu === open); }); }
+  function edit(k){ S.edit = k; if (!S[k].on) { S[k].on = true; S[k].mode = "blank"; } menus(null); draw(); var i = q("[data-tx]"); if (i) i.focus(); }
+  box.addEventListener("click", function(e){
+    var m = e.target.closest("[data-m]"); if (m) { var mm = q('[data-menu="' + m.dataset.m + '"]'); menus(mm.classList.contains("vb-open") ? null : m.dataset.m); return; }
+    var p = e.target.closest("[data-pn]"); if (p) { menus(null);
+      if (!p.dataset.pn) { S.pn = null; say("Đã xoá số trang."); draw(); return; }
+      var a = p.dataset.pn.split("-"); S.pn = {pos: a[0], al: a[1]}; ev.pos[p.dataset.pn] = true;
+      say("Đã đánh số trang " + (a[0] === "top" ? "ở đầu trang" : "ở chân trang") + ", " + {L: "bên trái", C: "giữa", R: "bên phải"}[a[1]] + ". Số trang tự động tăng: trang 1, trang 2,…"); draw(); return; }
+    var al = e.target.closest("[data-al]"); if (al) { S[S.edit].al = al.dataset.al; draw(); return; }
+    var stb = e.target.closest("[data-st]"); if (stb) { var o = S[S.edit]; o[stb.dataset.st] = !o[stb.dataset.st]; if (stb.dataset.st === "line" && o.line) ev.line = true; draw(); return; }
+    var c = e.target.closest("[data-col]"); if (c) { S[S.edit].col = c.dataset.col; draw(); return; }
+    var t = e.target.closest("[data-a]"); if (!t) return; var a2 = t.dataset.a, k = a2.charAt(0);
+    if (a2 === "reset") { init(); menus(null); say("Đã trả về văn bản ban đầu."); draw(); return; }
+    if (a2 === "close") { S.edit = null; ev.closed = true; say("Đã đóng Header & Footer: quay lại sửa nội dung văn bản. Đầu trang, chân trang xuất hiện ở tất cả các trang."); draw(); return; }
+    if (/Blank$/.test(a2)) { S[k] = Object.assign(S[k], {on: true, mode: "blank"}); say("Đã chọn mẫu Blank: nhập nội dung vào ô [Type here], rồi căn lề, định dạng."); edit(k); return; }
+    if (/Three$/.test(a2)) { if (S[k].on && S[k].mode === "blank" && S[k].text && !S[k][S[k].al]) S[k][S[k].al] = S[k].text; S[k] = Object.assign(S[k], {on: true, mode: "three"}); say("Mẫu Blank (Three Columns): có ba ô [Type here] ở bên trái, giữa và bên phải."); edit(k); return; }
+    if (/Edit/.test(a2)) { edit(k); say("Đang sửa " + (k === "h" ? "đầu trang." : "chân trang.")); return; }
+    if (/Remove/.test(a2)) { S[k] = blankHF(); if (S.edit === k) S.edit = null; menus(null); say("Đã xoá " + (k === "h" ? "đầu trang." : "chân trang.")); draw(); }
+  });
+  box.addEventListener("dblclick", function(e){ var h = e.target.closest("[data-hf]"); if (h) { edit(h.dataset.hf); say("Nháy đúp: mở chế độ sửa " + (h.dataset.hf === "h" ? "đầu trang." : "chân trang.")); } });
+  box.addEventListener("input", function(e){ var f = e.target.dataset.tx; if (!f || !S.edit) return; S[S.edit][f] = e.target.value;
+    var pos = e.target.selectionStart; draw(); var i = q('[data-tx="' + f + '"]'); if (i) { i.focus(); try { i.setSelectionRange(pos, pos); } catch (er) {} } });
+  init(); say(opt.msg || "Chọn Insert → Header, Footer hoặc Page Number."); draw();
   return {info: info};
 };
 })();
