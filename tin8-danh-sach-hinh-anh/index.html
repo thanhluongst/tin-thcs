@@ -135,63 +135,14 @@
       <div class="act">
         <div class="act-tag"><b>Đọc hiểu</b> Hai kiểu danh sách dạng liệt kê</div>
         <div class="reading">Đọc mục <b>1</b> (SGK trang 37). Phần mềm soạn thảo văn bản cung cấp hai kiểu danh sách dạng liệt kê là: <b>danh sách dấu đầu dòng</b> và <b>danh sách có thứ tự</b>. Phiếu khảo sát ở Hình 8a.1 là một ví dụ về danh sách có thứ tự. Nội dung văn bản trong Hình 8a.3 là một ví dụ về danh sách có thứ tự kết hợp với danh sách dấu đầu dòng. Mỗi đơn vị trong danh sách dạng liệt kê là một đoạn văn bản, phân tách nhau bởi một kí tự đặc biệt, được tạo ra khi người sử dụng nhấn phím <b>Enter</b>. Trong danh sách dấu đầu dòng, mỗi đoạn văn bản bắt đầu bằng một dấu đầu dòng. Trong danh sách có thứ tự, mỗi đoạn văn bản bắt đầu bằng một số hoặc chữ cái và dấu phân tách (thường là dấu chấm hoặc dấu ngoặc đơn). Dấu đầu dòng và thứ tự được tự động tạo và cập nhật khi em thêm hoặc bớt các đoạn văn bản. Sử dụng danh sách dạng liệt kê giúp cho văn bản trở nên rõ ràng, có tính thẩm mĩ hơn, giúp người đọc có khả năng tham khảo thông tin nhanh chóng, dễ dàng. Hãy thử trong <b>bảng mô phỏng</b> dưới đây.</div>
-        <div class="lst" data-lst>
-          <style>
-            .lst{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:10px}
-            .lst .t{font-weight:700}
-            .lst .ctl{display:flex;gap:8px 12px;flex-wrap:wrap;align-items:center;font-size:14px}
-            .lst select,.lst input{font:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg,#fff);color:inherit}
-            .lst button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:4px 10px;cursor:pointer}
-            .lst button:hover{border-color:var(--accent)}
-            .lst .doc{border:1px dashed var(--line);border-radius:8px;padding:10px 14px;min-height:80px;font-size:15px}
-            .lst .doc li{padding:2px 0}
-            .lst .doc li.cur{background:var(--accent-soft,#d6efe9);border-radius:4px}
-            .lst .note{font-size:13.5px;opacity:.9}
-          </style>
-          <div class="t">Bảng mô phỏng danh sách dạng liệt kê</div>
-          <div class="ctl">
-            <label>Kiểu <select data-ty>
-              <option value="decimal">Có thứ tự: 1. 2. 3.</option>
-              <option value="paren">Có thứ tự: 1) 2) 3)</option>
-              <option value="lower-alpha">Có thứ tự: a. b. c.</option>
-              <option value="upper-roman">Có thứ tự: I. II. III.</option>
-              <option value="disc">Dấu đầu dòng: •</option>
-              <option value="arrow">Dấu đầu dòng: ➢</option>
-              <option value="check">Dấu đầu dòng: ✓</option>
-            </select></label>
-            <label>Mục mới <input data-new value="Mục mới" style="width:9em"></label>
-            <button type="button" data-enter>Nhấn Enter sau mục đang chọn</button>
-            <button type="button" data-del>Xoá mục đang chọn</button>
-            <button type="button" data-reset>Trả về ban đầu</button>
-          </div>
-          <div class="doc" data-doc></div>
-          <div class="note" data-note aria-live="polite">Bấm vào một mục để chọn, rồi thử “Nhấn Enter” hoặc “Xoá”: số thứ tự tự động cập nhật.</div>
-          <script>
-          (function(){
-            var box = document.currentScript.parentNode, q = function(s){ return box.querySelector(s); };
-            var START = ["Ngôn ngữ lập trình","Mạng máy tính","Đồ hoạ máy tính","Bảng tính điện tử"], items = START.slice(), cur = 1;
-            function roman(n){ var r = "", m = [[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]]; m.forEach(function(p){ while (n >= p[0]) { r += p[1]; n -= p[0]; } }); return r; }
-            function mark(i){ var t = q("[data-ty]").value, n = i + 1;
-              return t === "decimal" ? n + "." : t === "paren" ? n + ")" : t === "lower-alpha" ? String.fromCharCode(96 + n) + "." : t === "upper-roman" ? roman(n) + "." : t === "disc" ? "•" : t === "arrow" ? "➢" : "✓"; }
-            function draw(){
-              q("[data-doc]").innerHTML = items.map(function(s, i){ return '<li data-i="' + i + '" class="' + (i === cur ? "cur" : "") + '" style="list-style:none;cursor:pointer"><b style="display:inline-block;min-width:2.2em">' + mark(i) + "</b>" + (s ? s.replace(/</g, "&lt;") : '<i style="opacity:.5">(trống)</i>') + "</li>"; }).join("");
-              q("[data-doc]").querySelectorAll("li").forEach(function(li){ li.addEventListener("click", function(){ cur = +li.dataset.i; draw(); }); });
-            }
-            q("[data-ty]").addEventListener("change", draw);
-            q("[data-enter]").addEventListener("click", function(){ items.splice(cur + 1, 0, q("[data-new]").value.trim()); cur++; q("[data-note]").textContent = "Đã thêm mục mới ở vị trí " + (cur + 1) + ". Các mục phía sau tự động đánh số lại."; draw(); });
-            q("[data-del]").addEventListener("click", function(){ if (!items.length) return; items.splice(cur, 1); cur = Math.max(0, Math.min(cur, items.length - 1)); q("[data-note]").textContent = "Đã xoá một mục. Số thứ tự tự động cập nhật."; draw(); });
-            q("[data-reset]").addEventListener("click", function(){ items = START.slice(); cur = 1; q("[data-ty]").selectedIndex = 0; q("[data-note]").textContent = "Bấm vào một mục để chọn, rồi thử “Nhấn Enter” hoặc “Xoá”: số thứ tự tự động cập nhật."; draw(); });
-            draw();
-          })();
-          </script>
-        </div>
+        <div data-ds1></div>
         <div data-task="kieu" data-n="2"></div>
         <div data-concept="c1"></div>
       </div>
 
       <div class="act">
         <div class="act-tag"><b>Câu hỏi</b> SGK trang 37</div>
-        <div class="reading">Câu 2: với danh sách có thứ tự ở Hình 8a.4a, nếu em đặt con trỏ soạn thảo ở cuối dòng thứ hai rồi nhấn phím Enter để thêm một đoạn văn bản mới thì em sẽ thu được kết quả như ở Hình 8a.4b hay Hình 8a.4c? Có thể kiểm tra ngay trên bảng mô phỏng: chọn mục 2 rồi bấm “Nhấn Enter”.</div>
+        <div class="reading">Câu 2: với danh sách có thứ tự ở Hình 8a.4a, nếu em đặt con trỏ soạn thảo ở cuối dòng thứ hai rồi nhấn phím Enter để thêm một đoạn văn bản mới thì em sẽ thu được kết quả như ở Hình 8a.4b hay Hình 8a.4c? Kiểm tra ngay trên bảng mô phỏng ở trên: nháy chuột vào <b>cuối dòng thứ hai</b> (Mạng máy tính) rồi nhấn phím <b>Enter</b> (hoặc nút ↵ Enter).</div>
         <figure class="fig"><img src="hinh/h84.jpg" alt="Ba danh sách a, b, c: b có thêm mục 3 trống và đánh số lại đến 5; c có dòng trống không đánh số"><figcaption>Hình 8a.4. Danh sách có thứ tự (từ trái sang phải: a, b, c)</figcaption></figure>
         <div data-task="p37a" data-n="1"></div>
         <div data-task="p37b" data-n="2"></div>
@@ -236,6 +187,8 @@
         <div class="reading">Dùng phần mềm soạn thảo (SGK minh hoạ bằng Microsoft Word 2016):<ul><li><b>a)</b> Khởi động phần mềm, nhập nội dung phiếu khảo sát. Kí hiệu ☐ nhập bằng <b>Insert → Symbol</b>.</li><li><b>b)</b> Tạo danh sách có thứ tự: chọn các đoạn văn bản → thẻ <b>Home</b> → nháy tam giác nhỏ cạnh lệnh <b>Numbering</b> → chọn kiểu danh sách.</li><li><b>c)</b> Lưu tệp: <b>File → Save</b>, tên <b>PhieuKhaoSat.docx</b>.</li></ul></div>
         <figure class="fig"><img src="hinh/h87.jpg" alt="Thẻ Home, nháy tam giác cạnh lệnh Numbering, chọn kiểu danh sách 1. 2. 3. trong Numbering Library"><figcaption>Hình 8a.7. Các bước tạo danh sách có thứ tự</figcaption></figure>
         <figure class="fig"><img src="hinh/h88.jpg" alt="Ba bước: phiếu khảo sát chưa đánh số, chọn các dòng, sau khi tạo danh sách có thứ tự"><figcaption>Hình 8a.8. Kết quả các bước tạo danh sách có thứ tự</figcaption></figure>
+        <div class="reading">Làm thử bước b) trên mô phỏng: bấm các <b>ô vuông đầu dòng</b> để chọn 6 dòng nội dung (giữ Shift để chọn liền một đoạn), bấm <b>▾</b> cạnh <b>Numbering</b> rồi chọn kiểu <b>1. 2. 3.</b></div>
+        <div data-ds2></div>
         <div data-task="nv1" data-n="1"></div>
         <div data-task="ki" data-n="2"></div>
       </div>
@@ -244,6 +197,8 @@
         <div class="act-tag"><b>Nhiệm vụ 2</b> Tạo tờ rơi tuyển thành viên CLB Tin học</div>
         <div class="reading">Tờ rơi mẫu gồm: ảnh nền, văn bản, hình đồ hoạ; văn bản và hình đồ hoạ nằm ở lớp trên, ảnh nền ở lớp dưới.<ul><li><b>a)</b> Nhập nội dung tờ rơi (như tờ rơi chỉ có chữ).</li><li><b>b)</b> Chèn ảnh nền: <b>Insert → Picture</b>. Để ảnh nằm dưới chữ: chọn ảnh → <b>Format → Arrange → Wrap Text → Behind Text</b>. Kéo hình vuông nhỏ ở góc dưới bên phải ảnh để ảnh phủ kín tờ rơi.</li><li><b>c)</b> Vẽ hình mũi tên: <b>Insert → Shapes → Block Arrows</b>, kéo thả chuột để vẽ; đổi màu: <b>Format → Shape Fill</b> → vàng. Muốn xoá: chọn đối tượng rồi nhấn Delete.</li><li><b>d)</b> Chỉnh vị trí dòng chữ “TUYỂN THÀNH VIÊN”, đổi màu chữ sang vàng; chèn ảnh nhỏ ở góc trên bên phải, đặt Wrap Text → <b>Square</b>.</li><li><b>e)</b> Lưu tệp với tên <b>TuyenThanhVien.docx</b>.</li></ul></div>
         <figure class="fig"><img src="hinh/h89.jpg" alt="Bốn bước a b c d: tờ rơi chữ, chèn ảnh đẩy chữ xuống, ảnh nằm dưới chữ, ảnh phủ kín tờ rơi"><figcaption>Hình 8a.9. Các bước chèn, thay đổi lớp và kích thước ảnh</figcaption></figure>
+        <div class="reading">Làm thử các bước b), c), d) trên mô phỏng trước khi làm trên máy tính: chèn ảnh nền, đổi <b>Wrap Text</b>, kéo kích thước, vẽ hai hình mũi tên (kéo thả để đặt vị trí), tô màu vàng, đổi màu chữ và chèn ảnh nhỏ.</div>
+        <div data-tr></div>
         <div data-task="nv2a" data-n="3"></div>
         <figure class="fig"><img src="hinh/h8a1011.jpg" alt="Thẻ Insert, lệnh Shapes, nhóm Block Arrows, mẫu Arrow: Curved Right"><figcaption>Hình 8a.10. Các bước vẽ hình đồ hoạ · Hình 8a.11. Nhóm Block Arrows</figcaption></figure>
         <div data-task="nv2b" data-n="4"></div>
@@ -261,6 +216,8 @@
       <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
       <div class="act">
         <div class="act-tag"><b>Luyện tập</b> Văn bản dự án CLB Tin học</div>
+        <div class="reading">Em hãy sử dụng phần mềm soạn thảo văn bản để nhập dữ liệu cho dự án Thành lập CLB Tin học, tạo danh sách dạng liệt kê cho dữ liệu theo mẫu ở Hình 8a.3 và lưu lại tệp với tên <b>CLBTinhoc.docx</b>.<br>Luyện trước trên mô phỏng: nội dung Hình 8a.2 đã được tách thành từng đoạn. Hãy tạo <b>danh sách có thứ tự</b> cho 4 tên công việc lớn và <b>danh sách dấu đầu dòng cấp 2</b> (Tăng mức / phím Tab) cho các việc nhỏ, giống Hình 8a.3.</div>
+        <div data-ds3></div>
         <div data-task="lt1" data-n="1"></div>
       </div>
       <div class="act act-ghi">
@@ -274,6 +231,8 @@
       <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
       <div class="act">
         <div class="act-tag"><b>Vận dụng</b> Mẫu danh sách mới và tờ rơi CLB</div>
+        <div class="reading">Trong Word, mẫu mới được tạo bằng <b>Bullets ▾ → Define New Bullet…</b> (chọn Symbol, Picture hoặc Font) và <b>Numbering ▾ → Define New Number Format…</b> (chọn kiểu số và gõ thêm chữ trước/sau số). Thử trên mô phỏng: nhập một kí hiệu riêng cho dấu đầu dòng và một mẫu thứ tự như “Bước 1:”, “Phần A –”.</div>
+        <div data-ds4></div>
         <div data-task="vd1" data-n="1"></div>
         <div data-task="vd2" data-n="2"></div>
       </div>
@@ -283,6 +242,41 @@
         <div data-concept="g6"></div>
       </div>
     </section>
+
+    <script src="../chung/vanban.js?v=4"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var N = function(arr){ return arr.map(function(t){ return [t, "num", 0]; }); };
+      DanhSach($("[data-ds1]"), {title:"Mô phỏng: danh sách có thứ tự (Hình 8a.4a)", lines:N(["Ngôn ngữ lập trình","Mạng máy tính","Đồ hoạ máy tính","Bảng tính điện tử"]),
+        check:function(x){ return [["Nhấn Enter ở cuối dòng thứ hai: có mục 3 mới, các mục sau tự đánh số 4, 5 (Hình 8a.4b)", !!x.ev.after2],
+          ["Xoá một mục: số thứ tự tự cập nhật", !!x.ev.del], ["Đổi sang kiểu khác trong Numbering Library (a. b. c. hoặc I. II. III.)", !!x.ev.numStyle],
+          ["Chuyển sang danh sách dấu đầu dòng (Bullets)", !!x.ev.bul]]; }});
+      DanhSach($("[data-ds2]"), {title:"Mô phỏng Nhiệm vụ 1: Phiếu khảo sát", lines:[["PHIẾU KHẢO SÁT"],["Họ và tên: ........................"],["Lớp: ........................"],["Bạn mong muốn tìm hiểu thêm nội dung nào của môn Tin học? (Chọn một nội dung)"],
+          ["Ngôn ngữ lập trình ☐"],["Mạng máy tính ☐"],["Đồ hoạ máy tính ☐"],["Bảng tính điện tử ☐"],["Soạn thảo văn bản ☐"],["Phần mềm trình chiếu ☐"]],
+        check:function(x){ var L = x.lines, six = L.filter(function(l){ return /☐/.test(l.t); });
+          return [["Chọn nhiều dòng rồi tạo danh sách có thứ tự một lần", !!x.ev.numMany],
+            ["Đủ 6 nội dung có số thứ tự 1 → 6, kiểu 1. 2. 3.", six.length === 6 && six.every(function(l){ return l.f === "num" && l.l === 0; }) && x.num === "1."],
+            ["Các dòng tiêu đề, họ tên, lớp, câu hỏi không bị đánh số", L.filter(function(l){ return !/☐/.test(l.t); }).every(function(l){ return !l.f; })]]; }});
+      ToRoi($("[data-tr]"), {title:"Mô phỏng Nhiệm vụ 2: tờ rơi Tuyển thành viên CLB Tin học",
+        note:"Ảnh nền trong mô phỏng là hình vẽ minh hoạ. Trên máy tính, em dùng ảnh thầy cô cung cấp hoặc ảnh tự chọn.",
+        check:function(x){ return [["Chèn ảnh nền và đặt Wrap Text → Behind Text", x.bg && x.wrap === "behind"],
+          ["Ảnh nền phủ kín tờ rơi", x.cover], ["Vẽ 2 hình mũi tên cong (trái và phải)", x.shapes.some(function(s){ return !s.flip; }) && x.shapes.some(function(s){ return s.flip; })],
+          ["Tô màu vàng cho các hình mũi tên (Shape Fill)", x.shapes.length >= 2 && x.yellowShapes === x.shapes.length],
+          ["Chữ “TUYỂN THÀNH VIÊN” màu vàng", x.tc === "#ffd400"], ["Chèn ảnh nhỏ ở góc trên bên phải (Square)", x.pic]]; }});
+      var H = ["Khảo sát","Xử lí dữ liệu","Quảng cáo và tuyển thành viên","Tổ chức buổi ra mắt CLB Tin học"];
+      DanhSach($("[data-ds3]"), {title:"Mô phỏng Luyện tập: tạo danh sách như Hình 8a.3", lines:[["Các công việc cần làm cho dự án Thành lập CLB Tin học"],[H[0]],["Tạo Phiếu khảo sát."],["Phát Phiếu khảo sát."],["Thu Phiếu khảo sát."],
+          [H[1]],["Nhập dữ liệu vào phần mềm bảng tính."],["Lọc, sắp xếp dữ liệu, tạo biểu đồ."],["Từ kết quả xử lí đưa ra kết luận."],
+          [H[2]],["Tạo tờ rơi quảng cáo và tuyển thành viên."],["Phát tờ rơi đến học sinh trong trường."],[H[3]],["Tạo bài trình chiếu."],["Tạo tài liệu CLB."]], num:"1)",
+        check:function(x){ var L = x.lines, head = L.filter(function(l){ return H.indexOf(l.t.trim()) >= 0; }), sub = L.filter(function(l){ return /\.$/.test(l.t.trim()); });
+          return [["4 công việc lớn là danh sách có thứ tự, cấp 1", head.length === 4 && head.every(function(l){ return l.f === "num" && l.l === 0; })],
+            ["10 việc nhỏ là dấu đầu dòng, cấp 2 (lùi vào)", sub.length === 10 && sub.every(function(l){ return l.f === "bul" && l.l === 1; })],
+            ["Dòng tiêu đề không đánh số", !L[0].f]]; }});
+      DanhSach($("[data-ds4]"), {title:"Mô phỏng Vận dụng: tạo mẫu dấu đầu dòng, mẫu thứ tự mới", custom:true,
+        lines:[["Rubik 3x3","bul",0],["Rubik 4x4","bul",0],["Rubik tam giác","bul",0],["Đăng kí tham gia","num",0],["Tập luyện mỗi chiều thứ Sáu","num",0],["Thi đấu cuối tháng","num",0]],
+        check:function(x){ return [["Tạo mẫu dấu đầu dòng mới", !!x.ev.cbul], ["Tạo mẫu thứ tự mới", !!x.ev.cnum]]; }});
+    })();
+    </script>
 
   </div>
 </main>
