@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Biểu diễn dữ liệu · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>13</b></div><h1><span class="sr-only">Bài 13. </span>Biểu diễn dữ liệu</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nêu được khái niệm hằng, biến, kiểu dữ liệu, biểu thức và sử dụng được các khái niệm này ở các chương trình đơn giản trong môi trường lập trình trực quan.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Kiểu dữ liệu, hằng và biến, biểu thức">
+      <span class="node">Kiểu dữ liệu</span>
+      <span class="node">Hằng, biến</span>
+      <span class="node io">Biểu thức</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Kiểu dữ liệu</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Hằng, biến, biểu thức</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Kiểu dữ liệu trong bảng tính</div>
+        <div class="reading">Trong chương trình Tin học lớp 7, em đã được học về các kiểu dữ liệu trong phần mềm bảng tính. Em hãy cho biết đó là những kiểu dữ liệu nào.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Kiểu dữ liệu</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Kiểu dữ liệu</div>
+        <div class="reading">1. Em hãy ghép mỗi dòng ở cột Dữ liệu với một dòng phù hợp ở cột Kiểu dữ liệu trong Hình 13.1. 2. Em hãy nhập dữ liệu và công thức theo mẫu trong Hình 13.2 vào phần mềm bảng tính và cho biết kết quả được hiển thị ở các ô tính C1, C2 và C3.</div>
+        <figure class="fig"><img src="hinh/h1312.jpg" alt="Hình 13.1: bảng Dữ liệu và Kiểu dữ liệu với Tin học, 3.141592 và Số, Văn bản. Hình 13.2: ô A1 bằng 3, B1 bằng 5, C1 =A1+B1, C2 =A1&B1, C3 =A1<B1"><figcaption>Hình 13.1. Dữ liệu và kiểu dữ liệu · Hình 13.2. Các phép toán</figcaption></figure>
+        <div data-task="hd1a" data-n="1"></div>
+        <div class="reading">Nhập công thức vào các ô C1, C2, C3 của bảng tính mô phỏng (gõ <b>=A1&amp;B1</b> để ghép, <b>=A1&lt;B1</b> để so sánh).</div>
+        <div data-bt1></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Kiểu dữ liệu và phép toán</div>
+        <figure class="fig sm"><img src="hinh/h133.jpg" alt="Kết quả: C1 là 8, C2 là 35, C3 là TRUE"><figcaption>Hình 13.3. Kết quả các phép toán</figcaption></figure>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 76–77). Trong Hình 13.1, Tin học là dữ liệu thuộc kiểu văn bản, 3.141592 là dữ liệu thuộc kiểu số. Các công thức ở các ô tính C1, C2 và C3 trong Hình 13.2 trả lại kết quả như Hình 13.3: ô C1 thực hiện phép cộng số 3 và số 5, cho kết quả 8 là một giá trị số; ô C2 thực hiện phép ghép kí tự 3 và kí tự 5, cho kết quả là xâu kí tự 35; ô C3 kiểm tra xem số 3 có nhỏ hơn số 5 hay không, cho kết quả TRUE (đúng) là giá trị thuộc kiểu lôgic.<br>Trong các ngôn ngữ lập trình, dữ liệu được phân loại thành những kiểu khác nhau để có thể lưu trữ và áp dụng những phép toán phù hợp. Số được phân loại thành kiểu số nguyên hoặc số thực, văn bản được phân loại thành kiểu kí tự hoặc xâu kí tự, các điều kiện hay các phép so sánh được phân loại thành kiểu lôgic,… Mỗi kiểu dữ liệu bao gồm một tập hợp giá trị và một số phép toán trên những giá trị đó. Ngôn ngữ lập trình Scratch có ba kiểu dữ liệu là kiểu số, kiểu xâu kí tự và kiểu lôgic. Mỗi kiểu dữ liệu được trang bị một số phép toán. Ngược lại, mỗi phép toán đều cho kết quả là giá trị thuộc một kiểu dữ liệu nhất định.</div>
+        <figure class="fig"><img src="hinh/b131.jpg" alt="Bảng 13.1: kiểu Số gồm số nguyên và số thập phân, ví dụ 15, 3.141592; kiểu Xâu kí tự gồm kí tự hoặc xâu kí tự, ví dụ @, Computer; kiểu Lôgic gồm hai giá trị true và false"><figcaption>Bảng 13.1. Tập hợp giá trị của các kiểu dữ liệu trong ngôn ngữ lập trình Scratch</figcaption></figure>
+        <div data-task="kieu" data-n="1"></div>
+        <figure class="fig"><img src="hinh/b132.jpg" alt="Bảng 13.2: phép toán trên kiểu số (cộng, trừ, nhân, chia, chia lấy dư, làm tròn số), kiểu xâu kí tự (kết hợp), kiểu lôgic (so sánh bằng, nhỏ hơn, lớn hơn; và, hoặc, không phải) cùng ví dụ"><figcaption>Bảng 13.2. Các phép toán cơ bản trong ngôn ngữ lập trình Scratch</figcaption></figure>
+        <div class="reading">Chạy chương trình dưới đây để xem kết quả các phép toán của Bảng 13.2. Em có thể sửa số trong các ô, hoặc bấm nút <b>▾</b> trong một ô để đặt một phép toán khác vào.</div>
+        <div data-sc1></div>
+        <div data-task="pt" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 77</div>
+        <figure class="fig sm"><img src="hinh/h13q.jpg" alt="Ba phép toán: kết hợp Diện tích hình tròn là với s; n chia lấy dư 2 bằng 0; làm tròn 3.141592 nhân r nhân r"><figcaption>Các phép toán cần ghép với kiểu dữ liệu</figcaption></figure>
+        <div data-task="p77" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Kiểu dữ liệu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Hằng, biến, biểu thức</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Hằng, biến, biểu thức</div>
+        <div class="reading">Trong Bài 12, em đã tạo ra chương trình để chú Bọ rùa di chuyển theo đường đi là một tam giác đều. Làm thế nào để tổng quát bài toán với đường đi của nhân vật là một hình đa giác đều có số cạnh bất kì được nhập vào từ bàn phím?</div>
+        <div data-task="hd2" data-n="1"></div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 78). Trong lập trình, <b>biến</b> được dùng để lưu trữ giá trị có thể thay đổi trong khi thực hiện chương trình. Biến được nhận biết qua tên của nó. Ví dụ: số cạnh của hình mà nhân vật di chuyển trong bài toán tổng quát ở Hoạt động 2 là một biến, nó được đặt tên n và lưu trữ một giá trị số, chẳng hạn số 6. <b>Hằng</b> là giá trị không đổi trong quá trình thực hiện chương trình. Chẳng hạn, 3.14 là hằng kiểu số (hằng số); “Xin chào!” là hằng kiểu xâu kí tự; true là hằng kiểu lôgic;… Mỗi hằng thuộc một kiểu dữ liệu nhất định. <b>Biểu thức</b> là sự kết hợp của biến, hằng, dấu ngoặc, phép toán và các hàm để trả lại giá trị thuộc một kiểu dữ liệu nhất định. Chẳng hạn, chu vi của đường tròn bán kính r có thể được tính gần đúng bằng biểu thức kiểu số 2 × 3.14 × r.</div>
+        <div data-task="hbt" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 78</div>
+        <div class="reading">Em hãy chỉ ra hằng, biến, biểu thức và kiểu dữ liệu tương ứng được sử dụng trong chương trình ở Hình 13.4. (Chương trình Hình 13.4 có trong mô phỏng ở phần Thực hành.)</div>
+        <figure class="fig sm"><img src="hinh/h134.jpg" alt="Chương trình Scratch: hỏi Hãy nhập số cạnh và đợi; đặt n thành trả lời; nói kết hợp Đường đi là hình có, n, cạnh bằng nhau; xoá tất cả; đặt bút; chọn bút màu; đặt số bước thành 900 chia n; đặt góc quay thành 360 chia n; lặp lại n: di chuyển số bước, xoay góc quay độ, đợi 1 giây; nhấc bút"><figcaption>Hình 13.4. Chương trình điều khiển nhân vật di chuyển theo hình có số cạnh được nhập vào từ bàn phím</figcaption></figure>
+        <div data-task="p78" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Hằng, biến, biểu thức</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Thực hành: Sử dụng hằng, biến, biểu thức trong chương trình</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Đường đi là đa giác đều có n cạnh</div>
+        <div class="reading">Mở tệp chương trình VeHinh.sb3 em đã lưu ở Bài 12, bổ sung các câu lệnh để được chương trình nâng cấp điều khiển nhân vật di chuyển theo hình có số cạnh nhập vào từ bàn phím như Hình 13.4. <b>Hướng dẫn:</b> Bước 1. Mở tệp chương trình VeHinh.sb3 trong Scratch, chọn chế độ hiển thị tiếng Việt. Lưu tệp với tên mới là <b>DuongDi.sb3</b>. Bước 2. Nháy chuột vào nhóm lệnh <b>Các biến số</b>, tạo các biến <b>n</b>, <b>số bước</b>, <b>góc quay</b>. Bước 3. Nháy chuột vào nhóm lệnh <b>Cảm biến</b>, <b>Các biến số</b>, <b>Hiển thị</b> và hoàn thành lệnh 1, 2, 3 của chương trình. Bước 4. Nháy chuột vào nhóm lệnh <b>Các phép toán</b> để tạo hai biểu thức 900 / n và 360 / n. Bước 5. Nháy chuột vào nhóm lệnh Các biến số, kéo thả và hoàn thành hai câu lệnh 4, 5. Bước 6. Nháy chuột vào nhóm lệnh Các biến số, kéo thả các biến vào vị trí tương ứng trong các câu lệnh 6, 7, 8. Bước 7. Nháy chuột vào nút lá cờ để chạy chương trình và xem kết quả.</div>
+        <div class="reading"><b>Trên mô phỏng</b> (đã mở sẵn VeHinh.sb3 của Bài 12): gõ tên biến rồi bấm <b>Tạo một biến</b>; thêm khối <b>hỏi … và đợi</b>, <b>đặt … thành …</b>; trong ô giá trị bấm <b>▾</b> để đặt <b>trả lời</b>, một biến, hoặc phép toán <b>( ) / ( )</b> vào ô đó. Chạy và nhập số cạnh ở ô bên dưới sân khấu.</div>
+        <div data-sc2></div>
+        <div class="reading">Chương trình mẫu Hình 13.4 để so sánh (có thể chạy thử):</div>
+        <div data-sc0></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Đường tròn</div>
+        <div class="reading">1. Giả sử r là biến lưu giá trị của bán kính hình tròn. Em hãy cho biết giá trị trả lại của các biểu thức sau và kiểu dữ liệu của chúng trong ngôn ngữ lập trình Scratch với trường hợp r = 5.</div>
+        <figure class="fig sm"><img src="hinh/h13lt.jpg" alt="Ba biểu thức: a) r lớn hơn 0; b) 2 nhân 3.14 nhân r; c) kết hợp Chu vi đường tròn là với 2 nhân 3.14 nhân r"><figcaption>Các biểu thức của Luyện tập 1</figcaption></figure>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-sc3></div>
+        <div class="reading">2. Em hãy sử dụng ngôn ngữ lập trình trực quan để viết chương trình tính chu vi đường tròn, diện tích hình tròn với giá trị của bán kính được nhập vào từ bàn phím, thông báo kết quả ra màn hình.</div>
+        <div data-sc4></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Bài toán của môn học khác</div>
+        <div class="reading">Em hãy viết chương trình Scratch của riêng mình để giải quyết một bài toán cụ thể trong một môn học như Khoa học tự nhiên, Toán,… trong đó có sử dụng hằng, biến và biểu thức để thực hiện thuật toán.</div>
+        <div data-sc5></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script src="../chung/bangtinh.js?v=5"></script>
+    <script src="../chung/scratch.js?v=5"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var V = function(n){ return {r:"var", name:n}; }, O = function(op, a, b){ return {r:op, a: b === undefined ? [a] : [a, b]}; };
+      var BO = function(body){ return [{id:"bo", name:"Bọ rùa", icon:"🐞", x:-150, y:-130, dir:90, body:body}]; };
+      var SH = Scratch.shape;
+      function find(body, f){ var r = false; (function w(a){ a.forEach(function(b){ if (f(b)) r = true; if (b.body) w(b.body); }); })(body); return r; }
+      function has(x, f){ return x.sprites.some(function(s){ return find(s.body, f); }); }
+      var EXPR = ["move","turnL","turnR","say","sayFor","repeat","wait","ask","set","change","clear","down","up","color"];
+      BangTinh($("[data-bt1]"), {title:"Bảng tính mô phỏng (Hình 13.2)", cols:3, rows:3, data:{A1:"3", B1:"5"},
+        check:function(x){ var f = function(k){ return String(x.d[k] || ""); };
+          return [["C1: =A1+B1 cho kết quả 8", x.val("C1") === 8 && /\+/.test(f("C1"))], ["C2: =A1&B1 cho kết quả 35", String(x.val("C2")) === "35" && /&/.test(f("C2"))], ["C3: =A1<B1 cho kết quả TRUE", x.val("C3") === true]]; }});
+      var DEMO = [{op:"sayFor", v:O("mod", 13, 4), n:2},{op:"sayFor", v:O("join", "táo", "chuối"), n:2},{op:"sayFor", v:O("gt", 70, 50), n:2},
+        {op:"sayFor", v:O("and", O("gt", 70, 50), O("lt", 80, 50)), n:2},{op:"sayFor", v:O("or", O("eq", 50, 50), O("gt", 30, 50)), n:2},{op:"sayFor", v:O("not", O("eq", 50, 50)), n:2}];
+      Scratch($("[data-sc1]"), {title:"Mô phỏng Scratch: thử các phép toán (Bảng 13.2)", sprites:BO(DEMO), expr:true, blocks:["say","sayFor","wait","repeat"],
+        check:function(x){ return [["Chạy chương trình, đọc kết quả từng phép toán", x.runs.length > 0], ["Tự đổi số hoặc đặt một phép toán khác rồi chạy lại", (x.log.indexOf("edit") >= 0 || x.log.some(function(l){ return /^rep:/.test(l); })) && x.runs.length > 1]]; }});
+      var H134 = [{op:"ask", v:"Hãy nhập số cạnh:"},{op:"set", "var":"n", v:{r:"answer"}},{op:"say", v:O("join", "Đường đi là hình có ", O("join", V("n"), " cạnh bằng nhau"))},{op:"clear"},{op:"down"},{op:"color", c:"#8e2c8e"},
+        {op:"set", "var":"số bước", v:O("div", 900, V("n"))},{op:"set", "var":"góc quay", v:O("div", 360, V("n"))},{op:"repeat", n:V("n"), body:[{op:"move", n:V("số bước")},{op:"turnL", n:V("góc quay")},{op:"wait", n:1}]},{op:"up"}];
+      Scratch($("[data-sc0]"), {title:"Chương trình mẫu Hình 13.4", sprites:BO(H134), vars:["n","số bước","góc quay"], expr:true, blocks:EXPR, flow:true,
+        check:function(x){ return [["Chạy thử và nhập một số cạnh", x.runs.some(function(r){ return r.answers.length; })]]; }});
+      var TRI2 = [{op:"clear"},{op:"down"},{op:"color", c:"#8e2c8e"},{op:"repeat", n:3, body:[{op:"move", n:60},{op:"turnL", n:120},{op:"wait", n:1}]},{op:"up"}];
+      Scratch($("[data-sc2]"), {title:"Mô phỏng Scratch: DuongDi.sb3 (nâng cấp từ VeHinh.sb3)", sprites:BO(TRI2), expr:true, blocks:EXPR, flow:true, save:"DuongDi.sb3",
+        check:function(x){ var vn = x.varNames, isV = function(v, n){ return v && v.r === "var" && v.name === n; }, isDiv = function(v, k){ return v && v.r === "div" && +v.a[0] === k && isV(v.a[1], "n"); };
+          var good = x.runs.filter(function(r){ var k = +r.answers[0], sh = SH(r.segs); return k >= 3 && sh.n === k && sh.equal && sh.closed && Math.abs(sh.len - 900 / k) < 2; });
+          return [["Bước 2: tạo các biến n, số bước, góc quay", ["n","số bước","góc quay"].every(function(n){ return vn.indexOf(n) >= 0; })],
+            ["Lệnh 1, 2: hỏi số cạnh và đặt n thành trả lời", has(x, function(b){ return b.op === "ask"; }) && has(x, function(b){ return b.op === "set" && b["var"] === "n" && b.v && b.v.r === "answer"; })],
+            ["Lệnh 3: nói thông báo bằng phép kết hợp", has(x, function(b){ return /say/.test(b.op) && b.v && b.v.r === "join"; })],
+            ["Lệnh 4, 5: số bước ← 900 / n, góc quay ← 360 / n", has(x, function(b){ return b.op === "set" && b["var"] === "số bước" && isDiv(b.v, 900); }) && has(x, function(b){ return b.op === "set" && b["var"] === "góc quay" && isDiv(b.v, 360); })],
+            ["Lệnh 6, 7, 8: lặp lại n {di chuyển số bước, xoay góc quay}", has(x, function(b){ return b.op === "repeat" && isV(b.n, "n") && b.body.some(function(c){ return c.op === "move" && isV(c.n, "số bước"); }) && b.body.some(function(c){ return /turn/.test(c.op) && isV(c.n, "góc quay"); }); })],
+            ["Chạy, nhập số cạnh: nhân vật vẽ đúng đa giác đều (thử 2 số khác nhau)", good.length >= 2 && good[0].answers[0] !== good[good.length - 1].answers[0]],
+            ["Lưu tệp DuongDi.sb3", x.log.indexOf("save") >= 0]]; }});
+      Scratch($("[data-sc3]"), {title:"Mô phỏng Scratch: kiểm tra Luyện tập 1 với r = 5", sprites:BO([{op:"set", "var":"r", v:5},{op:"sayFor", v:O("gt", V("r"), 0), n:2},{op:"sayFor", v:O("mul", O("mul", 2, 3.14), V("r")), n:2},{op:"sayFor", v:O("join", "Chu vi đường tròn là", O("mul", O("mul", 2, 3.14), V("r"))), n:3}]),
+        vars:["r"], expr:true, blocks:["say","sayFor","set","change","wait"], check:function(x){ return [["Chạy để kiểm tra đáp án câu 1", x.runs.length > 0]]; }});
+      function numsOf(r){ return (r.says || []).join(" ").match(/-?\d+(\.\d+)?/g) || []; }
+      function near(list, v){ return list.some(function(t){ return Math.abs(+t - v) <= Math.max(0.02, Math.abs(v) * 0.002); }); }
+      Scratch($("[data-sc4]"), {title:"Mô phỏng Scratch: chu vi và diện tích hình tròn", sprites:[{id:"meo", name:"Mèo", icon:"🐱", x:-120, y:-60, dir:90, body:[]}], expr:true, blocks:EXPR,
+        check:function(x){ var ok = function(f){ return x.runs.some(function(r){ var R = +r.answers[0]; if (!(R > 0)) return false; var ns = numsOf(r); return f(ns, R); }); };
+          var pi = function(ns, R, k){ return [3.14, 3.141592, Math.PI].some(function(p){ return near(ns, k(p, R)); }); };
+          return [["Nhập bán kính từ bàn phím (hỏi … và đợi)", has(x, function(b){ return b.op === "ask"; })],
+            ["Thông báo đúng chu vi đường tròn (2 × 3.14 × r)", ok(function(ns, R){ return pi(ns, R, function(p, r){ return 2 * p * r; }); })],
+            ["Thông báo đúng diện tích hình tròn (3.14 × r × r)", ok(function(ns, R){ return pi(ns, R, function(p, r){ return p * r * r; }); })]]; }});
+      Scratch($("[data-sc5]"), {title:"Mô phỏng Scratch: chương trình của em", sprites:[{id:"meo", name:"Mèo", icon:"🐱", x:-120, y:-60, dir:90, body:[]}], expr:true, blocks:EXPR, add:true,
+        check:function(x){ return [["Tạo ít nhất một biến", x.varNames.length > 0], ["Dùng biểu thức có phép toán", has(x, function(b){ return ["v","n"].some(function(k){ return b[k] && typeof b[k] === "object" && b[k].r !== "var" && b[k].r !== "answer"; }); })], ["Chạy chương trình", x.runs.length > 0]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

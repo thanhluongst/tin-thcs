@@ -1,6 +1,6 @@
 /* BẢNG TÍNH MÔ PHỎNG dùng chung cho các bài bảng tính (Tin 7 Bài 7, 8, 9,…)
    BangTinh(phần tử, tuỳ chọn) — chọn ô/vùng/hàng/cột, nhập, sửa, xoá, tự căn chỉnh, định dạng, độ rộng cột,
-   đổi tên trang tính, công thức (+ - * / ^, ngoặc, địa chỉ ô, vùng), hàm SUM AVERAGE MIN MAX COUNT,
+   đổi tên trang tính, công thức (+ - * / ^, & ghép xâu, so sánh = < > <= >= <>, ngoặc, địa chỉ ô, vùng), hàm SUM AVERAGE MIN MAX COUNT,
    tự động tính lại, sao chép công thức (địa chỉ tương đối), chèn/xoá hàng, cột, ẩn/hiện hàng, cột,
    gộp ô (Merge & Center), Format Cells (Number, Percentage, Date kiểu Việt Nam), cộng trừ ngày tháng,
    kẻ đường viền/khung (Border), màu nền, xem trước khi in (không có đường lưới).
@@ -90,7 +90,8 @@ window.BangTinh = function(box, opt){
       if ((m = /^["“”]([^"“”]*)["“”]/.exec(r))) { t.push({t:"s", v:m[1]}); i += m[0].length; continue; }
       if ((m = /^\$?([A-Za-z]{1,2})\$?(\d+)(?![A-Za-z(])/.exec(r))) { t.push({t:"r", c:colIdx(m[1]), r:+m[2] - 1}); i += m[0].length; continue; }
       if ((m = /^[A-Za-z][A-Za-z0-9.]*/.exec(r))) { t.push({t:"f", v:m[0].toUpperCase()}); i += m[0].length; continue; }
-      if ("+-*/^(),;:".indexOf(r[0]) >= 0) { t.push({t:r[0]}); i++; continue; }
+      if ((m = /^(<=|>=|<>)/.exec(r))) { t.push({t:m[0]}); i += 2; continue; }
+      if ("+-*/^(),;:&<>=".indexOf(r[0]) >= 0) { t.push({t:r[0]}); i++; continue; }
       if (r[0] === "#") { m = /^#[A-Z/0!?]+/.exec(r); E(m ? m[0] : "#SYNTAX"); }
       E("#SYNTAX");
     }
@@ -103,6 +104,11 @@ window.BangTinh = function(box, opt){
     function cell(c, r){ if (c >= C || r >= R || c < 0 || r < 0) return ""; var v = val(k(c, r), depth + 1); if (typeof v === "string" && v[0] === "#" && (d[k(c, r)] || "")[0] === "=") E(v); return v; }
     function scalar(x){ if (x && x.rg) { var g = x.rg; if (g[0] !== g[2] || g[1] !== g[3]) E("#VALUE!"); return cell(g[0], g[1]); } return x; }
     function num(x){ x = scalar(x); if (typeof x === "number") return x; if (x === "") return 0; if (isNum(x)) return +x; E("#VALUE!"); }
+    function txt(x){ x = scalar(x); return typeof x === "boolean" ? (x ? "TRUE" : "FALSE") : String(x); }
+    function cmp(){ var v = cat(); while (["=","<",">","<=",">=","<>"].some(peek)) { var o = t[p++].t, b = cat(), a1 = scalar(v), b1 = scalar(b), c;
+        if ((typeof a1 === "number" || isNum(a1)) && (typeof b1 === "number" || isNum(b1))) c = +a1 - +b1; else { var x1 = txt(a1).toLowerCase(), y1 = txt(b1).toLowerCase(); c = x1 < y1 ? -1 : x1 > y1 ? 1 : 0; }
+        v = o === "=" ? c === 0 : o === "<" ? c < 0 : o === ">" ? c > 0 : o === "<=" ? c <= 0 : o === ">=" ? c >= 0 : c !== 0; } return v; }
+    function cat(){ var v = expr(); while (peek("&")) { p++; var b = expr(); v = txt(v) + txt(b); } return v; }
     function expr(){ var v = term(); while (peek("+") || peek("-")) { var o = t[p++].t, b = term(); v = o === "+" ? num(v) + num(b) : num(v) - num(b); } return v; }
     function term(){ var v = pow(); while (peek("*") || peek("/")) { var o = t[p++].t, b = pow(); if (o === "*") v = num(v) * num(b); else { var y = num(b); if (y === 0) E("#DIV/0!"); v = num(v) / y; } } return v; }
     function pow(){ var v = unary(); while (peek("^")) { p++; var b = unary(); v = Math.pow(num(v), num(b)); } return v; }
@@ -113,7 +119,7 @@ window.BangTinh = function(box, opt){
       if (x.t === "n") { p++; return x.v; }
       if (x.t === "s") { p++; return x.v; }
       if (x.t === "r") { p++; if (peek(":")) { p++; var y = eat("r"); return {rg:[Math.min(x.c, y.c), Math.min(x.r, y.r), Math.max(x.c, y.c), Math.max(x.r, y.r)]}; } return {rg:[x.c, x.r, x.c, x.r]}; }
-      if (x.t === "(") { p++; var v = expr(); eat(")"); return v; }
+      if (x.t === "(") { p++; var v = cmp(); eat(")"); return v; }
       if (x.t === "f") { p++; if (!peek("(")) E("#NAME?"); p++; var args = [];
         if (!peek(")")) { args.push(expr()); while (peek(",") || peek(";")) { p++; args.push(expr()); } }
         eat(")"); return fn(x.v, args); }
@@ -134,7 +140,7 @@ window.BangTinh = function(box, opt){
       if (!ns.length) return 0;
       return name === "MIN" ? Math.min.apply(null, ns) : Math.max.apply(null, ns);
     }
-    var v = expr(); if (p < t.length) E("#SYNTAX");
+    var v = cmp(); if (p < t.length) E("#SYNTAX");
     v = scalar(v); if (v === "") return 0; return v;
   }
   function compile(src, depth){
@@ -150,6 +156,7 @@ window.BangTinh = function(box, opt){
     var n = 0; v.slice(1).replace(/(\$?)([A-Za-z]{1,2})(\$?)(\d+)(?![\w(:])/g, function(m0, d1, cl, d2, rw){ var kk = cl.toUpperCase() + rw; if (kk !== key && dateCell(kk, (depth || 0) + 1)) n++; return m0; });
     return n === 1; }
   function text(key){ var v = val(key), F = f[key] || {}, nf = F.nf;
+    if (typeof v === "boolean") return v ? "TRUE" : "FALSE";
     if (typeof v !== "number") return String(v);
     if (nf && nf.t === "pct") return fixed(v * 100, nf.dp, false) + "%";
     if (nf && nf.t === "num") return fixed(v, nf.dp, nf.sep);
