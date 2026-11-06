@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sử dụng bản mẫu tạo bài trình chiếu · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 4a. Soạn thảo văn bản và trình chiếu nâng cao</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>11a</b></div><h1><span class="sr-only">Bài 11a. </span>Sử dụng bản mẫu tạo bài trình chiếu</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Sử dụng được các bản mẫu (template).</li>
+        <li>Đưa được vào trong trang chiếu đường dẫn đến video hay tài liệu khác.</li>
+        <li>Tạo được các sản phẩm số phục vụ học tập, giao lưu và trao đổi thông tin.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Chọn bản mẫu, nhập nội dung và chỉnh sửa, thêm liên kết và lưu">
+      <span class="node">File/New: chọn bản mẫu</span>
+      <span class="node">Nhập nội dung, chỉnh sửa</span>
+      <span class="node io">Liên kết video, lưu tệp</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Bản mẫu</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> So sánh các trang chiếu</div>
+        <div class="reading">Em hãy quan sát hai trang chiếu trong Hình 11a.1, so sánh hai trang chiếu này với trang chiếu số 1 em đã tạo ở phần thực hành Bài 10a và đưa ra nhận xét.</div>
+        <figure class="fig"><img src="hinh/h111.jpg" alt="Hai trang chiếu Chào mừng các bạn đến với CLB Tin học: một trang nền cam có hình tên lửa và chồng sách, một trang nền hoa trắng lá xanh"><figcaption>Hình 11a.1. Các mẫu trang chiếu</figcaption></figure>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Bản mẫu trong phần mềm trình chiếu</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Làm thế nào để có thể tạo được bài trình chiếu đẹp, chuyên nghiệp?</div>
+        <div class="reading">Em hãy trả lời các câu hỏi sau: 1. Sử dụng phần mềm trình chiếu có tạo được các trang chiếu như Hình 11a.1 không? 2. Để tạo được các trang chiếu đó có cần nhiều thời gian không? 3. Làm thế nào để tạo được các trang chiếu đó?</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+        <div data-task="hd1c" data-n="3"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Mẫu định dạng và bản mẫu</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 51–52). Ở chương trình Tin học lớp 7, em đã biết cách áp dụng các <b>mẫu định dạng</b> (Themes) cho bài trình chiếu của mình. Mẫu định dạng là một tập hợp màu sắc, phông chữ và hiệu ứng hình ảnh được xác định trước giúp bài trình chiếu có một giao diện thống nhất, chuyên nghiệp. Nâng cao hơn, phần mềm trình chiếu còn cung cấp các <b>bản mẫu</b> (Template) có sẵn. Bản mẫu là một bản thiết kế của một hoặc một nhóm các trang chiếu được lưu dưới dạng một tệp có phần mở rộng là <b>.potx</b>. Bản mẫu chứa bố cục, màu sắc, phông chữ, hiệu ứng, kiểu nền và cả nội dung. Em có thể sử dụng các bản mẫu có sẵn, có thể tạo các bản mẫu tuỳ chỉnh của riêng mình rồi lưu trữ, tái sử dụng và chia sẻ chúng với những người khác. Bản mẫu thường được thiết kế để dùng cho một mục đích, một chủ đề cụ thể (ví dụ như bài trình bày về một chuyến du lịch, một dự án kinh doanh, một bài học trên lớp,…). Vì vậy, ngoài các yếu tố thiết kế về giao diện (màu sắc, phông chữ, hình nền, hiệu ứng) thì các nội dung gợi ý đi kèm trong bản mẫu cũng khá có ích cho em khi tạo bài trình chiếu của mình. Hình 11a.2 là ví dụ một bản mẫu về chủ đề du lịch: bản mẫu đã thiết kế sẵn giao diện các trang chiếu và gợi ý các chủ đề nên có trong bài.</div>
+        <figure class="fig"><img src="hinh/h112.jpg" alt="Bốn trang chiếu của bản mẫu du lịch: Thiết kế một chuyến đi, Chọn một trải nghiệm, Kinh phí, Phương tiện di chuyển"><figcaption>Hình 11a.2. Một bản mẫu về chủ đề du lịch</figcaption></figure>
+        <div class="reading">So sánh trên mô phỏng: bấm <b>📄 New</b>, chọn một mục trong <b>Themes</b> (mẫu định dạng), rồi bấm New lần nữa và chọn một <b>bản mẫu</b> (ví dụ Thiết kế một chuyến đi). Xem mỗi cách tạo ra những gì.</div>
+        <div data-tc1></div>
+        <div data-task="bm" data-n="1"></div>
+        <div data-task="ext" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 52</div>
+        <div data-task="p52" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Bản mẫu trong phần mềm trình chiếu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Tạo sản phẩm số phục vụ học tập, giao lưu và trao đổi thông tin</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> An toàn trong phòng thực hành</div>
+        <div class="reading">Em hãy tạo một bài trình chiếu về chủ đề <b>An toàn trong phòng thực hành</b> (phòng thực hành Tin học, thực hành Khoa học tự nhiên,…) với các yêu cầu sau: a) Sử dụng một bản mẫu có sẵn cho bài trình chiếu. b) Chỉnh sửa một vài thông số của bản mẫu để phù hợp hơn với nội dung. c) Đưa vào trang tiêu đề đường dẫn đến một video (hay tài liệu khác).</div>
+        <div class="reading"><b>Hướng dẫn</b> (SGK minh hoạ bằng Microsoft PowerPoint):<ul>
+          <li><b>a) Sử dụng một bản mẫu có sẵn cho bài trình chiếu.</b> Chọn <b>File/New</b> để tạo một bài trình chiếu mới. Phần mềm trình chiếu sẽ đưa ra các bản mẫu có sẵn được sắp xếp theo các chủ đề để em lựa chọn. Em chọn <b>Education</b> và chọn bản mẫu có tên <b>Lab Safety</b> (Hình 11a.3). Nội dung trong bản mẫu viết bằng tiếng Anh; em có thể sử dụng các công cụ dịch từ tiếng Anh sang tiếng Việt để hỗ trợ trong việc hiểu nội dung. Bản mẫu Lab Safety có nội dung tương tự như Hình 11a.4. Bản mẫu đưa ra các gợi ý rõ ràng về các nội dung cần có cho một bài trình chiếu với chủ đề An toàn phòng thực hành, bên cạnh đó còn có hướng dẫn chi tiết cách nhập nội dung, cách trình bày và sắp xếp. Em nhập nội dung bài trình chiếu theo hướng dẫn để hoàn thành bài trình chiếu.</li>
+          <li><b>b) Chỉnh sửa bản mẫu để phù hợp với nội dung.</b> Em có thể thay đổi phông chữ, cỡ chữ, màu nền, thêm hoặc bớt trang chiếu để phù hợp với nội dung trình chiếu. Kết quả bài trình chiếu có thể tương tự như Hình 11a.5.</li>
+          <li><b>c) Đưa vào trang tiêu đề đường dẫn đến một video.</b> Giả sử em muốn giới thiệu một video (có tên NhungSuCoPhongThucHanh.mp4) có nội dung cảnh báo về các tai nạn có thể xảy ra trong phòng thực hành. Em có thể đưa đường dẫn đến tệp video đó vào trang tiêu đề để mở trong khi trình chiếu: chèn vào trang chiếu một hình ảnh minh hoạ để đặt liên kết (hoặc chọn luôn hình ảnh chiếc bình màu vàng có sẵn trên trang chiếu); nháy chuột chọn hình ảnh minh hoạ, chọn <b>Insert/Links/Link</b>; trong cửa sổ <b>Insert Hyperlink</b>, chọn đường dẫn đến tệp NhungSuCoPhongThucHanh.mp4 (Hình 11a.6).</li>
+          <li><b>d) Lưu tệp.</b> Chọn <b>File/Save</b> để lưu tệp với tên <b>AnToanPhongThucHanh.pptx</b>.</li></ul></div>
+        <figure class="fig"><img src="hinh/h113.jpg" alt="Màn hình File New: chọn New, chọn Education trong các tìm kiếm gợi ý, chọn bản mẫu Lab Safety"><figcaption>Hình 11a.3. Các bước sử dụng một bản mẫu</figcaption></figure>
+        <figure class="fig"><img src="hinh/h114.jpg" alt="Tám trang chiếu của bản mẫu An toàn phòng thực hành, nền xanh đậm và trắng, có hình bình thí nghiệm, kính hiển vi, các ô gợi ý nội dung"><figcaption>Hình 11a.4. Bản mẫu An toàn phòng thực hành</figcaption></figure>
+        <div data-task="nv" data-n="1"></div>
+        <div class="reading">Làm trên mô phỏng: <b>📄 New</b> → <b>Education</b> → <b>An toàn phòng thực hành (Lab Safety)</b>. Gõ đè nội dung lên các dòng gợi ý. Để gắn liên kết: <b>nháy vào hình chiếc bình</b> ở trang tiêu đề rồi bấm <b>🔗 Link</b>. Bấm <b>▶ Trình chiếu</b> và nháy vào chiếc bình để thử mở video.</div>
+        <div data-tc2></div>
+        <figure class="fig"><img src="hinh/h115.jpg" alt="Bài trình chiếu kết quả An toàn phòng thực hành gồm 8 trang đã điền nội dung: trước khi vào phòng thực hành, trang phục, thực hành an toàn, khi xảy ra sự cố, những việc cần làm trước khi rời phòng"><figcaption>Hình 11a.5. Bài trình chiếu kết quả</figcaption></figure>
+        <figure class="fig"><img src="hinh/h116.jpg" alt="Cửa sổ Insert Hyperlink: Link to Existing File or Web Page, thư mục AnToan, chọn tệp NhungSuCoPhongThucHanh"><figcaption>Hình 11a.6. Chèn đường dẫn đến tệp video</figcaption></figure>
+        <div data-task="link" data-n="2"></div>
+        <div data-task="nv3" data-n="3"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Bản mẫu và liên kết</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div class="reading">Câu 2: làm tiếp trên mô phỏng ở phần Thực hành – chọn một đối tượng khác trên trang tiêu đề (ví dụ hình kính hiển vi) rồi gắn liên kết tới tệp <b>KiHieuCanhBao.docx</b>.</div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Bản mẫu cho bài trình chiếu lễ ra mắt CLB</div>
+        <div class="reading">Em hãy tìm một bản mẫu (có sẵn trong phần mềm trình chiếu hoặc được chia sẻ trên mạng) và sử dụng để tạo lại bài trình chiếu trong tệp LeRaMatCLBTinhoc.pptx. Thực hiện thay đổi các định dạng cần thiết để tạo một bản mẫu phù hợp với bài trình chiếu. Ghi lại tệp trình chiếu dưới dạng bản mẫu, tên tệp có dạng <b>.potx</b> để tái sử dụng và chia sẻ khi cần.<br>Phác thảo trên mô phỏng, cuối cùng bấm <b>💾 Save As</b> và chọn kiểu <b>PowerPoint Template (*.potx)</b>.</div>
+        <div data-tc3></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/trinhchieu.js?v=12"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var NOTE = "Nháy vào tiêu đề, một dòng nội dung hoặc một hình ảnh để chọn đối tượng. Undo để khôi phục.";
+      var has = function(x, l){ return x.log.indexOf(l) >= 0; }, any = function(x, re){ return x.log.some(function(l){ return re.test(l); }); };
+      TrinhChieu($("[data-tc1]"), {title:"Mô phỏng: File/New – mẫu định dạng hay bản mẫu?", tools:["new","design","show"], note:"Mỗi lần bấm New là tạo một bài trình chiếu mới.",
+        check:function(x){ return [["Tạo bài mới bằng một mẫu định dạng (Themes)", has(x, "theme-new")], ["Tạo bài mới bằng một bản mẫu", any(x, /^tpl:/)]]; }});
+      var FILES = ["NhungSuCoPhongThucHanh.mp4","KiHieuCanhBao.docx","NoiQuyPhongThucHanh.docx"];
+      var G = TrinhChieu.GUIDE;
+      function guideLeft(S){ return S.filter(function(s){ return s.tpl; }).reduce(function(n, s){ return n + (s.lines || []).filter(function(L){ return G.test(L.t.trim()) || /^Nguyên tắc thứ/.test(L.t.trim()); }).length + (G.test((s.sub || "").trim()) || /^Nhập tên/.test((s.sub || "").trim()) ? 1 : 0); }, 0); }
+      function links(s){ return s && s.links ? Object.keys(s.links).map(function(k){ return s.links[k]; }) : []; }
+      TrinhChieu($("[data-tc2]"), {title:"Mô phỏng PowerPoint: AnToanPhongThucHanh.pptx", tools:["new","slides","font","para","design","insert","link","show","save"], files:FILES, folder:"AnToan", saveName:"AnToanPhongThucHanh", note:NOTE,
+        check:function(x){ var S = x.slides, t = S[0];
+          return [["a) Dùng bản mẫu An toàn phòng thực hành (File/New → Education)", has(x, "tpl:lab")],
+            ["Trang tiêu đề có tên em (thay dòng “Nhập tên của bạn ở đây”)", has(x, "tpl:lab") && t.layout === "title" && !!(t.sub || "").trim() && !/^Nhập tên/.test(t.sub.trim())],
+            ["Thay hết các dòng gợi ý bằng nội dung", has(x, "tpl:lab") && guideLeft(S) === 0],
+            ["b) Chỉnh sửa bản mẫu (phông, cỡ chữ, màu nền, thêm/bớt trang)", has(x, "font") || has(x, "bg") || has(x, "new") || any(x, /^layout/)],
+            ["c) Trang tiêu đề có đường dẫn đến NhungSuCoPhongThucHanh.mp4", links(t).some(function(h){ return /NhungSuCoPhongThucHanh\.mp4$/i.test(h); })],
+            ["Trình chiếu và nháy mở liên kết", has(x, "openlink")],
+            ["d) Lưu tệp AnToanPhongThucHanh.pptx", any(x, /^save:pptx:AnToanPhongThucHanh$/i)],
+            ["Luyện tập 2: trang tiêu đề có thêm đường dẫn đến một tệp văn bản (.docx)", links(t).some(function(h){ return /\.docx?$/i.test(h); })]]; }});
+      TrinhChieu($("[data-tc3]"), {title:"Mô phỏng PowerPoint: bản mẫu cho lễ ra mắt CLB Tin học", tools:["new","slides","font","para","design","insert","hf","show","save"], saveName:"LeRaMatCLBTinhoc", note:NOTE,
+        check:function(x){ return [["Bắt đầu từ một bản mẫu hoặc mẫu định dạng (File/New)", any(x, /^tpl:/) || has(x, "theme-new")], ["Có ít nhất 4 trang", x.slides.length >= 4], ["Lưu dưới dạng bản mẫu (.potx)", any(x, /^save:potx:/)]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

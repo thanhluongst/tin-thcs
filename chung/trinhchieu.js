@@ -12,6 +12,9 @@
      Animation Pane (đổi thứ tự, xoá), Preview; Transitions: hiệu ứng chuyển trang, Apply To All.
    - Insert/Header & Footer (tools "hf"): hộp thoại Header and Footer – thẻ Slide (Date and time: Update automatically / Fixed, Slide number,
      Footer, Don't show on title slide; Apply / Apply to All) và thẻ Notes and Handouts (Header, Page number, Footer).
+   - File/New (tools "new"): thư viện bản mẫu (Template) theo chủ đề và mẫu định dạng (Themes); File/Save As (tools "save"): .pptx / .potx.
+   - Insert/Links/Link (tools "link"): hộp thoại Insert Hyperlink, gắn đường dẫn tới tệp (opt.files) hoặc địa chỉ web cho đối tượng đang chọn;
+     khi trình chiếu, nháy vào đối tượng có liên kết để mở.
    - opt.advice: bảng "Gợi ý của máy" cho trang đang chọn (độ tương phản chữ/nền, cỡ chữ, độ dài dòng, số màu, số phông).
    - Ctrl + nháy chọn nhiều trang rồi định dạng chữ: áp dụng cho khung cùng loại ở các trang đã chọn.
    Tuỳ chọn: title, note, slides[], tools[] ("slides","para","font","design","insert","anim","trans","hf","show"), doc{name, html}, extra[], advice, check(x)
@@ -72,6 +75,20 @@ var CSS = ".tc{border:1px solid var(--line);border-radius:12px;padding:10px;marg
  + ".tc .hfd input[type=text]{font:inherit;font-size:13px;border:1px solid #bbb;border-radius:3px;padding:2px 5px;width:100%;box-sizing:border-box;background:#fff;color:#222}.tc .hfd input:disabled{background:#f1f1f1;color:#888}"
  + ".tc .hfd .pv{border:1px solid #ccc;aspect-ratio:16/9;position:relative;background:#fafafa;max-width:160px}.tc .hfd .pv i{position:absolute;bottom:8%;height:9%;border:1px dashed #999}.tc .hfd .pv i.on{background:#333;border-color:#333}"
  + ".tc .hfd .ft2{display:flex;justify-content:flex-end;gap:6px;padding:8px 10px;border-top:1px solid #ddd}.tc .hfd .ft2 button{font:inherit;font-size:13px;border:1px solid #999;background:#f6f6f6;color:#222;border-radius:4px;padding:3px 12px;cursor:pointer}.tc .hfd .ft2 button.pr{border-color:#2f6fb3;box-shadow:inset 0 0 0 1px #2f6fb3}"
+ + ".tc .sl .lkb{position:absolute;left:1%;top:1%;z-index:6;background:rgba(255,255,255,.92);color:#1f5fbf;border:1px solid #9cc3f0;border-radius:4px;font:11px sans-serif;padding:2px 6px;max-width:70%;overflow-wrap:anywhere}"
+ + ".tc-show .lk{cursor:pointer;outline:2px dashed rgba(31,95,191,.0)}.tc-show .lk:hover{outline-color:rgba(31,95,191,.8)}"
+ + ".tc-show .lkp{position:fixed;inset:12% 15%;background:#000;color:#fff;border:2px solid #555;border-radius:8px;display:grid;place-items:center;text-align:center;font:16px sans-serif;z-index:10000;padding:20px}"
+ + ".tc .newp{border:1px solid #9aa4ae;background:#fff;color:#222;border-radius:6px;padding:8px 10px;display:grid;gap:8px;font-size:13px}"
+ + ".tc .newp .srch{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.tc .newp .srch input{flex:1;min-width:140px;font:inherit;border:1px solid #bbb;border-radius:4px;padding:3px 6px;background:#fff;color:#222}"
+ + ".tc .newp .cats button{font:inherit;font-size:12.5px;border:0;background:none;color:#1f5fbf;text-decoration:underline;cursor:pointer;padding:0 6px}.tc .newp .cats button.on{font-weight:700;color:#c4501b}"
+ + ".tc .newp .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}.tc .newp .card{border:2px solid #ddd;border-radius:6px;padding:4px;cursor:pointer;background:#fff;color:#222;font:inherit;font-size:12px;text-align:center}.tc .newp .card:hover{border-color:#c4501b}"
+ + ".tc .newp .card .mini{display:block;aspect-ratio:16/9;border:1px solid #bbb;font-size:7px;line-height:1.2;padding:3px;overflow:hidden;position:relative;text-align:left;margin-bottom:3px}"
+ + ".tc .lnk{border:1px solid #9aa4ae;background:#fff;color:#222;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:13px;max-width:620px}"
+ + ".tc .lnk .bd2{display:grid;grid-template-columns:110px 1fr;gap:8px;padding:8px 10px}@media (max-width:520px){.tc .lnk .bd2{grid-template-columns:1fr}}"
+ + ".tc .lnk .side{display:grid;gap:4px;align-content:start}.tc .lnk .side span{border:1px solid #ccc;border-radius:4px;padding:4px;font-size:12px;background:#f6f6f6}.tc .lnk .side span.on{background:#dbe8f7;border-color:#2f6fb3}"
+ + ".tc .lnk .fl{border:1px solid #bbb;min-height:90px;background:#fff;display:grid;align-content:start}.tc .lnk .fl button{font:inherit;font-size:12.5px;text-align:left;border:0;background:none;padding:3px 6px;cursor:pointer;color:#222}.tc .lnk .fl button.on{background:#cfe3ff}"
+ + ".tc .lnk input,.tc .sav input,.tc .sav select{font:inherit;font-size:13px;border:1px solid #bbb;border-radius:3px;padding:2px 5px;background:#fff;color:#222;width:100%;box-sizing:border-box}"
+ + ".tc .sav{border:1px solid #9aa4ae;background:#fff;color:#222;border-radius:6px;padding:8px 10px;display:grid;gap:6px;font-size:13px;max-width:460px}"
  + ".tc .adv{border:1px solid #d6d6d6;border-radius:8px;padding:6px 10px;font-size:13px;display:grid;gap:2px;background:#fbfbfb;color:#222}.tc .adv b{font-size:13px}.tc .adv .g{color:#1c7c54}.tc .adv .w{color:#b9480f}"
  + "@keyframes tr-split{from{clip-path:inset(0 50% 0 50%)}to{clip-path:inset(0)}}@keyframes tr-zoom{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}";
 function addCss(){ var s = document.getElementById("trinhchieu-css"); if (!s) { s = document.createElement("style"); s.id = "trinhchieu-css"; document.head.appendChild(s); } s.textContent = CSS; }
@@ -86,7 +103,32 @@ var THEMES = [
   {n:"Lá xanh", bg:"linear-gradient(135deg,#f3fbf4 0%,#d7efdc 100%)", tc:"#1e6b34", bc:"#1f2d22", ac:"#2e8b4a", font:"Times New Roman", band:"#2e8b4a"},
   {n:"Gỗ", bg:"linear-gradient(180deg,#fffaf1 0%,#f3e3c7 100%)", tc:"#7a3e10", bc:"#3a2a1a", ac:"#b5651d", font:"Georgia", band:"#8a5a2b"},
   {n:"Đêm", bg:"linear-gradient(135deg,#1d3557 0%,#2b5583 100%)", tc:"#ffd166", bc:"#f1f5f9", ac:"#ffd166", font:"Tahoma"},
-  {n:"Hoa đào", bg:"linear-gradient(135deg,#fff3f8 0%,#ffd6e6 100%)", tc:"#b0306a", bc:"#40202d", ac:"#d63384", font:"Verdana", band:"#d63384"}
+  {n:"Hoa đào", bg:"linear-gradient(135deg,#fff3f8 0%,#ffd6e6 100%)", tc:"#b0306a", bc:"#40202d", ac:"#d63384", font:"Verdana", band:"#d63384"},
+  {n:"Phòng thực hành", bg:"linear-gradient(90deg,#ffffff 0%,#ffffff 78.5%,#f2a20d 78.5%,#f2a20d 79.5%,#e8662a 79.5%,#e8662a 80.5%,#1f3b63 80.5%)", tc:"#d35400", bc:"#333333", ac:"#e8662a", font:"Georgia", pr:22},
+  {n:"Du lịch", bg:"linear-gradient(180deg,#fbfaf3 0%,#eef2dc 100%)", tc:"#6f8f17", bc:"#333333", ac:"#8db32b", font:"Verdana", band:"#8db32b"}
+];
+/* Bản mẫu (Template): bố cục + màu sắc + phông chữ + gợi ý nội dung */
+var GUIDE = /^\(.*\)$/;
+var TEMPLATES = [
+  {id:"lab", n:"An toàn phòng thực hành (Lab Safety)", cat:"Education", th:5, slides:[
+    {layout:"title", title:"AN TOÀN PHÒNG THỰC HÀNH", sub:"Nhập tên của bạn ở đây", bg:"#1f3b63", tf:{title:{color:"#ffffff"}, sub:{color:"#cfd8e3"}}, imgs:[{g:4, x:4, y:58, w:20, h:36}, {g:5, x:78, y:60, w:18, h:32}]},
+    {layout:"content", title:"Trước khi vào phòng thực hành", lines:[{t:"(Sử dụng khoảng trống này để liệt kê những việc cần làm trước khi đến phòng thực hành.)", lv:1}]},
+    {layout:"content", title:"Trang phục khi đến phòng thực hành", lines:[{t:"(Mô tả trang phục, dụng cụ bảo hộ cần có: áo choàng, kính bảo hộ, găng tay…)", lv:1}]},
+    {layout:"content", title:"Thực hành an toàn", lines:[{t:"Nguyên tắc thứ nhất", lv:1},{t:"Nguyên tắc thứ hai", lv:1},{t:"Nguyên tắc thứ ba", lv:1}], imgs:[{g:4, x:83, y:55, w:14, h:25}]},
+    {layout:"content", title:"Thực hành an toàn", lines:[{t:"Nguyên tắc thứ tư", lv:1},{t:"Nguyên tắc thứ năm", lv:1},{t:"Nguyên tắc thứ sáu", lv:1}]},
+    {layout:"content", title:"Khi xảy ra sự cố trong phòng thực hành", lines:[{t:"(Sử dụng khoảng trống này để nêu các quy tắc cần tuân theo khi xảy ra tai nạn.)", lv:1}]},
+    {layout:"content", title:"Những việc cần làm trước khi rời phòng thực hành", lines:[{t:"(Sử dụng khoảng trống này để nêu những việc cần làm trước khi rời phòng thực hành.)", lv:1}], imgs:[{g:5, x:82, y:58, w:15, h:27}]},
+    {layout:"title", title:"Hãy nhớ… An toàn là trên hết!", sub:"(Nhập thông tin liên hệ của bạn ở đây)", bg:"#1f3b63", tf:{title:{color:"#ffffff"}, sub:{color:"#cfd8e3"}}, imgs:[{g:4, x:76, y:8, w:20, h:36}]}]},
+  {id:"travel", n:"Thiết kế một chuyến đi", cat:"Presentations", th:6, slides:[
+    {layout:"title", title:"Thiết kế một chuyến đi", sub:"(Nhập tên chuyến đi, thời gian và người tham gia)", imgs:[{g:0, x:0, y:0, w:100, h:55, back:true}]},
+    {layout:"content", title:"Chọn một trải nghiệm", lines:[{t:"Du lịch mạo hiểm", lv:1},{t:"Du lịch nghỉ dưỡng", lv:1},{t:"Du lịch khám phá", lv:1}]},
+    {layout:"content", title:"Kinh phí", lines:[{t:"(Liệt kê các khoản: đi lại, ăn uống, sinh hoạt phí, giải trí…)", lv:1}]},
+    {layout:"content", title:"Phương tiện di chuyển", lines:[{t:"Ô tô", lv:1},{t:"Máy bay", lv:1},{t:"Tàu hoả", lv:1}]}]},
+  {id:"project", n:"Báo cáo dự án học tập", cat:"Education", th:1, slides:[
+    {layout:"title", title:"TÊN DỰ ÁN", sub:"(Nhập tên nhóm, lớp, trường)"},
+    {layout:"content", title:"Mục tiêu dự án", lines:[{t:"(Nêu 2–3 mục tiêu chính của dự án.)", lv:1}]},
+    {layout:"content", title:"Kế hoạch thực hiện", lines:[{t:"(Liệt kê các bước và thời gian thực hiện.)", lv:1}]},
+    {layout:"content", title:"Kết quả", lines:[{t:"(Trình bày sản phẩm, số liệu, hình ảnh.)", lv:1}]}]}
 ];
 /* Thư viện hình ảnh minh hoạ (vẽ bằng SVG, không cần tải về) */
 function svg(b){ return "data:image/svg+xml;charset=utf-8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="none">' + b + "</svg>"); }
@@ -96,9 +138,12 @@ var GALLERY = [
   {n:"Cây xanh", src: svg('<rect width="400" height="300" fill="#dff1ff"/><rect y="230" width="400" height="70" fill="#7cc36b"/><rect x="185" y="150" width="30" height="100" fill="#8a5a2b"/><circle cx="200" cy="120" r="70" fill="#2e8b4a"/><circle cx="150" cy="140" r="45" fill="#3fa35a"/><circle cx="250" cy="140" r="45" fill="#3fa35a"/><circle cx="200" cy="80" r="40" fill="#4cb868"/><circle cx="330" cy="50" r="25" fill="#ffd34d"/>')},
   {n:"Trường học", src: svg('<rect width="400" height="300" fill="#e8f4fd"/><rect y="240" width="400" height="60" fill="#9ccc65"/><rect x="90" y="110" width="220" height="130" fill="#f6e3b4" stroke="#b5651d" stroke-width="3"/><polygon points="80,115 200,50 320,115" fill="#c0392b"/><rect x="180" y="180" width="40" height="60" fill="#8a5a2b"/>' + [110,150,240,280].map(function(x){ return '<rect x="' + x + '" y="135" width="26" height="26" fill="#9cc3f0" stroke="#555"/>'; }).join("") + '<line x1="200" y1="50" x2="200" y2="20" stroke="#555" stroke-width="3"/><polygon points="200,20 230,28 200,36" fill="#d32f2f"/><circle cx="50" cy="220" r="28" fill="#2e8b4a"/><circle cx="350" cy="220" r="28" fill="#2e8b4a"/>')},
   {n:"Vườn hoa", src: svg('<rect width="400" height="300" fill="#fff8e7"/><rect y="200" width="400" height="100" fill="#8bc34a"/>' + [[60,150,"#e91e63"],[130,120,"#ff9800"],[200,145,"#9c27b0"],[270,115,"#f44336"],[340,150,"#ffc107"]].map(function(p){ var x = p[0], y = p[1]; return '<line x1="' + x + '" y1="' + y + '" x2="' + x + '" y2="260" stroke="#2e7d32" stroke-width="5"/>' + [0,72,144,216,288].map(function(a){ var r = a * Math.PI / 180; return '<circle cx="' + (x + 18 * Math.cos(r)).toFixed(1) + '" cy="' + (y + 18 * Math.sin(r)).toFixed(1) + '" r="14" fill="' + p[2] + '"/>'; }).join("") + '<circle cx="' + x + '" cy="' + y + '" r="10" fill="#ffeb3b"/>'; }).join(""))}
+  ,{n:"Bình thí nghiệm", src: svg('<rect width="400" height="300" fill="none"/><path d="M165 30h70v20h-10v70l80 140q8 18-12 20H107q-20-2-12-20l80-140V50h-10z" fill="#ffd34d" stroke="#1f3b63" stroke-width="8" stroke-linejoin="round"/><path d="M120 200h160l30 55q4 10-8 11H98q-12-1-8-11z" fill="#e8662a"/><circle cx="170" cy="230" r="10" fill="#fff" opacity=".8"/><circle cx="215" cy="215" r="7" fill="#fff" opacity=".8"/><circle cx="240" cy="240" r="12" fill="#fff" opacity=".8"/>')},
+  {n:"Kính hiển vi", src: svg('<rect width="400" height="300" fill="none"/><rect x="120" y="255" width="190" height="22" rx="6" fill="#e8662a"/><path d="M175 255v-30h90v30" fill="#1f3b63"/><rect x="200" y="40" width="34" height="130" rx="8" transform="rotate(-25 217 105)" fill="#4f81bd" stroke="#1f3b63" stroke-width="6"/><path d="M250 220q60-40 20-120" fill="none" stroke="#1f3b63" stroke-width="16" stroke-linecap="round"/><rect x="150" y="190" width="110" height="12" fill="#f2a20d"/>')}
 ];
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function tplSlides(T){ return T.slides.map(function(x){ var o = clone(x); o.theme = T.th; o.tf = o.tf || {}; o.imgs = o.imgs || []; o.anim = []; o.tpl = T.id; return o; }); }
 function hex(c){ var m = /#([0-9a-f]{6}|[0-9a-f]{3})\b/i.exec(String(c || "")); if (!m) return "#ffffff"; var h = m[1]; if (h.length === 3) h = h.replace(/./g, "$&$&"); return "#" + h.toLowerCase(); }
 function lum(c){ c = hex(c); var v = [1, 3, 5].map(function(i){ var x = parseInt(c.substr(i, 2), 16) / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; }
 function contrast(a, b){ var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
@@ -132,6 +177,7 @@ window.TrinhChieu = function(box, opt){
 
   /* ---------- Ribbon ---------- */
   var R = "";
+  if (has("new") || has("save")) R += '<span class="lb">File</span>' + (has("new") ? '<button type="button" data-a="fnew" title="File/New: tạo bài trình chiếu mới từ bản mẫu hoặc mẫu định dạng">📄 New</button>' : "") + (has("save") ? '<button type="button" data-a="fsave" title="File/Save As: lưu tệp">💾 Save As</button>' : "") + '<span class="sep"></span>';
   if (has("slides")) R += '<span class="lb">Slides</span><button type="button" data-a="new" title="New Slide: thêm trang mới (Title and Content)">➕ New Slide</button>'
     + '<select data-lay title="Layout: mẫu bố trí cho trang đang chọn"><option value="">Layout…</option><option value="title">Title Slide</option><option value="content">Title and Content</option><option value="only">Title Only</option></select>'
     + '<button type="button" data-a="delslide" title="Xoá trang đang chọn">🗑 Xoá trang</button><span class="sep"></span>';
@@ -157,6 +203,7 @@ window.TrinhChieu = function(box, opt){
   if (has("trans")) R += '<span class="lb">Transitions</span><select data-tr title="Hiệu ứng chuyển trang cho trang đang chọn"><option value="-">Chuyển trang…</option>' + TRANS.map(function(x){ return '<option value="' + x[0] + '">' + x[1] + "</option>"; }).join("") + "</select>"
     + '<select data-trd title="Duration: thời lượng chuyển trang"><option value="">Thời lượng…</option><option value="0.5">0,5 giây</option><option value="1">1 giây</option><option value="2">2 giây</option></select>'
     + '<button type="button" data-a="trall" title="Apply To All: áp dụng hiệu ứng chuyển trang này cho tất cả các trang">Apply To All</button><span class="sep"></span>';
+  if (has("link")) R += '<span class="lb">Insert · Links</span><button type="button" data-a="link" title="Insert/Links/Link: chèn đường dẫn cho đối tượng đang chọn">🔗 Link</button><span class="sep"></span>';
   if (has("hf")) R += '<span class="lb">Insert · Text</span><button type="button" data-a="hf" title="Insert/Header &amp; Footer: số trang, ngày giờ, chân trang">▤ Header &amp; Footer</button><button type="button" data-a="hf" title="Insert/Slide Number: mở hộp thoại Header and Footer"># Slide Number</button><button type="button" data-a="hf" title="Insert/Date &amp; Time: mở hộp thoại Header and Footer">📅 Date &amp; Time</button><span class="sep"></span>';
   if (has("show")) R += '<button type="button" data-a="show" title="Trình chiếu từ trang đầu (F5)">▶ Trình chiếu</button>';
   R += '<button type="button" data-a="reset">Làm lại</button>' + (opt.extra || []).map(function(x, i){ return '<button type="button" data-x="' + i + '" title="' + esc(x.title || "") + '">' + x.label + "</button>"; }).join("");
@@ -166,6 +213,7 @@ window.TrinhChieu = function(box, opt){
     + (opt.doc ? '<div class="dh">📄 <b>' + esc(opt.doc.name) + "</b> (tệp văn bản) – bôi đen phần cần sao chép rồi bấm <button type='button' data-a='copydoc'>Copy (Ctrl+C)</button></div><div class='doc' data-doc>" + opt.doc.html + "</div>" : "")
     + '<div class="rb">' + R + "</div>"
     + (has("hf") ? '<div class="hfd" data-hfd hidden></div>' : "")
+    + (has("new") ? '<div class="newp" data-newp hidden></div>' : "") + (has("link") ? '<div class="lnk" data-lnk hidden></div>' : "") + (has("save") ? '<div class="sav" data-sav hidden></div>' : "")
     + '<div class="pop" data-gal hidden><b>Insert Picture:</b> chọn một hình để chèn vào trang đang chọn' + GALLERY.map(function(g, i){ return '<img src="' + g.src + '" alt="' + g.n + '" title="' + g.n + '" data-g="' + i + '">'; }).join("") + '<button type="button" data-a="galx">Đóng</button></div>'
     + (has("anim") ? '<div class="pane" data-pane></div>' : "")
     + '<div class="wk"><div class="th" data-th></div><div data-ed></div></div>'
@@ -182,12 +230,13 @@ window.TrinhChieu = function(box, opt){
     return '<div class="ln' + (live && sel && i >= sel[0] && i <= sel[1] ? " sel" : "") + '" style="' + st + '"><span class="bu" style="color:' + (L.c || T.ac || F.color) + ';font-style:normal;font-weight:400">' + esc(mark(s.lines, i)) + "</span>"
       + (live ? '<textarea rows="1" data-li="' + i + '" placeholder="' + (i === 0 && s.lines.length === 1 ? "Click to add text" : "") + '" aria-label="Dòng ' + (i + 1) + '" style="font:inherit;color:inherit;text-align:inherit">' + esc(L.t) + "</textarea>" : '<span class="stx" style="flex:1">' + esc(L.t) + "</span>") + "</div>"; }
   function slideHtml(s, live){
-    var h = '<div class="sl' + (s.layout === "title" ? " ti" : "") + '" style="' + bgcss(s) + '">' + imgsHtml(s, true, live) + '<div class="tx">';
+    var Tp = th(s), h = '<div class="sl' + (s.layout === "title" ? " ti" : "") + '" style="' + bgcss(s) + '">' + imgsHtml(s, true, live) + '<div class="tx"' + (Tp.pr && !s.bg ? ' style="padding-right:' + Tp.pr + '%"' : "") + ">";
     var FT = tf(s, "title");
     h += live ? '<textarea rows="1" class="tt" data-tt placeholder="Click to add title" aria-label="Tiêu đề" style="' + css(FT) + '">' + esc(s.title) + "</textarea>" : '<div class="stx" data-o="title" style="' + css(FT) + 'padding:2px 4px">' + esc(s.title) + "</div>";
     if (s.layout === "title") { var FS = tf(s, "sub"); h += live ? '<textarea rows="2" class="sb" data-sb placeholder="Click to add subtitle" aria-label="Phụ đề" style="' + css(FS) + '">' + esc(s.sub) + "</textarea>" : '<div class="stx" data-o="sub" style="' + css(FS) + 'padding:2px 4px">' + esc(s.sub) + "</div>"; }
     if (s.layout === "content") h += '<div class="bd"' + (live ? "" : ' data-o="body"') + ">" + s.lines.map(function(L, i){ return lineHtml(s, i, live); }).join("") + "</div>";
     h += "</div>" + imgsHtml(s, false, live) + footHtml(s);
+    if (live && s.links && Object.keys(s.links).length) h += '<div class="lkb">' + Object.keys(s.links).map(function(o){ return "🔗 " + esc(oName(s, o)) + " → " + esc(s.links[o]); }).join("<br>") + "</div>";
     if (live && imgSel != null && s.imgs[imgSel]) { var im = s.imgs[imgSel];
       h += '<div class="fr" data-fr style="left:' + im.x + "%;top:" + im.y + "%;width:" + im.w + "%;height:" + im.h + '%"><i data-h="r" style="right:-6px;top:calc(50% - 5px);cursor:ew-resize"></i><i data-h="b" style="bottom:-6px;left:calc(50% - 5px);cursor:ns-resize"></i><i data-h="br" style="right:-6px;bottom:-6px;cursor:nwse-resize"></i><i data-h="t" style="top:-6px;left:calc(50% - 5px);cursor:ns-resize"></i><i data-h="l" style="left:-6px;top:calc(50% - 5px);cursor:ew-resize"></i></div>'; }
     return h + "</div>"; }
@@ -325,6 +374,9 @@ window.TrinhChieu = function(box, opt){
       clip = t; log.push("copy"); say("Đã sao chép (Copy) " + t.trim().split(/\s+/).length + " từ. Đặt con trỏ vào khung cần dán trên trang chiếu rồi bấm Paste (Ctrl+V)."); return; }
     if (a === "show") { show(0); return; }
     if (a === "hf") { openHF(); return; }
+    if (a === "fnew") { openNew(); return; }
+    if (a === "link") { openLink(); return; }
+    if (a === "fsave") { openSave(); return; }
     if (a === "preview") { show(cur, true); return; }
     if (a === "trall") { if (!s.tr) { say("Hãy chọn hiệu ứng chuyển trang cho trang này trước.", true); return; } snap(); S.forEach(function(x){ x.tr = {e: s.tr.e, d: s.tr.d}; }); log.push("trall"); say("Đã áp dụng hiệu ứng chuyển trang " + trName(s.tr.e) + " cho tất cả " + S.length + " trang (Apply To All)."); draw(); return; }
     if (a === "reset") { reset(); q("[data-gal]") && (q("[data-gal]").hidden = true); say("Đã làm lại từ đầu."); draw(); }
@@ -364,6 +416,60 @@ window.TrinhChieu = function(box, opt){
     hfd.addEventListener("change", function(ev){ var k = ev.target.dataset.hk; if (!k || !HF) return; var v = ev.target.checked;
       if (k === "auto") HF.auto = true; else if (k === "fix") HF.auto = false; else if (k === "nhdr") NH.hdr = v; else if (k === "nnum") NH.num = v; else if (k === "nfoot") NH.foot = v; else HF[k] = v; drawHF(); });
     hfd.addEventListener("input", function(ev){ var k = ev.target.dataset.hv; if (!k || !HF) return; var v = ev.target.value; if (k === "htext") NH.htext = v; else if (k === "nftext") NH.ftext = v; else HF[k] = v; }); }
+  /* ---------- File/New: bản mẫu và mẫu định dạng ---------- */
+  var NW = {cat: "", q: ""};
+  function openNew(){ var p = q("[data-newp]"); if (!p.hidden) { p.hidden = true; return; } NW = {cat: "", q: ""}; drawNew(); p.hidden = false; say("File/New: chọn một chủ đề gợi ý (ví dụ Education) hoặc gõ từ khoá để tìm bản mẫu."); }
+  function drawNew(){ var p = q("[data-newp]"), cats = ["Presentations","Themes","Education"];
+    var items = [];
+    TEMPLATES.forEach(function(T){ items.push({k: "t:" + T.id, n: T.n, cat: T.cat, mini: mini(tplSlides(T)[0]), tp: "Bản mẫu · " + T.slides.length + " trang có gợi ý nội dung"}); });
+    THEMES.forEach(function(T, i){ var b = blank("title"); b.theme = i; b.title = T.n; items.push({k: "m:" + i, n: T.n, cat: "Themes", mini: mini(b), tp: "Mẫu định dạng · chỉ có màu sắc, phông chữ"}); });
+    var kw = NW.q.trim().toLowerCase();
+    var show = items.filter(function(it){ return (!NW.cat || it.cat === NW.cat) && (!kw || (it.n + " " + it.cat).toLowerCase().indexOf(kw) >= 0); });
+    p.innerHTML = '<b style="font-size:15px">New</b><div class="srch"><input type="text" data-nq placeholder="Search for online templates and themes" value="' + esc(NW.q) + '"><button type="button" data-nx style="font:inherit;font-size:12px;border:1px solid #bbb;background:#fff;border-radius:4px;padding:2px 8px;cursor:pointer;color:#222">Đóng</button></div>'
+      + '<div class="cats">Suggested searches: <button type="button" data-nc="" class="' + (NW.cat ? "" : "on") + '">Tất cả</button>' + cats.map(function(c){ return '<button type="button" data-nc="' + c + '" class="' + (NW.cat === c ? "on" : "") + '">' + c + "</button>"; }).join("") + "</div>"
+      + '<div class="grid">' + (show.length ? show.map(function(it){ return '<button type="button" class="card" data-nk="' + it.k + '">' + it.mini + "<b>" + esc(it.n) + '</b><br><span style="color:#666">' + it.tp + "</span></button>"; }).join("") : "<i>Không tìm thấy. Thử từ khoá khác.</i>") + "</div>"; }
+  var np = q("[data-newp]");
+  if (np) { np.addEventListener("click", function(ev){ var c = ev.target.closest("[data-nc]"), k = ev.target.closest("[data-nk]");
+      if (ev.target.closest("[data-nx]")) { np.hidden = true; return; }
+      if (c) { NW.cat = c.dataset.nc; drawNew(); return; }
+      if (!k) return; snap(); var v = k.dataset.nk;
+      if (v.indexOf("t:") === 0) { var T = TEMPLATES.filter(function(x){ return x.id === v.slice(2); })[0]; S = tplSlides(T); log.push("tpl:" + T.id);
+        say("Đã tạo bài trình chiếu mới từ bản mẫu “" + T.n + "”: " + S.length + " trang có sẵn bố cục, màu sắc, phông chữ và gợi ý nội dung. Hãy thay các dòng gợi ý bằng nội dung của em."); }
+      else { var b = blank("title"); b.theme = +v.slice(2); S = [b]; log.push("theme-new"); say("Đã tạo bài trình chiếu mới với mẫu định dạng " + THEMES[b.theme].n + ": chỉ có màu sắc, phông chữ – không có sẵn trang, nội dung gợi ý."); }
+      cur = 0; ms = {}; sel = null; imgSel = null; np.hidden = true; draw(); });
+    np.addEventListener("input", function(ev){ if (ev.target.dataset.nq == null) return; NW.q = ev.target.value; var pos = ev.target.selectionStart; drawNew(); var i = np.querySelector("[data-nq]"); i.focus(); i.setSelectionRange(pos, pos); }); }
+  /* ---------- Insert/Links/Link ---------- */
+  var LK = null;
+  function openLink(){ var o = curObj(), s = S[cur]; LK = {o: o, file: "", addr: (s.links && s.links[o]) || ""};
+    var p = q("[data-lnk]"); drawLink(); p.hidden = false; say("Insert Hyperlink cho " + oName(s, o) + " của trang " + (cur + 1) + ". Chọn tệp trong thư mục rồi bấm OK."); }
+  function drawLink(){ var p = q("[data-lnk]"), files = opt.files || [], s = S[cur], has0 = s.links && s.links[LK.o];
+    p.innerHTML = '<div class="hd" style="display:flex;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600">Insert Hyperlink<button type="button" data-lb="cancel" style="border:0;background:none;font-size:16px;cursor:pointer;color:#222" aria-label="Đóng">✕</button></div>'
+      + '<div class="bd2"><div class="side"><b style="font-size:12px">Link to:</b><span class="on">Existing File or Web Page</span><span>Place in This Document</span><span>E-mail Address</span></div>'
+      + '<div style="display:grid;gap:6px"><div>Text to display: <i>&lt;&lt;' + esc(oName(s, LK.o)) + " trên trang " + (cur + 1) + "&gt;&gt;</i></div>"
+      + "<div>Look in: 📁 <b>" + esc(opt.folder || "AnToan") + '</b></div><div class="fl">' + (files.length ? files.map(function(f){ return '<button type="button" data-lf="' + esc(f) + '" class="' + (LK.addr.split(/[\\/]/).pop() === f ? "on" : "") + '">' + (/\.mp4$/i.test(f) ? "🎬 " : /\.docx?$/i.test(f) ? "📄 " : "📁 ") + esc(f) + "</button>"; }).join("") : "<i style='padding:4px'>(thư mục trống)</i>") + "</div>"
+      + '<label>Address: <input type="text" data-la value="' + esc(LK.addr) + '" placeholder="Đường dẫn tệp hoặc địa chỉ web, ví dụ https://…"></label></div></div>'
+      + '<div class="ft2" style="display:flex;justify-content:flex-end;gap:6px;padding:8px 10px;border-top:1px solid #ddd">' + (has0 ? '<button type="button" data-lb="remove">Remove Link</button>' : "") + '<button type="button" data-lb="ok" style="font:inherit;font-size:13px;border:1px solid #2f6fb3;background:#f6f6f6;color:#222;border-radius:4px;padding:3px 14px;cursor:pointer">OK</button><button type="button" data-lb="cancel" style="font:inherit;font-size:13px;border:1px solid #999;background:#f6f6f6;color:#222;border-radius:4px;padding:3px 12px;cursor:pointer">Cancel</button></div>'; }
+  var lp = q("[data-lnk]");
+  if (lp) { lp.addEventListener("click", function(ev){ var f = ev.target.closest("[data-lf]"), b = ev.target.closest("[data-lb]"); if (!LK) return;
+      if (f) { LK.addr = "..\\" + (opt.folder || "AnToan") + "\\" + f.dataset.lf; drawLink(); return; }
+      if (!b) return; var s = S[cur];
+      if (b.dataset.lb === "cancel") { lp.hidden = true; LK = null; say("Đã đóng hộp thoại (Cancel)."); return; }
+      if (b.dataset.lb === "remove") { snap(); delete s.links[LK.o]; lp.hidden = true; LK = null; log.push("unlink"); say("Đã xoá liên kết (Remove Link)."); draw(); return; }
+      var addr = lp.querySelector("[data-la]").value.trim(); if (!addr) { say("Hãy chọn tệp trong thư mục hoặc nhập địa chỉ.", true); return; }
+      snap(); s.links = s.links || {}; s.links[LK.o] = addr; log.push("link"); lp.hidden = true;
+      say("Đã gắn liên kết cho " + oName(s, LK.o) + " → " + addr + ". Khi trình chiếu, nháy chuột vào đối tượng này để mở."); LK = null; draw(); });
+    lp.addEventListener("input", function(ev){ if (ev.target.dataset.la != null && LK) LK.addr = ev.target.value; }); }
+  /* ---------- File/Save As ---------- */
+  function openSave(){ var p = q("[data-sav]"); if (!p.hidden) { p.hidden = true; return; }
+    p.innerHTML = "<b>Save As</b><label>File name: <input type=\"text\" data-sn value=\"" + esc(opt.saveName || "Presentation1") + "\"></label>"
+      + '<label>Save as type: <select data-st><option value="pptx">PowerPoint Presentation (*.pptx)</option><option value="potx">PowerPoint Template (*.potx)</option></select></label>'
+      + '<div style="display:flex;gap:6px;justify-content:flex-end"><button type="button" data-sb="ok" style="font:inherit;font-size:13px;border:1px solid #2f6fb3;background:#f6f6f6;border-radius:4px;padding:3px 14px;cursor:pointer;color:#222">Save</button><button type="button" data-sb="x" style="font:inherit;font-size:13px;border:1px solid #999;background:#f6f6f6;border-radius:4px;padding:3px 12px;cursor:pointer;color:#222">Cancel</button></div>';
+    p.hidden = false; }
+  var sp = q("[data-sav]");
+  if (sp) sp.addEventListener("click", function(ev){ var b = ev.target.closest("[data-sb]"); if (!b) return; if (b.dataset.sb === "x") { sp.hidden = true; return; }
+    var nm = sp.querySelector("[data-sn]").value.trim().replace(/\.(pptx|potx)$/i, "") || "Presentation1", ext = sp.querySelector("[data-st]").value;
+    log.push("save:" + ext + ":" + nm); sp.hidden = true;
+    say("Đã lưu tệp " + nm + "." + ext + (ext === "potx" ? " – bản mẫu: có thể dùng lại (File/New → Personal) và chia sẻ cho người khác." : ".")); check(); });
   function sel1(name, fn){ var el = q(name); if (el) el.addEventListener("change", function(){ var v = this.value; this.value = this.options[0].value; if (v === "" && this.options[0].value === "") return; if (v === "-") return; fn(v); }); }
   sel1("[data-lay]", function(v){ var s = S[cur]; snap(); var n = blank(v); n.title = s.title || ""; n.theme = s.theme; n.bg = s.bg; n.tf = s.tf; n.imgs = s.imgs;
     if (v === "title") n.sub = s.sub || (s.lines ? s.lines.map(function(L){ return L.t; }).join("\n") : ""); if (v === "content") n.lines = s.lines || (s.sub ? s.sub.split("\n").map(function(t){ return {t: t, lv: 1}; }) : [{t:"", lv:1}]);
@@ -394,6 +500,7 @@ window.TrinhChieu = function(box, opt){
     function paint(){ timers.forEach(clearTimeout); timers = []; var s = S[i]; gs = groups(s); gi = 0;
       ov.innerHTML = slideHtml(s, false) + '<div class="hint">' + (preview ? "Preview hiệu ứng trang " + (i + 1) : "Trang " + (i + 1) + "/" + S.length + " · nháy chuột, → hoặc Space: tiếp · ←: trang trước · Esc: thoát") + "</div>";
       (s.anim || []).forEach(function(a){ var el = ov.querySelector('[data-o="' + a.o + '"]'); if (el) el.style.visibility = "hidden"; });
+      Object.keys(s.links || {}).forEach(function(o){ var el = ov.querySelector('[data-o="' + o + '"]'); if (el) { el.classList.add("lk"); el.dataset.href = s.links[o]; el.title = s.links[o]; el.style.pointerEvents = "auto"; } });
       var sl = ov.querySelector(".sl"), td = s.tr ? s.tr.d : 0; if (s.tr) sl.style.animation = "tr-" + s.tr.e + " " + td + "s both";
       if (gs[0] && gs[0].auto) { runGroup(gs[0], td); gi = 1; }
       if (preview) auto(td); }
@@ -405,7 +512,10 @@ window.TrinhChieu = function(box, opt){
     function close(){ if (done) return; done = true; timers.forEach(clearTimeout); document.removeEventListener("keydown", key); ov.remove(); say(preview ? "Đã xem trước hiệu ứng (Preview)." : "Đã kết thúc trình chiếu."); check(); }
     function key(ev){ if (ev.key === "Escape") close(); else if (ev.key === "ArrowRight" || ev.key === " " || ev.key === "PageDown" || ev.key === "Enter") { ev.preventDefault(); next(); }
       else if (ev.key === "ArrowLeft" || ev.key === "PageUp") { ev.preventDefault(); if (!preview && i > 0) { i--; paint(); } } }
-    ov.addEventListener("click", function(){ if (preview) close(); else next(); });
+    ov.addEventListener("click", function(ev){ var pl = ev.target.closest(".lkp"); if (pl) { pl.remove(); return; }
+      var lk = ev.target.closest("[data-href]"); if (lk && !preview) { var h = lk.dataset.href, nm = h.split(/[\\/]/).pop(); log.push("openlink");
+        var d = document.createElement("div"); d.className = "lkp"; d.innerHTML = "<div>" + (/\.mp4$/i.test(h) ? "🎬 Đang phát video" : /\.docx?$/i.test(h) ? "📄 Đang mở tài liệu" : "🌐 Đang mở") + "<br><b>" + esc(nm) + '</b><br><small style="opacity:.7">(mô phỏng – nháy để đóng và quay lại trình chiếu)</small></div>'; ov.appendChild(d); return; }
+      if (preview) close(); else next(); });
     document.addEventListener("keydown", key); paint(); ov.focus(); }
   function needAnimSel(){ var s = S[cur]; if (paneSel != null && s.anim[paneSel]) return s.anim[paneSel]; var o = curObj(); for (var i = 0; i < s.anim.length; i++) if (s.anim[i].o === o) return s.anim[i];
     say("Hãy chọn một hiệu ứng trong Animation Pane (hoặc nháy vào đối tượng đã có hiệu ứng) trước.", true); return null; }
@@ -427,4 +537,5 @@ window.TrinhChieu = function(box, opt){
 };
 window.TrinhChieu.THEMES = THEMES;
 window.TrinhChieu.contrast = contrast;
+window.TrinhChieu.GUIDE = GUIDE;
 })();
