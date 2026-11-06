@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thông tin và dữ liệu · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 1. Máy tính và cộng đồng</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>1</b></div><h1><span class="sr-only">Bài 1. </span>Thông tin và dữ liệu</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nhận biết được sự khác nhau giữa thông tin và dữ liệu.</li>
+        <li>Phân biệt được thông tin và vật mang tin.</li>
+        <li>Nêu được ví dụ minh hoạ mối quan hệ giữa thông tin và dữ liệu.</li>
+        <li>Nêu được ví dụ minh hoạ tầm quan trọng của thông tin.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Thông tin và dữ liệu">
+      <span class="node">Dữ liệu</span>
+      <span class="node">Vật mang tin</span>
+      <span class="node io">Thông tin</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Thông tin và dữ liệu</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Tầm quan trọng của thông tin</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .td-ex{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;font-size:14px}
+      .td-ex>div{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--surface);display:grid;gap:4px;align-content:start}
+      .td-ex b{font-family:Lexend,sans-serif}
+      .td-d b{color:#1f6fb2}.td-t b{color:#c0392b}.td-v b{color:#2e7d32}
+      .td-sign{justify-self:center;background:#8a5a2b;padding:10px;border-radius:8px;box-shadow:inset 0 0 0 4px #6d4520}
+      .td-sign div{background:#3b2a1d;color:#f5f1e6;font-family:"Comic Sans MS","Segoe Print",cursive;font-size:20px;line-height:1.35;padding:12px 22px;border-radius:4px;text-align:center}
+      .td-bub{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;font-size:14px}
+      .td-bub div{border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:8px 12px;background:var(--surface)}
+      .td-rain{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+      .td-rain th,.td-rain td{border:1px solid var(--line);padding:4px 5px;text-align:right}
+      .td-rain th{background:var(--sunk);text-align:center}.td-rain td:first-child{text-align:left;font-weight:600;white-space:nowrap}
+      .td-rain td.lo{background:#cfe9ff;color:#0b3a66;font-weight:700}.td-rain td.hi{background:#ffd9cc;color:#7a1f00;font-weight:700}
+      .td-rain td.col{outline:2px solid var(--accent);outline-offset:-2px}
+      .td-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px}
+      .td-out{font-size:14px;min-height:1.4em}
+      .tbl-scroll{overflow-x:auto;width:100%}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Em nhìn thấy, nghe thấy gì?</div>
+        <div class="reading">Hằng ngày, em nhìn thấy những con số, dòng chữ, hình ảnh trong sách; nghe thấy tiếng chim hót, tiếng xe cộ trên đường. Các giác quan của em thu nhận những điều đó, não xử lí và chúng trở thành <b>hiểu biết</b> của em về thế giới xung quanh.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Thông tin và dữ liệu</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Thấy gì? Biết gì?</div>
+        <div class="reading">Đọc đoạn văn sau và cho biết: Bạn Minh đã thấy những gì và biết được điều gì để quyết định nhanh chóng qua đường?<br><i>“Trên đường từ nhà đến trường, Minh phải đi qua nhiều ngã tư đông đúc. Để đi qua các ngã tư này, Minh phải chú ý quan sát các đèn giao thông. Khi thấy đèn có màu xanh theo hướng di chuyển của mình và các xe bên chiều đèn đỏ dừng lại hết, Minh biết có thể qua đường an toàn và quyết định nhanh chóng qua đường trước khi đèn chuyển sang màu đỏ.”</i></div>
+        <div data-task="hd1" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Dữ liệu, thông tin, vật mang tin</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 5–6). Ở Hoạt động 1, những gì Minh <b>thấy</b> (đèn xanh, xe dừng) là <b>dữ liệu</b>; điều Minh <b>biết</b> (có thể qua đường an toàn) là <b>thông tin</b>; đèn giao thông là <b>vật mang tin</b>.<br>Bạn An xem mục dự báo thời tiết trên ti vi: các con số, văn bản, hình ảnh, âm thanh là dữ liệu; An biết “hôm nay trời nắng” là thông tin. Những hiểu biết của chúng ta có được từ sự lắng nghe, quan sát và trải nghiệm.<br><b>Mối quan hệ:</b> dữ liệu đem lại thông tin nên đôi khi người ta gọi dữ liệu là “thông tin”, vật chứa dữ liệu là vật mang tin. Tuy nhiên, với em bé 5 tuổi chưa đọc được bản tin thì dữ liệu đó không đem lại thông tin → sự hiểu biết mà thông tin đem lại <b>phụ thuộc vào người tiếp nhận</b>.</div>
+        <figure class="fig"><div class="td-sign"><div>Đảo Cò<br>Xuồng máy<br>40.000 đ<br>35 phút</div></div>
+          <figcaption>Tấm bảng ở bến xuồng: chữ và số trên bảng là dữ liệu, tấm bảng là vật mang tin (vẽ lại theo SGK)</figcaption></figure>
+        <div class="td-ex">
+          <div class="td-d"><b>Dữ liệu</b>Số, văn bản, hình ảnh, âm thanh.<br><small>VD: “Đảo Cò, xuồng máy, 40 000đ, 35 phút”</small></div>
+          <div class="td-t"><b>Thông tin</b>Hiểu biết về thế giới xung quanh và bản thân.<br><small>VD: giá vé đi Đảo Cò 40 000 đồng, mất 35 phút</small></div>
+          <div class="td-v"><b>Vật mang tin</b>Lưu trữ, truyền tải thông tin.<br><small>VD: tấm bảng, giấy viết, đĩa CD, thẻ nhớ</small></div>
+        </div>
+        <div data-task="pl" data-n="1"></div>
+        <div data-task="qh" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 6</div>
+        <div class="reading">1. Em hãy ghép mỗi mục ở cột A với một mục phù hợp ở cột B. 2. Mỗi dòng sau đây là thông tin hay dữ liệu: “16:00”, “0123456789”, “Hãy gọi cho tôi lúc 16 giờ theo số điện thoại 0123456789!”?</div>
+        <div data-task="c1m" data-n="1"></div>
+        <div data-task="c2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Thông tin và dữ liệu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Tầm quan trọng của thông tin</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Hỏi để có thông tin</div>
+        <div class="reading">Lớp em sắp tổ chức một buổi dã ngoại. Hãy thảo luận nhóm để đưa ra các câu hỏi giúp tìm thông tin để chuẩn bị cho buổi dã ngoại đó. Gợi ý từ các bạn trong tranh SGK:</div>
+        <div class="td-bub">
+          <div><b>Bình</b> tìm thông tin về phong cảnh để lập kế hoạch chụp ảnh.</div>
+          <div><b>Khoa</b> tìm thông tin về các trò chơi để quyết định chơi trò nào.</div>
+          <div><b>Dung</b> tìm thông tin thời tiết để biết nên chuẩn bị trang phục thế nào.</div>
+          <div><b>Minh</b> tìm thông tin về các di tích lịch sử để tham quan.</div>
+          <div><b>An</b> tìm thông tin về những món ăn nhẹ để chuẩn bị mang theo.</div>
+        </div>
+        <div data-task="hd2" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Thông tin quan trọng thế nào?</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 6). Bài học lịch sử về Chiến dịch Điện Biên Phủ có nhiều thông tin về địa điểm, thời gian, diễn biến trận đánh,… Qua đó em biết được tinh thần dũng cảm của quân và dân ta, truyền thống chống giặc ngoại xâm của dân tộc → <b>thông tin đem lại hiểu biết cho con người</b>.<br>Chuẩn bị đi sang nhà bạn Minh để học nhóm, An nghe mẹ nói: “Trời sắp mưa đấy nhé”. Thông tin đó làm An quay vào nhà cầm theo chiếc ô → <b>thông tin có khả năng làm thay đổi hành động của con người</b>.</div>
+        <div data-task="tq1" data-n="1"></div>
+        <div data-task="tq2" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Tầm quan trọng của thông tin</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Bảng lượng mưa trung bình</div>
+        <div class="reading">Bảng 1.1 cho biết lượng mưa trung bình hằng tháng (đơn vị: mm) của hai năm 2017, 2018 ở một số địa phương (theo Cục Thống kê). Em hãy xem bảng và trả lời các câu hỏi bên dưới.</div>
+        <figure class="fig" data-rain>
+          <div class="tbl-scroll"><table class="td-rain">
+            <thead><tr><th>Thành phố \ Tháng</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr></thead>
+            <tbody>
+              <tr><td>Hà Nội</td><td>43,8</td><td>11,2</td><td>73,2</td><td>39,0</td><td>157,2</td><td>200,7</td><td>438,6</td><td>298,3</td><td>248,3</td><td>177,1</td><td>23,8</td><td>65,9</td></tr>
+              <tr><td>Huế</td><td>201,0</td><td>126,6</td><td>34,1</td><td>119,2</td><td>127,9</td><td>134,2</td><td>258,7</td><td>78,2</td><td>216,6</td><td>325,9</td><td>484,5</td><td>560,5</td></tr>
+              <tr><td>Đà Nẵng</td><td>78,9</td><td>36,1</td><td>24,5</td><td>89,5</td><td>40,9</td><td>92,2</td><td>216,3</td><td>117,1</td><td>168,8</td><td>308,5</td><td>518,6</td><td>163,5</td></tr>
+            </tbody></table></div>
+          <figcaption>Bảng 1.1. Lượng mưa trung bình hằng tháng (theo SGK)</figcaption>
+          <div class="td-tools">
+            <span>Biến dữ liệu thành thông tin:</span>
+            <select data-city><option value="0">Hà Nội</option><option value="1">Huế</option><option value="2">Đà Nẵng</option></select>
+            <button class="btn" type="button" data-q="lo">Tháng ít mưa nhất?</button>
+            <button class="btn" type="button" data-q="hi">Tháng mưa nhiều nhất?</button>
+            <select data-month><option value="">So sánh tháng…</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+          </div>
+          <div class="td-out" aria-live="polite">Chọn một câu hỏi: máy sẽ đọc các con số (dữ liệu) và trả lời thành một câu (thông tin).</div>
+        </figure>
+        <div data-task="lta" data-n="1"></div>
+        <div data-task="ltb" data-n="2"></div>
+        <div data-task="ltc" data-n="3"></div>
+        <div data-task="ltd" data-n="4"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Thông tin và vật mang tin quanh em</div>
+        <div class="reading">1. Em hãy nêu ví dụ cho thấy thông tin giúp em: a) Có những lựa chọn trang phục phù hợp hơn. b) Đảm bảo an toàn khi tham gia giao thông. 2. Em hãy nêu ví dụ về vật mang tin giúp ích cho việc học tập của em.</div>
+        <div data-task="vd1a" data-n="1"></div>
+        <div data-task="vd1b" data-n="2"></div>
+        <div data-task="vd2" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var box = document.querySelector("[data-rain]"); if (!box) return;
+      var C = ["Hà Nội", "Huế", "Đà Nẵng"], rows = box.querySelectorAll("tbody tr"), out = box.querySelector(".td-out");
+      var D = [].map.call(rows, function(r){ return [].slice.call(r.cells, 1).map(function(td){ return parseFloat(td.textContent.replace(",", ".")); }); });
+      function f(x){ return String(x.toFixed(1)).replace(".", ","); }
+      function clear(){ box.querySelectorAll("td").forEach(function(td){ td.classList.remove("lo", "hi", "col"); }); }
+      box.addEventListener("click", function(e){
+        var b = e.target.closest("[data-q]"); if (!b) return;
+        clear(); var c = +box.querySelector("[data-city]").value, v = D[c], hi = b.dataset.q === "hi";
+        var m = hi ? Math.max.apply(null, v) : Math.min.apply(null, v), i = v.indexOf(m);
+        rows[c].cells[i + 1].classList.add(hi ? "hi" : "lo");
+        out.innerHTML = "<b>Thông tin:</b> " + C[c] + (hi ? " mưa nhiều nhất" : " ít mưa nhất") + " vào <b>tháng " + (i + 1) + "</b> (" + f(m) + " mm).";
+      });
+      box.querySelector("[data-month]").addEventListener("change", function(){
+        clear(); var t = +this.value; if (!t) { out.textContent = ""; return; }
+        var v = D.map(function(r){ return r[t - 1]; }), lo = Math.min.apply(null, v), hi = Math.max.apply(null, v);
+        D.forEach(function(r, c){ var td = rows[c].cells[t]; td.classList.add("col"); if (r[t - 1] === lo) td.classList.add("lo"); if (r[t - 1] === hi) td.classList.add("hi"); });
+        out.innerHTML = "<b>Thông tin:</b> Tháng " + t + ", <b>" + C[v.indexOf(lo)] + "</b> ít mưa nhất, <b>" + C[v.indexOf(hi)] + "</b> mưa nhiều nhất trong ba thành phố.";
+      });
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

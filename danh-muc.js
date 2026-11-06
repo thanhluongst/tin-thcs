@@ -13,7 +13,7 @@ window.GITHUB_USER = "thanhluongst";
 window.CHUONG_TRINH = [
   {lop: 6, chuDe: [
     {so: "1", ten: "Máy tính và cộng đồng", bai: [
-      {so: "1", ten: "Thông tin và dữ liệu"},
+      {so: "1", ten: "Thông tin và dữ liệu", tt: "dang"},
       {so: "2", ten: "Xử lí thông tin"},
       {so: "3", ten: "Thông tin trong máy tính"}]},
     {so: "2", ten: "Mạng máy tính và Internet", bai: [
