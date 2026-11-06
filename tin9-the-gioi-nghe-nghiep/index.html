@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tin học và thế giới nghề nghiệp · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 6. Hướng nghiệp với tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>17</b></div><h1><span class="sr-only">Bài 17. </span>Tin học và thế giới nghề nghiệp</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Trình bày được công việc đặc thù và sản phẩm chính của người làm tin học trong ít nhất ba nhóm nghề.</li>
+        <li>Nêu và giải thích được ý kiến cá nhân (thích hay không thích,…) về một nhóm nghề nào đó.</li>
+        <li>Nhận biết được đặc trưng cơ bản của nhóm nghề thuộc hướng Tin học ứng dụng và nhóm nghề thuộc hướng Khoa học máy tính.</li>
+        <li>Tìm hiểu được (thông qua Internet và những kênh thông tin khác) công việc ở một số doanh nghiệp, công ti có sử dụng nhân lực thuộc các nhóm ngành đã được giới thiệu.</li>
+        <li>Giải thích được cả nam và nữ đều có thể thích hợp với các ngành nghề trong lĩnh vực tin học.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Hai hướng nghề">
+      <span class="node">Khoa học máy tính</span>
+      <span class="node">Tin học ứng dụng</span>
+      <span class="node io">Nghề phù hợp với em</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Nghề nghiệp trong tin học</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Tin học và thế giới nghề nghiệp</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .nm-map{display:grid;gap:10px;font-size:14px}
+      .nm-c{justify-self:center;background:#f6b73c;color:#2a1a00;font-weight:700;border-radius:10px;padding:8px 16px;text-align:center}
+      .nm-dirs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+      .nm-d{display:grid;gap:8px;align-content:start}
+      .nm-h{font-weight:700;text-align:center;border-radius:8px;padding:5px 10px;color:#0d2a44}
+      .nm-k{background:#bfe0f7}.nm-u{background:#c9eecd;color:#123a17}
+      .nm-g{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-wrap:wrap;gap:5px;background:var(--surface)}
+      .nm-g b{flex-basis:100%;font-size:13.5px;color:#b0306a}
+      .nm-g span{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:13px;background:var(--bg)}
+      .nm-quiz{border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:8px}
+      .nm-qt{font-weight:700}.nm-qt small{font-weight:400;opacity:.8}
+      .nm-qs{display:grid;gap:4px;font-size:14px}.nm-qs label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+      .nm-res{display:grid;gap:4px;font-size:14px}
+      .nm-row{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) 2em;gap:8px;align-items:center}
+      .nm-bar{height:10px;border-radius:5px;background:var(--sunk);overflow:hidden}.nm-bar i{display:block;height:100%;background:var(--accent)}
+      @media (max-width:560px){.nm-row{grid-template-columns:minmax(0,1fr) 2em}.nm-row .nm-bar{grid-column:1 / -1;grid-row:2}}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Sở trường và nghề nghiệp</div>
+        <div class="reading">An, Minh và Khoa trao đổi về một dự án mà các bạn dự định thực hiện.<br><b>Khoa:</b> Tớ sẽ phác thảo một kịch bản để các bạn góp ý và chuyển kịch bản đó thành một phần mềm trò chơi trên máy tính.<br><b>Minh:</b> Làm thế nào để tạo nhân vật, trang phục, phong cảnh cho trò chơi?<br><b>An:</b> Bạn chỉ cần mô tả nhân vật, trang phục, phong cảnh, còn việc tạo ra các hình ảnh đó trên máy tính thì yên tâm, đã có tớ.<br><b>Minh:</b> Thật là tuyệt. Tớ sẽ đưa trò chơi lên Internet, duy trì sự hoạt động của nó và tập hợp các ý kiến phản hồi để cải tiến.<br>Chúng ta hãy cùng tìm hiểu xem sở trường của mỗi bạn có thể phát triển để trở thành một nghề trong tương lai được hay không nhé.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Nghề nghiệp trong tin học</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Công việc đặc thù của người làm tin học</div>
+        <div class="reading">Đoạn hội thoại ở hoạt động Khởi động cho biết ba bạn An, Minh, Khoa đang dự định cùng nhau làm một trò chơi trên máy tính. Mỗi bạn đều có sở thích và khả năng riêng. Em hãy trả lời các câu hỏi sau: 1. Ba người bạn của chúng ta, sau này có thể làm những nghề nghiệp gì trong lĩnh vực tin học? 2. Đặc thù công việc và sản phẩm chính của những nghề nghiệp đó là gì?</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Nhóm nghề và hướng nghề</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 88–89). Trong dự án làm phần mềm trò chơi, ba bạn An, Minh và Khoa, mỗi bạn nhận một việc. Khả năng và sở thích của các bạn đều có thể phát triển để được xã hội chấp nhận, tạo ra thu nhập cho mỗi bạn, trở thành nghề nghiệp. Chẳng hạn:<ul><li>Khoa có thể làm một nghề thuộc nhóm các <b>nhà chuyên môn về phân tích và phát triển phần mềm</b>. Những người làm việc trong lĩnh vực này nghiên cứu, phân tích các thành phần của hệ thống thông tin; thiết lập mục tiêu và các đặc điểm kĩ thuật của phần mềm; thiết kế, phát triển, thử nghiệm và bảo trì phần mềm; kiểm tra và tư vấn cải thiện hệ thống thông tin nhằm đáp ứng các yêu cầu cụ thể.</li><li>An có thể trở thành <b>nhà thiết kế đồ hoạ</b>, một nghề thuộc nhóm các nhà thiết kế đồ hoạ và truyền thông đa phương tiện. Công việc của nhóm nghề này là thiết kế nội dung để truyền đạt thông tin dưới hình thức hình ảnh, âm thanh, hoạt hình, video và các phương tiện nghe nhìn khác để sử dụng trong các trò chơi máy tính, phim ảnh, video âm nhạc, phương tiện in ấn và quảng cáo,…</li><li>Minh có thể trở thành một <b>nhà quản trị hệ thống</b>, một nghề thuộc nhóm các nhà chuyên môn về cơ sở dữ liệu và mạng máy tính. Nhóm nghề này có nhiệm vụ thiết kế, xây dựng, tích hợp và triển khai các hệ thống cơ sở dữ liệu; thiết lập chính sách và triển khai các kế hoạch bảo mật dữ liệu; thiết kế, xây dựng, cấu hình và quản trị mạng máy tính;…</li></ul>Trong những nhóm nghề trên, có những công việc đòi hỏi nghiên cứu khoa học về hệ thống máy tính, về thuật toán và cách biểu diễn thuật toán trong máy tính; sử dụng các mô hình toán học tạo ra những cách mới để biểu diễn, xử lí và trao đổi thông tin trong môi trường số. Đó là những nhóm nghề thuộc hướng <b>Khoa học máy tính</b> như nhà chuyên môn về phân tích và phát triển phần mềm và nhà chuyên môn về cơ sở dữ liệu và mạng máy tính. Những nhóm nghề không đòi hỏi nghiên cứu chuyên sâu về lí thuyết khoa học máy tính mà công việc chủ yếu là sử dụng phương tiện và công cụ công nghệ thông tin để giải quyết các vấn đề thực tế trong các lĩnh vực khác như y tế, giáo dục, thương mại, truyền thông,… là những nhóm nghề thuộc hướng <b>Tin học ứng dụng</b> như nhà thiết kế đồ hoạ và truyền thông đa phương tiện. Sơ đồ trong Hình 17.1 mô tả một số nhóm nghề và định hướng của những nhóm nghề đó.</div>
+        <figure class="fig"><div class="nm-map">
+          <div class="nm-c">Nghề nghiệp trong Tin học</div>
+          <div class="nm-dirs">
+            <div class="nm-d"><div class="nm-h nm-k">Khoa học máy tính</div>
+              <div class="nm-g"><b>Nhà chuyên môn về phân tích và phát triển phần mềm</b><span>Nhà lập trình các ứng dụng</span><span>Nhà phát triển web và truyền thông đa phương tiện</span><span>Nhà phân tích và thiết kế hệ thống</span><span>Nhà phát triển phần mềm</span></div>
+              <div class="nm-g"><b>Nhà chuyên môn về cơ sở dữ liệu và mạng máy tính</b><span>Nhà thiết kế cơ sở dữ liệu</span><span>Nhà quản trị cơ sở dữ liệu</span><span>Nhà khoa học dữ liệu</span><span>Nhà bảo mật (máy tính)</span><span>Nhà quản trị hệ thống</span></div></div>
+            <div class="nm-d"><div class="nm-h nm-u">Tin học ứng dụng</div>
+              <div class="nm-g"><b>Nhà thiết kế đồ hoạ và truyền thông đa phương tiện</b><span>Nhà thiết kế trò chơi máy tính</span><span>Nghệ sĩ kĩ thuật số</span><span>Nhà thiết kế đồ hoạ</span><span>Nhà thiết kế đa phương tiện</span><span>Nhà thiết kế trang web</span></div></div>
+          </div></div>
+          <figcaption>Hình 17.1. Một số nhóm nghề và nghề nghiệp trong lĩnh vực tin học (vẽ lại theo SGK)</figcaption></figure>
+        <div data-task="hg" data-n="1"></div>
+        <div data-task="dt" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 89</div>
+        <div class="reading">Sau khi tìm hiểu về nghề nghiệp trong lĩnh vực Tin học, em nhận thấy sở thích và khả năng của mình phù hợp với nhóm nghề nào? Tại sao?</div>
+        <div class="nm-quiz" data-quiz>
+          <div class="nm-qt">Em hợp với nhóm nghề nào? <small>(đánh dấu những điều đúng với em – chỉ để tham khảo)</small></div>
+          <div class="nm-qs"></div>
+          <div class="nm-res" aria-live="polite"></div>
+        </div>
+        <div data-task="p89" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Nghề nghiệp trong tin học</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Tin học và thế giới nghề nghiệp</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Tìm việc</div>
+        <div class="reading">Em hãy sử dụng những công cụ trên Internet như máy tìm kiếm, hội thoại thông minh, website của tổ chức, doanh nghiệp,… để tìm hiểu công việc ở một số doanh nghiệp và thực hiện các yêu cầu sau: 1. Nêu tên một doanh nghiệp hoạt động trong lĩnh vực tin học. Những công việc tin học nào phù hợp nhất với doanh nghiệp đó? 2. Nêu tên một doanh nghiệp sử dụng lao động tin học nhưng hoạt động trong lĩnh vực khác. Những công việc tin học được sử dụng trong doanh nghiệp đó là gì?</div>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Tin học trong các doanh nghiệp</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 89). Tin học xuất hiện trong nhiều cơ quan, tổ chức, doanh nghiệp,… bao gồm cả những doanh nghiệp hoạt động trong lĩnh vực tin học và những doanh nghiệp hoạt động trong lĩnh vực khác. Những công việc theo hướng <b>Khoa học máy tính</b> tập trung nhiều hơn ở các doanh nghiệp, công ti hoạt động trong lĩnh vực tin học, với các công việc như: phân tích, thiết kế hệ thống thông tin; xây dựng giải pháp kĩ thuật và công nghệ xử lí thông tin; phát triển các ứng dụng trí tuệ nhân tạo; nghiên cứu an ninh mạng và bảo mật thông tin;… Những công việc theo hướng <b>Tin học ứng dụng</b> xuất hiện ở hầu hết các cơ quan, tổ chức, doanh nghiệp với mức độ khác nhau, nhưng tập trung cao hơn ở những doanh nghiệp khai thác công nghệ thông tin, tạo ra giá trị mới trong kinh doanh như: quản lí thông tin và giao dịch khách hàng; thương mại điện tử; cung cấp dịch vụ phát thanh, truyền hình và báo điện tử; cung ứng dịch vụ đa phương tiện phục vụ quảng cáo, giải trí, truyền thông;…</div>
+        <div data-task="dn" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 3</b> Nữ giới và tin học</div>
+        <div class="reading">Bạn An đặt câu hỏi: “Những nghề liên quan đến tin học có phù hợp với nữ giới không?”. Em hãy giúp bạn An trả lời câu hỏi đó.</div>
+        <div data-task="hd3" data-n="1"></div>
+        <div class="reading">Có những định kiến cho rằng nữ giới gặp nhiều khó khăn khi làm việc trong lĩnh vực tin học do bị kì thị giới tính, không nhận được những lợi ích tương xứng với công sức. Ngoài ra, họ còn phải đối mặt với áp lực gia đình và xã hội khi làm việc trong một ngành nghề đầy cạnh tranh và thay đổi. Tuy nhiên, trên thực tế, nữ giới đóng vai trò quan trọng trong phát triển công nghệ. Đó là do họ có những ưu thế như khả năng ghi nhớ tốt, cẩn thận, chu đáo, giao tiếp tốt và chịu được áp lực lớn. Nữ giới cũng giúp gia tăng tính đa dạng và sáng kiến cho công việc. Ở Việt Nam, nữ giới làm việc trong lĩnh vực tin học cũng có cơ hội phát triển bản thân nhanh chóng và có mức lương cao, được tôn trọng và khuyến khích phát huy năng lực như nam giới. Những công việc tin học phù hợp với nữ giới có thể kể đến là: thiết kế đồ hoạ, truyền thông đa phương tiện, quản trị web, kiểm thử phần mềm, phân tích dữ liệu,…</div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 90</div>
+        <div class="reading">Em hãy chọn phát biểu đúng.</div>
+        <div data-task="p90" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Tin học và thế giới nghề nghiệp</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Tin học trong các lĩnh vực</div>
+        <div class="reading">1. Hãy kể tên hai công việc liên quan đến nghề nghiệp tin học trong lĩnh vực khác như y tế, giáo dục, nông nghiệp, xây dựng, giao thông,… 2. Em hãy nêu ví dụ về một nghề tin học mà theo em, lao động nữ có ưu thế. Giải thích cho câu trả lời của mình.</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Nghề tin học em quan tâm</div>
+        <div class="reading">1. Hãy kể về một nghề tin học mà em quan tâm. Nghề nghiệp đó theo định hướng Khoa học máy tính hay Tin học ứng dụng? 2. Em cần bổ sung những kiến thức hay kĩ năng nào để có thể trở thành người lao động trong nghề nghiệp mà em quan tâm ở Câu 1?</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var box = document.querySelector("[data-quiz]"); if (!box) return;
+      var G = ["Phân tích và phát triển phần mềm", "Cơ sở dữ liệu và mạng máy tính", "Thiết kế đồ hoạ và truyền thông đa phương tiện"];
+      var Q = [["Em thích giải các bài toán, tìm ra cách làm (thuật toán) cho một vấn đề.", 0], ["Em thích viết chương trình Scratch, Python,… và tìm lỗi để sửa.", 0], ["Em thích nghĩ ra một ứng dụng, trò chơi mới và lên kịch bản cho nó.", 0],
+        ["Em thích sắp xếp, phân loại, quản lí dữ liệu cho gọn gàng, dễ tìm.", 1], ["Em tò mò về cách các máy tính kết nối với nhau, cách cài đặt mạng Wi-Fi.", 1], ["Em quan tâm đến việc bảo vệ tài khoản, dữ liệu trước tin tặc.", 1],
+        ["Em thích vẽ, chỉnh sửa ảnh, thiết kế áp phích, trang trình chiếu.", 2], ["Em thích quay, dựng video, làm hoạt hình hoặc âm nhạc trên máy tính.", 2], ["Em quan tâm đến màu sắc, bố cục, cách trình bày một trang web cho đẹp.", 2]];
+      var KEY = "nm-quiz-tin9b17", saved = [];
+      try { saved = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
+      box.querySelector(".nm-qs").innerHTML = Q.map(function(q, i){ return '<label><input type="checkbox" data-i="' + i + '"' + (saved.indexOf(i) >= 0 ? " checked" : "") + '> <span>' + q[0] + "</span></label>"; }).join("");
+      function show(){ var on = [].slice.call(box.querySelectorAll("input:checked")).map(function(c){ return +c.dataset.i; }), n = [0, 0, 0];
+        on.forEach(function(i){ n[Q[i][1]]++; }); try { localStorage.setItem(KEY, JSON.stringify(on)); } catch (e) {}
+        var mx = Math.max.apply(null, n), res = box.querySelector(".nm-res");
+        res.innerHTML = G.map(function(g, k){ return '<div class="nm-row"><span>' + g + (mx && n[k] === mx ? " ⭐" : "") + '</span><span class="nm-bar"><i style="width:' + (n[k] / 3 * 100) + '%"></i></span><b>' + n[k] + "/3</b></div>"; }).join("")
+          + (mx ? '<div style="font-size:13px;opacity:.85">⭐ Nhóm nghề có nhiều điểm nhất có thể phù hợp với sở thích của em. Hãy dùng kết quả này làm gợi ý để trả lời câu hỏi bên dưới.</div>' : '<div style="font-size:13px;opacity:.85">Đánh dấu những điều đúng với em để xem gợi ý.</div>'); }
+      box.addEventListener("change", show); show();
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thực hành: Lập chương trình máy tính · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>16</b></div><h1><span class="sr-only">Bài 16. </span>Thực hành: Lập chương trình máy tính</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Sử dụng được cấu trúc tuần tự, rẽ nhánh, lặp trong mô tả thuật toán.</li>
+        <li>Giải thích được chương trình là bản mô tả thuật toán bằng ngôn ngữ mà máy tính có thể “hiểu” và thực hiện.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Các bước thực hành">
+      <span class="node">Tạo biến</span>
+      <span class="node">Mô tả lại thuật toán</span>
+      <span class="node">Tạo chương trình</span>
+      <span class="node io">Gỡ lỗi bằng dữ liệu kiểm thử</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Nhiệm vụ 1. Tính lương</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Nhiệm vụ 2. Tìm max</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Cấu trúc điều khiển cơ bản</div>
+        <div class="reading">Mỗi nhiệm vụ trong bài học này là giải một bài toán tin học mà sản phẩm là một chương trình máy tính. Các ngôn ngữ lập trình đều được trang bị những cấu trúc điều khiển cơ bản (tuần tự, rẽ nhánh và lặp). Vì vậy, việc mô tả thuật toán bằng cách chỉ sử dụng những cấu trúc điều khiển đó sẽ giúp em dễ dàng tạo ra những chương trình máy tính.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.1</span> Nhiệm vụ 1. Tính lương</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Yêu cầu</b> Lập chương trình tính lương</div>
+        <div class="reading">Theo thuật toán được mô tả ở Bài 15, em hãy lập chương trình tính và hiển thị tiền lương của một nhân viên khi biết mức lương (tiền lương trong một giờ làm việc) và số giờ làm việc trong tuần của họ bằng ngôn ngữ lập trình Scratch.</div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Hướng dẫn</b> a) Cài đặt thuật toán</div>
+        <div class="reading"><b>Bước 1.</b> Tạo các biến nhớ: biến đầu vào <i>muc_luong</i>, <i>tgian_laodong</i>; biến đầu ra <i>tien_luong</i>; biến trung gian <i>tgian_dmuc</i>, <i>tgian_vuot</i>, <i>luong_dmuc</i>, <i>luong_vuot</i>.</div>
+        <div data-task="bien" data-n="1"></div>
+        <div class="reading"><b>Bước 2.</b> Mô tả lại thuật toán theo ngôn ngữ lập trình. Vì chương trình là bản mô tả thuật toán theo quy tắc của ngôn ngữ lập trình nên đôi khi em phải hiệu chỉnh cách mô tả thuật toán để có thể cài đặt được bằng những công cụ của ngôn ngữ lập trình. Bước nhập dữ liệu tgian_laodong sử dụng cấu trúc lặp với điều kiện sau (Hình 16.1a) cần phải chuyển thành những câu lệnh sử dụng vòng lặp với điều kiện trước (Hình 16.1b) để phù hợp với cấu trúc lặp có sẵn trong ngôn ngữ lập trình trực quan (Hình 16.1c).</div>
+        <figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;font-size:14px">
+          <div style="border:1px solid var(--line);border-radius:8px;padding:8px 12px"><b>a) Lặp với điều kiện sau</b><br>lặp lại<br>&nbsp;&nbsp;&nbsp;&nbsp;nhập <i>tgian_laodong</i><br>cho đến khi 1 ≤ <i>tgian_laodong</i> ≤ 60</div>
+          <div style="border:1px solid var(--line);border-radius:8px;padding:8px 12px"><b>b) Lặp với điều kiện trước</b><br>nhập <i>tgian_laodong</i><br>lặp cho đến khi 1 ≤ <i>tgian_laodong</i> ≤ 60<br>&nbsp;&nbsp;&nbsp;&nbsp;nhập <i>tgian_laodong</i></div>
+          <div style="border:1px solid var(--line);border-radius:8px;padding:8px 12px"><b>c) Khối lệnh trong Scratch</b><br><span style="background:#5cb1d6;color:#fff;border-radius:6px;padding:2px 6px">hỏi … và đợi</span><br><span style="background:#ffab19;color:#fff;border-radius:6px;padding:2px 6px">lặp lại cho đến khi ⟨không phải ⟨⟨trả lời &lt; 1⟩ hoặc ⟨trả lời &gt; 60⟩⟩⟩</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="background:#5cb1d6;color:#fff;border-radius:6px;padding:2px 6px">hỏi … và đợi</span><br><span style="background:#ff8c1a;color:#fff;border-radius:6px;padding:2px 6px">đặt tgian_laodong thành trả lời</span></div>
+        </div><figcaption>Hình 16.1. Nhập số giờ lao động bằng vòng lặp với điều kiện trước (vẽ lại theo SGK)</figcaption></figure>
+        <div data-task="lap" data-n="2"></div>
+        <div class="reading"><b>Bước 3.</b> Tạo chương trình. Nhận dạng các khối lệnh trong Hình 16.2 tương ứng với từng phần của sơ đồ khối đã được trình bày trong Bài 15 (Hình 15.3) và lắp ghép chúng lại theo đúng thứ tự. Lưu ý: hệ số 1,5 trong sơ đồ thuật toán cần phải thay bằng 1.5 (sử dụng dấu chấm thay cho dấu phẩy ngăn cách phần nguyên và phần thập phân) trong chương trình.</div>
+        <div data-task="hs" data-n="3"></div>
+        <div data-task="ghep1" data-n="4"></div>
+        <div class="reading"><b>Trên mô phỏng:</b> chương trình dưới đây đã được lắp ghép từ các khối lệnh của Hình 16.2. Bấm lá cờ xanh để chạy và trả lời các câu hỏi của chương trình.</div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Hướng dẫn</b> b) Gỡ lỗi</div>
+        <div class="reading">Lập các bộ dữ liệu kiểm thử chương trình (Bảng 16.1). Mỗi bộ đại diện cho một tình huống dữ liệu để kiểm tra hoạt động của chương trình. Nếu chương trình hoạt động không đúng yêu cầu, chương trình đã gặp lỗi, cần phải sửa. Với mỗi bộ giá trị đầu vào (từ tình huống 1 đến tình huống 4), chương trình cần trả về đúng giá trị đầu ra. Bộ giá trị ở tình huống 5 đại diện cho trường hợp cần nhập lại dữ liệu như đã mô tả trong thuật toán. Bộ giá trị ở tình huống 6 cho thấy có những giá trị đầu vào chưa hợp lí. Em cần chính sửa chương trình để có một chương trình hoạt động tốt.</div>
+        <div class="tbl-wrap"><table class="tbl"><caption style="caption-side:top;font-weight:700;padding:4px">Bảng 16.1. Dữ liệu kiểm thử bài toán tính lương</caption><thead><tr><th rowspan="2">Tình huống</th><th colspan="2">Đầu vào</th><th>Đầu ra</th><th rowspan="2">Ghi chú</th></tr><tr><th>muc_luong</th><th>tgian_laodong</th><th>tien_luong</th></tr></thead><tbody>
+<tr><td>1</td><td>100</td><td>30</td><td>3000</td><td>tgian_laodong dưới định mức</td></tr>
+<tr><td>2</td><td>100</td><td>40</td><td>4000</td><td>tgian_laodong vừa đủ định mức</td></tr>
+<tr><td>3</td><td>100</td><td>50</td><td>5500</td><td>tgian_laodong vượt định mức</td></tr>
+<tr><td>4</td><td>100</td><td>60</td><td>7000</td><td>tgian_laodong vừa đạt mức tối đa</td></tr>
+<tr><td>5</td><td>100</td><td>70</td><td>Nhân viên đó làm việc bao nhiêu giờ?</td><td>Cần phải nhập lại tgian_laodong</td></tr>
+<tr><td>6</td><td>−100</td><td>50</td><td>Mức lương của nhân viên (theo giờ)?</td><td>Cần phải nhập lại muc_luong</td></tr>
+</tbody></table></div><p style="font-size:13px;margin:4px 0 0">(Ghi chú: đơn vị tiền là nghìn đồng, đơn vị thời gian là giờ.)</p>
+        <div class="reading">Bấm <b>🧪 Kiểm thử</b> để chạy chương trình với 6 tình huống của Bảng 16.1. Tìm tình huống bị lỗi rồi sửa chương trình (gợi ý: kiểm tra mức lương giống như đã kiểm tra số giờ) và kiểm thử lại.</div>
+        <div data-sc1></div>
+        <div data-task="gl1" data-n="1"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Nhiệm vụ 1. Tính lương</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Nhiệm vụ 2. Tìm giá trị lớn nhất</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Yêu cầu</b> Tìm giá trị lớn nhất</div>
+        <div class="reading">Tìm và hiển thị giá trị lớn nhất của một dãy số nguyên dương được nhập vào từ bàn phím. Số lượng các số trong dãy không được biết trước khi nhập dữ liệu, chỉ biết rằng quá trình nhập các số của dãy sẽ kết thúc khi nhập vào số 0.</div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Hướng dẫn</b> a) Cài đặt thuật toán</div>
+        <div class="reading"><b>Bước 1.</b> Tạo các biến: biến đầu vào <i>x</i>; biến đầu ra <i>max</i>. <b>Bước 2.</b> Tạo chương trình. Nhận dạng các khối lệnh trong Hình 16.3 tương ứng với từng phần của sơ đồ khối đã được trình bày trong bài trước (Hình 15.4) và lắp ghép chúng lại theo đúng thứ tự.</div>
+        <div data-task="ghep2" data-n="1"></div>
+        <div class="reading"><b>Trên mô phỏng:</b> chương trình chỉ mới có khối <i>Khi bấm vào lá cờ</i>. Em hãy tạo chương trình tìm giá trị lớn nhất theo thuật toán Hình 15.4 (biến <i>x</i>, <i>max</i> đã được tạo sẵn), dùng các khối: <i>đặt … thành</i>, <i>hỏi … và đợi</i>, <i>lặp lại cho đến khi</i>, <i>nếu … thì</i>, <i>nếu … thì … nếu không thì</i>, <i>nói … trong … giây</i>, <i>kết hợp</i>, <i>dừng lại tất cả</i>.</div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Hướng dẫn</b> b) Gỡ lỗi</div>
+        <div class="reading">Khi chạy chương trình, lần lượt nhập các số trong bộ dữ liệu kiểm thử (Bảng 16.2). Cần nhập từng số và nhấn phím Enter trước khi nhập số tiếp theo cho đến khi kết thúc bằng số 0. Mặc dù bài toán yêu cầu đầu vào là những số nguyên dương nhưng chương trình sẽ tốt hơn nếu phát hiện được và loại bỏ những dữ liệu không đúng yêu cầu. Với mỗi bộ giá trị đầu vào (từ tình huống 1 đến tình huống 4), chương trình cần trả về đúng giá trị đầu ra. Bộ giá trị ở tình huống 5 đại diện trường hợp không có số nguyên dương nào được nhập. Tình huống 6, 7 có những giá trị đầu vào không hợp lệ nhưng chương trình vẫn xử lí đúng. Bộ giá trị ở tình huống 8 cho thấy có những giá trị đầu vào không hợp lệ, dẫn đến kết quả sai. Việc chỉnh sửa chương trình để có một chương trình hoạt động tốt trong tình huống này là bài tập vận dụng.</div>
+        <div class="tbl-wrap"><table class="tbl"><caption style="caption-side:top;font-weight:700;padding:4px">Bảng 16.2. Dữ liệu kiểm thử bài toán tìm số lớn nhất</caption><thead><tr><th>Tình huống</th><th>Đầu vào</th><th>Đầu ra</th><th>Ghi chú</th></tr></thead><tbody>
+<tr><td>1</td><td>1 2 3 0</td><td>3</td><td>Dãy số tự nhiên tăng</td></tr>
+<tr><td>2</td><td>8 3 10 6 0</td><td>10</td><td>Dãy số ngẫu nhiên</td></tr>
+<tr><td>3</td><td>12 8 3 0</td><td>12</td><td>Dãy số giảm</td></tr>
+<tr><td>4</td><td>5 0</td><td>5</td><td>Dãy chỉ có một giá trị</td></tr>
+<tr><td>5</td><td>0</td><td>Không có dữ liệu!</td><td>Dãy không có dữ liệu</td></tr>
+<tr><td>6</td><td>8 −5 3 9 6 0</td><td>9</td><td>Dãy có số âm</td></tr>
+<tr><td>7</td><td>−8 −6 0</td><td>Không có dữ liệu!</td><td>Dãy không có số nguyên dương</td></tr>
+<tr><td>8</td><td>7 data 12 0</td><td>12</td><td>Dãy có dữ liệu chữ</td></tr>
+</tbody></table></div>
+        <div class="reading">Bấm <b>🧪 Kiểm thử</b> để chạy chương trình với 8 tình huống của Bảng 16.2.</div>
+        <div data-sc2></div>
+        <div data-task="t8" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Nhiệm vụ 2. Tìm giá trị lớn nhất</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Loại bỏ số âm</div>
+        <div class="reading">Bộ giá trị ở tình huống 6 (Bảng 16.2) cho thấy có những giá trị đầu vào chưa hợp lí. Em hãy chỉnh sửa chương trình để có một chương trình hoạt động tốt.</div>
+        <div class="reading"><b>Trên mô phỏng:</b> sửa chương trình ở Nhiệm vụ 2 (ngay phía trên) sao cho chỉ những số dương mới được đem so sánh với <i>max</i>, rồi kiểm thử lại – các tình huống 1 đến 7 vẫn phải đạt.</div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Bỏ qua dữ liệu dạng chữ</div>
+        <div class="reading">Ngôn ngữ lập trình trực quan không phân biệt dữ liệu đầu vào là dạng số hay dạng chữ. Vì vậy, chương trình được lập trong Nhiệm vụ 2 cho kết quả sai khi thực hiện với bộ dữ liệu ở tình huống 8 (Bảng 16.2). Em hãy sửa chương trình để có thể xác thực dữ liệu và bỏ qua dữ liệu dạng chữ trong bộ dữ liệu đầu vào.</div>
+        <div class="reading"><b>Gợi ý:</b> trong Scratch, một chữ (như <i>data</i>) đem cộng với 0 cho kết quả là 0, còn một số cộng với 0 vẫn bằng chính nó. Vì vậy điều kiện <i>⟨(x + 0) = x⟩</i> cho biết x có phải là số hay không. Sửa tiếp chương trình ở Nhiệm vụ 2 rồi kiểm thử lại – cả 8 tình huống phải đạt.</div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/scratch.js?v=7"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var V = function(n){ return {r:"var", name:n}; }, A = {r:"answer"}, O = function(op, a, b){ return {r:op, a: b === undefined ? [a] : [a, b]}; };
+      var MEO = function(body){ return [{id:"meo", name:"Mèo", icon:"🐱", x:-110, y:-70, dir:90, body:body}]; };
+      var CTL = ["say","sayFor","ask","set","change","wait","repeat","if","ifElse","untilB","stop"];
+      var allPass = function(x){ return !!x.tests && x.tests.length && x.tests.every(function(t){ return t.pass; }); };
+      var pass = function(x, i){ return !!x.tests && !!x.tests[i] && x.tests[i].pass; };
+      var QL = "Mức lương của nhân viên (theo giờ)?", QG = "Nhân viên đó làm việc bao nhiêu giờ?";
+      var LUONG = [{op:"ask", v:QL},{op:"set", "var":"muc_luong", v:A},{op:"ask", v:QG},
+        {op:"untilB", cond:O("not", O("or", O("lt", A, 1), O("gt", A, 60))), body:[{op:"ask", v:QG}]},
+        {op:"set", "var":"tgian_laodong", v:A},
+        {op:"ifElse", cond:O("gt", V("tgian_laodong"), 40), body:[{op:"set", "var":"tgian_dmuc", v:40},{op:"set", "var":"tgian_vuot", v:O("sub", V("tgian_laodong"), 40)}], body2:[{op:"set", "var":"tgian_dmuc", v:V("tgian_laodong")},{op:"set", "var":"tgian_vuot", v:0}]},
+        {op:"set", "var":"luong_dmuc", v:O("mul", V("muc_luong"), V("tgian_dmuc"))},
+        {op:"set", "var":"luong_vuot", v:O("mul", O("mul", V("muc_luong"), V("tgian_vuot")), 1.5)},
+        {op:"set", "var":"tien_luong", v:O("add", V("luong_dmuc"), V("luong_vuot"))},
+        {op:"sayFor", v:O("join", "Tiền lương theo tuần = ", V("tien_luong")), n:5},{op:"stop"}];
+      var luong = function(r, v){ return r.ended && r.says.some(function(s){ return String(s).replace(/\s+/g, "") === ("Tiềnlươngtheotuần=" + v); }); };
+      var nq = function(r, q){ return r.asks.filter(function(a){ return String(a) === q; }).length; };
+      var T161 = [[100,30,3000],[100,40,4000],[100,50,5500],[100,60,7000]].map(function(c, i){ return {name:"Tình huống " + (i + 1) + ": " + c[0] + "; " + c[1], answers:[c[0], c[1]], expect:"Tiền lương theo tuần = " + c[2], ok:function(r){ return luong(r, c[2]); }}; })
+        .concat([{name:"Tình huống 5: 100; 70 (rồi nhập lại 40)", answers:[100,70,40], expect:"Hỏi lại số giờ; Tiền lương theo tuần = 4000", ok:function(r){ return nq(r, QG) >= 2 && luong(r, 4000); }},
+          {name:"Tình huống 6: −100; (nhập lại 100); 50", answers:[-100,100,50], expect:"Hỏi lại mức lương; Tiền lương theo tuần = 5500", ok:function(r){ return nq(r, QL) >= 2 && luong(r, 5500); }}]);
+      Scratch($("[data-sc1]"), {title:"Mô phỏng Scratch: chương trình tính lương (Hình 16.2)", sprites:MEO(LUONG), vars:["muc_luong","tgian_laodong","tien_luong","tgian_dmuc","tgian_vuot","luong_dmuc","luong_vuot"], expr:true, blocks:CTL, lineNo:true, tests:T161, save:"TinhLuong.sb3",
+        check:function(x){ return [["Chạy chương trình (bấm lá cờ xanh)", x.runs.length > 0], ["Kiểm thử, phát hiện tình huống bị lỗi", x.log.some(function(l){ return /^test:/.test(l); })], ["Sửa chương trình: kiểm thử đạt cả 6 tình huống", allPass(x)]]; }});
+      var said = function(r, t){ return r.ended && r.says.some(function(s){ return String(s).replace(/\s+/g, " ").trim() === t; }); };
+      var T162 = [["1 2 3 0", [1,2,3,0], "3"],["8 3 10 6 0", [8,3,10,6,0], "10"],["12 8 3 0", [12,8,3,0], "12"],["5 0", [5,0], "5"],["0", [0], null],["8 −5 3 9 6 0", [8,-5,3,9,6,0], "9"],["−8 −6 0", [-8,-6,0], null],["7 data 12 0", [7,"data",12,0], "12"]]
+        .map(function(c, i){ var exp = c[2] === null ? "Không có dữ liệu!" : "Số lớn nhất là " + c[2]; return {name:"Tình huống " + (i + 1) + ": " + c[0], answers:c[1], expect:exp, ok:function(r){ return said(r, exp); }}; });
+      function find(body, f){ var r = false; (function w(a){ a.forEach(function(b){ if (f(b)) r = true; if (b.body) w(b.body); if (b.body2) w(b.body2); }); })(body); return r; }
+      function uses(c, op){ var r = false; (function w(e){ if (!e || typeof e !== "object") return; if (e.r === op) r = true; (e.a || []).forEach(w); })(c); return r; }
+      function cmp0(c){ var r = false; (function w(e){ if (!e || typeof e !== "object") return; if ((e.r === "gt" || e.r === "lt") && e.a.some(function(z){ return z && z.r === "var" && z.name === "x"; }) && e.a.some(function(z){ return String(z) === "0"; })) r = true; (e.a || []).forEach(w); })(c); return r; }
+      Scratch($("[data-sc2]"), {title:"Mô phỏng Scratch: chương trình tìm giá trị lớn nhất", sprites:MEO([]), vars:["x","max"], expr:true, blocks:CTL, lineNo:true, tests:T162, save:"TimMax.sb3",
+        check:function(x){ var b = x.sprites[0].body, ok17 = [0,1,2,3,4,5,6].every(function(i){ return pass(x, i); });
+          return [["Nhiệm vụ 2: kiểm thử đạt các tình huống 1 đến 5", [0,1,2,3,4].every(function(i){ return pass(x, i); })],
+            ["Luyện tập: thêm điều kiện so sánh x với 0 để loại bỏ số âm, tình huống 1 đến 7 vẫn đạt", ok17 && find(b, function(k){ return (k.op === "if" || k.op === "ifElse") && cmp0(k.cond); })],
+            ["Vận dụng: bỏ qua dữ liệu dạng chữ, đạt cả 8 tình huống", allPass(x) && x.tests.length === 8]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
