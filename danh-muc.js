@@ -84,7 +84,7 @@ window.CHUONG_TRINH = [
     {so: "5", ten: "Giải quyết vấn đề với sự trợ giúp của máy tính", bai: [
       {so: "12", ten: "Từ thuật toán đến chương trình", tt: "dang"},
       {so: "13", ten: "Biểu diễn dữ liệu", tt: "dang"},
-      {so: "14", ten: "Cấu trúc điều khiển"},
+      {so: "14", ten: "Cấu trúc điều khiển", tt: "dang"},
       {so: "15", ten: "Gỡ lỗi"}]},
     {so: "6", ten: "Hướng nghiệp với tin học", bai: [
       {so: "16", ten: "Tin học với nghề nghiệp", slug: "tin-hoc-nghe-nghiep"}]}

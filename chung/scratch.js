@@ -8,6 +8,7 @@
    - opt.expr: ô giá trị nhận biến / phép toán lồng nhau (nút ▾): + − × / chia lấy dư, làm tròn, kết hợp, > < =, và, hoặc, không phải;
      khối Hiển thị (nói, nói … trong … giây), Cảm biến (hỏi … và đợi, trả lời), Các biến số (tạo biến, đặt … thành, thay đổi … một lượng);
      ô theo dõi biến trên sân khấu. opt.vars: tên các biến có sẵn.
+   - Điều khiển (Bài 14): nếu ⟨⟩ thì, nếu ⟨⟩ thì … nếu không thì, liên tục, lặp lại cho đến khi ⟨⟩ (untilB), dừng lại tất cả; phép toán lấy ngẫu nhiên từ … đến ….
    Tuỳ chọn: title, note, sprites:[{id, name, icon, x, y, dir, color, hat, body, fixed}], scene ("xe": xe và hòn đá), blocks (danh sách khối được dùng),
              add (cho thêm nhân vật), flow (hiện sơ đồ khối), slow (chạy chậm mặc định), save (tên tệp .sb3), check(x)
    x = {sprites:[{id, name, hat, body}], runs:[{id, hat, segs:[[x1,y1,x2,y2,màu]], end:{x,y,dir}, dist}], log:[…]}
@@ -49,6 +50,8 @@ var CSS = ".scx{border:1px solid var(--line);border-radius:12px;padding:10px;mar
  + ".scx .nv{display:flex;gap:4px}.scx .nv input{min-width:0;flex:1;font:inherit;font-size:12.5px;border:1px solid #ccc;border-radius:6px;padding:2px 5px}.scx .nv button{font:inherit;font-size:12px;border:1px solid #ccc;background:#fff;border-radius:6px;padding:2px 6px;cursor:pointer;color:#222}"
  + ".scx .askb{display:flex;gap:6px;background:#fff;border:2px solid #5cb1d6;border-radius:20px;padding:4px 6px}.scx .askb input{flex:1;min-width:0;font:inherit;font-size:14px;border:0;outline:none;padding:3px 6px}.scx .askb button{border:0;background:#5cb1d6;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer;font-weight:700}"
  + ".scx .rmenu{display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:#fff;border:1px solid #c7d3ea;border-radius:8px;padding:6px;color:#222;font-size:12.5px}.scx .rmenu b{width:100%;font-size:12px;color:#555}.scx .rmenu button{font:600 12.5px sans-serif;border:0;color:#fff;border-radius:12px;padding:3px 10px;cursor:pointer}"
+ + ".scx .hexs{display:inline-flex;align-items:center;min-width:34px;height:20px;background:rgba(0,0,0,.18);clip-path:polygon(12% 0,88% 0,100% 50%,88% 100%,12% 100%,0 50%);justify-content:center}"
+ + ".scx .mid{border-radius:0!important;display:flex}"
  + ".scx .lib{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px;background:#fff;border:1px solid #c7d3ea;border-radius:8px;padding:6px;color:#222}.scx .lib button{font-size:20px;border:1px solid #ccc;background:#fff;border-radius:8px;padding:2px 8px;cursor:pointer}";
 function addCss(){ var s = document.getElementById("scratch-css"); if (!s) { s = document.createElement("style"); s.id = "scratch-css"; document.head.appendChild(s); } s.textContent = CSS; }
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
@@ -70,12 +73,15 @@ function cmpv(a, b){ if (isNumStr(a) && isNumStr(b)) return num(a) - num(b); var
 function truth(x){ if (typeof x === "boolean") return x; var t = str(x).toLowerCase(); return !(t === "" || t === "0" || t === "false"); }
 function etext(x){ if (x == null) return ""; if (typeof x !== "object") return isNumStr(x) ? str(x) : "“" + x + "”"; if (x.r === "var") return x.name; if (x.r === "answer") return "trả lời";
   var a = function(i){ return etext(x.a[i]); };
-  if (x.r === "round") return "làm tròn(" + a(0) + ")"; if (x.r === "not") return "không phải (" + a(0) + ")"; if (x.r === "join") return "kết hợp(" + a(0) + ", " + a(1) + ")";
+  if (x.r === "round") return "làm tròn(" + a(0) + ")"; if (x.r === "rand") return "ngẫu nhiên(" + a(0) + ", " + a(1) + ")"; if (x.r === "not") return "không phải (" + a(0) + ")"; if (x.r === "join") return "kết hợp(" + a(0) + ", " + a(1) + ")";
   return "(" + a(0) + " " + OPS[x.r][0] + " " + a(1) + ")"; }
-function isC(op){ return op === "repeat" || op === "until"; }
-function col(op){ return /move|turn/.test(op) ? C.mo : /repeat|wait|until/.test(op) ? C.ct : /say/.test(op) ? C.lo : op === "ask" ? C.se : /set|change/.test(op) ? C.va : C.pen; }
-function slotHtml(v, path, env){
+function isC(op){ return /^(repeat|until|if|ifElse|forever|untilB)$/.test(op); }
+DEF["if"] = {op:"if", cond:"", body:[]}; DEF.ifElse = {op:"ifElse", cond:"", body:[], body2:[]}; DEF.forever = {op:"forever", body:[]}; DEF.untilB = {op:"untilB", cond:"", body:[]}; DEF.stop = {op:"stop"};
+OPS.rand = ["lấy ngẫu nhiên", 2];
+function col(op){ return /move|turn/.test(op) ? C.mo : /repeat|wait|until|^if|forever|stop/.test(op) ? C.ct : /say/.test(op) ? C.lo : op === "ask" ? C.se : /set|change/.test(op) ? C.va : C.pen; }
+function slotHtml(v, path, env, kind){
   if (v && typeof v === "object") return repHtml(v, path, env);
+  if (kind === "b") return '<span class="hexs" title="Ô điều kiện (kiểu lôgic)">' + (env.live && env.expr ? '<button type="button" class="rm" data-rm="' + path + '" title="Đặt phép so sánh hoặc phép toán lôgic vào ô này">▾</button>' : "") + "</span>";
   var t = v == null ? "" : String(v), w = Math.max(2, t.length + 1) + "ch";
   if (!env.live) return '<input class="tx" value="' + esc(t) + '" tabindex="-1" readonly style="width:' + w + '">';
   return '<input class="tx" data-p="' + path + '" value="' + esc(t) + '" style="width:' + w + '" aria-label="giá trị">' + (env.expr ? '<button type="button" class="rm" data-rm="' + path + '" title="Đặt biến hoặc phép toán vào ô này">▾</button>' : ""); }
@@ -83,8 +89,8 @@ function repHtml(r, path, env){
   var x = env.live ? '<button type="button" class="rx" data-rx="' + path + '" title="Bỏ, trả lại ô trống">×</button>' : "";
   if (r.r === "var") return '<span class="rp" style="background:' + C.va + '">' + esc(r.name) + x + "</span>";
   if (r.r === "answer") return '<span class="rp" style="background:' + C.se + '">trả lời' + x + "</span>";
-  var o = OPS[r.r], bool = /^(gt|lt|eq|and|or|not)$/.test(r.r), a = function(i){ return slotHtml(r.a[i], path + ".a." + i, env); };
-  var inner = r.r === "join" ? "kết hợp " + a(0) + " " + a(1) : r.r === "mod" ? a(0) + " chia lấy dư " + a(1) : o[1] === 1 ? o[0] + " " + a(0) : a(0) + " " + o[0] + " " + a(1);
+  var o = OPS[r.r], bool = /^(gt|lt|eq|and|or|not)$/.test(r.r), a = function(i){ return slotHtml(r.a[i], path + ".a." + i, env, /^(and|or|not)$/.test(r.r) ? "b" : ""); };
+  var inner = r.r === "rand" ? "lấy ngẫu nhiên từ " + a(0) + " đến " + a(1) : r.r === "join" ? "kết hợp " + a(0) + " " + a(1) : r.r === "mod" ? a(0) + " chia lấy dư " + a(1) : o[1] === 1 ? o[0] + " " + a(0) : a(0) + " " + o[0] + " " + a(1);
   return '<span class="rp' + (bool ? " bool" : "") + '" style="background:' + C.op + '">' + inner + x + "</span>"; }
 function label(b, env, target){
   if (typeof env !== "object") env = {live: !!env, expr: false, vars: []};
@@ -105,6 +111,10 @@ function label(b, env, target){
     case "sayFor": return "nói " + slotHtml(b.v, "v", env) + " trong " + num("n") + " giây";
     case "ask": return "hỏi " + slotHtml(b.v, "v", env) + " và đợi";
     case "set": return "đặt " + vsel() + " thành " + slotHtml(b.v, "v", env);
+    case "if": case "ifElse": return "nếu " + slotHtml(b.cond, "cond", env, "b") + " thì";
+    case "untilB": return "lặp lại cho đến khi " + slotHtml(b.cond, "cond", env, "b");
+    case "forever": return "liên tục";
+    case "stop": return 'dừng lại <span class="rp" style="background:rgba(0,0,0,.15)">tất cả ▾</span>';
     case "change": return "thay đổi " + vsel() + " một lượng " + slotHtml(b.v, "v", env);
   }
   return b.op;
@@ -114,7 +124,7 @@ function rad(d){ return d * Math.PI / 180; }
 window.Scratch = function(box, opt){
   addCss(); opt = opt || {};
   var blocks = opt.blocks || ALLB, scene = opt.scene || "", log = [], runs = [], running = false, stopFlag = false;
-  var SP, cur, ins, selB, pen, slow = !!opt.slow, VARS, VN, ANSWER = "", SAYS = [], RM = null, askRes = null;
+  var stopAll = false, SP, cur, ins, selB, pen, slow = !!opt.slow, VARS, VN, ANSWER = "", SAYS = [], RM = null, askRes = null;
   function env(live){ return {live: live, expr: !!opt.expr, vars: VN}; }
   var q = function(s){ return box.querySelector(s); };
   function reset(){ SP = clone(opt.sprites || [{id:"bo", name:"Bọ rùa", icon:"🐞", x:0, y:0, dir:90, hat:"flag", body:[]}]).map(function(s){ s.x0 = s.x || 0; s.y0 = s.y || 0; s.d0 = s.dir == null ? 90 : s.dir; s.hat = s.hat || "flag"; s.body = s.body || []; s.pc = "#8e2c8e"; s.pd = false; return s; });
@@ -139,7 +149,7 @@ window.Scratch = function(box, opt){
   function sp(){ return SP[cur]; }
   /* ---------- Bảng lệnh ---------- */
   function palette(){
-    var groups = [["Sự kiện", []], ["Chuyển động", ["move","turnL","turnR"]], ["Hiển thị", ["say","sayFor"]], ["Điều khiển", ["repeat","wait","until"]], ["Cảm biến", ["ask"]], ["Các biến số", ["set","change"]], ["Bút vẽ", ["clear","down","up","color"]]];
+    var groups = [["Sự kiện", []], ["Chuyển động", ["move","turnL","turnR"]], ["Hiển thị", ["say","sayFor"]], ["Điều khiển", ["wait","repeat","forever","if","ifElse","untilB","until","stop"]], ["Cảm biến", ["ask"]], ["Các biến số", ["set","change"]], ["Bút vẽ", ["clear","down","up","color"]]];
     var h = '<h5>Sự kiện</h5><div class="b hat" data-hat="flag" style="background:' + C.ev + '">Khi bấm vào ' + FLAG + '</div>'
       + (SP.length > 1 || opt.add ? '<div class="b hat" data-hat="click" style="background:' + C.ev + '">Khi bấm vào nhân vật này</div>' : "");
     groups.slice(1).forEach(function(gp){ var list = gp[1].filter(function(o){ return blocks.indexOf(o) >= 0; }); if (!list.length) return;
@@ -153,7 +163,8 @@ window.Scratch = function(box, opt){
   function blocksHtml(arr, depth){
     var h = '<span class="ins' + (ins.arr === arr && ins.i === 0 ? " on" : "") + '" data-ins="' + key(arr) + ':0" title="Chèn vào đây"></span>';
     arr.forEach(function(b, i){ var id = key(arr) + ":" + i, c = col(b.op), tl = selB === b ? '<span class="tools"><button type="button" data-mv="-1">↑</button><button type="button" data-mv="1">↓</button><button type="button" data-del>✕</button></span>' : "";
-      if (isC(b.op)) h += '<div class="cw" data-bid="' + id + '"><div class="b' + (selB === b ? " sel" : "") + '" data-sb="' + id + '" style="background:' + c + '">' + label(b, env(true), "Hòn đá") + tl + '</div><div class="in" style="border-color:' + c + '">' + blocksHtml(b.body, depth + 1) + '</div><div class="ce" style="background:' + c + '"></div></div>';
+      if (isC(b.op)) h += '<div class="cw" data-bid="' + id + '"><div class="b' + (selB === b ? " sel" : "") + '" data-sb="' + id + '" style="background:' + c + '">' + label(b, env(true), "Hòn đá") + tl + '</div><div class="in" style="border-color:' + c + '">' + blocksHtml(b.body, depth + 1) + "</div>"
+        + (b.op === "ifElse" ? '<div class="b mid" style="background:' + c + '">nếu không thì</div><div class="in" style="border-color:' + c + '">' + blocksHtml(b.body2, depth + 1) + "</div>" : "") + '<div class="ce" style="background:' + c + '"></div></div>';
       else h += '<div class="row" data-bid="' + id + '"><div class="b' + (selB === b ? " sel" : "") + '" data-sb="' + id + '" style="background:' + c + '">' + label(b, env(true)) + tl + "</div></div>";
       h += '<span class="ins' + (ins.arr === arr && ins.i === i + 1 ? " on" : "") + '" data-ins="' + key(arr) + ":" + (i + 1) + '" title="Chèn vào đây"></span>'; });
     return h; }
@@ -210,7 +221,10 @@ window.Scratch = function(box, opt){
       if (n.kind === "dec") return '<polygon points="' + cx + "," + n.y + " " + (cx + 84) + "," + n.m + " " + cx + "," + (n.y + n.h) + " " + (cx - 84) + "," + n.m + '" fill="#d6ecfa" stroke="#3a7fbf"/>' + t;
       return '<rect x="' + (cx - 112) + '" y="' + n.y + '" width="224" height="' + n.h + '" rx="3" fill="#e4f4d8" stroke="#6a9f3a"/>' + t; }).join("");
     return '<svg viewBox="0 0 ' + W + " " + (y - 6) + '" width="' + W + '" style="max-width:100%;font:11.5px sans-serif" role="img" aria-label="Sơ đồ khối"><defs><marker id="fa" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L8,4L0,8z" fill="#555"/></marker></defs><style>polyline{stroke:#555;stroke-width:1.2}.lb{font-size:10.5px;fill:#333}</style>' + edges.join("") + shapes + "</svg>"; }
-  function flow(){ var el = q("[data-fl]"); if (!el) return; var on = q("[data-flow]").checked, s = sp(); el.hidden = !on || s.fixed; if (on && !s.fixed) el.innerHTML = '<div style="font-size:12px;color:#555;padding:2px 4px">Sơ đồ khối của chương trình (' + esc(s.name) + ")</div>" + flowSvg(s); }
+  function branchy(arr){ return arr.some(function(b){ return /^(if|ifElse|forever|untilB)$/.test(b.op) || (b.body && branchy(b.body)); }); }
+  function flow(){ var el = q("[data-fl]"); if (!el) return; var on = q("[data-flow]").checked, s = sp(); el.hidden = !on || s.fixed;
+    if (on && !s.fixed && branchy(s.body)) { el.innerHTML = '<div style="font-size:12.5px;color:#555;padding:6px">Chương trình có cấu trúc rẽ nhánh hoặc lặp có điều kiện: xem sơ đồ khối mẫu trong SGK (Hình 14.2b, 14.4a, 14.7).</div>'; return; }
+    if (on && !s.fixed) el.innerHTML = '<div style="font-size:12px;color:#555;padding:2px 4px">Sơ đồ khối của chương trình (' + esc(s.name) + ")</div>" + flowSvg(s); }
   function check(){ if (opt.check) q("[data-ck]").innerHTML = opt.check(info()).map(function(x){ return "<li class='" + (x[1] ? "ok" : "") + "'>" + x[0] + "</li>"; }).join(""); }
   function info(){ return {sprites: SP.filter(function(s){ return !s.fixed; }).map(function(s){ return {id: s.id, name: s.name, hat: s.hat, body: clone(s.body)}; }), runs: runs, log: log, vars: clone(VARS), varNames: VN.slice(), says: SAYS.slice()}; }
   function draw(){ palette(); code(); sprites(); stage(); flow(); check(); }
@@ -222,7 +236,8 @@ window.Scratch = function(box, opt){
     var a = function(i){ return ev(x.a[i]); };
     switch (x.r) { case "add": return num(a(0)) + num(a(1)); case "sub": return num(a(0)) - num(a(1)); case "mul": return num(a(0)) * num(a(1)); case "div": return num(a(0)) / num(a(1));
       case "mod": var n = num(a(0)), m = num(a(1)), r = n % m; if (r !== 0 && (r < 0) !== (m < 0)) r += m; return r;
-      case "round": return Math.round(num(a(0))); case "join": return str(a(0)) + str(a(1));
+      case "round": return Math.round(num(a(0)));
+      case "rand": var lo = num(a(0)), hi = num(a(1)); if (lo > hi) { var tt = lo; lo = hi; hi = tt; } return (lo % 1 === 0 && hi % 1 === 0) ? lo + Math.floor(Math.random() * (hi - lo + 1)) : lo + Math.random() * (hi - lo); case "join": return str(a(0)) + str(a(1));
       case "gt": return cmpv(a(0), a(1)) > 0; case "lt": return cmpv(a(0), a(1)) < 0; case "eq": return cmpv(a(0), a(1)) === 0;
       case "and": return truth(a(0)) && truth(a(1)); case "or": return truth(a(0)) || truth(a(1)); case "not": return !truth(a(0)); }
     return ""; }
@@ -249,24 +264,29 @@ window.Scratch = function(box, opt){
       else if (b.op === "up") s.pd = false;
       else if (b.op === "color") s.pc = b.c;
       else if (b.op === "repeat") { var cnt = Math.round(N(b.n)); for (var r = 0; r < Math.min(200, cnt) && !stopFlag; r++) { await exec(s, b.body, rec); stage(); await frame(); } }
+      else if (b.op === "if") { if (truth(ev(b.cond))) await exec(s, b.body, rec); }
+      else if (b.op === "ifElse") { await exec(s, truth(ev(b.cond)) ? b.body : b.body2, rec); }
+      else if (b.op === "forever") { var gf = 0; while (!stopFlag && gf++ < 3000) { await exec(s, b.body, rec); stage(); await frame(); } }
+      else if (b.op === "untilB") { var gu = 0; while (!stopFlag && !truth(ev(b.cond)) && gu++ < 3000) { await exec(s, b.body, rec); stage(); await frame(); } }
+      else if (b.op === "stop") { stopFlag = true; stopAll = true; log.push("stopall"); }
       else if (b.op === "until") { var tgt = SP[SP.length - 1], guard = 0; while (!stopFlag && dist(s, tgt) >= N(b.n) && guard++ < 1000) { await exec(s, b.body, rec); stage(); await frame(); } }
       if (slow) { stage(); await sleep(260); }
       if (el) el.classList.remove("run"); } }
   function ids(){ KA.forEach(function(arr, ai){ arr.forEach(function(b, i){ b._id = ai + ":" + i; }); }); }
   async function run(hat, only){
-    if (running) { say("Chương trình đang chạy…"); return; } running = true; stopFlag = false; ids();
+    if (running) { say("Chương trình đang chạy…"); return; } running = true; stopFlag = false; stopAll = false; ids();
     var list = SP.filter(function(s){ return !s.fixed && (only ? s === only : s.hat === hat); });
     if (!list.length) { running = false; say(hat === "flag" ? "Chưa có nhân vật nào có chương trình bắt đầu bằng “Khi bấm vào lá cờ xanh”." : ""); return; }
     log.push("run:" + hat); say("Đang chạy…");
     await Promise.all(list.map(async function(s){ var rec = {id: s.id, hat: hat, segs: [], waits: 0, says: [], answers: []}; SP.forEach(function(x){ x.bubble = null; }); await exec(s, s.body, rec); rec.end = {x: s.x, y: s.y, dir: s.dir};
       if (scene === "xe") rec.dist = dist(s, SP[SP.length - 1]); runs.push(rec); }));
     running = false; stage(); var last = runs[runs.length - 1];
-    say(stopFlag ? "Đã dừng." : "Chạy xong." + (last && last.segs.length ? " Nhân vật đã vẽ " + last.segs.length + " đoạn thẳng." : "") + (scene === "xe" && last ? " Xe dừng lại khi cách hòn đá " + Math.round(last.dist) + " bước." : ""));
+    say(stopAll ? "Chương trình kết thúc (dừng lại tất cả)." + (runs.length && runs[runs.length - 1].says.length ? " Lời nói cuối: “" + runs[runs.length - 1].says[runs[runs.length - 1].says.length - 1] + "”." : "") : stopFlag ? "Đã dừng." : "Chạy xong." + (last && last.segs.length ? " Nhân vật đã vẽ " + last.segs.length + " đoạn thẳng." : "") + (scene === "xe" && last ? " Xe dừng lại khi cách hòn đá " + Math.round(last.dist) + " bước." : ""));
     box.querySelectorAll(".run").forEach(function(e){ e.classList.remove("run"); }); check(); }
   /* ---------- Sự kiện ---------- */
   function rmenu(){ var m = q("[data-rmenu]"), btn = function(k, lab, c){ return '<button type="button" data-ro="' + k + '" style="background:' + c + '">' + esc(lab) + "</button>"; };
     m.innerHTML = "<b>Đặt vào ô đã chọn:</b>" + VN.map(function(n){ return btn("var:" + n, n, C.va); }).join("") + (blocks.indexOf("ask") >= 0 ? btn("answer", "trả lời", C.se) : "")
-      + ["add","sub","mul","div","mod","round","join"].map(function(k){ return btn(k, k === "round" ? "làm tròn ( )" : k === "join" ? "kết hợp ( ) ( )" : k === "mod" ? "( ) chia lấy dư ( )" : "( ) " + OPS[k][0] + " ( )", C.op); }).join("")
+      + ["add","sub","mul","div","mod","round","rand","join"].map(function(k){ return btn(k, k === "rand" ? "lấy ngẫu nhiên từ ( ) đến ( )" : k === "round" ? "làm tròn ( )" : k === "join" ? "kết hợp ( ) ( )" : k === "mod" ? "( ) chia lấy dư ( )" : "( ) " + OPS[k][0] + " ( )", C.op); }).join("")
       + ["gt","lt","eq","and","or","not"].map(function(k){ return btn(k, k === "not" ? "không phải ⟨ ⟩" : "⟨ ) " + OPS[k][0] + " ( ⟩", C.op); }).join("")
       + '<button type="button" data-ro="x" style="background:#888">Đóng</button>'; m.hidden = false; }
   box.addEventListener("click", function(ev){
@@ -296,7 +316,7 @@ window.Scratch = function(box, opt){
     else if (a === "addsp") { var lb = q("[data-lib]"); lb.innerHTML = "Chọn nhân vật: " + LIB.map(function(L, i){ return '<button type="button" data-lb="' + i + '" title="' + L.name + '">' + L.icon + "</button>"; }).join(""); lb.hidden = !lb.hidden; }
     else if (a === "save") { log.push("save"); say("Đã lưu tệp " + opt.save + " (mô phỏng: Tệp → Lưu về máy tính)."); check(); }
   });
-  function locate(b){ var r = null; (function walk(arr){ arr.forEach(function(x, i){ if (x === b) r = {arr: arr, i: i}; if (x.body) walk(x.body); }); })(sp().body); return r; }
+  function locate(b){ var r = null; (function walk(arr){ arr.forEach(function(x, i){ if (x === b) r = {arr: arr, i: i}; if (x.body) walk(x.body); if (x.body2) walk(x.body2); }); })(sp().body); return r; }
   box.addEventListener("input", function(ev){ var t = ev.target, h = t.closest("[data-sb]"); if (!h) return; var f = find(h.dataset.sb), b = f.arr[f.i];
     if (t.dataset.p) { var v = t.value; setv(b, t.dataset.p, /^-?\d+(\.\d+)?$/.test(v.trim()) ? +v : v); t.style.width = Math.max(2, v.length + 1) + "ch"; }
     else if (t.dataset.c != null) b.c = t.value; else if (t.dataset.vs != null) b["var"] = t.value; log.push("edit"); flow(); check(); });

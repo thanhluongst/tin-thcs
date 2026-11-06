@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cấu trúc điều khiển · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>14</b></div><h1><span class="sr-only">Bài 14. </span>Cấu trúc điều khiển</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Thể hiện được cấu trúc tuần tự, rẽ nhánh và lặp ở chương trình trong môi trường lập trình trực quan.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Tuần tự, rẽ nhánh, lặp">
+      <span class="node">Tuần tự</span>
+      <span class="node">Rẽ nhánh</span>
+      <span class="node io">Lặp</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Cấu trúc điều khiển cơ bản</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Cấu trúc điều khiển trong Scratch</div>
+        <div class="reading"><b>An:</b> Ở lớp 6, chúng ta đã biết cách biểu diễn thuật toán bằng cách sử dụng các cấu trúc điều khiển cơ bản. Trong ngôn ngữ lập trình Scratch, có cách nào để biểu diễn các cấu trúc đó không?<br><b>Khoa:</b> Giống như hầu hết các ngôn ngữ lập trình, ngôn ngữ lập trình trực quan như Scratch cũng có các khối lệnh tương ứng với các cấu trúc điều khiển.<br><b>An:</b> Bạn có thể giới thiệu cho tớ cách biểu diễn các cấu trúc tuần tự, rẽ nhánh và lặp trong Scratch không?</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Cấu trúc điều khiển cơ bản</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Trò chơi Đoán số</div>
+        <div class="reading">Giả sử em cần xây dựng một trò chơi trên máy tính. Trong trò chơi, em cần tìm một số bí mật mà máy tính đã lấy ngẫu nhiên trong khoảng từ 1 đến 100. Em được đoán nhiều lần cho đến khi đoán đúng số bí mật đó. Mỗi lần em đoán sai, máy tính sẽ cho em biết số em đoán là nhỏ hơn hay lớn hơn số bí mật. Em hãy mô tả kịch bản của trò chơi đó dưới dạng một thuật toán.<br>Chơi thử trò chơi hoàn chỉnh (chương trình Hình 14.7) trước khi tìm hiểu cách tạo ra nó:</div>
+        <div data-sc0></div>
+        <div data-task="hd1" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> a) Cấu trúc tuần tự</div>
+        <div class="reading">Đọc mục <b>1a</b> (SGK trang 80). Dựa trên kịch bản đã xây dựng, em sẽ từng bước lập chương trình của trò chơi này bằng ngôn ngữ lập trình trực quan. Nhận xét rằng, trong trò chơi, chỉ cần sử dụng hai biến số: số thứ nhất do máy tính lấy ngẫu nhiên, được đặt tên là <i>số bí mật</i> và số thứ hai do người chơi đoán và nhập vào máy tính là <i>trả lời</i>. Biến này có sẵn trong Scratch. Để đảm bảo các lệnh đọc, ghi và gán giá trị với hai biến trên hoạt động bình thường, em có thể yêu cầu máy tính gán cho <i>số bí mật</i> một giá trị ngẫu nhiên, sau đó hỏi để nhận vào <i>trả lời</i> một giá trị số từ người chơi, rồi hiển thị hai giá trị đó ra. Trong ngôn ngữ lập trình trực quan, cấu trúc tuần tự được thể hiện bằng cách lắp ghép các khối lệnh thành phần theo đúng trình tự của các hoạt động, từ trên xuống dưới, như Hình 14.1b.</div>
+        <figure class="fig"><img src="hinh/h141.jpg" alt="a) Mô tả thuật toán đọc và hiển thị dữ liệu gồm 6 bước. b) Chương trình Scratch: đặt số bí mật thành lấy ngẫu nhiên từ 1 đến 100, hỏi, nói số bí mật trong 2 giây, nói trả lời trong 2 giây, dừng lại tất cả"><figcaption>Hình 14.1. Thuật toán sử dụng cấu trúc tuần tự</figcaption></figure>
+        <div data-sc1></div>
+        <div data-task="tt" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> b) Cấu trúc rẽ nhánh</div>
+        <div class="reading">Đọc mục <b>1b</b> (SGK trang 81). Sau khi đảm bảo các biến đã hoạt động đúng, em có thể thay thế các thao tác hiển thị trong kịch bản trên bằng thao tác so sánh hai số và cho biết giá trị của biến <i>trả lời</i> bằng, thấp hơn hay cao hơn giá trị của biến <i>số bí mật</i>: nếu trả lời bằng số bí mật thì thông báo “HOAN HÔ!”; nếu trả lời nhỏ hơn số bí mật thì thông báo “Quá thấp”; nếu trả lời lớn hơn số bí mật thì thông báo “Quá cao”. Nhận xét rằng ba trường hợp “bằng”, “nhỏ hơn” và “lớn hơn” loại trừ lẫn nhau nên không cần kiểm tra cả ba trường hợp đó mà chỉ cần kiểm tra hai lần. Trong ngôn ngữ lập trình trực quan, cấu trúc rẽ nhánh được thể hiện bằng khối lệnh chứa một điều kiện hay một biểu thức lôgic. Tuỳ tình huống, điều kiện này nhận giá trị đúng hay sai, chương trình sẽ định hướng đến khối lệnh tiếp theo để máy tính thực hiện.</div>
+        <figure class="fig"><img src="hinh/h142.jpg" alt="a) Mô tả thuật toán so sánh bằng cấu trúc rẽ nhánh. b) Sơ đồ: kiểm tra trả lời bằng số bí mật, đúng thì HOAN HÔ, sai thì kiểm tra trả lời nhỏ hơn số bí mật: đúng thì Quá thấp, sai thì Quá cao"><figcaption>Hình 14.2. Thuật toán sử dụng cấu trúc rẽ nhánh</figcaption></figure>
+        <figure class="fig"><img src="hinh/h143.jpg" alt="a) Khối nếu thì. b) Khối nếu thì, nếu không thì. c) Đoạn chương trình so sánh trả lời với số bí mật lồng hai khối rẽ nhánh"><figcaption>Hình 14.3. Các cấu trúc rẽ nhánh và đoạn chương trình trong Scratch</figcaption></figure>
+        <div class="reading">Thử đoạn chương trình Hình 14.3c (số bí mật được đặt sẵn là 45 để dễ kiểm tra): chạy ba lần, lần lượt nhập một số nhỏ hơn, lớn hơn và bằng 45.</div>
+        <div data-sc2></div>
+        <div data-task="rn" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> c) Cấu trúc lặp</div>
+        <div class="reading">Đọc mục <b>1c</b> (SGK trang 82). Trong trò chơi, việc đoán số không chỉ được thực hiện một lần mà được người chơi thực hiện lặp lại cho đến khi đoán đúng số bí mật. Mỗi khi người chơi đoán sai, máy tính hỏi lại và câu trả lời mới lại được đem ra so sánh với số bí mật. Lưu ý rằng việc lặp lại chỉ thực hiện khi người chơi đoán sai. Điều đó cũng có nghĩa rằng người chơi đoán đúng là điều kiện kết thúc vòng lặp. Thuật toán được mô tả bằng cấu trúc lặp như trong Hình 14.4a và được thể hiện trong ngôn ngữ lập trình trực quan bằng khối lệnh “lặp lại cho đến khi” (Hình 14.4d). Trong ngôn ngữ lập trình Scratch, có ba khối lệnh lặp, bao gồm: lặp với số lần định trước (Hình 14.4b), lặp vô hạn (Hình 14.4c), và lặp có điều kiện kết thúc (Hình 14.4d).</div>
+        <figure class="fig"><img src="hinh/h144.jpg" alt="a) Sơ đồ cấu trúc lặp có điều kiện. b) Khối lặp lại 10. c) Khối liên tục. d) Khối lặp lại cho đến khi trả lời bằng số bí mật"><figcaption>Hình 14.4. Cấu trúc lặp</figcaption></figure>
+        <div data-task="ct" data-n="1"></div>
+        <div data-task="lap" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 82</div>
+        <div data-task="p82" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Cấu trúc điều khiển cơ bản</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Xây dựng trò chơi Đoán số</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Lập chương trình trò chơi Đoán số</div>
+        <div class="reading">Lập chương trình trò chơi Đoán số như đã được mô tả trong Hoạt động 1. <b>Hướng dẫn:</b> Bước 1. Tạo các biến: tạo biến <i>số bí mật</i> (có thể tạo biến mới hoặc đổi tên biến có sẵn “my variable”); biến <i>trả lời</i> đã có sẵn trong nhóm lệnh Cảm biến. Bước 2. Tạo khung chương trình gồm 6 khối lệnh lắp ghép với nhau theo cấu trúc tuần tự, từ trên xuống dưới (Hình 14.5). Bước 3. Tạo các biểu thức: chọn phép toán và điền các giá trị để có biểu thức “lấy ngẫu nhiên từ 1 đến 100”; chọn phép so sánh “=” và lắp các biến vào chỗ trống để có biểu thức lôgic “trả lời = số bí mật”; lắp ghép các biểu thức vào vị trí phù hợp trong khung chương trình (Hình 14.6a). Bước 4. Tạo khối lệnh rẽ nhánh với điều kiện “trả lời &lt; số bí mật”; chọn từ nhóm Cảm biến các khối lệnh “hỏi” và lắp vào vị trí phù hợp như Hình 14.6b. Bước 5. Hoàn thành chương trình: lắp khối lệnh rẽ nhánh vào khung chương trình; đối sánh thuật toán được mô tả dưới dạng sơ đồ với chương trình hoàn chỉnh ở Hình 14.7.</div>
+        <figure class="fig sm"><img src="hinh/h145.jpg" alt="Khung chương trình: Khi bấm vào lá cờ, đặt số bí mật thành 0, hỏi Hãy cho biết bạn đoán số nào và đợi, lặp lại cho đến khi điều kiện trống, nói HOAN HÔ trong 2 giây, dừng lại tất cả"><figcaption>Hình 14.5. Khung chương trình</figcaption></figure>
+        <figure class="fig"><img src="hinh/h146.jpg" alt="a) Khung chương trình đã có biểu thức lấy ngẫu nhiên từ 1 đến 100 và điều kiện trả lời bằng số bí mật. b) Khối nếu trả lời nhỏ hơn số bí mật thì hỏi Quá thấp, nếu không thì hỏi Quá cao"><figcaption>Hình 14.6. Tạo các biểu thức trong khối lệnh</figcaption></figure>
+        <div class="reading"><b>Trên mô phỏng:</b> tạo biến <i>số bí mật</i>; thêm các khối của Hình 14.5 (nháy vạch ▸ để chọn chỗ chèn). Trong ô giá trị hoặc ô điều kiện hình lục giác, bấm <b>▾</b> để đặt <b>lấy ngẫu nhiên từ ( ) đến ( )</b>, phép so sánh <b>( ) = ( )</b>, <b>( ) &lt; ( )</b>, biến <i>số bí mật</i> hoặc <i>trả lời</i>.</div>
+        <div data-sc3></div>
+        <figure class="fig"><img src="hinh/h147.jpg" alt="Sơ đồ khối và chương trình hoàn chỉnh của trò chơi Đoán số"><figcaption>Hình 14.7. Chương trình hoàn chỉnh</figcaption></figure>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Đoạn lệnh và hình vẽ</div>
+        <div class="reading">Em hãy ghép mỗi đoạn lệnh ở hàng trên với kết quả tương ứng mà đoạn lệnh đó vẽ ở hàng dưới trong Bảng 14.1.</div>
+        <figure class="fig"><img src="hinh/b141.jpg" alt="Bốn đoạn lệnh: đặt bút, lặp lại 4, 5, 6, 3 lần di chuyển 100 bước rồi xoay phải 90, 72, 60, 120 độ; kết quả: hình ba cạnh, bốn cạnh, năm cạnh, sáu cạnh"><figcaption>Bảng 14.1. Các đoạn lệnh và kết quả thực hiện</figcaption></figure>
+        <div class="reading">Kiểm tra bằng mô phỏng: sửa hai con số rồi chạy cho từng đoạn lệnh a, b, c, d.</div>
+        <div data-sc4></div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Phương trình ax + b = 0</div>
+        <div class="reading">1. Em hãy ghép các khối lệnh a, b, c, d vào các vị trí 1, 2, 3, 4 ở Hình 14.8 để được chương trình giải phương trình ax + b = 0 trong ngôn ngữ lập trình Scratch với các giá trị a, b nhập từ bàn phím.</div>
+        <figure class="fig"><img src="hinh/h148.jpg" alt="Khung chương trình có vị trí 1 và 2, và các khối lệnh a (nói nghiệm), b (hỏi hệ số a, b), c (nếu b bằng 0 thì vô số nghiệm, nếu không thì vô nghiệm), d (nếu a bằng 0 thì vị trí 3, nếu không thì vị trí 4)"><figcaption>Hình 14.8. Các khối lệnh</figcaption></figure>
+        <div data-task="vd1" data-n="1"></div>
+        <div class="reading">Lắp chương trình trên mô phỏng (biến a, b đã tạo sẵn) và chạy thử với ba trường hợp: a = 2, b = −4; a = 0, b = 0; a = 0, b = 3.</div>
+        <div data-sc5></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Ước chung lớn nhất</div>
+        <div class="reading">2. Ước chung lớn nhất của hai số không thay đổi nếu thay số lớn bằng phần dư trong phép chia của nó cho số bé. Dựa trên nhận xét đó, ước chung lớn nhất của hai số nguyên không âm có thể được tính theo thuật toán được biểu diễn bằng sơ đồ khối trong Hình 14.9. Em hãy ghép các khối lệnh Scratch trong Hình 14.10 thành chương trình tính ước chung lớn nhất của hai số nguyên không âm.</div>
+        <figure class="fig sm"><img src="hinh/h149.jpg" alt="Sơ đồ khối: Bắt đầu, nhập hai số a và b, kiểm tra a nhân b bằng 0, nếu sai thì kiểm tra a lớn hơn b: đúng thì a nhận số dư a chia b, sai thì b nhận số dư b chia a, rồi quay lại; nếu đúng thì xuất a cộng b, Kết thúc"><figcaption>Hình 14.9. Sơ đồ khối</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h1410.jpg" alt="Chín khối lệnh đánh số: 1 đặt a thành a chia lấy dư b; 2 đặt b thành b chia lấy dư a; 3 lặp lại cho đến khi a nhân b bằng 0; 4 nói a cộng b trong 5 giây; 5 hỏi a và đặt a; 6 hỏi b và đặt b; 7 khi bấm vào lá cờ; 8 dừng lại tất cả; 9 nếu a lớn hơn b thì, nếu không thì"><figcaption>Hình 14.10. Các khối lệnh</figcaption></figure>
+        <div data-task="vd2" data-n="2"></div>
+        <div data-sc6></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/scratch.js?v=6"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var V = function(n){ return {r:"var", name:n}; }, A = {r:"answer"}, O = function(op, a, b){ return {r:op, a: b === undefined ? [a] : [a, b]}; };
+      var MEO = function(body, x, y){ return [{id:"meo", name:"Mèo", icon:"🐱", x: x == null ? -120 : x, y: y == null ? -60 : y, dir:90, body:body}]; };
+      var SH = Scratch.shape, CTL = ["say","sayFor","ask","set","change","wait","repeat","forever","if","ifElse","untilB","stop"];
+      function find(body, f){ var r = false; (function w(a){ a.forEach(function(b){ if (f(b)) r = true; if (b.body) w(b.body); if (b.body2) w(b.body2); }); })(body); return r; }
+      function has(x, f){ return x.sprites.some(function(s){ return find(s.body, f); }); }
+      function isV(v, n){ return v && v.r === "var" && v.name === n; }
+      var GAME = [{op:"set", "var":"số bí mật", v:O("rand", 1, 100)},{op:"ask", v:"Hãy cho biết bạn đoán số nào."},
+        {op:"untilB", cond:O("eq", A, V("số bí mật")), body:[{op:"ifElse", cond:O("lt", A, V("số bí mật")), body:[{op:"ask", v:"Quá thấp!"}], body2:[{op:"ask", v:"Quá cao!"}]}]},
+        {op:"sayFor", v:"HOAN HÔ!", n:2},{op:"stop"}];
+      Scratch($("[data-sc0]"), {title:"Chơi thử: trò chơi Đoán số (Hình 14.7)", sprites:MEO(GAME), vars:["số bí mật"], expr:true, blocks:CTL,
+        note:"Ô theo dõi biến số bí mật hiện trên sân khấu; em hãy cố tìm số mà không nhìn vào đó!",
+        check:function(x){ return [["Chơi đến khi đoán đúng (máy nói HOAN HÔ!)", x.says.indexOf("HOAN HÔ!") >= 0]]; }});
+      Scratch($("[data-sc1]"), {title:"Mô phỏng: cấu trúc tuần tự (Hình 14.1b)", sprites:MEO([{op:"set", "var":"số bí mật", v:O("rand", 1, 100)},{op:"ask", v:"Hãy cho biết bạn đoán số nào."},{op:"sayFor", v:V("số bí mật"), n:2},{op:"sayFor", v:A, n:2},{op:"stop"}]), vars:["số bí mật"], expr:true, blocks:CTL,
+        check:function(x){ return [["Chạy chương trình: các lệnh được thực hiện lần lượt từ trên xuống", x.runs.some(function(r){ return r.answers.length && r.says.length >= 2; })]]; }});
+      var CMP = [{op:"set", "var":"số bí mật", v:45},{op:"ask", v:"Bạn đoán số nào?"},{op:"ifElse", cond:O("eq", A, V("số bí mật")), body:[{op:"say", v:"HOAN HÔ!"}], body2:[{op:"ifElse", cond:O("lt", A, V("số bí mật")), body:[{op:"say", v:"Quá thấp!"}], body2:[{op:"say", v:"Quá cao!"}]}]}];
+      Scratch($("[data-sc2]"), {title:"Mô phỏng: cấu trúc rẽ nhánh (Hình 14.3c)", sprites:MEO(CMP), vars:["số bí mật"], expr:true, blocks:CTL,
+        check:function(x){ return ["Quá thấp!","Quá cao!","HOAN HÔ!"].map(function(t){ return ["Nhận được thông báo “" + t + "”", x.says.indexOf(t) >= 0]; }); }});
+      Scratch($("[data-sc3]"), {title:"Mô phỏng Scratch: trò chơi Đoán số của em", sprites:MEO([]), expr:true, blocks:CTL,
+        check:function(x){ var sb = function(v){ return isV(v, "số bí mật"); };
+          return [["Bước 1: tạo biến số bí mật", x.varNames.indexOf("số bí mật") >= 0],
+            ["Bước 3: số bí mật ← lấy ngẫu nhiên từ 1 đến 100", has(x, function(b){ return b.op === "set" && b["var"] === "số bí mật" && b.v && b.v.r === "rand" && +b.v.a[0] === 1 && +b.v.a[1] === 100; })],
+            ["Hỏi “Hãy cho biết bạn đoán số nào.”", has(x, function(b){ return b.op === "ask"; })],
+            ["Lặp lại cho đến khi ⟨trả lời = số bí mật⟩", has(x, function(b){ return b.op === "untilB" && b.cond && b.cond.r === "eq" && ((b.cond.a[0].r === "answer" && sb(b.cond.a[1])) || (sb(b.cond.a[0]) && b.cond.a[1].r === "answer")); })],
+            ["Bước 4: trong vòng lặp có nếu ⟨trả lời < số bí mật⟩ thì hỏi “Quá thấp!” nếu không thì hỏi “Quá cao!”", has(x, function(b){ return b.op === "untilB" && find(b.body, function(c){ return c.op === "ifElse" && c.cond && /lt|gt/.test(c.cond.r) && c.body.some(function(d){ return d.op === "ask"; }) && c.body2.some(function(d){ return d.op === "ask"; }); }); })],
+            ["Nói “HOAN HÔ!” rồi dừng lại tất cả", has(x, function(b){ return /say/.test(b.op) && /HOAN/i.test(String(b.v)); }) && has(x, function(b){ return b.op === "stop"; })],
+            ["Chơi thử đến khi thắng", x.runs.some(function(r){ return r.answers.length >= 2 && r.says.some(function(t){ return /HOAN/i.test(t); }); })]]; }});
+      Scratch($("[data-sc4]"), {title:"Mô phỏng: kiểm tra Bảng 14.1", sprites:[{id:"but", name:"Bút chì", icon:"✏️", x:-60, y:60, dir:90, body:[{op:"clear"},{op:"down"},{op:"repeat", n:4, body:[{op:"move", n:100},{op:"turnR", n:90}]},{op:"up"}]}], blocks:["move","turnL","turnR","repeat","clear","down","up","color"],
+        check:function(x){ var hasN = function(n){ return x.runs.some(function(r){ var s = SH(r.segs); return s.n === n && s.equal && s.closed; }); };
+          return [3,4,5,6].map(function(n){ return ["Đã vẽ hình " + n + " cạnh", hasN(n)]; }); }});
+      function said(x, f){ return x.runs.some(function(r){ return r.answers.length >= 2 && f(+r.answers[0], +r.answers[1], r.says.join(" ")); }); }
+      Scratch($("[data-sc5]"), {title:"Mô phỏng Scratch: giải phương trình ax + b = 0", sprites:MEO([]), vars:["a","b"], expr:true, blocks:CTL,
+        check:function(x){ return [["a ≠ 0: thông báo nghiệm −b/a", said(x, function(a, b, t){ var v = -b / a; return a !== 0 && (t.indexOf(String(-b) + "/" + a) >= 0 || t.indexOf("-" + b + "/" + a) >= 0 || (t.match(/-?\d+(\.\d+)?/g) || []).some(function(z){ return Math.abs(+z - v) < 1e-6; })); })],
+          ["a = 0, b = 0: phương trình có vô số nghiệm", said(x, function(a, b, t){ return a === 0 && b === 0 && /vô số/i.test(t); })],
+          ["a = 0, b ≠ 0: phương trình vô nghiệm", said(x, function(a, b, t){ return a === 0 && b !== 0 && /vô nghiệm/i.test(t); })]]; }});
+      function gcd(a, b){ while (b) { var t = a % b; a = b; b = t; } return a; }
+      Scratch($("[data-sc6]"), {title:"Mô phỏng Scratch: ước chung lớn nhất", sprites:MEO([]), vars:["a","b"], expr:true, blocks:CTL,
+        check:function(x){ var ok = x.runs.filter(function(r){ var a = +r.answers[0], b = +r.answers[1]; return r.answers.length >= 2 && a >= 0 && b >= 0 && (a || b) && r.says.join(" ").split(/[^0-9.]+/).indexOf(String(gcd(a, b))) >= 0; });
+          return [["Dùng lặp lại cho đến khi và nếu … thì … nếu không thì", has(x, function(b){ return b.op === "untilB" && find(b.body, function(c){ return c.op === "ifElse"; }); })],
+            ["Tính đúng ƯCLN (thử ít nhất 2 cặp số)", ok.length >= 2 && ok[0].answers.join() !== ok[ok.length - 1].answers.join()]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
