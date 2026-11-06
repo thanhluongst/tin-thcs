@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tin học với nghề nghiệp · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 6. Hướng nghiệp với tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>16</b></div><h1><span class="sr-only">Bài 16. </span>Tin học với nghề nghiệp</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nêu được một số nghề nghiệp mà ứng dụng tin học sẽ làm tăng hiệu quả công việc.</li>
+        <li>Nêu được tên một số nghề thuộc lĩnh vực tin học và một số nghề liên quan đến ứng dụng tin học.</li>
+        <li>Nhận thức và trình bày được vấn đề bình đẳng giới trong việc sử dụng máy tính và trong ứng dụng tin học, nêu được ví dụ minh hoạ.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Ứng dụng tin học, nghề tin học, bình đẳng giới">
+      <span class="node">Ứng dụng tin học</span>
+      <span class="node">Nghề tin học</span>
+      <span class="node io">Bình đẳng giới</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Tin học và hiệu quả công việc</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Bình đẳng giới</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Nghề nghiệp nào ứng dụng tin học rõ nhất?</div>
+        <div class="reading">An, Minh, Khoa sôi nổi trò chuyện về chủ đề mà ba bạn đang tìm hiểu: Những nghề nghiệp mà ứng dụng tin học giúp tăng hiệu quả công việc rõ ràng nhất.<br><b>An:</b> Tớ được nghe mẹ kể nhiều về nghề kế toán của mẹ. Ứng dụng tin học giúp mẹ làm việc hiệu quả hơn nhiều, như việc theo dõi các giao dịch tài chính, tạo ra các báo cáo tổng hợp phức tạp.<br><b>Khoa:</b> Tớ nghĩ chắc chắn ứng dụng tin học giúp tăng hiệu quả công việc cho nghề giáo viên. Thầy cô có thể dạy học trực tuyến và nhất là tớ thấy những tiết học trên lớp có ứng dụng tin học thì lôi cuốn và dễ hiểu hơn nhiều.<br><b>Minh:</b> Tớ thì tìm hiểu về nghề hoạ sĩ. Bây giờ các bức tranh không chỉ được tạo ra bằng bút lông và màu nước nữa mà còn được tạo ra trên máy tính. Sau này tớ muốn trở thành nhà thiết kế đồ hoạ máy tính.<br>Còn ý kiến của em thì sao?</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Tin học giúp nâng cao hiệu quả công việc</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Ứng dụng tin học trong nghề nghiệp</div>
+        <div class="reading">Em hãy cùng các bạn lựa chọn một vài nghề nghiệp mà các em biết để thảo luận và chỉ ra những ví dụ mà tin học được ứng dụng trong các nghề nghiệp đó.</div>
+        <div data-task="hd1" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Tin học giúp nâng cao hiệu quả công việc</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 91–92). Trong suốt chiều dài lịch sử, công nghệ đã liên tục thay đổi cách người lao động trong mọi ngành nghề thực hiện công việc của họ để tăng năng suất. Cùng với sự phát triển của công nghệ thông tin, tin học ngày càng được ứng dụng rộng rãi trong mọi ngành nghề khác nhau. Theo các chuyên gia, việc ứng dụng tin học sẽ mang lại lợi ích cho hầu hết các ngành nghề nhờ tăng hiệu quả công việc. Có được kết quả đó là nhờ vào một số điểm sau:<ul>
+          <li>Ứng dụng tin học giúp <b>tăng tốc độ xử lí</b>, tiết kiệm thời gian của người lao động. Ví dụ với nghề kế toán, những yêu cầu mất hàng giờ tính toán thủ công có thể thực hiện trong vài phút nhờ các phần mềm ứng dụng. Các khoản thanh toán, giao dịch, chuyển tiền được thực hiện gần như ngay lập tức qua mạng.</li>
+          <li>Ứng dụng tin học giúp <b>liên lạc và trao đổi thông tin</b> dễ dàng. Các tài liệu cần trao đổi, tin nhắn công việc được gửi ngay lập tức đến đồng nghiệp hoặc khách hàng trên toàn thế giới.</li>
+          <li>Ứng dụng tin học hỗ trợ <b>làm việc nhóm</b> và mở rộng phạm vi làm việc. Ví dụ với nghề phát triển phần mềm, nhờ các công cụ giao tiếp trực tuyến, các lập trình viên có thể làm việc xuyên biên giới, trao đổi với đồng nghiệp ở các nước khác nhau. Các nhóm có thể tổ chức họp từ xa và làm việc trên cùng một tài liệu được chia sẻ dựa trên công nghệ đám mây.</li>
+          <li>Ứng dụng tin học giúp <b>nâng cao tay nghề</b>, bổ sung kiến thức, hỗ trợ thông tin cho người lao động. Ví dụ nghề lái xe taxi, các ứng dụng đặt xe, bản đồ, thông báo tình trạng giao thông giúp lái xe dễ dàng nhận khách, tìm đường, tránh các cung đường bị tắc để tiết kiệm thời gian, nhiên liệu.</li></ul>
+          Thông qua sự phát triển của tin học, hàng loạt các lĩnh vực nghề nghiệp được hỗ trợ hiệu quả, nâng cao chất lượng công việc. Sự phát triển của tin học cũng đã tạo ra những nghề nghiệp đa dạng của lĩnh vực này như: phát triển phần mềm, lập trình ứng dụng điện thoại, quản trị mạng, phát triển và thiết kế website,… Bên cạnh đó, một số nghề liên quan đến ứng dụng tin học cũng rất phát triển như: bán hàng online, streamer (phát sóng trực tiếp cho người xem thông qua một nền tảng online), vlogger (tạo dựng nội dung trên nền tảng video và đăng trên các mạng xã hội). Hình 16.1 cho em thấy những ví dụ cụ thể về việc ứng dụng tin học trong một số nghề nghiệp đã giúp tăng chất lượng, hiệu quả công việc.</div>
+        <div class="nmap" data-nmap>
+          <style>
+            .nmap{border:1px solid var(--line);border-radius:12px;padding:10px;margin:10px 0;display:grid;gap:8px}
+            .nmap .t{font-weight:700}.nmap .note{font-size:13px;opacity:.85}
+            .nmap .g{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+            @media (max-width:640px){.nmap .g{grid-template-columns:1fr}.nmap .c{order:-1}}
+            .nmap .col{display:grid;gap:10px}
+            .nmap .c{justify-self:center;width:110px;height:110px;border-radius:50%;background:#f6c343;color:#7a3b00;display:grid;place-items:center;text-align:center;font:800 16px/1.2 'Lexend',sans-serif}
+            .nmap .n{border:2px solid var(--line);border-radius:12px;background:var(--surface,#fff);padding:8px 10px;cursor:pointer;text-align:left;font:inherit;color:inherit;display:grid;gap:4px}
+            .nmap .n b{font:700 14.5px 'Lexend',sans-serif;color:#fff;border-radius:999px;padding:4px 12px;justify-self:start}
+            .nmap .n ul{margin:0;padding-left:18px;font-size:13.5px}.nmap .n .h{font-size:12.5px;opacity:.7}
+            .nmap .n[aria-expanded="false"] ul{display:none}.nmap .n[aria-expanded="true"] .h{display:none}
+          </style>
+          <div class="t">Hình 16.1. Ví dụ về ứng dụng tin học trong một số nghề nghiệp (sơ đồ tương tác)</div>
+          <div class="note">Đoán trước: mỗi nghề có thể ứng dụng tin học vào việc gì? Rồi nháy vào từng nghề để xem ví dụ trong SGK.</div>
+          <div class="g">
+            <div class="col">
+              <button type="button" class="n" aria-expanded="false"><b style="background:#2a9d8f">BÁC SĨ</b><span class="h">Nháy để xem ví dụ</span><ul><li>Hồ sơ sức khoẻ điện tử.</li><li>Khám bệnh từ xa.</li></ul></button>
+              <button type="button" class="n" aria-expanded="false"><b style="background:#2a7fbf">QUẢN LÍ DU LỊCH</b><span class="h">Nháy để xem ví dụ</span><ul><li>Quảng cáo sản phẩm du lịch.</li><li>Đặt chỗ khách sạn trên website.</li></ul></button>
+              <button type="button" class="n" aria-expanded="false"><b style="background:#e63946">KIẾN TRÚC SƯ</b><span class="h">Nháy để xem ví dụ</span><ul><li>Phần mềm thiết kế bản vẽ.</li><li>In 3D tạo mẫu.</li></ul></button>
+            </div>
+            <div class="c">NGHỀ<br>NGHIỆP</div>
+            <div class="col">
+              <button type="button" class="n" aria-expanded="false"><b style="background:#e76f51">NHÀ BÁO</b><span class="h">Nháy để xem ví dụ</span><ul><li>Đăng bài nhanh chóng trên báo điện tử.</li><li>Chỉnh sửa ảnh, video dễ dàng.</li></ul></button>
+              <button type="button" class="n" aria-expanded="false"><b style="background:#43aa8b">NHÂN VIÊN VĂN PHÒNG</b><span class="h">Nháy để xem ví dụ</span><ul><li>Phần mềm soạn thảo văn bản.</li><li>Phần mềm lưu trữ hồ sơ.</li></ul></button>
+              <button type="button" class="n" aria-expanded="false"><b style="background:#3a6ea5">KĨ SƯ NÔNG NGHIỆP</b><span class="h">Nháy để xem ví dụ</span><ul><li>Tự động điều tiết nước tưới.</li><li>Nghiên cứu tiến bộ nông nghiệp: ví dụ Internet vạn vật (IoT).</li></ul></button>
+            </div>
+          </div>
+          <script>document.currentScript.parentNode.querySelectorAll(".n").forEach(function(b){ b.addEventListener("click", function(){ b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") === "true" ? "false" : "true"); }); });</script>
+        </div>
+        <div data-task="li" data-n="1"></div>
+        <div data-task="nghe" data-n="2"></div>
+        <div data-task="h161" data-n="3"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 92</div>
+        <div data-task="p92a" data-n="1"></div>
+        <div data-task="p92b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Tin học giúp nâng cao hiệu quả công việc</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Bình đẳng giới trong sử dụng máy tính và ứng dụng tin học</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Bình đẳng giới trong lĩnh vực tin học</div>
+        <div class="reading">1. Nếu có bạn nào đó nói với em rằng “Nghề nghiệp trong lĩnh vực tin học chỉ nên dành cho nam giới”, em sẽ trả lời bạn như thế nào? Tại sao? 2. Em biết những ngành nghề nào thuộc lĩnh vực tin học đang có nhiều phụ nữ làm việc?</div>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Bình đẳng giới trong sử dụng máy tính và ứng dụng tin học</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 93–94). Tin học đang thúc đẩy sự phát triển của mọi ngành nghề, thu hút một số lượng lớn lao động của xã hội tham gia. Trong thực tế, nhiều số liệu nghiên cứu cho thấy tỉ lệ nữ giới làm việc trong các ngành nghề tin học so với nam giới còn khá thấp, mặc dù môi trường, điều kiện công việc vẫn phù hợp cho phụ nữ phát huy khả năng về sức khoẻ, trí tuệ, phẩm chất của mình trong lĩnh vực này. Chính vì vậy, nhiều tổ chức trên thế giới cũng đang tích cực tổ chức nhiều hoạt động thúc đẩy phụ nữ và trẻ em gái tham gia nhiều hơn vào lĩnh vực tin học:<ul>
+          <li>Ngày Quốc tế trẻ em gái với công nghệ thông tin (International Girls in ICT Day) được tổ chức hằng năm bởi Liên minh Viễn thông Quốc tế của Liên Hợp Quốc (viết tắt là ITU). Các hoạt động trong ngày này nhằm tuyên truyền và nhấn mạnh sự cần thiết phải thúc đẩy các cơ hội nghề nghiệp công nghệ cho phụ nữ và trẻ em gái trong lĩnh vực được xem là phát triển nhanh nhất thế giới này. <i>(Hình 16.2 trong SGK là áp phích Ngày Quốc tế trẻ em gái với công nghệ thông tin năm 2021 với chủ đề “Internet tốt hơn cho trẻ em”.)</i></li>
+          <li>DigiGirlZ là chiến dịch toàn cầu do tập đoàn Microsoft khởi xướng nhằm truyền cảm hứng cho các học sinh nữ Trung học cơ sở và Trung học phổ thông theo đuổi các ngành nghề khoa học – công nghệ, trong đó có lĩnh vực tin học.</li>
+          <li>Khi chưa tìm hiểu thì nhiều người có thể nghĩ lập trình viên đầu tiên trên thế giới là nam giới, nhưng không, người được coi là lập trình viên đầu tiên trên thế giới lại là một phụ nữ – bà Ada Lovelace (người Anh, sinh năm 1815). Em có thể tìm hiểu câu chuyện cuộc đời của bà bằng cách tìm kiếm thông tin trên Internet.</li></ul></div>
+        <div data-task="bdg" data-n="1"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 94</div>
+        <div data-task="p94" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Bình đẳng giới</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Phỏng vấn và hậu quả của bất bình đẳng giới</div>
+        <div class="reading">1. Em hãy phỏng vấn một vài người (có thể là bố mẹ, người quen của bố mẹ, thầy cô,…) để tìm hiểu về những ứng dụng tin học giúp họ nâng cao hiệu quả công việc. 2. Em hãy chọn phương án trả lời đúng nhất: Bất bình đẳng giới trong sử dụng máy tính và ứng dụng tin học có thể dẫn tới hậu quả gì?</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Thuyết trình và thúc đẩy bình đẳng giới</div>
+        <div class="reading">1. Em hãy đề xuất với thầy cô giáo và các bạn tổ chức một cuộc thi thuyết trình về ứng dụng tin học trong các nghề nghiệp tại Việt Nam. Em hãy tìm hiểu và tạo ra bài thuyết trình của mình nhé. Hãy chia sẻ với bạn bè về bài thuyết trình của em. 2. Trong vai trò một học sinh lớp 8, em có thể làm gì để thúc đẩy bình đẳng giới ở lứa tuổi của em, ở khía cạnh sử dụng máy tính và ứng dụng tin học trong học tập?</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
