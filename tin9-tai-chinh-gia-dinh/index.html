@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hoàn thiện bảng tính quản lí tài chính gia đình · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 4a. Sử dụng bảng tính điện tử nâng cao</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>13a</b></div><h1><span class="sr-only">Bài 13a. </span>Hoàn thiện bảng tính quản lí tài chính gia đình</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Tạo được trang tính tổng hợp thông tin thu, chi gia đình.</li>
+        <li>Hoàn thiện bảng tính quản lí tài chính gia đình.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Thu nhập, Chi tiêu, Tổng hợp">
+      <span class="node">Trang Thu nhập (H7)</span>
+      <span class="node">Trang Chi tiêu (H11)</span>
+      <span class="node io">Trang Tổng hợp: NET, biểu đồ</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Trang tính Tổng hợp</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Bảng tính cần bổ sung gì?</div>
+        <div class="reading">Dự án sử dụng bảng tính điện tử quản lí tài chính gia đình đã hoàn thành các trang tính Thu nhập và Chi tiêu. Theo em, để cân đối thu, chi, giúp kiểm soát chi tiêu gia đình hiệu quả, bảng tính cần bổ sung thông tin gì?</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Trang tính tổng hợp dữ liệu tài chính gia đình</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Tổng hợp dữ liệu tài chính gia đình</div>
+        <div class="reading">Quan sát Hình 13a.1 và Hình 13a.2, em thấy các khoản thu và chi đã được tính tổng số tiền (tại ô H7 và H11). Để cân đối thu, chi, trang tính Tổng hợp được bổ sung vào bảng tính như Hình 13a.3. 1. Em hãy chỉ ra mối liên hệ về dữ liệu của trang tính Tổng hợp ở Hình 13a.3 với hai trang tính Thu nhập và Chi tiêu ở Hình 13a.1 và Hình 13a.2. 2. Trong trang tính Tổng hợp, công thức để tính tổng thu nhập ở ô B14 là gì? Công thức để tính tổng số tiền chi tiêu ở ô B15 là gì?</div>
+        <figure class="fig"><img src="hinh/h131.jpg" alt="Trang tính Thu nhập: tổng số lần thu 6, tổng tiền 17 500 ở ô H7"><figcaption>Hình 13a.1. Trang tính Thu nhập</figcaption></figure>
+        <figure class="fig"><img src="hinh/h132.jpg" alt="Trang tính Chi tiêu: tổng số lần chi 8, tổng tiền 13 640 ở ô H11"><figcaption>Hình 13a.2. Trang tính Chi tiêu</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h133.jpg" alt="Trang tính Tổng hợp: biểu đồ cột Cân đối thu chi, bảng Thu nhập 17 500, Chi tiêu 13 640, Giá trị NET 3 860"><figcaption>Hình 13a.3. Trang tính Tổng hợp</figcaption></figure>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Trang tính Tổng hợp</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 53). Từ hai nguồn dữ liệu trong hai trang tính Thu nhập và Chi tiêu, em có thể tổng hợp thông tin một cách trực quan để có kịp thời điều chỉnh các khoản thu, chi. Trong bảng tính quản lí tài chính gia đình, ở trang tính Tổng hợp, tổng tiền thu nhập ở ô B14 chính là giá trị ở ô H7 trong trang tính Thu nhập, tổng tiền chi tiêu ở ô B15 chính là giá trị ở ô H11 trong trang tính Chi tiêu. Công thức cho các ô B14, B15 trong trang tính Tổng hợp được trình bày chi tiết trong Bảng 13a.1.</div>
+        <figure class="fig"><img src="hinh/b131.jpg" alt="Bảng 13a.1: B14 bằng 'Thu nhập'!H7 lấy giá trị ô H7 trong trang tính Thu nhập; B15 bằng 'Chi tiêu'!H11 lấy giá trị ô H11 trong trang tính Chi tiêu; dữ liệu được cập nhật tự động"><figcaption>Bảng 13a.1. Công thức lấy tổng tiền thu nhập và chi tiêu từ các trang tính tương ứng đưa vào trang tính Tổng hợp</figcaption></figure>
+        <div class="reading">Trong trang tính Tổng hợp, <b>Giá trị NET</b> là số tiền chênh lệch giữa thu và chi. Giá trị NET nhỏ sẽ cho thấy gia đình đang chi tiêu nhiều, cần được báo động để tất cả các thành viên thực hiện tiết kiệm. Bên cạnh đó, em có thể bổ sung biểu đồ để hiển thị số liệu thu và chi một cách trực quan, dễ so sánh, giúp cho việc quản lí tài chính gia đình được dễ dàng và hiệu quả.</div>
+        <div data-task="net" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 53</div>
+        <div class="reading">1. Hình 13a.4 là công thức lấy tổng tiền thu nhập từ trang tính Thu nhập đưa vào trang Tổng hợp. Hãy ghép mỗi cụm từ Địa chỉ ô, Tên trang tính, Dấu chấm than vào vị trí tương ứng sao cho phù hợp. 2. Trong một bảng tính có chứa nhiều trang tính, nếu công thức tham chiếu đến địa chỉ ô ở một trang tính khác, thì địa chỉ ô đó gồm những thành phần gì?</div>
+        <figure class="fig sm"><img src="hinh/h134.jpg" alt="Công thức bằng 'Thu nhập' dấu chấm than H7, với các vị trí (1) dưới 'Thu nhập', (2) dưới dấu chấm than, (3) dưới H7"><figcaption>Hình 13a.4. Công thức lấy tổng tiền thu nhập từ trang Thu nhập đưa vào trang Tổng hợp</figcaption></figure>
+        <div data-task="p53a" data-n="1"></div>
+        <div data-task="p53b" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Trang tính tổng hợp dữ liệu tài chính gia đình</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Hoàn thiện bảng tính quản lí tài chính gia đình</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> TaiChinhGiaDinh.xlsx</div>
+        <div class="reading">Tính tổng thu nhập và chi tiêu, bổ sung trang tính Tổng hợp để cân đối thu, chi như Hình 13a.1, Hình 13a.2 và Hình 13a.3. <b>Hướng dẫn. a) Tính tổng số tiền trong trang tính Thu nhập và Chi tiêu:</b> mở bảng tính TaiChinhGiaDinh.xlsx, chọn trang tính Thu nhập như Hình 13a.1; tại ô H7, nhập công thức <b>=SUM(H2:H6)</b> để tính tổng số tiền thu nhập; nháy chuột chọn trang tính Chi tiêu như Hình 13a.2; tại ô H11, nhập công thức <b>=SUM(H2:H10)</b> để tính tổng số tiền đã chi tiêu; lưu tệp.<br><b>b) Tạo trang tính Tổng hợp:</b> tạo thêm một trang tính mới, đặt tên trang tính là <b>Tổng hợp</b>. Tại ô A1, nhập tiêu đề bảng tính là <b>Cân đối thu chi</b>. Tạo bảng dữ liệu trong vùng A13:B16, trong đó công thức tại ô B14 và B15 xem ở Bảng 13a.1. Công thức tại ô B16 là <b>=B14-B15</b>. Tạo biểu đồ cột hiển thị trực quan giá trị thu và chi: chọn vùng dữ liệu tạo biểu đồ là A13:B15; trong dải lệnh <b>Insert</b>, ở nhóm lệnh <b>Charts</b>, chọn dạng biểu đồ <b>Clustered Column</b> (Hình 13a.5). Đặt biểu đồ vào vị trí A2:B12, chỉnh sửa thông tin hiển thị trên biểu đồ như ở Hình 13a.3. Lưu tệp.</div>
+        <figure class="fig"><img src="hinh/h135.jpg" alt="Chọn vùng A13:B15 gồm Nội dung, Thu nhập 17 500, Chi tiêu 13 640; thẻ Insert, nhóm Charts, chọn Clustered Column"><figcaption>Hình 13a.5. Thao tác chèn biểu đồ tổng số tiền thu nhập và chi tiêu vào trang tính Tổng hợp</figcaption></figure>
+        <div class="reading"><b>Trên mô phỏng:</b> ba bảng tính dưới đây là ba trang tính của <b>cùng một tệp</b> TaiChinhGiaDinh.xlsx – công thức ở trang này lấy được dữ liệu ở trang kia. Nháy đúp vào tên trang tính để đổi tên. Ở trang thứ ba, gõ <b>='Thu nhập'!H7</b> vào B14; chọn vùng A13:B15 rồi bấm <b>📊 Biểu đồ cột</b>, nháy vào tiêu đề biểu đồ để sửa thành “Cân đối thu chi”.</div>
+        <div data-bt1></div>
+        <div data-bt2></div>
+        <div data-bt3></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Cập nhật dữ liệu và đánh giá</div>
+        <div class="reading">Em hãy bổ sung một số dòng dữ liệu thu, chi của gia đình vào cả hai trang tính Thu nhập và Chi tiêu. Hãy sửa lại các công thức ở trang tính Thu nhập và Chi tiêu để công thức đúng với vùng dữ liệu mới sau khi bổ sung dữ liệu. Quan sát để thấy dữ liệu đã được cập nhật tự động vào trang tính Tổng hợp. Từ Giá trị NET trên trang tính Tổng hợp, em hãy đánh giá tình hình tài chính hiện tại của gia đình và đề xuất những điều chỉnh chi tiêu sao cho phù hợp. (Làm tiếp trên ba trang tính mô phỏng ở phần Thực hành: thêm dòng ở cột A–D phía dưới dữ liệu cũ, rồi sửa vùng trong công thức cột G, H.)</div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Kinh phí Triển lãm tin học</div>
+        <div class="reading">Em hãy tạo trang tính Tổng hợp tương tự như trong bảng tính quản lí tài chính gia đình để cân đối kinh phí cho dự án Triển lãm tin học, trong đó tiền thu được lấy từ trang tính lưu các khoản thu, tiền chi được lấy từ trang tính lưu các khoản chi của triển lãm. Dựa trên dữ liệu của trang Tổng hợp, hãy thảo luận với bạn để đánh giá tình hình kinh phí của dự án để có điều chỉnh phù hợp.</div>
+        <div data-bv1></div>
+        <div data-bv2></div>
+        <div data-bv3></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/bangtinh.js?v=9"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var TOOLS = ["copy","paste","|","b","fill","left","center","right","|","chart","|","reset"];
+      var NOTE = "Chọn ô rồi gõ (công thức bắt đầu bằng =), nhấn Enter. Nháy đúp vào tên trang tính để đổi tên.";
+      var ns = function(x){ return String(x || "").replace(/\s/g, ""); };
+      var W = [64,120,140,140,20,130,60,100];
+      var CHI = ["Ở","Ăn","Di chuyển","Học tập","Sức khoẻ","Giải trí","Quà tặng/Từ thiện","Tiết kiệm","Khác"], THU = ["Lương","Thưởng","Làm thêm","Được cho/tặng","Khác"];
+      var RCHI = [["14/8/23","Ở","Tiền điện tháng 8",800],["14/8/23","Sức khoẻ","Mua thuốc",620],["15/8/23","Học tập","Học phí tháng 8",2200],["20/8/23","Quà tặng/Từ thiện","Quà tặng",300],["22/8/23","Di chuyển","Gửi xe, xăng xe",600],["26/8/23","Ở","Tiền nước tháng 8",120],["26/8/23","Tiết kiệm","Tiết kiệm tháng 8",1000],["30/8/23","Ăn","Tiền ăn tháng 8",8000]];
+      var RTHU = [["13/8/23","Lương","Lương tháng 8",10000],["15/8/23","Làm thêm","Bán hàng trực tuyến",1500],["18/8/23","Được cho/tặng","Người thân tặng",500],["25/8/23","Thưởng","Thưởng tháng 8",3000],["29/8/23","Khác","Tiết kiệm tiền đi lại",500],["30/8/23","Làm thêm","Làm thêm tháng 8",2000]];
+      function sheet(title, colB, items, rows, g){ var last = rows.length + 2, d = {A1:title, A2:"Ngày", B2:colB, C2:"Nội dung", D2:"Số tiền (nghìn đồng)", F1:colB, G1:g, H1:"Tổng tiền (nghìn đồng)"};
+        items.forEach(function(t, i){ var r = i + 2; d["F" + r] = t; d["G" + r] = "=COUNTIF($B$3:$B$" + last + ",F" + r + ")"; d["H" + r] = "=SUMIF($B$3:$B$" + last + ",F" + r + ",$D$3:$D$" + last + ")"; });
+        var tr = items.length + 2; d["F" + tr] = "Tổng"; d["G" + tr] = "=SUM(G2:G" + (tr - 1) + ")";
+        rows.forEach(function(x, i){ var r = i + 3; d["A" + r] = x[0]; d["B" + r] = x[1]; d["C" + r] = x[2]; d["D" + r] = String(x[3]); }); return d; }
+      function fm(n, col){ var o = {A1:{big:true}, A2:{b:true, al:"center"}, B2:{b:true, al:"center"}, C2:{b:true, al:"center"}, D2:{b:true, al:"center"}, F1:{b:true, al:"center"}, G1:{b:true, al:"center"}, H1:{b:true, al:"center"}}; for (var i = 2; i < 2 + n; i++) o["F" + i] = {fill: col}; o["F" + (n + 2)] = {b:true}; o["G" + (n + 2)] = {b:true}; o["H" + (n + 2)] = {b:true}; return o; }
+      function lastRow(x){ var l = 2; for (var r = 3; r <= 20; r++) if (x.text("D" + r)) l = r; return l; }
+      function sumD(x){ var s = 0; for (var r = 3; r <= 20; r++) s += +x.val("D" + r) || 0; return s; }
+      var thu = null, chi = null;
+      BangTinh($("[data-bt1]"), {title:"Trang tính 1 – Thu nhập", book:"tcgd", cols:8, rows:12, widths:W, tools:TOOLS, sheet:"Thu nhập", note:NOTE, data:sheet("Thu nhập", "Khoản thu", THU, RTHU, "Số lần thu"), fmt:fm(5, "#c9d9ee"),
+        check:function(x){ thu = x; var L = lastRow(x); return [["H7: =SUM(H2:H6) → 17 500", /^=SUM\(H2:H6\)$/i.test(ns(x.d.H7)) && (L > 8 || x.val("H7") === 17500)], ["Luyện tập: thêm dữ liệu (hàng 9 trở đi), công thức G, H dùng vùng đến hàng mới, H7 = tổng cột D", L > 8 && x.val("H7") === sumD(x) && /\$B\$\d+/.test(x.d.H2) && +(/\$B\$3:\$B\$(\d+)/.exec(x.d.H2) || [0,0])[1] >= L]]; }});
+      BangTinh($("[data-bt2]"), {title:"Trang tính 2 – Chi tiêu", book:"tcgd", cols:8, rows:14, widths:W, tools:TOOLS, sheet:"Chi tiêu", note:NOTE, data:sheet("Chi tiêu", "Khoản chi", CHI, RCHI, "Số lần chi"), fmt:fm(9, "#f8c9b5"),
+        check:function(x){ chi = x; var L = lastRow(x); return [["H11: =SUM(H2:H10) → 13 640", /^=SUM\(H2:H10\)$/i.test(ns(x.d.H11)) && (L > 10 || x.val("H11") === 13640)], ["Luyện tập: thêm dữ liệu (hàng 12 trở đi), công thức G, H dùng vùng đến hàng mới, H11 = tổng cột D", L > 11 && x.val("H11") === sumD(x) && +(/\$B\$3:\$B\$(\d+)/.exec(x.d.H2) || [0,0])[1] >= L]]; }});
+      BangTinh($("[data-bt3]"), {title:"Trang tính 3 – trang tính mới", book:"tcgd", cols:2, rows:16, widths:[110,170], tools:TOOLS, sheet:"Sheet3", note:NOTE,
+        data:{A13:"Nội dung", B13:"Số tiền (nghìn đồng)", A14:"Thu nhập", A15:"Chi tiêu", A16:"Giá trị NET"}, fmt:{A13:{b:true}, B13:{b:true}, A16:{b:true}, B16:{b:true}},
+        check:function(x){ var t = thu ? thu.val("H7") : null, c = chi ? chi.val("H11") : null;
+          return [["Đổi tên trang tính thành Tổng hợp", x.sheet.trim() === "Tổng hợp"], ["A1: Cân đối thu chi", /^cân đối thu chi$/i.test(String(x.text("A1")).trim().normalize("NFC"))],
+            ["B14 = 'Thu nhập'!H7", /^='?Thunhập'?!H7$/i.test(ns(x.d.B14).normalize("NFC")) && typeof t === "number" && x.val("B14") === t],
+            ["B15 = 'Chi tiêu'!H11", /^='?Chitiêu'?!H11$/i.test(ns(x.d.B15).normalize("NFC")) && typeof c === "number" && x.val("B15") === c],
+            ["B16 = B14-B15 (Giá trị NET)", /^=B14-B15$/i.test(ns(x.d.B16)) && typeof t === "number" && typeof c === "number" && x.val("B16") === t - c],
+            ["Biểu đồ cột từ vùng A13:B15, tiêu đề Cân đối thu chi", !!x.chart && x.chart.range === "A13:B15" && /cân đối thu chi/i.test(String(x.chart.title).normalize("NFC"))]]; }});
+      /* Vận dụng */
+      var tl = null, cl = null;
+      function vsheet(title, colB, items, rows){ return sheet(title, colB, items, rows, colB === "Khoản thu" ? "Số lần thu" : "Số lần chi"); }
+      BangTinh($("[data-bv1]"), {title:"KinhPhiTrienLam.xlsx – Các khoản thu", book:"kptl", cols:8, rows:6, widths:W, tools:TOOLS, sheet:"Các khoản thu", note:NOTE,
+        data:vsheet("Các khoản thu của Triển lãm tin học", "Khoản thu", ["Quỹ","Tài trợ"], [["1/9/23","Quỹ","Quỹ lớp",500],["3/9/23","Tài trợ","Hội cha mẹ học sinh",1000]]), fmt:fm(2, "#c9d9ee"),
+        check:function(x){ tl = x; return [["H4: tổng tiền thu (=SUM(H2:H3))", /^=SUM\(H2:H3\)$/i.test(ns(x.d.H4)) && x.val("H4") === 1500]]; }});
+      BangTinh($("[data-bv2]"), {title:"KinhPhiTrienLam.xlsx – Các khoản chi", book:"kptl", cols:8, rows:6, widths:W, tools:TOOLS, sheet:"Các khoản chi", note:NOTE,
+        data:vsheet("Các khoản chi cho Triển lãm tin học", "Khoản chi", ["Văn phòng phẩm","In tài liệu"], [["5/9/23","Văn phòng phẩm","Mua giấy, bút",150],["6/9/23","In tài liệu","In tờ rơi",300],["8/9/23","In tài liệu","In áp phích",250]]), fmt:fm(2, "#f8c9b5"),
+        check:function(x){ cl = x; return [["H4: tổng tiền chi (=SUM(H2:H3))", /^=SUM\(H2:H3\)$/i.test(ns(x.d.H4)) && x.val("H4") === 700]]; }});
+      BangTinh($("[data-bv3]"), {title:"KinhPhiTrienLam.xlsx – trang tính mới", book:"kptl", cols:2, rows:16, widths:[110,170], tools:TOOLS, sheet:"Sheet3", note:NOTE,
+        data:{A13:"Nội dung", B13:"Số tiền (nghìn đồng)", A14:"Thu", A15:"Chi", A16:"Giá trị NET"}, fmt:{A13:{b:true}, B13:{b:true}, A16:{b:true}},
+        check:function(x){ return [["Đổi tên trang tính thành Tổng hợp", x.sheet.trim() === "Tổng hợp"], ["B14, B15 lấy từ hai trang tính kia, B16 = B14-B15", /!/.test(x.d.B14 || "") && /!/.test(x.d.B15 || "") && !!tl && !!cl && x.val("B14") === tl.val("H4") && x.val("B15") === cl.val("H4") && x.val("B16") === x.val("B14") - x.val("B15")], ["Có biểu đồ cột so sánh thu, chi", !!x.chart]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

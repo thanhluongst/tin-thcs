@@ -6,6 +6,8 @@
    kẻ đường viền/khung (Border), màu nền, xem trước khi in (không có đường lưới).
    Data Validation (tools "valid"): Settings (Any value, Whole number, Decimal, List, Date, Text length; between, greater than,…; Source),
    Input Message, Error Alert (Stop / Warning / Information); danh sách thả xuống ▾ ở ô; thông báo lỗi khi nhập sai. Lưu trong f[ô].dv.
+   Nhiều trang tính một tệp (opt.book: tên tệp chung): công thức tham chiếu ='Tên trang'!H7 giữa các bảng tính cùng book, tự cập nhật.
+   Biểu đồ (tools "chart"): Insert/Charts/Clustered Column từ vùng đang chọn (cột 1: nhãn, cột 2: số liệu), tiêu đề sửa được.
    Tuỳ chọn: title, note, cols, rows, widths[], data{A1:"…"}, fmt{A1:{b,fill,al,nf,m}}, sheet, tools[], extra[{label,title,run(api)}],
              check(x) → [[nhãn, đúng?],…]
    x = {d, f, sheet, w, hr, hc, log, C, R, val(địa chỉ), text(địa chỉ): chữ hiển thị} */
@@ -54,6 +56,9 @@ var CSS = ".bt{border:1px solid var(--line);border-radius:12px;padding:10px;marg
  + ".bt .dvd .ft2{display:flex;gap:6px;justify-content:space-between;padding:8px 10px;border-top:1px solid #ddd}.bt .dvd .ft2 button,.bt .ea button{font:inherit;font-size:13px;border:1px solid #999;background:#f6f6f6;color:#111;border-radius:4px;padding:3px 12px;cursor:pointer}"
  + ".bt .ea{position:absolute;z-index:30;left:50%;top:40%;transform:translate(-50%,-50%);background:#fff;color:#111;border:1px solid #888;box-shadow:0 6px 24px rgba(0,0,0,.3);min-width:280px;max-width:92%;border-radius:4px;font-size:13.5px}"
  + ".bt .ea .hd{padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600}.bt .ea .bd{display:flex;gap:10px;align-items:center;padding:12px}.bt .ea .ic{font-size:26px}.bt .ea .bt2{display:flex;gap:6px;justify-content:center;padding:0 12px 12px}"
+ + ".bt .chart{border:1px solid #c8c8c8;background:#fff;color:#111;border-radius:4px;padding:6px 8px;max-width:420px;display:grid;gap:4px}"
+ + ".bt .chart input{font:600 14px Calibri,'Be Vietnam Pro',Arial,sans-serif;border:1px dashed transparent;text-align:center;background:transparent;color:#111;width:100%}.bt .chart input:hover,.bt .chart input:focus{border-color:#999}"
+ + ".bt .chart svg{width:100%;height:auto;display:block}.bt .chart .cb{display:flex;gap:6px;justify-content:flex-end}.bt .chart .cb button{font:inherit;font-size:12px;border:1px solid #999;background:#f6f6f6;border-radius:4px;padding:1px 8px;cursor:pointer;color:#111}"
  + ".bt .ck li::before{content:'☐ '}.bt .ck li.ok::before{content:'☑ ';color:#1c7c54}.bt .ck li.ok{color:#1c7c54;font-weight:600}";
 function addCss(){ if (document.getElementById("bangtinh-css")) return; var s = document.createElement("style"); s.id = "bangtinh-css"; s.textContent = CSS; document.head.appendChild(s); }
 
@@ -66,6 +71,7 @@ var TOOLS = {
   border:['▦ Kẻ viền','Format Cells → Border: kẻ đường viền ô và khung bao quanh vùng'], fillc:['🎨 Màu nền','Chọn màu nền cho ô'],
   print:['🖨 Xem trước khi in','File/Print: xem trang in (đang chọn vùng thì in vùng chọn – Print Selection)'],
   b:['<b>B</b>','Chữ đậm'], i:['<i>I</i>','Chữ nghiêng'], big:['A⁺','Tăng cỡ chữ'], green:['<span style="color:#1d8a3a;font-weight:700">A</span>','Chữ xanh lá'],
+  chart:['📊 Biểu đồ cột','Insert/Charts/Clustered Column: vẽ biểu đồ cột từ vùng đang chọn (cột đầu là nhãn, cột sau là số liệu)'],
   valid:['✅ Data Validation','Data/Data Tools/Data Validation: giới hạn kiểu dữ liệu hoặc giá trị nhập vào ô'],
   fill:['🟨 Nền','Màu nền vàng'], left:['⇤','Căn trái'], center:['↔','Căn giữa'], right:['⇥','Căn phải'], reset:['Làm lại','Làm lại từ đầu']
 };
@@ -103,6 +109,7 @@ window.BangTinh = function(box, opt){
       if ((m = /^\s+/.exec(r))) { i += m[0].length; continue; }
       if ((m = /^(\d+(\.\d+)?|\.\d+)(%?)/.exec(r))) { t.push({t:"n", v: m[3] ? +m[1] / 100 : +m[1]}); i += m[0].length; continue; }
       if ((m = /^["“”]([^"“”]*)["“”]/.exec(r))) { t.push({t:"s", v:m[1]}); i += m[0].length; continue; }
+      if ((m = /^(?:'([^']+)'|([^\s!'(),;:+\-*/^&<>="]+))!\$?([A-Za-z]{1,2})\$?(\d+)/.exec(r))) { t.push({t:"x", sh:(m[1] || m[2]).trim(), c:colIdx(m[3]), r:+m[4] - 1}); i += m[0].length; continue; }
       if ((m = /^\$?([A-Za-z]{1,2})\$?(\d+)(?![A-Za-z(])/.exec(r))) { t.push({t:"r", c:colIdx(m[1]), r:+m[2] - 1}); i += m[0].length; continue; }
       if ((m = /^[A-Za-z][A-Za-z0-9.]*/.exec(r))) { t.push({t:"f", v:m[0].toUpperCase()}); i += m[0].length; continue; }
       if ((m = /^(<=|>=|<>)/.exec(r))) { t.push({t:m[0]}); i += 2; continue; }
@@ -132,6 +139,9 @@ window.BangTinh = function(box, opt){
       var x = t[p];
       if (!x) E("#SYNTAX");
       if (x.t === "n") { p++; return x.v; }
+      if (x.t === "x") { p++; var bk = window.BangTinh.books[opt.book || ""] || [], o = null;
+        bk.forEach(function(b){ if (b.sheet().trim().toLowerCase() === x.sh.toLowerCase()) o = b; });
+        if (!o) E("#REF!"); if (depth > 30) E("#VÒNG!"); var vv = o.val(k(x.c, x.r), depth + 1); if (typeof vv === "string" && vv[0] === "#") E(vv); return vv; }
       if (x.t === "s") { p++; return x.v; }
       if (x.t === "r") { p++; if (peek(":")) { p++; var y = eat("r"); return {rg:[Math.min(x.c, y.c), Math.min(x.r, y.r), Math.max(x.c, y.c), Math.max(x.r, y.r)]}; } return {rg:[x.c, x.r, x.c, x.r]}; }
       if (x.t === "(") { p++; var v = cmp(); eat(")"); return v; }
@@ -230,7 +240,7 @@ window.BangTinh = function(box, opt){
     + '<div class="pal" data-pal hidden>Màu nền: <button type="button" data-pc="#ffe94d" style="background:#ffe94d" title="Vàng"></button><button type="button" data-pc="#f4a340" style="background:#f4a340" title="Cam"></button><button type="button" data-pc="#3e9b5a" style="background:#3e9b5a" title="Xanh lá đậm"></button><button type="button" data-pc="#a9dcb5" style="background:#a9dcb5" title="Xanh lá nhạt"></button><button type="button" data-pc="#9cc3f0" style="background:#9cc3f0" title="Xanh dương nhạt"></button><button type="button" data-pc="#f3b6c8" style="background:#f3b6c8" title="Hồng"></button><button type="button" data-pc="" style="background:#fff" title="Không màu">✕</button></div>'
     + '<div class="pv" data-pv hidden></div><div class="dvd" data-dvd hidden></div>'
     + '<div class="fb"><span class="nb" data-nb>A1</span><span class="fx">fx</span><input data-in aria-label="Vùng nhập dữ liệu" placeholder="Vùng nhập dữ liệu (công thức bắt đầu bằng =)" autocomplete="off" spellcheck="false"></div>'
-    + '<div class="gw"><table data-g></table></div>'
+    + '<div class="chart" data-chart hidden></div><div class="gw"><table data-g></table></div>'
     + '<div class="tabs"><span class="tab" data-tab title="Nháy đúp để đổi tên"></span></div>'
     + '<div class="msg" data-msg aria-live="polite"></div><div class="ddl" data-ddl hidden></div><div class="imt" data-imt hidden></div><div class="ea" data-ea hidden role="alertdialog"></div>'
     + (opt.check ? '<ul class="ck" data-ck></ul>' : "")
@@ -298,8 +308,9 @@ window.BangTinh = function(box, opt){
     q("[data-nb]").textContent = n > 1 && !(mg && mg[0] === g[0] && mg[1] === g[1] && mg[2] === g[2] && mg[3] === g[3]) ? k(g[0], g[1]) + ":" + k(g[2], g[3]) : k(a[0], a[1]);
     if (document.activeElement !== inp) inp.value = d[k(a[0], a[1])] || "";
     if (!q("[data-tab] input")) q("[data-tab]").textContent = sheet;
-    imsg();
-    if (opt.check) { var res = opt.check({d: d, f: f, sheet: sheet, dv: function(key){ return (f[key] || {}).dv || null; }, w: w, hr: hr, hc: hc, log: log, C: C, R: R, val: val, text: text});
+    imsg(); drawChart();
+    if (opt.book && !silent) (window.BangTinh.books[opt.book] || []).forEach(function(b){ if (b !== me) b.redraw(); });
+    if (opt.check) { var res = opt.check({chart: chart ? {range: chart.src, title: chart.title} : null, d: d, f: f, sheet: sheet, dv: function(key){ return (f[key] || {}).dv || null; }, w: w, hr: hr, hc: hc, log: log, C: C, R: R, val: val, text: text});
       q("[data-ck]").innerHTML = res.map(function(x){ return "<li class='" + (x[1] ? "ok" : "") + "'>" + x[0] + "</li>"; }).join(""); }
   }
   function say(t, bad){ var m = q("[data-msg]"); m.textContent = t; m.className = "msg" + (bad ? " bad" : ""); }
@@ -383,6 +394,25 @@ window.BangTinh = function(box, opt){
     for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {}; if (nf) F.nf = JSON.parse(JSON.stringify(nf)); else delete F.nf; }
     fc.hidden = true; log.push("fmt-" + cat); say("Đã định dạng " + q("[data-nb]").textContent + " kiểu " + {gen:"General", num:"Number", pct:"Percentage", date:"Date (Việt Nam)"}[cat] + ". Chỉ cách hiển thị thay đổi, dữ liệu trong ô vẫn giữ nguyên."); draw(); box.focus(); });
 
+  /* ---------- Biểu đồ cột ---------- */
+  var chart = null, silent = false, me = null;
+  function drawChart(){ var el = q("[data-chart]"); if (!chart) { el.hidden = true; return; }
+    var g = chart.g, labs = [], vals = [];
+    for (var r = g[1]; r <= g[3]; r++) { var vv = val(k(g[2], r)); if (typeof vv !== "number") continue; labs.push(text(k(g[0], r))); vals.push(vv); }
+    var W = 360, H = 200, L = 48, B = 26, T = 8, mx = Math.max.apply(null, vals.concat([1])), st = Math.pow(10, Math.floor(Math.log10(mx))), step = mx / st > 5 ? st * 2 : mx / st > 2 ? st : st / 2, top = Math.ceil(mx / step) * step;
+    var bw = (W - L - 10) / Math.max(1, vals.length), svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Biểu đồ cột">';
+    for (var y = 0; y <= top + 1e-9; y += step) { var yy = H - B - (H - B - T) * y / top; svg += '<line x1="' + L + '" y1="' + yy + '" x2="' + (W - 6) + '" y2="' + yy + '" stroke="#e3e3e3"/><text x="' + (L - 4) + '" y="' + (yy + 4) + '" font-size="10" text-anchor="end" fill="#555">' + (+y.toFixed(6)).toLocaleString("en-US") + "</text>"; }
+    vals.forEach(function(v, i){ var h = (H - B - T) * Math.max(0, v) / top, x = L + i * bw + bw * 0.3; svg += '<rect x="' + x + '" y="' + (H - B - h) + '" width="' + bw * 0.4 + '" height="' + h + '" fill="#2f6fb3"/><text x="' + (x + bw * 0.2) + '" y="' + (H - 8) + '" font-size="10.5" text-anchor="middle" fill="#333">' + String(labs[i]).replace(/</g, "&lt;") + "</text>"; });
+    svg += '<line x1="' + L + '" y1="' + (H - B) + '" x2="' + (W - 6) + '" y2="' + (H - B) + '" stroke="#999"/></svg>';
+    el.innerHTML = '<input data-ct value="' + String(chart.title).replace(/"/g, "&quot;") + '" aria-label="Tiêu đề biểu đồ" title="Nháy để sửa tiêu đề biểu đồ">' + svg + '<div class="cb"><span style="font-size:11.5px;color:#666;margin-right:auto">Dữ liệu: ' + k(g[0], g[1]) + ":" + k(g[2], g[3]) + '</span><button type="button" data-cx>Xoá biểu đồ</button></div>';
+    el.hidden = false;
+    el.querySelector("[data-ct]").addEventListener("change", function(){ chart.title = this.value; log.push("chart-title"); say("Đã sửa tiêu đề biểu đồ."); silent = true; draw(); silent = false; });
+    el.querySelector("[data-cx]").addEventListener("click", function(){ chart = null; log.push("chart-del"); say("Đã xoá biểu đồ."); draw(); }); }
+  function makeChart(){ var g = rg();
+    if (g[2] - g[0] < 1 || g[3] - g[1] < 1) { say("Hãy chọn vùng gồm ít nhất 2 cột (cột nhãn và cột số liệu) và 2 hàng, ví dụ A13:B15.", true); return; }
+    var g2 = [g[0], g[1], g[0] + 1, g[3]], ttl = "Tiêu đề biểu đồ";
+    if (typeof val(k(g2[2], g2[1])) !== "number") { ttl = text(k(g2[2], g2[1])) || ttl; g2[1]++; }
+    chart = {g: g2, src: k(g[0], g[1]) + ":" + k(g[0] + 1, g[3]), title: ttl}; log.push("chart:" + k(g[0], g[1]) + ":" + k(g[2], g[3])); say("Đã chèn biểu đồ cột (Clustered Column) từ vùng " + k(g[0], g[1]) + ":" + k(g[2], g[3]) + ". Nháy vào tiêu đề để sửa."); draw(); }
   /* ---------- Data Validation ---------- */
   var ALLOW = [["any","Any value"],["whole","Whole number"],["decimal","Decimal"],["list","List"],["date","Date"],["time","Time"],["len","Text length"],["custom","Custom"]];
   var OPS = [["between","between"],["nbetween","not between"],["eq","equal to"],["ne","not equal to"],["gt","greater than"],["lt","less than"],["ge","greater than or equal to"],["le","less than or equal to"]];
@@ -516,6 +546,7 @@ window.BangTinh = function(box, opt){
     if (t === "border") { q("[data-bd]").hidden = !q("[data-bd]").hidden; return; }
     if (t === "fillc") { q("[data-pal]").hidden = !q("[data-pal]").hidden; return; }
     if (t === "print") { preview(); return; }
+    if (t === "chart") { makeChart(); return; }
     if (t === "valid") { if (q("[data-dvd]").hidden) dvOpen(); else q("[data-dvd]").hidden = true; return; }
     var first = f[k(g[0], g[1])] || {}, on = !first[t];
     for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {};
@@ -533,8 +564,13 @@ window.BangTinh = function(box, opt){
     function done(){ if (ok) return; ok = true; sheet = i.value.trim() || sheet; tab.textContent = sheet; say("Đã đổi tên trang tính thành " + sheet + "."); draw(); }
     i.addEventListener("keydown", function(ev){ if (ev.key === "Enter") done(); }); i.addEventListener("blur", done);
   });
+  if (opt.book) { window.BangTinh.books[opt.book] = window.BangTinh.books[opt.book] || [];
+    me = {sheet: function(){ return sheet; }, val: function(addr, dp){ return val(addr, dp); }, redraw: function(){ silent = true; try { draw(); } finally { silent = false; } }};
+    window.BangTinh.books[opt.book].push(me); }
+  api.sheet = function(){ return sheet; };
   draw(); selInfo();
   return api;
 };
 window.BangTinh.n = 0;
+window.BangTinh.books = {};
 })();
