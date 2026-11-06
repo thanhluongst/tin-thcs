@@ -90,6 +90,7 @@ function fixed(v, dp, sep){ var s = Math.abs(v).toFixed(dp), p = s.split("."); i
 var REF = /(\$?)([A-Za-z]{1,2})(\$?)(\d+)(?![\w(])/g;
 
 window.BangTinh = function(box, opt){
+  box.classList.add("bt"); /* khung bảng tính luôn có giao diện kiểu Excel, kể cả khi trang quên ghi class="bt" */
   addCss(); opt = opt || {};
   var C, R, q = function(s){ return box.querySelector(s); };
   var d, f, w, a, s, e, sheet, hr, hc, log, clip = null, drag = false, hdr = null, pick = null;
