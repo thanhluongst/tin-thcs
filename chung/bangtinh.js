@@ -101,7 +101,7 @@ window.BangTinh = function(box, opt){
     while (i < src.length) {
       var r = src.slice(i);
       if ((m = /^\s+/.exec(r))) { i += m[0].length; continue; }
-      if ((m = /^\d+(\.\d+)?|^\.\d+/.exec(r))) { t.push({t:"n", v:+m[0]}); i += m[0].length; continue; }
+      if ((m = /^(\d+(\.\d+)?|\.\d+)(%?)/.exec(r))) { t.push({t:"n", v: m[3] ? +m[1] / 100 : +m[1]}); i += m[0].length; continue; }
       if ((m = /^["“”]([^"“”]*)["“”]/.exec(r))) { t.push({t:"s", v:m[1]}); i += m[0].length; continue; }
       if ((m = /^\$?([A-Za-z]{1,2})\$?(\d+)(?![A-Za-z(])/.exec(r))) { t.push({t:"r", c:colIdx(m[1]), r:+m[2] - 1}); i += m[0].length; continue; }
       if ((m = /^[A-Za-z][A-Za-z0-9.]*/.exec(r))) { t.push({t:"f", v:m[0].toUpperCase()}); i += m[0].length; continue; }
@@ -184,20 +184,21 @@ window.BangTinh = function(box, opt){
   /* Giá trị của ô: số, chuỗi, "" hoặc lỗi "#…". Ngày tháng (tháng/ngày/năm) được lưu như số ngày, giống Excel. */
   function val(key, depth){ depth = depth || 0; var v = d[key]; if (v == null || v === "") return "";
     if (v[0] === "=") return depth > 60 ? "#VÒNG!" : compile(v.slice(1), depth);
-    if (isNum(v)) return +v; var dt = parseDate(v); return dt !== null ? dt : v; }
+    if (isNum(v)) return +v; if (/^-?\d+(\.\d+)?%$/.test(v.trim())) return +v.trim().slice(0, -1) / 100; var dt = parseDate(v); return dt !== null ? dt : v; }
   /* Ô hiển thị kiểu ngày: nhập ngày, hoặc công thức có đúng một ô ngày tháng (ví dụ =A2+B2) */
   function dateCell(key, depth){ var v = d[key]; if (!v) return false; if (isDate(v)) return true; if (v[0] !== "=" || (depth || 0) > 20) return false;
     var n = 0; v.slice(1).replace(/(\$?)([A-Za-z]{1,2})(\$?)(\d+)(?![\w(:])/g, function(m0, d1, cl, d2, rw){ var kk = cl.toUpperCase() + rw; if (kk !== key && dateCell(kk, (depth || 0) + 1)) n++; return m0; });
     return n === 1; }
   function text(key){ var v = val(key), F = f[key] || {}, nf = F.nf;
     if (typeof v === "boolean") return v ? "TRUE" : "FALSE";
+    var raw0 = d[key]; if (typeof v === "number" && !(nf && nf.t) && raw0 && /^-?\d+(\.\d+)?%$/.test(raw0.trim())) { var dpp = (raw0.split(".")[1] || "").replace("%", "").length; return fixed(v * 100, dpp, false) + "%"; }
     if (typeof v !== "number") return String(v);
     if (nf && nf.t === "pct") return fixed(v * 100, nf.dp, false) + "%";
     if (nf && nf.t === "num") return fixed(v, nf.dp, nf.sep);
     if (nf && nf.t === "date") return dateStr(v, true);
     if (dateCell(key)) return dateStr(v, false);
     return general(v); }
-  function kind(v){ return v == null || v === "" ? "" : v[0] === "=" ? "công thức" : isNum(v) ? "số" : isDate(v) ? "ngày tháng" : "văn bản"; }
+  function kind(v){ return v == null || v === "" ? "" : v[0] === "=" ? "công thức" : isNum(v) || /^-?\d+(\.\d+)?%$/.test(v) ? "số" : isDate(v) ? "ngày tháng" : "văn bản"; }
   function shift(raw, dc, dr){ if (!raw || raw[0] !== "=") return raw;
     return "=" + raw.slice(1).replace(REF, function(m, d1, cl, d2, rw){
       var c = colIdx(cl) + (d1 ? 0 : dc), r = +rw + (d2 ? 0 : dr);

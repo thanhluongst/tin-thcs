@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sử dụng hàm IF · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 4a. Sử dụng bảng tính điện tử nâng cao</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>12a</b></div><h1><span class="sr-only">Bài 12a. </span>Sử dụng hàm IF</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Sử dụng được hàm điều kiện IF trong giải quyết bài toán thực tiễn về quản lí tài chính.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Điều kiện, đúng, sai">
+      <span class="node">logical_test: điều kiện</span>
+      <span class="node">Đúng → value_if_true</span>
+      <span class="node io">Sai → value_if_false</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Hàm IF</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Quy tắc 50-30-20</div>
+        <div class="reading">Trong những bài học trước, em đã sử dụng hàm đếm theo điều kiện COUNTIF và hàm tính tổng theo điều kiện SUMIF để tổng hợp số liệu chi tiêu. Dựa trên số liệu tổng hợp, để biết việc chi tiêu đã cân đối, hợp lí hay chưa, em có thể sử dụng một số quy tắc quản lí tài chính, ví dụ quy tắc 50-30-20. Quy tắc 50-30-20 khuyên chúng ta nên dành 50% số tiền của mình cho nhu cầu thiết yếu (ăn, ở, sức khoẻ,…), 30% cho mong muốn cá nhân (giải trí, thời trang,…) và 20% cho tiết kiệm. Dĩ nhiên tỉ lệ 50-30-20 có thể linh hoạt điều chỉnh sao cho phù hợp tình hình thực tiễn. Bài học này sẽ hướng dẫn em sử dụng hàm điều kiện IF để quản lí việc chi tiêu dựa trên quy tắc tài chính, nhằm giúp việc chi tiêu được kiểm soát hiệu quả.</div>
+        <figure class="fig sm"><img src="hinh/h121.jpg" alt="Biểu đồ hình tròn: nhu cầu thiết yếu 50%, mong muốn cá nhân 30%, tiết kiệm 20%"><figcaption>Hình 12a.1. Quy tắc 50-30-20 (nguồn: unfcu.org)</figcaption></figure>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Hàm IF</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Tổng hợp các khoản chi theo quy tắc 50-30-20</div>
+        <div class="reading">Giả sử các mục chi được chia thành ba loại A, B và C. Trong đó, mục A là Nhu cầu thiết yếu, mục B là Mong muốn cá nhân, mục C là Tiết kiệm. Bảng tổng hợp các khoản chi đã được thêm dữ liệu Mục chi ở cột I như minh hoạ trong Hình 12a.2. Để đánh giá chi tiêu theo quy tắc 50-30-20, chúng ta tạo bảng dữ liệu để tính tổng số tiền của mỗi mục chi như minh hoạ ở Hình 12a.3. Trong bảng này, tổng tiền của mỗi mục chi ở cột M được tổng hợp từ dữ liệu các khoản chi trong bảng ở Hình 12a.2; dữ liệu tỉ lệ ở cột N là tổng tiền của mỗi mục chi so với tổng tiền của tất cả các khoản (ở ô H11 trong Hình 12a.2). 1. Em hãy nêu công thức ở các ô của cột M và cột N trong bảng dữ liệu Hình 12a.3. 2. Em hãy viết quy tắc để đưa ra nhận xét tình trạng chi tiêu như minh hoạ ở cột O trong Hình 12a.3 dựa trên quy tắc quản lí tài chính 50-30-20.</div>
+        <figure class="fig sm"><img src="hinh/h122.jpg" alt="Bảng tổng hợp khoản chi: khoản chi, số lần chi, tổng tiền và cột Mục chi A, B, C; tổng 8 lần, 13 640 nghìn đồng"><figcaption>Hình 12a.2. Bảng tổng hợp các khoản chi đã thêm cột Mục chi</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h123.jpg" alt="Bảng Tổng hợp mục chi: A Nhu cầu thiết yếu 12 340, 90.5%, Nhiều hơn; B Mong muốn cá nhân 300, 2.2%, Ít hơn; C Tiết kiệm 1 000, 7.3%, Ít hơn"><figcaption>Hình 12a.3. Bảng tổng hợp mục chi</figcaption></figure>
+        <div data-task="muc" data-n="1"></div>
+        <div data-task="hd1a" data-n="2"></div>
+        <div data-task="hd1b" data-n="3"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Hàm điều kiện IF</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 49). Dựa trên quy tắc quản lí tài chính 50-30-20, em có thể đưa ra nhận xét về tình trạng chi tiêu của mỗi mục chi. Ví dụ, với mục chi Nhu cầu thiết yếu thì nhận xét là: <i>Nếu tỉ lệ chi lớn hơn 50% thì nhận xét là “Nhiều hơn”, còn không thì nhận xét là “Ít hơn”.</i> Để điền nhận xét như minh hoạ ở các ô từ O3 đến O5 trong Hình 12a.3, em sử dụng hàm điều kiện IF. Công thức chung của hàm IF là: <b>=IF(logical_test,[value_if_true],[value_if_false])</b>. Trong đó, ý nghĩa của các tham số như sau: <b>logical_test</b>: điều kiện kiểm tra; <b>value_if_true</b>: giá trị trả về nếu điều kiện là đúng; <b>value_if_false</b>: giá trị trả về nếu điều kiện là sai. Ví dụ, trong Hình 12a.3, tỉ lệ chi của mục Nhu cầu thiết yếu được lưu tại ô N3. Do đó, nhận xét ở trên về tình trạng của mục chi này được thực hiện bằng công thức tại ô O3 là <b>=IF(N3&gt;50%,"Nhiều hơn","Ít hơn")</b>.</div>
+        <div data-task="ts" data-n="1"></div>
+        <div data-task="o3" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Hàm IF lồng nhau</div>
+        <div class="reading">Trên thực tế, nhận xét về tình trạng chi tiêu có thể cần chi tiết hơn. Ví dụ với mục chi Nhu cầu thiết yếu có thể nhận xét theo hai mức: <i>Nếu tỉ lệ chi lớn hơn 80% thì nhận xét “Nhiều quá”, nếu tỉ lệ chi lớn hơn 50% thì nhận xét “Nhiều hơn”, còn không thì nhận xét là “Ít hơn”.</i> Trong trường hợp tiêu chí kiểm tra cần thoả mãn nhiều mức hơn, em sử dụng các hàm IF lồng nhau. Ví dụ sử dụng hàm IF lồng nhau cho nhận xét trên như minh hoạ trong Hình 12a.4 là <b>=IF(N3&gt;80%,"Nhiều quá",IF(N3&gt;50%,"Nhiều hơn","Ít hơn"))</b>.</div>
+        <figure class="fig"><img src="hinh/h124.jpg" alt="Ô O3 có công thức =IF(N3>80%,Nhiều quá,IF(N3>50%,Nhiều hơn,Ít hơn)) cho kết quả Nhiều quá"><figcaption>Hình 12a.4. Sử dụng hai hàm IF lồng nhau</figcaption></figure>
+        <div class="reading">Thử trên bảng tính mô phỏng: nhập công thức IF lồng nhau vào B2, sao chép xuống B4, rồi sửa các tỉ lệ ở cột A (gõ dạng 85%) để xem nhận xét thay đổi.</div>
+        <div data-bt0></div>
+        <div data-task="long" data-n="1"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 49</div>
+        <div class="reading">Em hãy viết công thức trong các ô O4 và O5 ở Hình 12a.3 để nhận xét về tình trạng của mục Mong muốn cá nhân và Tiết kiệm dựa trên quy tắc 50-30-20.</div>
+        <div data-task="p49" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Hàm IF</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Sử dụng hàm IF</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Bảng tổng hợp các mục chi</div>
+        <div class="reading">Bổ sung cột mục chi cho bảng tổng hợp khoản chi (như Hình 12a.2) và tạo bảng dữ liệu tổng hợp các mục chi (như Hình 12a.3). <b>Hướng dẫn. a) Tạo bảng dữ liệu:</b> mở bảng tính TaiChinhGiaDinh.xlsx, nháy chuột chọn trang tính Chi tiêu; tại cột I, bổ sung tiêu đề cột Mục chi và nhập dữ liệu cho cột này như minh hoạ ở Hình 12a.2; trong vùng dữ liệu K1:O5, tạo bảng dữ liệu tổng hợp mục chi như minh hoạ ở Hình 12a.5; lưu bảng tính.<br><b>b) Tính Tổng chi và Tỉ lệ của mỗi mục chi:</b> ta có tổng chi của mỗi mục chi ở cột M được lấy từ dữ liệu các khoản chi trong bảng ở Hình 12a.2, vì vậy cần sử dụng hàm SUMIF để tính tổng theo từng mục. Tại ô M3, nhập công thức <b>=SUMIF($I$2:$I$10,K3,$H$2:$H$10)</b> để tổng hợp số tiền của mục Nhu cầu thiết yếu như minh hoạ ở Hình 12a.6; sao chép công thức của ô M3 sang các ô M4 và M5 để tính tổng chi của các mục chi còn lại. Tỉ lệ ở cột N là tổng chi của mỗi mục chi so với tổng tiền của tất cả các khoản (lưu tại ô H11). Vì vậy, em nhập công thức tại ô N3 là <b>=M3/$H$11*100%</b>; sao chép công thức của ô N3 sang các ô N4 và N5 để tính tỉ lệ của các mục chi còn lại.<br><b>c) Điền nhận xét vào cột Trạng thái của từng mục chi:</b> tại ô O3, nhập công thức <b>=IF(N3&gt;50%,"Nhiều hơn","Ít hơn")</b> để điền nhận xét của mục Nhu cầu thiết yếu; tại ô O4, nhập công thức <b>=IF(N4&gt;30%,"Nhiều hơn","Ít hơn")</b> để điền nhận xét của mục Mong muốn cá nhân; tại ô O5, nhập công thức <b>=IF(N5&gt;20%,"Nhiều hơn","Ít hơn")</b> để điền nhận xét của mục Tiết kiệm; lưu bảng tính.</div>
+        <figure class="fig sm"><img src="hinh/h125.jpg" alt="Bảng dữ liệu tổng hợp mục chi trong vùng K1:O5 với các cột Mục chi, Nội dung, Tổng chi, Tỉ lệ, Trạng thái"><figcaption>Hình 12a.5. Bảng dữ liệu tổng hợp mục chi</figcaption></figure>
+        <figure class="fig"><img src="hinh/h126.jpg" alt="Ô M3 đang nhập =SUMIF($I$2:$I$10,K3,$H$2:$H$10), vùng I2:I10 và H2:H10 được tô màu"><figcaption>Hình 12a.6. Nhập công thức tính tổng chi của mục Nhu cầu thiết yếu</figcaption></figure>
+        <div class="reading"><b>Trên bảng tính mô phỏng</b>: cột F, G, H (khoản chi, số lần chi, tổng tiền) và khung bảng K1:O5 đã có sẵn; dữ liệu chi tiết ở cột A–D vẫn được dùng cho các công thức. Kéo sang phải trong bảng tính để thấy cột I đến O. Cột tỉ lệ N đã định dạng phần trăm.</div>
+        <div data-bt1></div>
+        <div data-task="nv1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Tiền thưởng của các đại lí</div>
+        <div class="reading">Hình 12a.7 là bảng dữ liệu tính số tiền thưởng cho các đại lí của một nhãn hàng. Em hãy tạo bảng dữ liệu và thực hiện các yêu cầu sau: a) Tính tỉ lệ thưởng (cột C), biết nếu doanh thu đạt trên 10 triệu thì tỉ lệ thưởng là 5%, còn không thì tỉ lệ thưởng là 0%. b) Tính số tiền thưởng (cột D) mà các đại lí nhận được biết Số tiền = Doanh thu × Tỉ lệ. c) Nhãn hàng thay đổi cách tính tỉ lệ thưởng cho đại lí theo quy tắc sau: nếu doanh thu trên 20 triệu thì tỉ lệ thưởng là 6%; nếu doanh thu trên 15 triệu thì tỉ lệ thưởng là 4%; nếu doanh thu trên 10 triệu thì tỉ lệ thưởng là 2%; còn không thì tỉ lệ thưởng là 0%. Hãy chỉnh sửa công thức ở câu a) theo quy tắc tính tỉ lệ thưởng ở trên.</div>
+        <figure class="fig sm"><img src="hinh/h127.jpg" alt="Bảng đại lí A, B, C, D với doanh thu 6 000, 10 000, 12 000, 18 000 nghìn đồng; cột Tỉ lệ thưởng và Số tiền đang trống"><figcaption>Hình 12a.7. Bảng tính tỉ lệ và tiền thưởng của các đại lí</figcaption></figure>
+        <div data-bt2></div>
+        <div data-task="lta" data-n="1"></div>
+        <div data-bt3></div>
+        <div data-task="ltc" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Nhận xét chi tiết hơn</div>
+        <div class="reading">1. Với bảng Tổng hợp mục chi đã thực hiện ở phần Thực hành, em hãy chỉnh sửa công thức tại ô O3 để có thể nhận xét tình trạng của mục chi Nhu cầu thiết yếu theo hai mức: nếu tỉ lệ chi lớn hơn 80% thì nhận xét “Nhiều quá”, nếu tỉ lệ chi lớn hơn 50% thì nhận xét “Nhiều hơn”, còn không thì nhận xét là “Ít hơn”. 2. Tương tự Câu 1, em hãy sử dụng hàm IF lồng nhau tại ô O4 và O5 để có thể nhận xét chi tiết hơn tình trạng chi của mục chi Mong muốn cá nhân và Tiết kiệm. Dựa trên quy tắc tài chính 50-30-20, em hãy điều chỉnh sao cho các mục chi được cân đối và tài chính gia đình được kiểm soát hiệu quả. (Làm tiếp trên bảng tính mô phỏng của phần Thực hành; có thể sửa số tiền ở cột D để thử điều chỉnh chi tiêu.)</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/bangtinh.js?v=8"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var TOOLS = ["copy","paste","|","b","fill","left","center","right","|","fmt","|","reset"];
+      var NOTE = "Chọn ô rồi gõ (công thức bắt đầu bằng =), nhấn Enter. Sao chép: chọn ô → 📋 Sao chép → chọn vùng đích → 📌 Dán.";
+      var ns = function(x){ return String(x || "").replace(/\s/g, ""); };
+      var PCT = {nf:{t:"pct", dp:1}};
+      BangTinh($("[data-bt0]"), {title:"Thử hàm IF lồng nhau (Hình 12a.4)", cols:2, rows:4, widths:[90,200], tools:["copy","paste","|","reset"], note:NOTE,
+        data:{A1:"Tỉ lệ", B1:"Nhận xét", A2:"90.5%", A3:"60%", A4:"40%"}, fmt:{A1:{b:true}, B1:{b:true}},
+        check:function(x){ var ok = true; for (var r = 2; r <= 4; r++) { if (!/^=IF\(A\d+>80%,"Nhiềuquá",IF\(A\d+>50%,"Nhiềuhơn","Íthơn"\)\)$/i.test(ns(x.d["B" + r]).normalize("NFC"))) ok = false; }
+          var exp = function(v){ return v > 0.8 ? "Nhiều quá" : v > 0.5 ? "Nhiều hơn" : "Ít hơn"; }, right = [2,3,4].every(function(r){ return String(x.val("B" + r)).normalize("NFC") === exp(+x.val("A" + r)); });
+          return [["B2:B4 dùng IF lồng nhau, sao chép đúng", ok && right], ["Kết quả: Nhiều quá, Nhiều hơn, Ít hơn", x.val("B2") === "Nhiều quá" && x.val("B3") === "Nhiều hơn" && x.val("B4") === "Ít hơn"]]; }});
+      var CHI = ["Ở","Ăn","Di chuyển","Học tập","Sức khoẻ","Giải trí","Quà tặng/Từ thiện","Tiết kiệm","Khác"];
+      var RCHI = [["14/8/23","Ở","Tiền điện tháng 8",800],["14/8/23","Sức khoẻ","Mua thuốc",620],["15/8/23","Học tập","Học phí tháng 8",2200],["20/8/23","Quà tặng/Từ thiện","Quà tặng",300],["22/8/23","Di chuyển","Gửi xe, xăng xe",600],["26/8/23","Ở","Tiền nước tháng 8",120],["26/8/23","Tiết kiệm","Tiết kiệm tháng 8",1000],["30/8/23","Ăn","Tiền ăn tháng 8",8000]];
+      var d = {A1:"Chi tiêu", A2:"Ngày", B2:"Khoản chi", C2:"Nội dung", D2:"Số tiền (nghìn đồng)", F1:"Khoản chi", G1:"Số lần chi", H1:"Tổng tiền (nghìn đồng)", F11:"Tổng", G11:"=SUM(G2:G10)", H11:"=SUM(H2:H10)",
+        K1:"Tổng hợp mục chi", K2:"Mục chi", L2:"Nội dung", M2:"Tổng chi (nghìn đồng)", N2:"Tỉ lệ", O2:"Trạng thái", K3:"A", L3:"Nhu cầu thiết yếu", K4:"B", L4:"Mong muốn cá nhân", K5:"C", L5:"Tiết kiệm"};
+      CHI.forEach(function(t, i){ var r = i + 2; d["F" + r] = t; d["G" + r] = "=COUNTIF($B$3:$B$10,F" + r + ")"; d["H" + r] = "=SUMIF($B$3:$B$10,F" + r + ",$D$3:$D$10)"; });
+      RCHI.forEach(function(x, i){ var r = i + 3; d["A" + r] = x[0]; d["B" + r] = x[1]; d["C" + r] = x[2]; d["D" + r] = String(x[3]); });
+      var fm = {A1:{big:true}, K1:{b:true}, F11:{b:true}, G11:{b:true}, H11:{b:true}, N3:PCT, N4:PCT, N5:PCT};
+      ["A2","B2","C2","D2","F1","G1","H1","K2","L2","M2","N2","O2"].forEach(function(k){ fm[k] = {b:true, al:"center"}; });
+      for (var r = 2; r <= 10; r++) fm["F" + r] = {fill:"#f8c9b5"};
+      var MUC = ["A","A","A","A","A","B","B","C","B"];
+      BangTinh($("[data-bt1]"), {title:"TaiChinhGiaDinh.xlsx – trang tính Chi tiêu: Tổng hợp mục chi", cols:15, rows:11, widths:[60,110,120,110,16,120,64,90,56,16,56,130,96,64,96], tools:TOOLS, sheet:"Chi tiêu", note:NOTE,
+        data:d, fmt:fm,
+        check:function(x){ var muc = MUC.every(function(m, i){ return String(x.text("I" + (i + 2))).trim().toUpperCase() === m; });
+          var mOK = [3,4,5].every(function(r){ return new RegExp("^=SUMIF\\(\\$I\\$2:\\$I\\$10,K" + r + ",\\$H\\$2:\\$H\\$10\\)$", "i").test(ns(x.d["M" + r])); }) && x.val("M3") === 12340 && x.val("M4") === 300 && x.val("M5") === 1000;
+          var nOK = [3,4,5].every(function(r){ return new RegExp("^=M" + r + "/\\$H\\$11(\\*100%)?$", "i").test(ns(x.d["N" + r])); }) && Math.abs(x.val("N3") - 12340 / 13640) < 1e-9;
+          var oF = function(r, p){ return new RegExp("^=IF\\(N" + r + ">" + p + "%,\"Nhiềuhơn\",\"Íthơn\"\\)$", "i").test(ns(x.d["O" + r]).normalize("NFC")); };
+          var vd1 = /^=IF\(N3>80%,"Nhiềuquá",IF\(N3>50%,"Nhiềuhơn","Íthơn"\)\)$/i.test(ns(x.d.O3).normalize("NFC"));
+          return [["a) Cột I (Mục chi): A, A, A, A, A, B, B, C, B như Hình 12a.2", muc],
+            ["b) M3:M5 = SUMIF($I$2:$I$10,K3,$H$2:$H$10) → 12 340; 300; 1 000", mOK],
+            ["b) N3:N5 = M3/$H$11*100% → 90.5%; 2.2%; 7.3%", nOK],
+            ["c) O3: IF(N3>50%,…) (hoặc Vận dụng 1: IF lồng nhau 80%, 50%)", oF(3, 50) || vd1],
+            ["c) O4: IF(N4>30%,…); O5: IF(N5>20%,…)", oF(4, 30) && oF(5, 20)],
+            ["Vận dụng 1: O3 dùng IF lồng nhau → Nhiều quá", vd1 && x.val("O3") === "Nhiều quá"]]; }});
+      var DL = {A1:"Đại lí", B1:"Doanh thu (nghìn đồng)", C1:"Tỉ lệ thưởng", D1:"Số tiền (nghìn đồng)", A2:"A", B2:"6000", A3:"B", B3:"10000", A4:"C", B4:"12000", A5:"D", B5:"18000"};
+      var DF = {A1:{b:true, al:"center"}, B1:{b:true, al:"center"}, C1:{b:true, al:"center"}, D1:{b:true, al:"center"}, C2:{nf:{t:"pct", dp:0}}, C3:{nf:{t:"pct", dp:0}}, C4:{nf:{t:"pct", dp:0}}, C5:{nf:{t:"pct", dp:0}}};
+      function colVals(x, c){ return [2,3,4,5].map(function(r){ return Math.round((+x.val(c + r) || 0) * 10000) / 10000; }); }
+      BangTinh($("[data-bt2]"), {title:"Luyện tập a, b: tỉ lệ 5% nếu doanh thu trên 10 triệu", cols:4, rows:5, widths:[60,130,100,130], tools:TOOLS, note:NOTE, data:DL, fmt:DF,
+        check:function(x){ return [["a) C2:C5 dùng IF: 0%, 0%, 5%, 5%", /^=IF\(B\d+>10000,(5%|0\.05),(0%|0)\)$/i.test(ns(x.d.C2)) && colVals(x, "C").join() === "0,0,0.05,0.05"], ["b) D2:D5 = B*C: 0, 0, 600, 900", /^=B\d\*C\d$/i.test(ns(x.d.D2)) && colVals(x, "D").join() === "0,0,600,900"]]; }});
+      BangTinh($("[data-bt3]"), {title:"Luyện tập c: thưởng theo nhiều mức (IF lồng nhau)", cols:4, rows:5, widths:[60,130,100,130], tools:TOOLS, note:NOTE + " Thử sửa doanh thu (ví dụ 25000, 16000) để kiểm tra các mức.", data:DL, fmt:DF,
+        check:function(x){ var exp = function(v){ return v > 20000 ? 0.06 : v > 15000 ? 0.04 : v > 10000 ? 0.02 : 0; };
+          var ok = [2,3,4,5].every(function(r){ return /IF/i.test(x.d["C" + r] || "") && Math.abs((+x.val("C" + r) || 0) - exp(+x.val("B" + r))) < 1e-9; });
+          return [["C2:C5 dùng IF lồng nhau, đúng các mức 6%, 4%, 2%, 0%", ok], ["Số tiền thưởng D2:D5 = B*C", [2,3,4,5].every(function(r){ return Math.abs((+x.val("D" + r) || 0) - (+x.val("B" + r)) * (+x.val("C" + r) || 0)) < 1e-6 && /^=B\d\*C\d$/i.test(ns(x.d["D" + r])); })]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
