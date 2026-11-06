@@ -105,7 +105,7 @@ window.CHUONG_TRINH = [
     {so: "4a", nhom: "a", ten: "Sử dụng bảng tính điện tử nâng cao", bai: [
       {so: "9a", ten: "Sử dụng công cụ xác thực dữ liệu", slug: "xac-thuc-du-lieu", tt: "dang"},
       {so: "10a", ten: "Sử dụng hàm COUNTIF", slug: "ham-countif", tt: "dang"},
-      {so: "11a", ten: "Sử dụng hàm SUMIF", slug: "ham-sumif"},
+      {so: "11a", ten: "Sử dụng hàm SUMIF", slug: "ham-sumif", tt: "dang"},
       {so: "12a", ten: "Sử dụng hàm IF", slug: "ham-if"},
       {so: "13a", ten: "Hoàn thiện bảng tính quản lí tài chính gia đình", slug: "tai-chinh-gia-dinh"}]},
     {so: "4b", nhom: "b", ten: "Làm quen với phần mềm làm video", bai: [

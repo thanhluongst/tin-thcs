@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sử dụng hàm SUMIF · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 4a. Sử dụng bảng tính điện tử nâng cao</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>11a</b></div><h1><span class="sr-only">Bài 11a. </span>Sử dụng hàm SUMIF</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Biết sử dụng hàm tính tổng theo điều kiện SUMIF để giải quyết bài toán quản lí tài chính gia đình.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Vùng kiểm tra, điều kiện, vùng tính tổng">
+      <span class="node">range: vùng kiểm tra</span>
+      <span class="node">criteria: điều kiện</span>
+      <span class="node io">sum_range: cộng các ô tương ứng</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Hàm SUMIF</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Tổng tiền theo từng khoản</div>
+        <div class="reading">Trong bài học trước, em đã sử dụng hàm đếm theo điều kiện để biết được số lần thu, chi theo từng khoản mục. Bài học này sẽ hướng dẫn em tính tổng theo các khoản chi tiêu, giúp quản lí tài chính gia đình hiệu quả.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Hàm SUMIF</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Tổng hợp chi tiêu theo từng khoản</div>
+        <div class="reading">Hình 11a.1 là trang tính Chi tiêu đã được bổ sung thêm cột Tổng tiền. Theo em, con số 920 ở ô H2 mang ý nghĩa gì? Công thức ở ô H2 liên quan đến những dữ liệu nào trong vùng dữ liệu A3:D10?</div>
+        <figure class="fig"><img src="hinh/h111.jpg" alt="Trang tính Chi tiêu có thêm cột H Tổng tiền: Ở 920, Ăn 8000, Di chuyển 600, Học tập 2200, Sức khoẻ 620, Giải trí 0, Quà tặng từ thiện 300, Tiết kiệm 1000, Khác 0"><figcaption>Hình 11a.1. Trang tính Chi tiêu đã bổ sung thêm cột Tổng tiền</figcaption></figure>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Hàm tính tổng theo điều kiện SUMIF</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 45–46). Trong bài toán quản lí tài chính gia đình, em cần biết tổng số tiền thu, chi theo từng khoản để cân đối sao cho hợp lí. Ví dụ: với việc chi tiêu, nhìn vào dữ liệu tổng hợp, em có thể tránh được việc chi quá nhiều cho những nhu cầu không thiết yếu. Để tính tổng số tiền theo từng khoản mục, em sử dụng hàm tính tổng theo điều kiện SUMIF. Công thức chung của hàm SUMIF là: <b>=SUMIF(range, criteria, [sum_range])</b>. Trong đó, ý nghĩa của các tham số như sau: <b>range</b>: phạm vi chứa các giá trị cần kiểm tra hoặc tính tổng các giá trị nếu không có tham số sum_range; <b>criteria</b>: điều kiện kiểm tra; <b>sum_range</b> (tuỳ chọn): phạm vi chứa các giá trị cần tính tổng, nếu sum_range bị bỏ qua thì tính tổng các ô trong tham số range thoả mãn điều kiện. Có hai dạng sử dụng hàm SUMIF như ví dụ trong Bảng 11a.1.</div>
+        <figure class="fig"><img src="hinh/b111.jpg" alt="Bảng 11a.1: =SUMIF(A1:A5, lớn hơn 5) tính tổng các giá trị lớn hơn 5 trong A1:A5 (kết quả 15); =SUMIF(A2:A5, Khoa, B2:B5) tính tổng tiền Khoa đã chi (kết quả 750 000)"><figcaption>Bảng 11a.1. Ví dụ sử dụng hàm SUMIF</figcaption></figure>
+        <div class="reading">Thử hai công thức của Bảng 11a.1 trên bảng tính mô phỏng (gõ vào ô D1).</div>
+        <div data-bt0></div>
+        <div data-bt0b></div>
+        <div data-task="b111" data-n="1"></div>
+        <div data-task="thamso" data-n="2"></div>
+        <div class="reading">Trong Hình 11a.1, tại ô H2, em dùng hàm SUMIF để tính tổng tiền của khoản chi Ở. Trong đó, phạm vi chứa giá trị cần kiểm tra là ở cột Khoản chi là B3:B10, điều kiện kiểm tra là tên của khoản chi Ở, phạm vi chứa các giá trị cần tính tổng là ở cột Số tiền là D3:D10. Do đó, công thức tại ô H2 là =SUMIF(B3:B10,"Ở",D3:D10). Nhưng vì tên khoản chi Ở đã được lưu ở ô F2 nên để dữ liệu đảm bảo chính xác khi sao chép sang các ô khác, điều kiện kiểm tra cần thay đổi thành F2 và các địa chỉ trong công thức phải là địa chỉ tuyệt đối. Khi đó, công thức tại ô H2 là <b>=SUMIF($B$3:$B$10,F2,$D$3:$D$10)</b> như minh hoạ trong Hình 11a.2.</div>
+        <figure class="fig"><img src="hinh/h112.jpg" alt="Ô H2 đang nhập =SUMIF($B$3:$B$10,F2,$D$3:$D$10); vùng B3:B10 và D3:D10 được tô màu"><figcaption>Hình 11a.2. Công thức tính tổng số tiền của khoản chi Ở</figcaption></figure>
+        <div data-task="chon" data-n="3"></div>
+        <div data-task="h2" data-n="4"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 47</div>
+        <div class="reading">Hình 11a.3 minh hoạ dữ liệu của trang tính Thu nhập. Em hãy cho biết công thức cần nhập vào ô H2 là gì, giá trị của ô H2 có ý nghĩa gì.</div>
+        <figure class="fig"><img src="hinh/h113.jpg" alt="Trang tính Thu nhập có cột G Số lần thu và cột H Tổng tiền, ô H2 đang để dấu hỏi"><figcaption>Hình 11a.3. Trang tính Thu nhập</figcaption></figure>
+        <div data-task="p47" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Hàm SUMIF</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Sử dụng hàm SUMIF</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Tổng số tiền của mỗi khoản chi tiêu</div>
+        <div class="reading">Sử dụng hàm SUMIF để tính tổng số tiền của mỗi khoản chi tiêu. <b>Hướng dẫn. a) Tính tổng số tiền của mỗi khoản chi trong trang tính Chi tiêu:</b> mở tệp bảng tính TaiChinhGiaDinh.xlsx, chọn trang tính Chi tiêu; tại ô H2, nhập công thức <b>=SUMIF($B$3:$B$10,F2,$D$3:$D$10)</b> để tính tổng số tiền của khoản chi Ở (Hình 11a.2); sao chép công thức trong ô H2 sang các ô từ H3 đến H10 để tính tổng số tiền của mỗi khoản chi còn lại; lưu tệp.<br><b>b) Tính tổng số tiền của mỗi khoản thu trong trang tính Thu nhập:</b> chọn trang tính Thu nhập (Hình 11a.3); tại ô H2, nhập công thức <b>=SUMIF($B$3:$B$8,F2,$D$3:$D$8)</b> để tính tổng tiền của khoản thu Lương; sao chép công thức trong ô H2 sang các ô từ H3 đến H6 để tính tổng tiền cho các khoản thu còn lại; lưu tệp.</div>
+        <div class="reading"><b>Trên bảng tính mô phỏng</b> (dữ liệu và cột Số lần của Bài 10a đã có sẵn): chọn H2, gõ công thức rồi Enter; chọn lại H2, bấm <b>📋 Sao chép</b>, kéo chọn vùng đích rồi bấm <b>📌 Dán</b>.</div>
+        <div data-bt1></div>
+        <div data-bt2></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Bổ sung dữ liệu thu, chi</div>
+        <div class="reading">Em hãy bổ sung thêm một số dòng dữ liệu thu, chi vào cuối phần dữ liệu của cả hai trang tính Thu nhập và Chi tiêu. Hãy điều chỉnh công thức SUMIF ở cột H để kết quả tổng tiền của mỗi khoản thu, chi được chính xác. (Mô phỏng: trang tính Chi tiêu, công thức cột G, H đang dùng vùng đến hàng 10.)</div>
+        <div data-bt3></div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Kinh phí Triển lãm tin học</div>
+        <div class="reading">Em hãy mở bảng tính KinhPhiTrienLam.xlsx đã lưu ở phần Vận dụng, Bài 10a và sử dụng hàm SUMIF để tính tổng các khoản thu, chi của dự án Triển lãm tin học. Lưu tệp sau khi hoàn thành công việc.</div>
+        <div data-bt4></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/bangtinh.js?v=7"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var TOOLS = ["copy","paste","|","b","fill","left","center","right","|","fmt","|","reset"];
+      var NOTE = "Chọn ô rồi gõ (công thức bắt đầu bằng =), nhấn Enter. Sao chép: chọn ô → 📋 Sao chép → chọn vùng đích → 📌 Dán.";
+      var nospace = function(x){ return String(x || "").replace(/\s/g, ""); };
+      BangTinh($("[data-bt0]"), {title:"Bảng 11a.1 – ví dụ 1", cols:4, rows:5, widths:[60,40,150,80], tools:["reset"], note:'Gõ =SUMIF(A1:A5,">5") vào ô D1.',
+        data:{A1:"5", A2:"3", A3:"7", A4:"8", A5:"2", C1:"Tổng các số >5"},
+        check:function(x){ return [['D1: =SUMIF(A1:A5,">5") → 15', /^=SUMIF\(A1:A5,">5"\)$/i.test(nospace(x.d.D1)) && x.val("D1") === 15]]; }});
+      BangTinh($("[data-bt0b]"), {title:"Bảng 11a.1 – ví dụ 2", cols:4, rows:5, widths:[90,90,170,90], tools:["reset"], note:'Gõ =SUMIF(A2:A5,"Khoa",B2:B5) vào ô D1.',
+        data:{A1:"Người chi", B1:"Số tiền", C1:"Tổng tiền Khoa đã chi", A2:"Khoa", B2:"500000", A3:"Minh", B3:"450000", A4:"Khoa", B4:"250000", A5:"Minh", B5:"80000"}, fmt:{A1:{b:true}, B1:{b:true}},
+        check:function(x){ return [['D1: =SUMIF(A2:A5,"Khoa",B2:B5) → 750000', /^=SUMIF\(A2:A5,"Khoa",B2:B5\)$/i.test(nospace(x.d.D1)) && x.val("D1") === 750000]]; }});
+      var W = [64,120,140,140,20,130,60,90];
+      var CHI = ["Ở","Ăn","Di chuyển","Học tập","Sức khoẻ","Giải trí","Quà tặng/Từ thiện","Tiết kiệm","Khác"], THU = ["Lương","Thưởng","Làm thêm","Được cho/tặng","Khác"];
+      var RCHI = [["14/8/23","Ở","Tiền điện tháng 8",800],["14/8/23","Sức khoẻ","Mua thuốc",620],["15/8/23","Học tập","Học phí tháng 8",2200],["20/8/23","Quà tặng/Từ thiện","Quà tặng",300],["22/8/23","Di chuyển","Gửi xe, xăng xe",600],["26/8/23","Ở","Tiền nước tháng 8",120],["26/8/23","Tiết kiệm","Tiết kiệm tháng 8",1000],["30/8/23","Ăn","Tiền ăn tháng 8",8000]];
+      var RTHU = [["13/8/23","Lương","Lương tháng 8",10000],["15/8/23","Làm thêm","Bán hàng trực tuyến",1500],["18/8/23","Được cho/tặng","Người thân tặng",500],["25/8/23","Thưởng","Thưởng tháng 8",3000],["29/8/23","Khác","Tiết kiệm tiền đi lại",500],["30/8/23","Làm thêm","Làm thêm tháng 8",2000]];
+      function sheet(title, colB, items, rows, last, g, h){ var d = {A1:title, A2:"Ngày", B2:colB, C2:"Nội dung", D2:"Số tiền (nghìn đồng)", F1:colB, G1:g, H1:"Tổng tiền (nghìn đồng)"};
+        items.forEach(function(t, i){ d["F" + (i + 2)] = t; d["G" + (i + 2)] = "=COUNTIF($B$3:$B$" + last + ",F" + (i + 2) + ")"; });
+        rows.forEach(function(r, i){ d["A" + (i + 3)] = r[0]; d["B" + (i + 3)] = r[1]; d["C" + (i + 3)] = r[2]; d["D" + (i + 3)] = String(r[3]); }); return d; }
+      function fm(n, col){ var o = {A1:{big:true}, A2:{b:true, al:"center"}, B2:{b:true, al:"center"}, C2:{b:true, al:"center"}, D2:{b:true, al:"center"}, F1:{b:true, al:"center"}, G1:{b:true, al:"center"}, H1:{b:true, al:"center"}}; for (var i = 2; i < 2 + n; i++) o["F" + i] = {fill: col}; return o; }
+      function sumOK(x, n, last){ for (var r = 2; r < 2 + n; r++) { var m = /^=SUMIF\(\$B\$3:\$B\$(\d+),F(\d+),\$D\$3:\$D\$(\d+)\)$/i.exec(nospace(x.d["H" + r])); if (!m || +m[2] !== r || +m[1] < last || +m[3] < last || m[1] !== m[3]) return false; } return true; }
+      function expect(x, n, last){ for (var r = 2; r < 2 + n; r++) { var s = 0; for (var q = 3; q <= last; q++) if (String(x.text("B" + q)).toLowerCase() === String(x.text("F" + r)).toLowerCase()) s += +x.val("D" + q) || 0; if (x.val("H" + r) !== s) return false; } return true; }
+      BangTinh($("[data-bt1]"), {title:"TaiChinhGiaDinh.xlsx – trang tính Chi tiêu", cols:8, rows:10, widths:W, tools:TOOLS, sheet:"Chi tiêu", note:NOTE,
+        data:sheet("Chi tiêu", "Khoản chi", CHI, RCHI, 10, "Số lần chi"), fmt:fm(9, "#f8c9b5"),
+        check:function(x){ return [["H2: =SUMIF($B$3:$B$10,F2,$D$3:$D$10) → 920", /^=SUMIF\(\$B\$3:\$B\$10,F2,\$D\$3:\$D\$10\)$/i.test(nospace(x.d.H2)) && x.val("H2") === 920], ["Sao chép sang H3 đến H10", sumOK(x, 9, 10)], ["Kết quả đúng như Hình 11a.1 (Ăn 8 000, Giải trí 0,…)", expect(x, 9, 10)]]; }});
+      BangTinh($("[data-bt2]"), {title:"TaiChinhGiaDinh.xlsx – trang tính Thu nhập", cols:8, rows:8, widths:W, tools:TOOLS, sheet:"Thu nhập", note:NOTE,
+        data:sheet("Thu nhập", "Khoản thu", THU, RTHU, 8, "Số lần thu"), fmt:fm(5, "#c9d9ee"),
+        check:function(x){ return [["H2: =SUMIF($B$3:$B$8,F2,$D$3:$D$8) → 10 000", /^=SUMIF\(\$B\$3:\$B\$8,F2,\$D\$3:\$D\$8\)$/i.test(nospace(x.d.H2)) && x.val("H2") === 10000], ["Sao chép sang H3 đến H6, kết quả đúng (Làm thêm 3 500)", sumOK(x, 5, 8) && expect(x, 5, 8)]]; }});
+      var d3 = sheet("Chi tiêu", "Khoản chi", CHI, RCHI, 10, "Số lần chi"); for (var r = 2; r <= 10; r++) d3["H" + r] = "=SUMIF($B$3:$B$10,F" + r + ",$D$3:$D$10)";
+      BangTinh($("[data-bt3]"), {title:"Luyện tập: bổ sung dữ liệu vào trang tính Chi tiêu", cols:8, rows:16, widths:W, tools:TOOLS, sheet:"Chi tiêu", note:NOTE + " Nhập thêm ở hàng 11, 12,… (cột A, B, C, D) rồi sửa vùng trong công thức cột G và H.",
+        data:d3, fmt:fm(9, "#f8c9b5"),
+        check:function(x){ var last = 10; for (var r = 11; r <= 16; r++) if (x.text("B" + r)) last = r;
+          return [["Thêm ít nhất 2 dòng dữ liệu chi (hàng 11 trở đi)", last >= 12], ["Mở rộng range và sum_range trong cột H, sao chép lại", last >= 12 && sumOK(x, 9, last)], ["Tổng tiền cột H khớp với dữ liệu", last >= 12 && expect(x, 9, last)]]; }});
+      BangTinh($("[data-bt4]"), {title:"KinhPhiTrienLam.xlsx – trang tính Các khoản chi", cols:8, rows:8, widths:W, tools:TOOLS, sheet:"Các khoản chi", note:NOTE,
+        data:sheet("Các khoản chi cho Triển lãm tin học", "Khoản chi", ["Văn phòng phẩm","In tài liệu"], [["5/9/23","Văn phòng phẩm","Mua giấy, bút",150],["6/9/23","In tài liệu","In tờ rơi",300],["8/9/23","In tài liệu","In áp phích",250]], 8, "Số lần chi"), fmt:fm(2, "#f8c9b5"),
+        check:function(x){ return [["H2, H3 dùng SUMIF với vùng cố định, kết quả 150 và 550", /SUMIF/i.test(x.d.H2 || "") && /\$/.test(x.d.H2 || "") && x.val("H2") === 150 && x.val("H3") === 550]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
