@@ -108,3 +108,133 @@ window.Chieu = {open, close, parts: PARTS};
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
 })();
+
+/* BÚT VIẾT LÊN TRANG: nút ✏️ ở góc phải dưới. Bút nhiều màu, bút dạ quang, tẩy (xoá từng nét), hoàn tác, xoá hết, ẩn/hiện nét.
+   Nét vẽ gắn với nội dung: cuộn trang thì nét cuộn theo. Trong "Chiếu ghi bài", mỗi phần có nét riêng; vẫn dùng được khi toàn màn hình.
+   Nét vẽ chỉ nằm trên máy đang dùng, tải lại trang là mất. Phím tắt khi đang vẽ: Esc thoát bút, Ctrl+Z hoàn tác. */
+(function(){
+  const COLORS = [["#e53935","Đỏ"],["#1e88e5","Xanh dương"],["#2e7d32","Xanh lá"],["#212121","Đen"]];
+  const css = ".pen-fab{position:fixed;right:14px;bottom:14px;z-index:310;width:46px;height:46px;border-radius:50%;border:2px solid var(--accent,#0c665e);background:var(--surface,#fff);color:var(--fg,#1d2433);font-size:22px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.25);display:grid;place-items:center;padding:0}"
+    + ".pen-fab[aria-pressed=true]{background:var(--accent,#0c665e);color:#fff}"
+    + ".pen-cv{position:fixed;left:0;top:0;z-index:300;pointer-events:none;touch-action:none}"
+    + ".pen-cv.on{pointer-events:auto;cursor:crosshair}.pen-cv.on.er{cursor:cell}"
+    + ".pen-bar{position:fixed;right:14px;bottom:70px;z-index:310;display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:14px;background:var(--surface,#fff);border:1px solid var(--line,#ccd);box-shadow:0 4px 16px rgba(0,0,0,.25);max-height:calc(100vh - 90px);overflow:auto}"
+    + ".pen-bar[hidden]{display:none}"
+    + ".pen-bar button{width:40px;height:36px;border-radius:9px;border:2px solid transparent;background:transparent;color:var(--fg,#1d2433);font-size:18px;cursor:pointer;display:grid;place-items:center;padding:0}"
+    + ".pen-bar button:hover{border-color:var(--line,#ccd)}"
+    + ".pen-bar button[aria-pressed=true]{border-color:var(--accent,#0c665e);background:var(--sunk,#eef)}"
+    + ".pen-bar .dot{width:20px;height:20px;border-radius:50%;display:block}"
+    + ".pen-bar .ln{height:1px;background:var(--line,#ccd);margin:2px 0}"
+    + ".pen-bar .w{display:block;border-radius:4px;background:currentColor;width:22px}";
+  const st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+
+  const fab = document.createElement("button"); fab.type = "button"; fab.className = "pen-fab"; fab.title = "Bút viết lên trang"; fab.setAttribute("aria-label", "Bút viết lên trang"); fab.setAttribute("aria-pressed", "false"); fab.textContent = "✏️";
+  const cv = document.createElement("canvas"); cv.className = "pen-cv"; cv.setAttribute("aria-hidden", "true");
+  const bar = document.createElement("div"); bar.className = "pen-bar"; bar.hidden = true; bar.setAttribute("role", "toolbar"); bar.setAttribute("aria-label", "Công cụ bút");
+  bar.innerHTML = COLORS.map(function(c){ return '<button type="button" data-c="' + c[0] + '" title="Bút ' + c[1] + '" aria-label="Bút ' + c[1] + '"><span class="dot" style="background:' + c[0] + '"></span></button>'; }).join("")
+    + '<button type="button" data-t="hl" title="Bút dạ quang" aria-label="Bút dạ quang"><span class="dot" style="background:#ffeb3b;border-radius:3px;width:22px;height:12px"></span></button>'
+    + '<span class="ln"></span>'
+    + '<button type="button" data-w="3" title="Nét mảnh" aria-label="Nét mảnh"><span class="w" style="height:2px"></span></button>'
+    + '<button type="button" data-w="6" title="Nét vừa" aria-label="Nét vừa"><span class="w" style="height:5px"></span></button>'
+    + '<button type="button" data-w="11" title="Nét đậm" aria-label="Nét đậm"><span class="w" style="height:9px"></span></button>'
+    + '<span class="ln"></span>'
+    + '<button type="button" data-t="er" title="Tẩy: chạm vào nét nào thì xoá nét đó" aria-label="Tẩy">🧽</button>'
+    + '<button type="button" data-a="undo" title="Hoàn tác (Ctrl+Z)" aria-label="Hoàn tác">↶</button>'
+    + '<button type="button" data-a="clear" title="Xoá hết nét vẽ" aria-label="Xoá hết nét vẽ">🗑️</button>'
+    + '<button type="button" data-a="eye" title="Ẩn / hiện nét vẽ" aria-label="Ẩn hoặc hiện nét vẽ" aria-pressed="false">👁️</button>'
+    + '<button type="button" data-a="done" title="Xong (Esc): thôi vẽ, giữ nét để bấm, cuộn trang" aria-label="Xong">✓</button>';
+
+  let on = false, tool = "pen", color = COLORS[0][0], width = 3, hidden = false, cur = null;
+  const LAYERS = {};   /* "page" hoặc "chieu:<phần>" → mảng nét {c, w, hl, p:[[x,y],…]}, toạ độ theo nội dung */
+  function chieuBox(){ const b = document.querySelector(".chieu"); return b && !b.hidden ? b : null; }
+  function ctxInfo(){
+    const b = chieuBox();
+    if (b) { const body = b.querySelector(".chieu-body"), part = (b.querySelector(".chieu-part") || {}).textContent || "";
+      return {key: "chieu:" + part, host: b, ox: body.scrollLeft, oy: body.scrollTop, scroller: body}; }
+    return {key: "page", host: document.body, ox: window.scrollX, oy: window.scrollY, scroller: null};
+  }
+  function strokes(){ const k = ctxInfo().key; return LAYERS[k] || (LAYERS[k] = []); }
+  function mount(){ const h = ctxInfo().host; [cv, bar, fab].forEach(function(x){ if (x.parentNode !== h) h.appendChild(x); }); }
+  function size(){ const r = window.devicePixelRatio || 1; cv.width = Math.round(innerWidth * r); cv.height = Math.round(innerHeight * r); cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px"; draw(); }
+  function path(g, s, ox, oy){
+    const p = s.p; g.beginPath(); g.moveTo(p[0][0] - ox, p[0][1] - oy);
+    if (p.length === 1) g.lineTo(p[0][0] - ox + .1, p[0][1] - oy);
+    for (let i = 1; i < p.length - 1; i++) { const mx = (p[i][0] + p[i + 1][0]) / 2, my = (p[i][1] + p[i + 1][1]) / 2; g.quadraticCurveTo(p[i][0] - ox, p[i][1] - oy, mx - ox, my - oy); }
+    if (p.length > 1) g.lineTo(p[p.length - 1][0] - ox, p[p.length - 1][1] - oy);
+  }
+  function draw(){
+    const g = cv.getContext("2d"), r = window.devicePixelRatio || 1; g.setTransform(r, 0, 0, r, 0, 0); g.clearRect(0, 0, innerWidth, innerHeight);
+    if (hidden) return;
+    const I = ctxInfo(); g.lineCap = "round"; g.lineJoin = "round";
+    strokes().concat(cur && !cur.er ? [cur] : []).forEach(function(s){ g.globalAlpha = s.hl ? .38 : 1; g.strokeStyle = s.c; g.lineWidth = s.w; path(g, s, I.ox, I.oy); g.stroke(); });
+    g.globalAlpha = 1;
+  }
+  function pt(e){ const I = ctxInfo(); return [e.clientX + I.ox, e.clientY + I.oy]; }
+  function near(s, x, y, R){
+    const p = s.p, rr = R + s.w / 2;
+    for (let i = 0; i < p.length; i++) {
+      const a = p[i], b = p[i + 1] || a, dx = b[0] - a[0], dy = b[1] - a[1], L2 = dx * dx + dy * dy;
+      let t = L2 ? ((x - a[0]) * dx + (y - a[1]) * dy) / L2 : 0; t = Math.max(0, Math.min(1, t));
+      const qx = a[0] + t * dx - x, qy = a[1] + t * dy - y; if (qx * qx + qy * qy <= rr * rr) return true;
+    }
+    return false;
+  }
+  function erase(e){ const q = pt(e), S = strokes(); for (let i = S.length - 1; i >= 0; i--) if (near(S[i], q[0], q[1], 10)) { (S.undo = S.undo || []).push(["del", S[i], i]); S.splice(i, 1); } draw(); }
+  cv.addEventListener("pointerdown", function(e){
+    if (!on) return; e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch(x) {}
+    if (hidden) { hidden = false; sync(); }
+    if (tool === "er") { cur = {er: true}; erase(e); return; }
+    cur = tool === "hl" ? {c: "#ffeb3b", w: Math.max(14, width * 3), hl: true, p: [pt(e)]} : {c: color, w: width, p: [pt(e)]}; draw();
+  });
+  cv.addEventListener("pointermove", function(e){
+    if (!cur) return;
+    if (cur.er) { erase(e); return; }
+    let evs = e.getCoalescedEvents ? e.getCoalescedEvents() : []; if (!evs.length) evs = [e];
+    evs.forEach(function(ev){ cur.p.push(pt(ev)); }); draw();
+  });
+  function up(){ if (!cur) return; if (!cur.er) { const S = strokes(); S.push(cur); (S.undo = S.undo || []).push(["add", cur]); } cur = null; draw(); }
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  /* lăn chuột khi đang vẽ: cuộn trang (hoặc phần chiếu) bên dưới */
+  cv.addEventListener("wheel", function(e){ const I = ctxInfo(); if (I.scroller) I.scroller.scrollBy(e.deltaX, e.deltaY); else window.scrollBy(e.deltaX, e.deltaY); }, {passive: true});
+  function undo(){ const S = strokes(), u = S.undo && S.undo.pop(); if (!u) return;
+    if (u[0] === "add") { const i = S.indexOf(u[1]); if (i >= 0) S.splice(i, 1); }
+    else if (u[0] === "del") S.splice(Math.min(u[2], S.length), 0, u[1]);
+    else if (u[0] === "clear") Array.prototype.push.apply(S, u[1]);
+    draw(); }
+  function sync(){
+    fab.setAttribute("aria-pressed", String(on)); bar.hidden = !on; cv.classList.toggle("on", on); cv.classList.toggle("er", tool === "er");
+    bar.querySelectorAll("[data-c]").forEach(function(b){ b.setAttribute("aria-pressed", String(tool === "pen" && b.dataset.c === color)); });
+    bar.querySelectorAll("[data-w]").forEach(function(b){ b.setAttribute("aria-pressed", String(Number(b.dataset.w) === width)); });
+    bar.querySelectorAll("[data-t]").forEach(function(b){ b.setAttribute("aria-pressed", String(tool === b.dataset.t)); });
+    bar.querySelector('[data-a="eye"]').setAttribute("aria-pressed", String(hidden));
+    draw();
+  }
+  function setOn(v){ on = v; mount(); sync(); }
+  fab.addEventListener("click", function(){ setOn(!on); });
+  bar.addEventListener("click", function(e){ const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.c) { tool = "pen"; color = b.dataset.c; }
+    else if (b.dataset.w) { width = Number(b.dataset.w); if (tool === "er") tool = "pen"; }
+    else if (b.dataset.t) tool = tool === b.dataset.t ? "pen" : b.dataset.t;
+    else if (b.dataset.a === "undo") undo();
+    else if (b.dataset.a === "clear") { const S = strokes(); if (S.length) (S.undo = S.undo || []).push(["clear", S.splice(0)]); }
+    else if (b.dataset.a === "eye") hidden = !hidden;
+    else if (b.dataset.a === "done") { setOn(false); return; }
+    sync(); });
+  document.addEventListener("keydown", function(e){
+    if (!on) return;
+    if (e.key === "Escape") { e.stopImmediatePropagation(); e.preventDefault(); setOn(false); }
+    else if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "Z")) { e.preventDefault(); undo(); }
+  }, true);
+  window.addEventListener("scroll", draw, {passive: true});
+  window.addEventListener("resize", size);
+  document.addEventListener("scroll", function(e){ if (e.target && e.target.classList && e.target.classList.contains("chieu-body")) draw(); }, true);
+  /* mở/đóng màn chiếu, đổi phần chiếu, vào/thoát toàn màn hình: chuyển lớp nét vẽ cho đúng chỗ */
+  function re(){ mount(); draw(); }
+  new MutationObserver(re).observe(document.documentElement, {attributes: true, attributeFilter: ["class"]});
+  document.addEventListener("fullscreenchange", function(){ setTimeout(function(){ size(); re(); }, 60); });
+  function watchChieu(){ const b = document.querySelector(".chieu"); if (!b || b._penWatch) return; b._penWatch = true;
+    const p = b.querySelector(".chieu-part"); if (p) new MutationObserver(draw).observe(p, {childList: true, characterData: true, subtree: true}); }
+  function init(){ mount(); size(); sync(); new MutationObserver(watchChieu).observe(document.body, {childList: true}); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+  window.But = {on: function(){ setOn(true); }, off: function(){ setOn(false); }, layers: LAYERS};
+})();
