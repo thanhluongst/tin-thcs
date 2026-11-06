@@ -26,9 +26,9 @@ window.CHUONG_TRINH = [
     {so: "4", ten: "Đạo đức, pháp luật và văn hoá trong môi trường số", bai: [
       {so: "9", ten: "An toàn thông tin trên Internet", tt: "dang"}]},
     {so: "5", ten: "Ứng dụng tin học", bai: [
-      {so: "10", ten: "Sơ đồ tư duy"},
-      {so: "11", ten: "Định dạng văn bản"},
-      {so: "12", ten: "Trình bày thông tin ở dạng bảng", slug: "trinh-bay-bang"},
+      {so: "10", ten: "Sơ đồ tư duy", tt: "dang"},
+      {so: "11", ten: "Định dạng văn bản", tt: "dang"},
+      {so: "12", ten: "Trình bày thông tin ở dạng bảng", slug: "trinh-bay-bang", tt: "dang"},
       {so: "13", ten: "Thực hành: Tìm kiếm và thay thế"},
       {so: "14", ten: "Thực hành tổng hợp: Hoàn thiện sổ lưu niệm"}]},
     {so: "6", ten: "Giải quyết vấn đề với sự trợ giúp của máy tính", bai: [
