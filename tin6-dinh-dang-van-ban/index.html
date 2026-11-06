@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Định dạng văn bản · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 5. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>11</b></div><h1><span class="sr-only">Bài 11. </span>Định dạng văn bản</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nêu được các chức năng đặc trưng của những phần mềm soạn thảo văn bản.</li>
+        <li>Trình bày được tác dụng của công cụ căn lề, định dạng văn bản.</li>
+        <li>Thực hiện được việc định dạng văn bản, trình bày trang văn bản và in.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Định dạng văn bản">
+      <span class="node">Định dạng đoạn</span>
+      <span class="node">Định dạng trang</span>
+      <span class="node io">In</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Phần mềm soạn thảo văn bản</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Định dạng văn bản và in</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Định dạng văn bản</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .wp{display:grid;gap:8px;width:100%}
+      .wp-tb{display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:#eef1f5;border:1px solid #cdd3da;border-radius:8px;padding:6px;font-size:13px;color:#1d2433}
+      .wp-tb button{min-width:34px;height:32px;border:1px solid #c5ccd4;border-radius:6px;background:#fff;cursor:pointer;font:inherit;color:#1d2433;padding:0 8px}
+      .wp-tb button[aria-pressed=true]{background:#cfe0fb;border-color:#3466c2}
+      .wp-tb select{height:32px;font:inherit}
+      .wp-tb .sep{width:1px;height:24px;background:#c5ccd4;margin:0 4px}
+      .wp-desk{background:#9aa3ad;padding:16px;border-radius:8px;display:grid;justify-items:center;overflow:auto}
+      .wp-page{background:#fff;color:#1d2433;box-shadow:0 2px 8px rgba(0,0,0,.35);font-family:"Times New Roman",serif;font-size:11px;line-height:1.15;transition:all .2s;outline:1px dashed #b9c3cf;outline-offset:-1px}
+      .wp-page p{margin:0 0 4px;cursor:pointer;border-radius:2px}
+      .wp-page p.sel{background:#e6efff;outline:1px solid #8fb0ea}
+      .wp-page .tt{color:#2a6db5;font-weight:700}
+      .wp-page .im{font-size:40px;line-height:1}
+      .wp-msg{font-size:13px}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Làm sổ lưu niệm trên máy tính</div>
+        <div class="reading">Ba bạn An, Minh và Khoa đã bàn về nội dung cuốn sổ lưu niệm của lớp, nhưng còn một câu hỏi phải trả lời là dùng công cụ gì để làm cuốn sổ này.<br><b>An:</b> Nội dung cuốn sổ gồm những bài viết cảm nghĩ, ảnh chụp, danh sách các bạn trong lớp,… Tớ nghĩ mình mua một cuốn sổ để viết và dán ảnh vào đó.<br><b>Minh:</b> Thử cân nhắc làm trên máy tính xem sao. Những năm ở Tiểu học, chúng mình đã học sử dụng nhiều phần mềm trên máy tính.<br><b>Khoa:</b> Nếu làm trên máy tính, mình có thể gửi cho thầy cô và các bạn xem trước để góp ý, khi cần sửa lại cũng thuận tiện. Hơn nữa, ngoài cuốn sổ lưu niệm in ra cho mỗi bạn, mình vẫn còn tệp lưu trữ trong máy tính để phòng khi cuốn sổ đã in bị hỏng hoặc thất lạc.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Phần mềm soạn thảo văn bản</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Phần mềm soạn thảo văn bản</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Chức năng của phần mềm soạn thảo văn bản</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 48). Phần mềm soạn thảo văn bản có thể được cài đặt trên máy tính hoặc chạy trực tuyến trên Internet. Có nhiều loại phần mềm soạn thảo khác nhau, chúng đều có các chức năng cơ bản: tạo và định dạng văn bản; biên tập, chỉnh sửa nội dung; lưu trữ văn bản; in văn bản. Để nâng cao hiệu quả sử dụng, phần mềm soạn thảo còn có một số chức năng nâng cao khác: xem lại và theo dõi sự thay đổi của tài liệu; lưu trữ tài liệu nhờ công nghệ đám mây để có thể đồng bộ và lấy tài liệu từ máy tính, điện thoại di động hay máy tính bảng; làm việc cộng tác với người khác trên cùng một tài liệu mọi lúc mọi nơi. Với những chức năng này, chúng ta có thể tạo ra các tài liệu khác nhau như cuốn sách, bài viết, báo cáo, bản tin, tờ rơi,…</div>
+        <div data-task="cn" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 48</div>
+        <div data-task="p48" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Phần mềm soạn thảo văn bản</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Định dạng văn bản và in</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Định dạng đoạn, định dạng trang, in</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 49–50). Để văn bản được trình bày đẹp, dễ đọc, dễ nhớ thì ngoài việc định dạng kí tự, chúng ta cần định dạng đoạn và định dạng trang văn bản.<ul><li><b>a) Định dạng đoạn văn bản</b>: đoạn là phần văn bản thường được phân cách bởi dấu ngắt đoạn (xuất hiện khi nhấn phím Enter). Định dạng đoạn giúp thay đổi cách trình bày của đoạn: tăng, giảm lề của đoạn, căn chỉnh lề, đặt khoảng cách giữa các dòng trong đoạn,… Các lệnh nằm trong thẻ <b>Home</b>, nhóm lệnh <b>Paragraph</b>: căn thẳng lề trái, căn giữa, căn thẳng lề phải, căn thẳng hai lề, giảm/tăng mức thụt lề trái, khoảng cách giữa các dòng trong đoạn, giữa các đoạn.</li><li><b>b) Định dạng trang văn bản</b>: các lệnh nằm trong thẻ <b>Page Layout</b>, nhóm lệnh <b>Page Setup</b>. Yêu cầu cơ bản khi trình bày trang: chọn hướng trang (Orientation): trang đứng (Portrait) hay trang ngang (Landscape); đặt lề trang (Margins): lề trái (Left), lề phải (Right), lề trên (Top), lề dưới (Bottom); lựa chọn khổ giấy (Size): khổ giấy phổ biến là A4.</li><li><b>c) In văn bản</b>: trong thẻ <b>File</b>, chọn lệnh <b>Print</b>: chọn máy in, nhập trang cần in, xem trước khi in, nháy nút Print để in.</li></ul><i>Thử các nút định dạng trên trang mô phỏng: nháy vào một đoạn để chọn, rồi bấm nút.</i></div>
+        <figure class="fig wp" data-wp>
+          <div class="wp-tb" role="toolbar" aria-label="Thanh công cụ định dạng">
+            <b>Home ▸ Paragraph:</b>
+            <button type="button" data-a="left" title="Căn thẳng lề trái">⫷</button><button type="button" data-a="center" title="Căn giữa">≡</button><button type="button" data-a="right" title="Căn thẳng lề phải">⫸</button><button type="button" data-a="justify" title="Căn thẳng hai lề">☰</button>
+            <button type="button" data-i="-1" title="Giảm mức thụt lề trái">⇤</button><button type="button" data-i="1" title="Tăng mức thụt lề trái">⇥</button>
+            <label>Giãn dòng <select data-ls><option value="1.15">1,15</option><option value="1.5">1,5</option><option value="2">2,0</option></select></label>
+            <span class="sep"></span><b>Page Layout ▸ Page Setup:</b>
+            <label>Orientation <select data-or><option value="p">Portrait (đứng)</option><option value="l">Landscape (ngang)</option></select></label>
+            <label>Margins <select data-mg><option value="n">Normal</option><option value="na">Narrow (hẹp)</option><option value="w">Wide (rộng)</option></select></label>
+          </div>
+          <div class="wp-desk"><div class="wp-page">
+            <p class="tt">CẢM NGHĨ VỀ NHÓM BẠN THÂN LỚP 6A</p>
+            <p class="im">👧</p>
+            <p class="tt">Tớ là An</p>
+            <p>Ngày đầu nhận lớp ở trường mới, tớ còn rụt rè vì chưa quen ai. Người đầu tiên bắt chuyện với tớ là Khoa, cậu bạn đeo cặp kính cận rất dày.</p>
+            <p>Khoa giới thiệu tớ với Minh – một bạn rất nhanh nhẹn và hay cười. Thế là ba đứa tớ trở thành nhóm bạn thân, cùng học, cùng chơi suốt những ngày đầu năm học.</p>
+            <p>Tớ mong cả nhóm sẽ luôn giữ được tình bạn đẹp như thế này.</p>
+          </div></div>
+          <div class="wp-msg" aria-live="polite">Đoạn đang chọn: 1</div>
+          <figcaption>Hình 5.5, 5.6. Định dạng đoạn và trình bày trang văn bản – mô phỏng</figcaption>
+        </figure>
+        <div data-task="dt" data-n="1"></div>
+        <div data-task="vt" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Định dạng văn bản và in</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Định dạng văn bản</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Bài viết cảm nghĩ</div>
+        <div class="reading"><b>Nhiệm vụ:</b> cuốn sổ lưu niệm của lớp chứa những bài viết cảm nghĩ về bạn bè, thầy cô và mái trường. Hình 5.8 là bài viết “Cảm nghĩ về nhóm bạn thân lớp 6A” của bạn An. Em hãy tham khảo bài viết này để soạn một bài viết cảm nghĩ của em trên phần mềm soạn thảo văn bản. Một số công việc cần làm: nhập nội dung văn bản, chèn hình ảnh (Insert/Picture); căn lề các đoạn văn bản; chọn hướng trang, chọn lề trang; xem trang in để điều chỉnh lại (nếu cần); lưu tệp văn bản (File/Save, tên CamNghiVeBan.docx). Trong bài viết của An, phần tiêu đề, hình ảnh và giới thiệu tên của An được căn lề giữa, phần văn bản còn lại được căn đều hai bên.</div>
+        <div data-task="th1" data-n="1"></div>
+        <div data-task="th2" data-n="2"></div>
+        <div data-task="th3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Hướng trang và căn lề</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+        <div data-task="lt3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Nội dung cuốn sổ lưu niệm</div>
+        <div data-task="vd" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var B = document.querySelector("[data-wp]"); if (!B) return;
+      var pg = B.querySelector(".wp-page"), ps = [].slice.call(pg.querySelectorAll("p")), cur = ps[0], msg = B.querySelector(".wp-msg"), st = ps.map(function(){ return {al:"left", ind:0}; });
+      ps.forEach(function(p, i){ p.addEventListener("click", function(){ cur = p; render(); }); });
+      function render(){ var i = ps.indexOf(cur);
+        ps.forEach(function(p, k){ p.classList.toggle("sel", p === cur); p.style.textAlign = st[k].al; p.style.marginLeft = st[k].ind * 18 + "px"; });
+        B.querySelectorAll("[data-a]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.a === st[i].al ? "true" : "false"); });
+        var or = B.querySelector("[data-or]").value, mg = {n:[26,26], na:[13,13], w:[26,51]}[B.querySelector("[data-mg]").value];
+        var w = or === "p" ? 260 : 368, h = or === "p" ? 368 : 260;
+        pg.style.width = w + "px"; pg.style.minHeight = h + "px"; pg.style.padding = mg[0] + "px " + mg[1] + "px"; pg.style.lineHeight = B.querySelector("[data-ls]").value;
+        msg.textContent = "Đoạn đang chọn: " + (i + 1) + " · Căn lề: " + {left:"thẳng lề trái", center:"giữa", right:"thẳng lề phải", justify:"thẳng hai lề"}[st[i].al] + " · Thụt lề: " + st[i].ind + " · Trang " + (or === "p" ? "đứng" : "ngang") + ", lề " + B.querySelector("[data-mg]").selectedOptions[0].text; }
+      B.addEventListener("click", function(e){ var b = e.target.closest("button"); if (!b) return; var i = ps.indexOf(cur);
+        if (b.dataset.a) st[i].al = b.dataset.a; if (b.dataset.i) st[i].ind = Math.max(0, Math.min(4, st[i].ind + +b.dataset.i)); render(); });
+      B.addEventListener("change", render); render();
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

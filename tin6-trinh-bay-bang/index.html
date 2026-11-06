@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Trình bày thông tin ở dạng bảng · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 5. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>12</b></div><h1><span class="sr-only">Bài 12. </span>Trình bày thông tin ở dạng bảng</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Biết được ưu điểm của việc trình bày thông tin ở dạng bảng.</li>
+        <li>Trình bày được thông tin ở dạng bảng bằng phần mềm soạn thảo văn bản.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Trình bày thông tin ở dạng bảng">
+      <span class="node">Tạo bảng</span>
+      <span class="node">Nhập dữ liệu</span>
+      <span class="node io">Chỉnh sửa, định dạng</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Trình bày thông tin ở dạng bảng</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Tạo bảng</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Định dạng bảng</a>
+    <a href="#phan-4" data-stage="phan-4"><span class="sn">2.4</span> Tạo bảng</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .tg{display:grid;gap:8px;width:100%;justify-items:center}
+      .tg-grid{display:grid;grid-template-columns:repeat(10,20px);gap:3px;padding:6px;background:#fff;border:1px solid #c5ccd4;border-radius:6px;touch-action:none}
+      .tg-grid span{width:20px;height:20px;border:1px solid #e0763b;background:#fff;cursor:pointer}
+      .tg-grid span.on{background:#ffd7bf}
+      .tg-lb{font-weight:700;font-size:14px}
+      .tg table,.sv table{border-collapse:collapse;font-size:13.5px;background:#fff;color:#1d2433}
+      .tg td{border:1px solid #6c8fc7;width:44px;height:22px}
+      .sv{display:grid;gap:8px;width:100%;justify-items:center;overflow-x:auto}
+      .sv th,.sv td{border:1px solid #6c8fc7;padding:4px 8px;text-align:center}
+      .sv th{background:#dfe9f8}
+      .sv td.new,.sv th.new{background:#fff3c4}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Danh sách học sinh</div>
+        <div class="reading">Cuốn sổ lưu niệm mà ba bạn An, Minh và Khoa đang làm cần bổ sung danh sách gồm ảnh và thông tin ngắn về các bạn trong lớp. Ba bạn đang băn khoăn không biết nên trình bày như thế nào cho đẹp và khoa học.<br><b>An:</b> Tớ đã mất khá nhiều thời gian để soạn thảo danh sách trên mấy trang văn bản. Các bạn xem thế đã được chưa?<br><b>Minh:</b> Tớ có tham khảo cách trình bày của một số cuốn sổ lưu niệm. Họ để danh sách vào một bảng, nhìn rất đầy đủ mà cô đọng.<br><b>Khoa:</b> Nhưng bảng vừa chứa hình ảnh, vừa chứa chữ có được không? Có lẽ chúng ta phải nhờ thầy cô hướng dẫn thêm.</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Trình bày thông tin ở dạng bảng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Bảng</div>
+        <div class="reading">Một phiếu khảo sát về sở thích đối với các trò chơi tập thể đã được phát cho học sinh trong lớp. Kết quả trả lời của các phiếu khảo sát được thống kê trong bảng sau:</div>
+        <figure class="fig sv" data-sv>
+          <table><thead><tr><th>STT</th><th>Tên trò chơi</th><th>Số bạn nam thích</th><th>Số bạn nữ thích</th></tr></thead>
+            <tbody><tr><td>1</td><td>Kéo co</td><td>19</td><td>16</td></tr><tr><td>2</td><td>Ném bóng trúng đích</td><td>12</td><td>15</td></tr><tr><td>3</td><td>Lò cò tiếp sức</td><td>16</td><td>18</td></tr><tr><td>4</td><td>Trốn tìm</td><td>8</td><td>10</td></tr></tbody></table>
+          <div class="row"><button class="btn" type="button" data-add>Chèn cột “Tổng số” (Insert Right)</button></div>
+          <figcaption>Bảng kết quả khảo sát trò chơi tập thể (theo SGK)</figcaption>
+        </figure>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+        <div data-task="hd2c" data-n="3"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Trình bày thông tin ở dạng bảng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Tạo bảng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Tạo bảng</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 54–55). Trong phần mềm soạn thảo văn bản, các lệnh tạo bảng nằm trong nhóm lệnh <b>Tables</b> của thẻ <b>Insert</b>. Để tạo bảng, em chọn lệnh Table trong thẻ Insert, kéo thả chuột để chọn số hàng, số cột của bảng. Bảng mới tạo sẽ được chèn vào vị trí của con trỏ soạn thảo. Để đưa dữ liệu vào bảng, em đặt con trỏ soạn thảo vào ô và nhập dữ liệu. Ô của bảng có thể chứa tất cả các loại dữ liệu như văn bản, hình ảnh,… Để di chuyển con trỏ soạn thảo, em sử dụng các phím mũi tên ↑, ↓, →, ← hoặc sử dụng chuột. Căn chỉnh lề cho dữ liệu trong ô tương tự như căn lề cho văn bản. <i>Lưu ý: cách tạo bảng này chỉ tạo được bảng có tối đa 10 cột, 8 hàng. Muốn tạo bảng lớn hơn: chọn <b>Insert/Table/Insert Table</b>, nhập số cột (Number of columns), số hàng (Number of rows).</i></div>
+        <figure class="fig tg" data-tg>
+          <div class="tg-lb">Insert ▸ Table: rê chuột (hoặc chạm) để chọn số cột × số hàng</div>
+          <div class="tg-grid" aria-label="Lưới chọn số cột, số hàng"></div>
+          <div class="tg-out" aria-live="polite"></div>
+          <figcaption>Hình 5.13. Chọn số cột, hàng của bảng – mô phỏng</figcaption>
+        </figure>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 55</div>
+        <div data-task="p55a" data-n="1"></div>
+        <div data-task="p55b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Tạo bảng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.3</span> Định dạng bảng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Chỉnh sửa bảng</div>
+        <div class="reading">Đọc mục <b>3</b> (SGK trang 55). Khi em đặt con trỏ soạn thảo trong bảng, nhóm thẻ <b>Table Tools</b> sẽ xuất hiện giúp em định dạng bảng. Để chỉnh sửa bảng, em chọn thẻ <b>Layout</b>.</div>
+        <div data-task="cs" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 55</div>
+        <div data-task="p55c" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Định dạng bảng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-4">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.4</span> Tạo bảng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Danh sách thành viên của lớp</div>
+        <div class="reading"><b>Nhiệm vụ:</b> tạo bảng danh sách thành viên của lớp như minh hoạ trong Hình 5.11; nhập dữ liệu gồm họ tên, ngày sinh và ảnh của giáo viên chủ nhiệm và từng thành viên trong lớp; chỉnh sửa, định dạng bảng. <b>Hướng dẫn:</b> a) Tạo bảng: xác định số cột, số hàng (Hình 5.11 có 4 cột, 4 hàng; em có thể ước tính theo số thành viên của lớp, hoặc tạo hai bảng: giáo viên và học sinh). b) Chỉnh sửa bảng: phần thông tin giáo viên chủ nhiệm trình bày trong một ô to được gộp từ 4 ô nhỏ. c) Nhập thông tin các thành viên vào ô: ảnh, họ tên, ngày sinh; có thể bổ sung địa chỉ, sở thích,… và chèn thêm hàng, cột cho đủ thành viên.</div>
+        <div data-task="th1" data-n="1"></div>
+        <div data-task="th2" data-n="2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Bảng khảo sát, bảng đọc sách</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Thời khoá biểu, sổ lưu niệm</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var G = document.querySelector("[data-tg]");
+      if (G) { var gr = G.querySelector(".tg-grid"), out = G.querySelector(".tg-out"), cells = [];
+        for (var r = 0; r < 8; r++) for (var c = 0; c < 10; c++) { var s = document.createElement("span"); s.dataset.r = r; s.dataset.c = c; gr.appendChild(s); cells.push(s); }
+        function hi(r, c){ cells.forEach(function(s){ s.classList.toggle("on", +s.dataset.r <= r && +s.dataset.c <= c); }); G.querySelector(".tg-lb").textContent = "Insert ▸ Table: " + (c + 1) + "x" + (r + 1) + " Table"; }
+        function pick(r, c){ var t = "<table>"; for (var i = 0; i <= r; i++) { t += "<tr>"; for (var j = 0; j <= c; j++) t += "<td></td>"; t += "</tr>"; }
+          out.innerHTML = "Đã tạo bảng <b>" + (c + 1) + " cột, " + (r + 1) + " hàng</b>:" + t + "</table>"; }
+        gr.addEventListener("pointermove", function(e){ var s = document.elementFromPoint(e.clientX, e.clientY); if (s && s.parentNode === gr) hi(+s.dataset.r, +s.dataset.c); });
+        gr.addEventListener("click", function(e){ var s = e.target.closest("span"); if (s) { hi(+s.dataset.r, +s.dataset.c); pick(+s.dataset.r, +s.dataset.c); } }); }
+      var V = document.querySelector("[data-sv]");
+      if (V) V.querySelector("[data-add]").addEventListener("click", function(){ var t = V.querySelector("table"); if (t.querySelector(".new")) return;
+        t.tHead.rows[0].insertAdjacentHTML("beforeend", '<th class="new">Tổng số</th>');
+        [].forEach.call(t.tBodies[0].rows, function(r){ r.insertAdjacentHTML("beforeend", '<td class="new">' + (+r.cells[2].textContent + +r.cells[3].textContent) + "</td>"); });
+        this.disabled = true; });
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
