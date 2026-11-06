@@ -88,3 +88,23 @@ function close(){
 }
 window.Chieu = {open, close, parts: PARTS};
 })();
+
+/* Bấm vào hình trong bài (figure.fig img) để xem phóng to; bấm lại hoặc Esc để đóng. */
+(function(){
+  let ov = null;
+  function close(){ if (ov) { ov.remove(); ov = null; } }
+  document.addEventListener("click", e => {
+    const img = e.target.closest && e.target.closest("figure.fig img");
+    if (!img || ov) return;
+    ov = document.createElement("div"); ov.className = "zoom-ov"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Hình phóng to");
+    const big = document.createElement("img"); big.src = img.currentSrc || img.src; big.alt = img.alt;
+    /* phóng to tối đa gấp đôi cỡ thật, vừa màn hình */
+    big.style.width = Math.min(img.naturalWidth * 2, window.innerWidth * 0.96) + "px";
+    ov.appendChild(big);
+    const cap = img.closest("figure").querySelector("figcaption");
+    if (cap) { const p = document.createElement("p"); p.textContent = cap.textContent; ov.appendChild(p); }
+    ov.addEventListener("click", close);
+    document.body.appendChild(ov);
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+})();

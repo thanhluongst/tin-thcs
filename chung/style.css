@@ -87,7 +87,11 @@ section.part{display:grid;gap:18px;scroll-margin-top:64px}
 .reading{background:var(--sunk);border-radius:10px;padding:12px 14px;font-size:15px}
 
 figure.fig{margin:0;display:grid;gap:6px;justify-items:center;background:#ffffff;border:1px solid var(--line);border-radius:10px;padding:10px}
-figure.fig img{display:block;width:100%;height:auto}
+/* Ảnh cắt từ SGK có độ phân giải thấp: hiện đúng cỡ thật (không kéo giãn cho đỡ nhoè), bấm vào để phóng to */
+figure.fig img{display:block;width:auto;max-width:100%;height:auto;cursor:zoom-in}
+.zoom-ov{position:fixed;inset:0;z-index:9999;background:rgba(10,20,30,.88);display:grid;place-items:center;padding:12px;cursor:zoom-out}
+.zoom-ov img{max-width:96vw;max-height:88vh;width:auto;height:auto;object-fit:contain;background:#fff;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.zoom-ov p{color:#fff;margin:8px 0 0;font-size:14px;text-align:center;max-width:90vw}
 figure.fig.sm img{max-width:320px}
 figure.fig figcaption{font-size:13px;color:#2f6f63;font-style:italic;text-align:center}
 
