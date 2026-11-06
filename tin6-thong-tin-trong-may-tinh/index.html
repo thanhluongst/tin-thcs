@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thông tin trong máy tính · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 1. Máy tính và cộng đồng</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>3</b></div><h1><span class="sr-only">Bài 3. </span>Thông tin trong máy tính</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Giải thích được việc có thể biểu diễn thông tin chỉ với hai kí hiệu 0 và 1.</li>
+        <li>Biết được bit là đơn vị nhỏ nhất trong lưu trữ thông tin.</li>
+        <li>Nêu được tên và độ lớn của các đơn vị cơ bản đo dung lượng thông tin.</li>
+        <li>Ước lượng được khả năng lưu trữ của các thiết bị nhớ thông dụng như đĩa quang, đĩa từ, thẻ nhớ,…</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Thông tin trong máy tính">
+      <span class="node">Số, chữ, hình, âm thanh</span>
+      <span class="node">0 và 1</span>
+      <span class="node io">Dãy bit</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Biểu diễn thông tin trong máy tính</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Đơn vị đo thông tin</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .bt-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px}
+      .bt-tools input[type=text]{width:9em;text-transform:uppercase}
+      .enc{display:grid;gap:6px;font-size:14px;font-variant-numeric:tabular-nums}
+      .enc-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+      .enc-row .lb{min-width:4.5em;font-weight:600}
+      .cells{display:flex;gap:2px}
+      .cells span{width:26px;height:26px;display:grid;place-items:center;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+      .cells span.off{opacity:.25}.cells span.cut{border-left:3px solid #b0306a}
+      .cells span.t{background:#f6b73c;color:#2a1a00;font-weight:700}
+      .bit{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:#b0306a}
+      .enc-res{font-size:15px}
+      .tbl-mini{border-collapse:collapse;font-size:13.5px}
+      .tbl-mini th,.tbl-mini td{border:1px solid var(--line);padding:3px 8px;text-align:center}
+      .tbl-mini th{background:var(--sunk)}
+      .mono{font-family:ui-monospace,Consolas,monospace;overflow-wrap:anywhere}
+      .px-wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
+      .px{display:grid;grid-template-columns:repeat(8,28px);grid-auto-rows:28px;gap:1px;background:#999;border:1px solid #999;touch-action:none}
+      .px span{background:#fff}.px span.on{background:#111}
+      .px.edit span{cursor:pointer}
+      .px-bits{font-family:ui-monospace,Consolas,monospace;font-size:14px;line-height:28.9px;color:#b0306a;font-weight:700}
+      .px-all{font-family:ui-monospace,Consolas,monospace;font-size:13px;overflow-wrap:anywhere;width:100%}
+      .drv{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;font-size:13.5px;width:100%}
+      .drv div{display:grid;gap:3px}.drv i{display:block;height:12px;background:var(--sunk);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+      .drv i b{display:block;height:100%;background:#2a8fd6}.drv i b.full{background:#d64545}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Máy tính hiểu thông tin thế nào?</div>
+        <div class="reading">Trong bài trước, chúng ta đã biết rằng máy tính có thể xử lí được thông tin, nhưng làm thế nào để máy tính hiểu được những dữ liệu mà chúng ta chuyển cho nó xử lí? Con người dùng các chữ số, chữ cái và kí hiệu để diễn đạt suy nghĩ của mình cho người khác hiểu, tuy nhiên máy tính thông dụng hiện nay chỉ làm việc với hai kí hiệu <b>0 và 1</b>.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Biểu diễn thông tin trong máy tính</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Mã hoá</div>
+        <div class="reading">Cho các số từ 0 đến 7 viết thành dãy tăng dần từ trái sang phải. Để mã hoá một số thành dãy kí hiệu 0 và 1:<br><b>Bước 1.</b> Thu gọn dãy số: ❶ chia dãy số thành hai nửa (trái, phải) đều nhau; ❷ kiểm tra xem số cần mã hoá thuộc nửa trái hay phải; ❸ ghi lại vị trí (<b>trái</b> hoặc <b>phải</b>); ❹ bỏ đi nửa không chứa số đó. Thực hiện thu gọn ba lần cho đến khi chỉ còn lại số đó.<br><b>Bước 2.</b> Chuyển dãy vị trí thu được thành dãy 0, 1 theo quy tắc: <b>trái → 0, phải → 1</b>. Ví dụ, số 4: phải, trái, trái → <span class="bit">100</span>.</div>
+        <figure class="fig" data-enc>
+          <div class="bt-tools">
+            <label>Dãy số: <select data-n><option value="8">0 đến 7</option><option value="16">0 đến 15</option></select></label>
+            <label>Số cần mã hoá: <select data-x></select></label>
+            <button class="btn" type="button" data-step>Thu gọn tiếp ▸</button>
+            <button class="btn" type="button" data-all>Làm hết</button>
+          </div>
+          <div class="enc"></div>
+          <figcaption>Hình 1.3. Cách mã hoá một số (mô phỏng theo SGK)</figcaption>
+        </figure>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Biểu diễn số, văn bản, hình ảnh, âm thanh</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 12–14).<ul><li><b>Biểu diễn số</b>: trong Hoạt động 1, mỗi số từ 0 đến 7 được chuyển thành một dãy ba kí hiệu 0 và 1. Nếu dãy số dài gấp đôi (0 đến 15) thì mỗi số được chuyển thành dãy bốn kí hiệu. Mỗi dãy kí hiệu 0 và 1 như vậy gọi là <b>dãy bit</b>; mỗi kí hiệu gọi là một <b>bit</b> (viết tắt từ <b>Bi</b>nary digi<b>T</b>).</li><li><b>Biểu diễn văn bản</b>: văn bản gồm các kí tự (chữ cái, chữ số, dấu câu, kí hiệu,…). Văn bản được chuyển thành dãy bit bằng cách chuyển từng kí tự theo một <b>bảng mã</b>.</li><li><b>Biểu diễn hình ảnh</b>: hình ảnh kĩ thuật số gồm các điểm ảnh (pixel). Kẻ lưới lên hình, mỗi ô vuông là một pixel; với ảnh đen trắng, màu đen kí hiệu là 1, màu trắng là 0. Ảnh màu thì mỗi pixel cần nhiều bit hơn.</li><li><b>Biểu diễn âm thanh</b>: âm thanh phát ra do sự rung lên của màng loa, dây đàn,… Tốc độ rung được ghi lại dưới dạng giá trị số rồi chuyển thành dãy bit. Ví dụ: dây đàn rung 440 lần mỗi giây phát ra nốt La chuẩn: 440 → <span class="bit">110111000</span>.</li></ul></div>
+        <figure class="fig" data-txt>
+          <table class="tbl-mini"><thead><tr><th>Kí tự</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr></thead>
+            <tbody><tr><th>Dãy bit</th><td class="mono">01000001</td><td class="mono">01000010</td><td class="mono">01000011</td><td class="mono">01000100</td><td class="mono">01000101</td><td class="mono">01000110</td></tr></tbody></table>
+          <div class="bt-tools"><label>Gõ từ (chỉ dùng A–F): <input type="text" maxlength="8" value="CAFE" data-w></label></div>
+          <div class="mono" data-wout></div>
+          <figcaption>Bảng 1.2. Một phần bảng mã (theo SGK) – thử chuyển một từ thành dãy bit</figcaption>
+        </figure>
+        <figure class="fig"><div class="px-wrap" data-pxa></div>
+          <figcaption>Hình 1.4. Một cách biểu diễn hình ảnh chữ A thành dãy bit (vẽ lại theo SGK)</figcaption></figure>
+        <div data-task="vb" data-n="1"></div>
+        <div data-task="ha" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Viết dãy bit</div>
+        <div class="reading">Trong hình vuông mỗi chiều 8 ô, vẽ hình một trái tim như Hình 1.6 trong SGK. <i>Bấm (hoặc kéo) vào các ô để tô màu; dãy bit của từng dòng hiện ở bên phải.</i></div>
+        <figure class="fig" data-px>
+          <div class="px-wrap"><div class="px edit"></div><div class="px-bits"></div></div>
+          <div class="bt-tools"><button class="btn" type="button" data-clear>Xoá hình</button></div>
+          <div class="px-all"></div>
+          <figcaption>Hình 1.6. Hình trái tim – em tự vẽ</figcaption>
+        </figure>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+        <div class="reading">Như vậy, trong máy tính, tất cả thông tin dạng văn bản, hình ảnh, âm thanh,… đều được chuyển thành dãy bit. Bit cũng là đơn vị nhỏ nhất trong lưu trữ thông tin. <i>Em có biết?</i> Số nhị phân là số được viết từ chỉ hai kí hiệu 0 và 1, chẳng hạn 101110101010.</div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 14</div>
+        <div data-task="p14a" data-n="1"></div>
+        <div data-task="p14b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Biểu diễn thông tin trong máy tính</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Đơn vị đo thông tin</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Đơn vị đo dung lượng</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 14–15). Thông tin trong máy tính được tổ chức dưới dạng các <b>tệp</b> (tệp văn bản, tệp hình ảnh, tệp video,…), lưu trữ trong các thiết bị nhớ như thẻ nhớ, đĩa cứng,… Người ta thường đo dung lượng thông tin bằng đơn vị <b>byte</b> (dãy 8 bit liên tục) và các đơn vị lớn hơn. Ngoài bộ nhớ trong, máy tính còn trao đổi dữ liệu với các bộ nhớ ngoài như thẻ nhớ, đĩa quang, đĩa cứng,…</div>
+        <figure class="fig">
+          <div class="tbl-scroll" style="overflow-x:auto;width:100%"><table class="tbl-mini" style="margin:auto">
+            <thead><tr><th>Đơn vị</th><th>Cách đọc</th><th>Kí hiệu</th><th>Giá trị</th><th>Xấp xỉ</th></tr></thead>
+            <tbody><tr><td>byte</td><td>Bai</td><td>B</td><td>1 B = 8 bit</td><td></td></tr>
+              <tr><td>kilobyte</td><td>Ki-lô-bai</td><td>KB</td><td>1024 B</td><td>1 nghìn byte</td></tr>
+              <tr><td>megabyte</td><td>Mê-ga-bai</td><td>MB</td><td>1024 KB</td><td>1 triệu byte</td></tr>
+              <tr><td>gigabyte</td><td>Gi-ga-bai</td><td>GB</td><td>1024 MB</td><td>1 tỉ byte</td></tr>
+              <tr><td>terabyte</td><td>Tê-ra-bai</td><td>TB</td><td>1024 GB</td><td>1 nghìn tỉ byte</td></tr></tbody></table></div>
+          <figcaption>Bảng 1.3. Một số đơn vị cơ bản đo dung lượng thông tin (theo SGK)</figcaption>
+          <div class="bt-tools" data-unit>
+            <span>Đổi đơn vị:</span><input type="number" value="16" min="0" step="any" style="width:7em" data-v>
+            <select data-u><option>B</option><option>KB</option><option>MB</option><option selected>GB</option><option>TB</option></select>
+            <span>Mỗi tệp:</span><input type="number" value="12" min="0" step="any" style="width:6em" data-f>
+            <select data-fu><option>KB</option><option selected>MB</option><option>GB</option></select>
+          </div>
+          <div class="enc-res" data-uout aria-live="polite"></div>
+        </figure>
+        <div class="reading">Dung lượng của một số thiết bị nhớ: bộ nhớ trong của máy tính cá nhân thường từ 2 GB đến 16 GB; đĩa CD khoảng 700 MB; đĩa DVD từ 4,7 GB đến 17 GB; ổ đĩa cứng từ vài trăm GB đến vài TB; thẻ nhớ có thể lưu trữ hàng trăm GB hoặc cao hơn.</div>
+        <div data-task="dv" data-n="1"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 15</div>
+        <div class="reading">1. Quan sát hình sau và cho biết thông tin về dung lượng của từng ổ đĩa.</div>
+        <figure class="fig"><div class="drv">
+          <div><b>Local Disk (C:)</b><i><b style="width:65%"></b></i><span>37,9 GB free of 109 GB</span></div>
+          <div><b>Local Disk (E:)</b><i><b style="width:57%"></b></i><span>48,2 GB free of 111 GB</span></div>
+          <div><b>Local Disk (F:)</b><i><b style="width:9%"></b></i><span>153 GB free of 169 GB</span></div>
+          <div><b>DATA2 (G:)</b><i><b class="full" style="width:85%"></b></i><span>27,2 GB free of 186 GB</span></div>
+        </div><figcaption>Devices and drives (4) – vẽ lại theo SGK</figcaption></figure>
+        <div data-task="p15a" data-n="1"></div>
+        <div class="reading">2. Quan sát hình sau và cho biết dung lượng của mỗi tệp.</div>
+        <figure class="fig"><table class="tbl-mini"><thead><tr><th>Name</th><th>Type</th><th>Size</th></tr></thead><tbody>
+          <tr><td>IMG_0013.jpg</td><td>JPG File</td><td>372 KB</td></tr><tr><td>IMG_0014.jpg</td><td>JPG File</td><td>408 KB</td></tr>
+          <tr><td>IMG_0023.jpg</td><td>JPG File</td><td>482 KB</td></tr><tr><td>IMG_0024.jpg</td><td>JPG File</td><td>512 KB</td></tr>
+          <tr><td>IMG_0038.jpg</td><td>JPG File</td><td>1,095 KB</td></tr><tr><td>IMG_0039.jpg</td><td>JPG File</td><td>1,108 KB</td></tr>
+          <tr><td>IMG_0041.jpg</td><td>JPG File</td><td>846 KB</td></tr><tr><td>IMG_0046.jpg</td><td>JPG File</td><td>488 KB</td></tr>
+        </tbody></table><figcaption>Danh sách tệp ảnh (vẽ lại theo SGK)</figcaption></figure>
+        <div data-task="p15b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Đơn vị đo thông tin</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Đổi đơn vị, ước lượng</div>
+        <div class="reading">Có thể dùng công cụ <b>Đổi đơn vị</b> ở mục 2 để kiểm tra kết quả.</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Ổ đĩa và mã hoá số 0–15</div>
+        <div class="reading">Câu 2: dùng công cụ mã hoá ở Hoạt động 1, chọn <b>Dãy số: 0 đến 15</b>.</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      /* ---- Mã hoá số bằng cách thu gọn dãy ---- */
+      var E = document.querySelector("[data-enc]");
+      if (E) {
+        var selN = E.querySelector("[data-n]"), selX = E.querySelector("[data-x]"), out = E.querySelector(".enc"), steps = 0;
+        function opts(){ var n = +selN.value, v = Math.min(+selX.value || 4, n - 1); selX.innerHTML = ""; for (var i = 0; i < n; i++) selX.add(new Option(i, i)); selX.value = v; }
+        function draw(){
+          var n = +selN.value, x = +selX.value, k = Math.log2(n), lo = 0, hi = n, bits = "", html = "";
+          function row(lb, a, b, cut, tail){ var c = ""; for (var i = 0; i < n; i++) c += '<span class="' + (i < a || i >= b ? "off" : "") + (i === cut ? " cut" : "") + (i === x ? " t" : "") + '">' + i + "</span>"; return '<div class="enc-row"><span class="lb">' + lb + '</span><div class="cells">' + c + "</div>" + (tail || "") + "</div>"; }
+          html += row("Chuẩn bị", 0, n, -1);
+          for (var s = 0; s < Math.min(steps, k); s++) { var mid = (lo + hi) / 2, right = x >= mid;
+            html += row("Lần " + (s + 1), lo, hi, mid, ' <b>' + (right ? "phải" : "trái") + '</b> → <span class="bit">' + (right ? 1 : 0) + "</span>");
+            bits += right ? "1" : "0"; if (right) lo = mid; else hi = mid; }
+          if (steps >= k) html += '<div class="enc-res">Số <b>' + x + '</b> được mã hoá thành <span class="bit">' + bits + "</span> (" + k + " bit).</div>";
+          out.innerHTML = html;
+          E.querySelector("[data-step]").disabled = steps >= k;
+        }
+        selN.addEventListener("change", function(){ opts(); steps = 0; draw(); });
+        selX.addEventListener("change", function(){ steps = 0; draw(); });
+        E.querySelector("[data-step]").addEventListener("click", function(){ steps++; draw(); });
+        E.querySelector("[data-all]").addEventListener("click", function(){ steps = 99; draw(); });
+        opts(); draw();
+      }
+      /* ---- Văn bản → dãy bit ---- */
+      var T = document.querySelector("[data-txt]");
+      if (T) { var w = T.querySelector("[data-w]"), wo = T.querySelector("[data-wout]");
+        function tx(){ var s = w.value.toUpperCase().replace(/[^A-F]/g, ""); w.value = s;
+          wo.innerHTML = s ? "<b>" + s + "</b> → " + s.split("").map(function(c){ return '<span class="bit">' + ("00000000" + c.charCodeAt(0).toString(2)).slice(-8) + "</span>"; }).join(" ") : "Gõ một từ gồm các chữ A, B, C, D, E, F."; }
+        w.addEventListener("input", tx); tx(); }
+      /* ---- Lưới điểm ảnh ---- */
+      function grid(el, rows, edit, onchange){
+        el.innerHTML = ""; var cells = [];
+        for (var r = 0; r < 8; r++) for (var c = 0; c < 8; c++) { var sp = document.createElement("span"); sp.dataset.r = r; sp.dataset.c = c; if (rows[r][c] === "1") sp.className = "on"; el.appendChild(sp); cells.push(sp); }
+        if (edit) { var paint = null;
+          el.addEventListener("pointerdown", function(e){ var t = e.target.closest("span"); if (!t) return; e.preventDefault(); paint = !t.classList.contains("on"); t.classList.toggle("on", paint); onchange(); });
+          el.addEventListener("pointerover", function(e){ if (paint === null) return; var t = e.target.closest("span"); if (t) { t.classList.toggle("on", paint); onchange(); } });
+          document.addEventListener("pointerup", function(){ paint = null; }); }
+        return function(){ var o = []; for (var r = 0; r < 8; r++) { var s = ""; for (var c = 0; c < 8; c++) s += cells[r * 8 + c].classList.contains("on") ? "1" : "0"; o.push(s); } return o; };
+      }
+      var A = document.querySelector("[data-pxa]");
+      if (A) { var ra = ["00011000","00111100","01100110","01111110","01100110","01100110","01100110","00000000"];
+        A.innerHTML = '<div class="px"></div><div class="px-bits">' + ra.join("<br>") + "</div>"; grid(A.querySelector(".px"), ra, false); }
+      var P = document.querySelector("[data-px]");
+      if (P) { var KEY = "px-tin6b3", init = ["00000000","00000000","00000000","00000000","00000000","00000000","00000000","00000000"];
+        try { var sv = JSON.parse(localStorage.getItem(KEY) || "null"); if (Array.isArray(sv) && sv.length === 8) init = sv; } catch (e) {}
+        var bitsEl = P.querySelector(".px-bits"), allEl = P.querySelector(".px-all"), read;
+        function show(){ var b = read(); bitsEl.innerHTML = b.join("<br>"); allEl.innerHTML = "Cả hình (64 bit): <b>" + b.join("") + "</b>"; try { localStorage.setItem(KEY, JSON.stringify(b)); } catch (e) {} }
+        read = grid(P.querySelector(".px"), init, true, function(){ show(); });
+        P.querySelector("[data-clear]").addEventListener("click", function(){ P.querySelectorAll(".px span").forEach(function(s){ s.classList.remove("on"); }); show(); });
+        show(); }
+      /* ---- Đổi đơn vị ---- */
+      var U = document.querySelector("[data-unit]");
+      if (U) { var N = ["B","KB","MB","GB","TB"], uo = document.querySelector("[data-uout]");
+        function fmt(x){ return x >= 1e6 ? x.toLocaleString("vi-VN", {maximumFractionDigits:0}) : x.toLocaleString("vi-VN", {maximumFractionDigits:3}); }
+        function cv(){ var v = parseFloat(U.querySelector("[data-v]").value) || 0, u = N.indexOf(U.querySelector("[data-u]").value), b = v * Math.pow(1024, u);
+          var parts = N.map(function(n, i){ return "<b>" + fmt(b / Math.pow(1024, i)) + "</b> " + n; });
+          var f = parseFloat(U.querySelector("[data-f]").value) || 0, fb = f * Math.pow(1024, N.indexOf(U.querySelector("[data-fu]").value));
+          uo.innerHTML = fmt(v) + " " + N[u] + " = " + parts.join(" = ") + "<br>" + (fb ? "Chứa được khoảng <b>" + Math.floor(b / fb).toLocaleString("vi-VN") + "</b> tệp, mỗi tệp " + fmt(f) + " " + U.querySelector("[data-fu]").value + "." : "");
+        }
+        U.addEventListener("input", cv); U.addEventListener("change", cv); cv(); }
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

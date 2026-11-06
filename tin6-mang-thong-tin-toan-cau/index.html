@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mạng thông tin toàn cầu · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 3. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>6</b></div><h1><span class="sr-only">Bài 6. </span>Mạng thông tin toàn cầu</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Trình bày sơ lược được các khái niệm World Wide Web, website, địa chỉ của website, trình duyệt.</li>
+        <li>Xem và nêu được các thông tin chính trên trang web cho trước.</li>
+        <li>Khai thác được thông tin trên một số trang web thông dụng: tra từ điển, xem tin thời tiết, thời sự,…</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Mạng thông tin toàn cầu">
+      <span class="node">Trang web</span>
+      <span class="node">Website</span>
+      <span class="node">WWW</span>
+      <span class="node io">Trình duyệt</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Tổ chức thông tin trên Internet</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Trình duyệt</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Khai thác thông tin trên trang web</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .br{width:100%;border:1px solid #9aa;border-radius:10px;overflow:hidden;background:#fff;color:#1d2433;font-size:14px;text-align:left}
+      .br-bar{display:flex;gap:4px;align-items:center;background:#e9edf2;padding:6px}
+      .br-bar button{border:0;background:none;font-size:17px;cursor:pointer;padding:2px 6px;border-radius:6px;color:#1d2433}
+      .br-bar button:disabled{opacity:.35;cursor:default}
+      .br-bar input{flex:1;min-width:0;border:1px solid #bbc;border-radius:999px;padding:5px 12px;font:inherit;background:#fff;color:#1d2433}
+      .br-bm{display:flex;flex-wrap:wrap;gap:4px;background:#f4f6f9;padding:4px 8px;border-bottom:1px solid #dde;font-size:13px;min-height:28px;align-items:center}
+      .br-bm a{color:#1d2433;text-decoration:none;border-radius:4px;padding:1px 6px;background:#fff;border:1px solid #dde;cursor:pointer}
+      .br-pg{padding:12px 14px;min-height:190px;line-height:1.55}
+      .br-pg h3{margin:0 0 6px;font-family:Lexend,sans-serif;font-size:18px}
+      .br-pg a{color:#0b57d0;text-decoration:underline;cursor:pointer}
+      .br-pg .lg{float:right;font-size:34px}
+      .br-st{font-size:12.5px;color:#556;padding:4px 10px;border-top:1px solid #eee;background:#fafbfc}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Thế giới thông tin rộng lớn</div>
+        <div class="reading">Khi truy cập Internet, em sẽ bước vào một thế giới thông tin vô cùng rộng lớn. Các trang thông tin trên Internet đưa em đi từ những câu chuyện hấp dẫn đến những bản nhạc du dương, từ những hình ảnh đẹp đến những kho tri thức quý giá. Các trang thông tin được nối với nhau tạo thành một mạng giống như mạng nhện khổng lồ bao trùm lên cả thế giới nên nó được gọi là World Wide Web hay <b>mạng thông tin toàn cầu</b> – một dịch vụ trên Internet.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Tổ chức thông tin trên Internet</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Tìm hiểu cách tổ chức thông tin</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Trang web, website, WWW</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 23–24). Kho thông tin khổng lồ trên Internet được tạo nên từ rất nhiều trang web.<ul><li><b>Trang siêu văn bản</b> (Hypertext) là trang văn bản đặc biệt, tích hợp nhiều dạng dữ liệu khác nhau như văn bản, hình ảnh, âm thanh, video,… và các <b>siêu liên kết</b> (liên kết) trỏ đến vị trí khác trong trang hay các trang web khác.</li><li>Mỗi <b>trang web</b> là một trang siêu văn bản được gán một địa chỉ truy cập trên Internet.</li><li>Mỗi <b>website</b> là tập hợp các trang web liên quan và được truy cập thông qua một địa chỉ. Mỗi website do một người hoặc một tổ chức quản lí. <b>Trang chủ</b> (homepage) là trang được mở ra đầu tiên khi truy cập website; địa chỉ của trang chủ chính là địa chỉ của website.</li><li>Hệ thống các website trên Internet tạo thành <b>Mạng thông tin toàn cầu</b>.</li></ul>Ví dụ: http://thieunien.vn là địa chỉ của website báo Thiếu niên Tiền phong; https://vi.wikipedia.org là địa chỉ trang chủ của website Bách khoa toàn thư mở tiếng Việt; https://vi.wikipedia.org/wiki/Internet là địa chỉ của trang web về Internet trong website đó.</div>
+        <div data-task="kn" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 24</div>
+        <div data-task="p24a" data-n="1"></div>
+        <div data-task="p24b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Tổ chức thông tin trên Internet</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Trình duyệt</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Trình duyệt web</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 24).<ul><li>Muốn truy cập các website, người dùng cần sử dụng một phần mềm ứng dụng gọi là <b>trình duyệt</b> (web browser). Một số trình duyệt phổ biến: Mozilla Firefox, Google Chrome, Safari, Cốc Cốc, Microsoft Edge,…</li><li>Các trình duyệt có chức năng chính và cách sử dụng tương tự nhau; có thể cài đặt nhiều trình duyệt trên một máy tính.</li><li>Để truy cập một trang web, ta có thể nhập địa chỉ của trang đó vào <b>thanh địa chỉ</b> của trình duyệt.</li><li>Trang web có chứa các liên kết chỉ dẫn tới các trang web khác. Nháy chuột vào liên kết để chuyển tới trang web được xác định bởi liên kết đó. Hoạt động di chuyển theo các liên kết gọi là <b>duyệt web</b>. Khi di chuyển con trỏ chuột vào liên kết, con trỏ thường chuyển thành hình bàn tay 👆.</li></ul></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 25</div>
+        <div data-task="p25a" data-n="1"></div>
+        <div data-task="p25b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Trình duyệt</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Khai thác thông tin trên trang web</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Duyệt web</div>
+        <div class="reading"><b>Nhiệm vụ:</b> dùng trình duyệt truy cập Bách khoa toàn thư mở tiếng Việt (https://vi.wikipedia.org) để xem và tra cứu thông tin; khai thác thông tin trên một số trang web thông dụng (thời tiết, thời sự). <b>Hướng dẫn:</b> nháy đúp biểu tượng trình duyệt → nhập địa chỉ trang web vào ô địa chỉ → nhấn Enter. Các nút ← (quay về trang trước), → (đến trang tiếp theo), ⟳ (tải lại), ⌂ (về trang chủ), ☆ (lưu đánh dấu). <i>Trước khi làm trên máy thật, em hãy luyện tập với trình duyệt mô phỏng dưới đây: gõ địa chỉ <b>truong.edu.vn</b>, nháy các liên kết, dùng nút ← →, lưu đánh dấu.</i></div>
+        <figure class="fig" data-br>
+          <div class="br">
+            <div class="br-bar"><button type="button" data-k="back" aria-label="Quay về trang trước">←</button><button type="button" data-k="fwd" aria-label="Đến trang tiếp theo">→</button><button type="button" data-k="re" aria-label="Tải lại">⟳</button><button type="button" data-k="home" aria-label="Trang chủ">⌂</button>
+              <input type="text" aria-label="Thanh địa chỉ" spellcheck="false"><button type="button" data-k="star" aria-label="Đánh dấu trang">☆</button></div>
+            <div class="br-bm" aria-label="Thanh đánh dấu"></div>
+            <div class="br-pg" aria-live="polite"></div>
+            <div class="br-st"></div>
+          </div>
+          <figcaption>Trình duyệt mô phỏng (website trong mô phỏng là tự tạo, không phải trang thật)</figcaption>
+        </figure>
+        <div data-task="th1" data-n="1"></div>
+        <div data-task="th2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Tổ chức thông tin, khái niệm</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Sách và Internet</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var B = document.querySelector("[data-br]"); if (!B) return;
+      var H = "truong.edu.vn";
+      var P = {
+        "truong.edu.vn": {t:"Trường THCS Hoa Sen – Trang chủ", i:"🏫", b:"<p>Chào mừng em đến với website của trường (đây là <b>trang chủ</b>).</p><p>Các mục chính: <a data-u='truong.edu.vn/tin-tuc'>Tin tức</a> · <a data-u='truong.edu.vn/thu-vien'>Thư viện</a> · <a data-u='truong.edu.vn/thoi-tiet'>Thời tiết hôm nay</a></p>"},
+        "truong.edu.vn/tin-tuc": {t:"Tin tức", i:"📰", b:"<p>Lớp 6A đạt giải Nhất hội thi “Tin học trẻ”. <a data-u='truong.edu.vn/tin-tuc/tin-hoc-tre'>Đọc tiếp…</a></p><p><a data-u='truong.edu.vn'>Về trang chủ</a></p>"},
+        "truong.edu.vn/tin-tuc/tin-hoc-tre": {t:"Lớp 6A đạt giải Nhất “Tin học trẻ”", i:"🏆", b:"<p>Nhóm bạn lớp 6A đã làm một sổ lưu niệm điện tử rất đẹp. Xem thêm về <a data-u='truong.edu.vn/thu-vien/internet'>Internet</a> trong thư viện.</p>"},
+        "truong.edu.vn/thu-vien": {t:"Thư viện", i:"📚", b:"<p>Tra cứu: <a data-u='truong.edu.vn/thu-vien/internet'>Internet</a> · <a data-u='truong.edu.vn/thu-vien/trinh-duyet'>Trình duyệt</a></p>"},
+        "truong.edu.vn/thu-vien/internet": {t:"Internet", i:"🌐", b:"<p><b>Internet</b> là mạng liên kết các mạng máy tính trên khắp thế giới. Một dịch vụ trên Internet là <a data-u='truong.edu.vn/thu-vien/www'>World Wide Web</a>.</p>"},
+        "truong.edu.vn/thu-vien/www": {t:"World Wide Web", i:"🕸️", b:"<p>Hệ thống các website trên Internet. Để xem trang web, em dùng một <a data-u='truong.edu.vn/thu-vien/trinh-duyet'>trình duyệt</a>.</p>"},
+        "truong.edu.vn/thu-vien/trinh-duyet": {t:"Trình duyệt", i:"🧭", b:"<p>Phần mềm giúp truy cập trang web, ví dụ Chrome, Edge, Cốc Cốc, Firefox. Quay lại <a data-u='truong.edu.vn/thu-vien'>Thư viện</a>.</p>"},
+        "truong.edu.vn/thoi-tiet": {t:"Thời tiết hôm nay", i:"⛅", b:"<p>Có mây, ngày nắng. Nhiệt độ thấp nhất 24°C, cao nhất 33°C. Chiều tối có mưa rào rải rác.</p><p><a data-u='truong.edu.vn'>Về trang chủ</a></p>"}
+      };
+      var hist = [], pos = -1, bm = [], inp = B.querySelector("input"), pg = B.querySelector(".br-pg"), st = B.querySelector(".br-st"), bar = B.querySelector(".br-bm");
+      function norm(u){ return String(u).trim().toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/+$/, ""); }
+      function show(){ var u = hist[pos], p = P[u];
+        inp.value = u ? "https://" + u : "";
+        pg.innerHTML = p ? '<span class="lg">' + p.i + "</span><h3>" + p.t + "</h3>" + p.b : u ? "<h3>Không tìm thấy trang</h3><p>Trong mô phỏng chỉ có website <b>truong.edu.vn</b>. Em kiểm tra lại địa chỉ nhé.</p>" : "<p>Gõ địa chỉ <b>truong.edu.vn</b> vào thanh địa chỉ rồi nhấn <b>Enter</b>.</p>";
+        B.querySelector("[data-k=back]").disabled = pos <= 0; B.querySelector("[data-k=fwd]").disabled = pos >= hist.length - 1;
+        B.querySelector("[data-k=star]").textContent = bm.indexOf(u) >= 0 ? "★" : "☆";
+        bar.innerHTML = bm.length ? bm.map(function(b){ return "<a data-u='" + b + "'>" + (P[b] ? P[b].i + " " + P[b].t : b) + "</a>"; }).join("") : "<span style='opacity:.6'>Thanh đánh dấu (trống)</span>";
+        st.textContent = "Đã xem " + (pos + 1) + "/" + hist.length + " trang trong lịch sử."; }
+      function go(u){ u = norm(u); if (!u) return; hist = hist.slice(0, pos + 1); hist.push(u); pos = hist.length - 1; show(); }
+      inp.addEventListener("keydown", function(e){ if (e.key === "Enter") go(inp.value); });
+      B.addEventListener("click", function(e){ var a = e.target.closest("[data-u]"); if (a) { e.preventDefault(); go(a.dataset.u); return; }
+        var k = e.target.closest("[data-k]"); if (!k) return; k = k.dataset.k;
+        if (k === "back" && pos > 0) { pos--; show(); } else if (k === "fwd" && pos < hist.length - 1) { pos++; show(); }
+        else if (k === "re") show(); else if (k === "home") go(H);
+        else if (k === "star" && hist[pos]) { var i = bm.indexOf(hist[pos]); if (i >= 0) bm.splice(i, 1); else bm.push(hist[pos]); show(); } });
+      B.addEventListener("mouseover", function(e){ var a = e.target.closest(".br-pg [data-u]"); if (a) st.textContent = "https://" + a.dataset.u; });
+      show();
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

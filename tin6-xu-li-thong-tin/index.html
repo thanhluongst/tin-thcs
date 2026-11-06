@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Xử lí thông tin · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 1. Máy tính và cộng đồng</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>2</b></div><h1><span class="sr-only">Bài 2. </span>Xử lí thông tin</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Nêu được các hoạt động cơ bản trong xử lí thông tin.</li>
+        <li>Giải thích được máy tính là công cụ hiệu quả để xử lí thông tin. Nêu được ví dụ minh hoạ cụ thể.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Xử lí thông tin">
+      <span class="node">Thu nhận</span>
+      <span class="node">Lưu trữ</span>
+      <span class="node">Xử lí</span>
+      <span class="node io">Truyền thông tin</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Xử lí thông tin</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Xử lí thông tin trong máy tính</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .dg{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;font-size:14px}
+      .dg .bx{border:2px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--surface);text-align:center;font-weight:600}
+      .dg .ar{color:var(--muted);font-weight:700;font-size:18px}
+      .dg .ar small{display:block;font-size:11.5px;font-weight:600}
+      .dg .s{display:grid;gap:4px}.dg .s span{border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:13px;background:var(--bg)}
+      .dg .brain{background:#fde3ea;border-color:#e58aa5}
+      .pc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+      .pc button{font:inherit;text-align:left;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);padding:8px 10px;cursor:pointer;display:grid;gap:2px}
+      .pc button b{font-family:Lexend,sans-serif;color:#b0306a}.pc button small{opacity:.8}
+      .pc button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+      .pc-out{font-size:14px;min-height:2.6em;border-left:3px solid var(--accent);padding:4px 10px}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Quả phạt đền</div>
+        <div class="reading">Minh thích xem bóng đá và nhớ mãi một quả phạt đền. Khi cầu thủ thực hiện quả phạt, mắt anh ấy liên tục quan sát thủ môn và đoán xem góc nào của khung thành là sơ hở nhất. Sải bước, tạo đà, anh ấy đã khéo léo chiến thắng thủ môn bằng một cú sút rất mạnh vào góc cao của khung thành.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Xử lí thông tin</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Xử lí thông tin</div>
+        <div class="reading">Trong trường hợp của cầu thủ bóng đá trên, bàn thắng xảy ra trong chớp mắt, nhưng trong khoảng thời gian rất ngắn đó, trí óc của cầu thủ đã thực hiện một loạt hoạt động phức tạp:<ul><li>Mắt theo dõi vị trí thủ môn và thông tin đó được chuyển lên não.</li><li>Não phân tích, đánh giá, suy luận,… chuyển hoá thông tin thu được thành ý định của cầu thủ: sút bóng vào góc cao của khung thành.</li><li>Ý định đó được thực hiện bằng cách điều khiển chân sút thành công quả phạt.</li></ul>Não còn thực hiện việc <b>nhớ</b> kết quả của hoạt động trước để thực hiện hoạt động sau. Trong mọi hoạt động có ý thức của con người, bộ não đều phải thực hiện một nhiệm vụ rất quan trọng: <b>xử lí thông tin</b>. Em hãy xem xét tình huống cầu thủ ghi bàn và trả lời các câu hỏi sau.</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+        <div data-task="hd1c" data-n="3"></div>
+        <div data-task="hd1d" data-n="4"></div>
+        <div data-task="hd1e" data-n="5"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Bốn hoạt động xử lí thông tin</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 9). Quá trình xử lí thông tin gồm bốn hoạt động cơ bản:<ul><li><b>Thu nhận thông tin</b>: nhờ các giác quan, con người nhận được thông tin của thế giới bên ngoài như âm thanh, hình ảnh, màu sắc, ánh sáng, nhiệt độ, mùi vị,…</li><li><b>Lưu trữ thông tin</b>: sau khi nhận được thông tin, bộ não ghi nhớ lại. Không ghi nhận được thì thông tin sẽ bị mất và các thao tác khác không thể thực hiện được. Con người còn lưu trữ thông tin bằng cách ghi chép.</li><li><b>Xử lí thông tin</b>: bộ não liên kết các thông tin đã có, so sánh, phân tích, thống kê, suy luận, giải thích,… để đưa ra kết luận, quyết định,… Đó là quá trình biến đổi thông tin ban đầu thành thông tin mới.</li><li><b>Truyền thông tin</b>: thông tin được truyền đến các bộ phận cơ thể để chuyển hoá thành hành vi, hoặc được chia sẻ với người khác. Thông tin được nhân rộng qua quá trình chia sẻ.</li></ul></div>
+        <figure class="fig"><div class="dg">
+          <div class="s"><span>Nghe</span><span>Nhìn</span><span>Chạm</span><span>Nếm</span><span>Ngửi</span></div>
+          <div class="ar">→<small>Thu nhận</small></div>
+          <div class="bx brain">Bộ não<br><small>Xử lí thông tin</small><br><small>↕ Lưu trữ (vật mang tin)</small></div>
+          <div class="ar">→<small>Truyền</small></div>
+          <div class="bx">Hành động,<br>chia sẻ</div>
+        </div><figcaption>Hình 1.1. Các hoạt động xử lí thông tin của con người (vẽ lại theo SGK)</figcaption></figure>
+        <div data-task="ct" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 9</div>
+        <div class="reading">Mỗi việc dưới đây thuộc hoạt động nào trong quá trình xử lí thông tin? Giải thích tại sao?</div>
+        <div data-task="p9" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Xử lí thông tin</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Xử lí thông tin trong máy tính</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Thành phần của máy tính</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 10). Ngày nay, thông tin là nguồn tài nguyên của xã hội loài người. Chiếc máy kì diệu giúp con người xử lí nguồn tài nguyên đó chính là <b>máy tính</b>. Máy tính có đủ thành phần để thực hiện các hoạt động của quá trình xử lí thông tin. <i>Bấm vào từng thành phần trong hình để xem ví dụ.</i></div>
+        <figure class="fig" data-pc>
+          <div class="pc">
+            <button type="button" data-i="0"><b>Thiết bị vào</b><small>→ thu nhận thông tin</small></button>
+            <button type="button" data-i="1"><b>Bộ xử lí (CPU)</b><small>→ xử lí thông tin</small></button>
+            <button type="button" data-i="2"><b>Bộ nhớ</b><small>→ lưu trữ thông tin</small></button>
+            <button type="button" data-i="3"><b>Thiết bị ra</b><small>→ truyền, chia sẻ thông tin</small></button>
+          </div>
+          <div class="pc-out" aria-live="polite">Thiết bị vào → Bộ xử lí ⇄ Bộ nhớ → Thiết bị ra</div>
+          <figcaption>Hình 1.2. Các hoạt động xử lí thông tin của máy tính (vẽ lại theo SGK)</figcaption>
+        </figure>
+        <div data-task="tb" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 10</div>
+        <div data-task="p10a" data-n="1"></div>
+        <div data-task="p10b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Hiệu quả thực hiện xử lí thông tin của máy tính</div>
+        <div class="reading">Em hãy nêu ví dụ về việc máy tính giúp con người trong các hoạt động sau và so sánh hiệu quả thực hiện việc đó khi có sử dụng và khi không sử dụng máy tính: a) Thu nhận thông tin. b) Lưu trữ thông tin. c) Xử lí thông tin. d) Truyền thông tin.</div>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+        <div data-task="hd2c" data-n="3"></div>
+        <div data-task="hd2d" data-n="4"></div>
+        <div class="reading">Đọc SGK trang 11. Máy tính là một công cụ hiệu quả để thu nhận, lưu trữ, xử lí và truyền thông tin:<ul><li><b>Thu nhận dễ dàng, đa dạng, nhanh chóng</b>: dùng máy quét, máy ảnh số, điện thoại thông minh để chép một bài thơ, tìm thông tin trên mạng dạng văn bản, hình ảnh, âm thanh, phim,…</li><li><b>Xử lí, tính toán tốc độ cao, chính xác, bền bỉ</b>: hàng trăm tỉ phép tính trong một giây; tính số Pi đến hàng nghìn tỉ chữ số; làm việc liên tục suốt ngày đêm.</li><li><b>Lưu trữ lượng rất lớn</b>: một chiếc thẻ nhớ nhỏ bằng đầu bút có thể lưu nội dung hàng nghìn cuốn sách.</li><li><b>Kết nối mạng</b>: trao đổi thông tin với mọi người ở khắp nơi, truy cập kho tri thức khổng lồ.</li></ul></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 11</div>
+        <div data-task="p11" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Xử lí thông tin trong máy tính</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Vật mang tin và phân loại công việc</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Xử lí thông tin quanh em</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var box = document.querySelector("[data-pc]"); if (!box) return;
+      var T = ["<b>Thiết bị vào</b> thu nhận thông tin: bàn phím, chuột, máy quét, micro, camera,…",
+        "<b>Bộ xử lí (CPU)</b> xử lí thông tin bằng cách thực hiện chương trình máy tính do con người viết ra.",
+        "<b>Bộ nhớ</b> lưu trữ thông tin: đĩa quang, đĩa từ, thẻ nhớ,… (giống như con người ghi nhớ, ghi chép).",
+        "<b>Thiết bị ra</b> truyền hoặc chia sẻ thông tin: màn hình, máy in, loa,…"];
+      var out = box.querySelector(".pc-out"), bs = box.querySelectorAll("button");
+      box.addEventListener("click", function(e){ var b = e.target.closest("button"); if (!b) return;
+        bs.forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); }); out.innerHTML = T[+b.dataset.i]; });
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

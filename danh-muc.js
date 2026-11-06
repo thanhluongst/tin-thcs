@@ -14,13 +14,13 @@ window.CHUONG_TRINH = [
   {lop: 6, chuDe: [
     {so: "1", ten: "Máy tính và cộng đồng", bai: [
       {so: "1", ten: "Thông tin và dữ liệu", tt: "dang"},
-      {so: "2", ten: "Xử lí thông tin"},
-      {so: "3", ten: "Thông tin trong máy tính"}]},
+      {so: "2", ten: "Xử lí thông tin", tt: "dang"},
+      {so: "3", ten: "Thông tin trong máy tính", tt: "dang"}]},
     {so: "2", ten: "Mạng máy tính và Internet", bai: [
-      {so: "4", ten: "Mạng máy tính"},
-      {so: "5", ten: "Internet"}]},
+      {so: "4", ten: "Mạng máy tính", tt: "dang"},
+      {so: "5", ten: "Internet", tt: "dang"}]},
     {so: "3", ten: "Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin", bai: [
-      {so: "6", ten: "Mạng thông tin toàn cầu"},
+      {so: "6", ten: "Mạng thông tin toàn cầu", tt: "dang"},
       {so: "7", ten: "Tìm kiếm thông tin trên Internet"},
       {so: "8", ten: "Thư điện tử"}]},
     {so: "4", ten: "Đạo đức, pháp luật và văn hoá trong môi trường số", bai: [
