@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gỡ lỗi · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>15</b></div><h1><span class="sr-only">Bài 15. </span>Gỡ lỗi</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Chạy thử, tìm lỗi và sửa được lỗi cho chương trình.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Chạy thử, phát hiện lỗi, sửa lỗi">
+      <span class="node">Chạy thử (kiểm thử)</span>
+      <span class="node">Phát hiện, tìm lỗi</span>
+      <span class="node io">Sửa lỗi, kiểm thử lại</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Kiểm thử, phân loại lỗi</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Phát hiện, sửa lỗi lôgic</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Gỡ lỗi là làm những gì?</div>
+        <div class="reading"><b>An:</b> Chúng ta đã tạo ra một chương trình máy tính trong Bài 14 và thế là tớ đã biết lập trình.<br><b>Khoa:</b> Chưa xong đâu, chúng ta cần phải thực hiện một việc nữa, đó là gỡ lỗi.<br><b>An:</b> Gỡ lỗi là làm những gì? Bạn hãy hướng dẫn cụ thể hơn cho tớ nhé.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Kiểm thử và phân loại lỗi</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1, 2</b> Đếm số lần đoán</div>
+        <div class="reading"><b>Hoạt động 1.</b> Trong trò chơi Đoán số ở Bài 14, ai đoán đúng số bí mật với ít lần đoán hơn sẽ là người thắng cuộc. Ở chương trình trong Hình 15.1, biến <i>số lần đoán</i> được bổ sung để đếm số lần người chơi đoán và thông báo giá trị này khi người chơi đoán đúng số bí mật. Trước khi chia sẻ trò chơi của mình, em quyết định kiểm tra xem trò chơi có hoạt động tốt không. Hãy cho biết kết quả của việc kiểm tra đó bằng cách mô tả tình huống chương trình chạy không đúng kịch bản (nếu có).<br><b>Hoạt động 2.</b> Em hãy cho biết, chương trình đã cho trong Hình 15.1 không hoạt động được hay nó có hoạt động nhưng đã thực hiện không đúng kịch bản.</div>
+        <figure class="fig sm"><img src="hinh/h151.jpg" alt="Chương trình Hình 15.1 gồm 12 lệnh: đặt số lần đoán thành 0, đặt số bí mật thành lấy ngẫu nhiên từ 1 đến 100, hỏi, lặp lại cho đến khi trả lời bằng số bí mật gồm nếu trả lời nhỏ hơn số bí mật thì hỏi Quá thấp nếu không thì hỏi Quá cao và thay đổi số lần đoán một lượng 1, nói HOAN HÔ, nói kết hợp Số lần đoán với số lần đoán, dừng lại tất cả"><figcaption>Hình 15.1. Chương trình mới được tạo</figcaption></figure>
+        <div class="reading">Chương trình Hình 15.1 trên mô phỏng (các lệnh được đánh số như SGK). Hãy <b>chạy thử</b> và tự đếm số lần mình đoán, hoặc bấm <b>🧪 Kiểm thử</b> để máy chạy ba tình huống với số bí mật là 40.</div>
+        <div data-sc1></div>
+        <div data-task="hd1" data-n="1"></div>
+        <div data-task="hd2" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> a) Kiểm thử · b) Phân loại lỗi</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 86–87). Theo kịch bản, trò chơi sẽ thông báo số lần đoán khi người chơi đoán đúng số bí mật. Tuy nhiên, khi chạy thử chương trình, em sẽ thấy số lần đoán mà máy tính hiển thị luôn kém số lần thực tế mà người chơi đã đoán một đơn vị. Việc chạy thử chương trình để kiểm tra (còn gọi là <b>kiểm thử</b>) nhằm phát hiện những tình huống bất thường (được gọi là lỗi) khi thực hiện chương trình. Các lỗi cần được loại bỏ trước khi chương trình được coi là sản phẩm hoàn chỉnh và có thể chia sẻ với người khác.<br>Khi chạy thử, em nhận ra rằng chương trình vẫn hoạt động vì máy tính vẫn hỏi và trả lời theo sự điều khiển của các khối lệnh. Tuy nhiên nó thực hiện không đúng kịch bản vì số lần đoán được hiển thị không đúng với số lần thực tế mà người chơi đã đoán. Có hai loại lỗi: 1) <b>Lỗi cú pháp</b> xảy ra khi lệnh viết sai so với quy tắc của ngôn ngữ lập trình, làm cho chương trình không hoạt động; 2) <b>Lỗi lôgic</b> (hay lỗi ngữ nghĩa) xảy ra khi các câu lệnh trong chương trình tuy được viết đúng cú pháp nhưng thực hiện không đúng kịch bản như trong chương trình của trò chơi Đoán số.</div>
+        <div data-task="loai" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 87</div>
+        <div data-task="p87" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Kiểm thử và phân loại lỗi</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Phát hiện lỗi và sửa lỗi lôgic</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 3</b> Gỡ lỗi</div>
+        <div class="reading">Xét tình huống máy tính hiển thị số lần đoán không đúng với số lần đoán thực tế của người chơi. Em hãy trả lời các câu hỏi: 1. Theo kịch bản, biến số lần đoán sẽ thay đổi trong tình huống nào? 2. Những khối lệnh nào làm thay đổi biến số lần đoán? 3. Có điều gì khác nhau giữa kịch bản và những khối lệnh tương ứng?</div>
+        <div data-task="hd3a" data-n="1"></div>
+        <div data-task="hd3b" data-n="2"></div>
+        <div data-task="hd3c" data-n="3"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> a) Phát hiện lỗi lôgic · b) Sửa lỗi</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 87–88). Hầu hết các ngôn ngữ lập trình đều có chức năng chỉ rõ lỗi cú pháp; ngôn ngữ lập trình trực quan thậm chí còn hạn chế những tình huống xảy ra lỗi cú pháp. Vì vậy lỗi cú pháp dễ dàng được phát hiện và sửa chữa. Tuy nhiên, với lỗi lôgic, việc xác định lệnh nào gây ra lỗi và nó đã hoạt động thế nào để tạo ra lỗi ấy không phải lúc nào cũng đơn giản. Có hai cách thường được sử dụng để phát hiện lỗi lôgic.<br><i>Cách thứ nhất: Dựa vào phân tích lôgic để tìm lỗi.</i> Tập trung vào những khối lệnh liên quan đến lỗi và so sánh với kịch bản xem chúng có được thực hiện đúng yêu cầu hay không. Trong chương trình trò chơi Đoán số, lỗi được thể hiện ở việc chương trình hiển thị sai giá trị của số lần đoán. Các khối lệnh liên quan đến biến này là khởi tạo giá trị (2), thay đổi giá trị (9) và hiển thị giá trị (11). Theo kịch bản, số lần đoán cần phải tăng 1 đơn vị mỗi khi người chơi nhập một giá trị số (đoán). Điều này xảy ra ở các câu lệnh (4), (7) và (8). Tuy nhiên, có thể thấy rằng, mặc dù (9) tăng giá trị của số lần đoán sau khi (7) hoặc (8) được thực hiện, nhưng không có lệnh nào như thế sau khối lệnh (4) cả. Theo cách này, việc phát hiện vị trí xuất hiện lỗi trong chương trình được tìm kiếm bằng cách suy luận lôgic, bắt đầu từ những khối lệnh thực hiện không đúng kịch bản. Hạn chế việc tìm lỗi theo cách đó dò từng lệnh.<br><i>Cách thứ hai: Chạy thử với dữ liệu mẫu để dò lỗi.</i> Vì là người lập trình, em có thể cho hiện giá trị các biến số bí mật và số lần đoán bằng cách đánh dấu ☑ vào bên cạnh tên biến đó trong nhóm “Các biến số” (Hình 15.2a). Chạy chương trình với một số dữ liệu đầu vào dự kiến. Chẳng hạn, em có thể nhập số bí mật ngay trong lần đoán đầu tiên. Khi đó, lẽ ra số lần đoán cần nhận giá trị 1 thì nó vẫn chỉ mang giá trị 0. Từ đó, em nhận thấy rằng lỗi xảy ra do không tăng giá trị của số lần đoán sau lần nhập giá trị đầu tiên của người chơi ở lệnh (4). <i>Lưu ý:</i> Chương trình có thể chạy theo từng bước bằng cách chèn lệnh “đợi… giây” (Hình 15.2b) vào những vị trí cần quan sát dữ liệu. Theo cách này, người lập trình có thể kết hợp chạy chương trình từng bước với việc theo dõi giá trị của các biến, so sánh chúng với các giá trị tương ứng được tính theo cách thủ công để phát hiện câu lệnh nào gây ra lỗi và cách nó hoạt động để gây ra lỗi đó.<br><b>b) Sửa lỗi.</b> Khi đã biết vị trí câu lệnh xảy ra lỗi trong chương trình và cách thức câu lệnh đó tạo ra lỗi, em có thể đưa ra những cách sửa lỗi phù hợp với yêu cầu. Chẳng hạn, tăng giá trị số lần đoán lên 1 đơn vị sau lần đoán đầu tiên bằng cách bổ sung lệnh (4a) “thay đổi số lần đoán một lượng 1” giống như lệnh (9) vào sau lệnh (4).</div>
+        <figure class="fig sm"><img src="hinh/h152.jpg" alt="a) Đánh dấu vào ô bên cạnh biến số bí mật để hiện giá trị biến trên sân khấu, ví dụ số bí mật 67. b) Khối lệnh đợi 5 giây để dừng tạm thời"><figcaption>Hình 15.2. Công cụ phát hiện lỗi lôgic</figcaption></figure>
+        <div class="reading"><b>Thử trên mô phỏng ở mục 2.1:</b> đánh dấu ☑ hai biến trong nhóm <i>Các biến số</i> để hiện giá trị trên sân khấu; bật <b>Chạy từng lệnh</b> (thay cho việc chèn lệnh đợi) và bấm <b>⏭ Lệnh tiếp</b> để quan sát số lần đoán sau mỗi lệnh. Sau đó sửa lỗi: nháy vạch ▸ ngay dưới lệnh (4), thêm khối <i>thay đổi số lần đoán một lượng 1</i>, rồi bấm <b>🧪 Kiểm thử</b> lại.</div>
+        <div data-task="sua" data-n="1"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 89</div>
+        <div class="reading">Em hãy gỡ lỗi đoạn chương trình xác định một số n được nhập từ bàn phím là số chẵn hay số lẻ được cho trong Hình 15.3.</div>
+        <figure class="fig sm"><img src="hinh/h153.jpg" alt="Chương trình: hỏi n bằng và đợi; nếu n chia lấy dư 2 bằng 0 thì nói kết hợp n là số LẺ trong 5 giây, nếu không thì nói kết hợp n là số CHẴN trong 5 giây; dừng lại tất cả"><figcaption>Hình 15.3. Chương trình xác định một số là chẵn hay lẻ</figcaption></figure>
+        <div data-sc2></div>
+        <div data-task="p89" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Phát hiện lỗi và sửa lỗi lôgic</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Thực hành: Gỡ lỗi</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Trò chơi Đoán số tối đa 7 lần</div>
+        <div class="reading">Giả sử trong trò chơi Đoán số, không ai được đoán quá 7 lần. Em hãy gỡ lỗi chương trình trò chơi Đoán số trong Hình 15.4 (đã được bổ sung chức năng thông báo người chơi thua cuộc nếu vẫn đoán sai ở lần thứ 7).<br><b>a) Kiểm thử và phát hiện lỗi.</b> Bước 1. Chạy thử chương trình: với tình huống đoán đúng số bí mật sau không quá 7 lần đoán, thông báo hiển thị số lần đoán không xuất hiện cụm từ “Số lần đoán:” như trong chương trình; với tình huống đoán sai, chương trình không kết thúc và báo thua ngay sau lần đoán sai thứ 7 mà vẫn cho đoán thêm một lần nữa. Bước 2. Phát hiện lỗi. Gợi ý: trong tình huống thứ nhất, lỗi xảy ra ở câu lệnh hiển thị: phép toán ghép nối các chữ là “kết hợp…” chứ không phải dấu “+”; trong tình huống thứ hai, lỗi xảy ra ở biểu thức điều kiện: vì mỗi người không đoán quá 7 lần, nên vòng lặp (6) – (10) sẽ kết thúc khi số lần đoán bằng 7. Ngoài ra, sau 7 lần đoán, vẫn có thể xảy ra cả hai khả năng đoán đúng hoặc đoán sai. Vì vậy, số lần đoán không cho biết kết quả đoán đúng hay sai.<br><b>b) Sửa các lỗi phát hiện được.</b> Điều kiện trong câu lệnh (6) cần đổi thành ⟨trả lời = số bí mật⟩ hoặc ⟨số lần đoán &gt; 6⟩ (hoặc ⟨số lần đoán = 7⟩). Điều kiện rẽ nhánh ở lệnh (11) cần được chỉnh sửa thành ⟨trả lời = số bí mật⟩. Sửa biểu thức trong lệnh hiển thị (14). Khi đó, các lệnh (11) đến (14) như Hình 15.5.</div>
+        <figure class="fig sm"><img src="hinh/h154.jpg" alt="Chương trình Hình 15.4 gồm 15 lệnh: thêm lệnh 5 thay đổi số lần đoán một lượng 1, lệnh 6 lặp lại cho đến khi trả lời bằng số bí mật hoặc số lần đoán lớn hơn 7, lệnh 11 nếu số lần đoán lớn hơn 7 thì nói Bạn đã thua, nếu không thì nói HOAN HÔ và nói Số lần đoán cộng số lần đoán"><figcaption>Hình 15.4. Chương trình cần được gỡ lỗi</figcaption></figure>
+        <div class="reading">Gỡ lỗi trên mô phỏng: bấm <b>🧪 Kiểm thử</b> để xem tình huống nào sai; sửa số trong ô (ví dụ 7 → 6); bấm <b>×</b> trên một phép toán để bỏ nó, rồi bấm <b>▾</b> để đặt phép toán đúng vào ô; dùng ✕ và các vạch ▸ để chuyển lệnh sang nhánh khác. Kiểm thử lại cho đến khi đạt cả 4 tình huống.</div>
+        <div data-sc3></div>
+        <figure class="fig sm"><img src="hinh/h155.jpg" alt="Các lệnh 11 đến 14 sau khi sửa: nếu trả lời bằng số bí mật thì nói HOAN HÔ trong 2 giây và nói kết hợp Số lần đoán với số lần đoán trong 5 giây, nếu không thì nói Bạn đã thua trong 5 giây"><figcaption>Hình 15.5. Các lệnh (11) đến (14) sau khi sửa</figcaption></figure>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-task="nv3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Một cách sửa lỗi khác</div>
+        <div class="reading">Em hãy chọn một cách khác với cách đã nêu trong phần b) Sửa lỗi của mục 2 để sửa lỗi của chương trình được cho trong Hình 15.1.</div>
+        <div data-sc4></div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Máy tính đoán số</div>
+        <div class="reading">Đổi vai trò máy tính và người chơi trong trò chơi Đoán số. Em chọn một số nguyên trong khoảng từ 1 đến 120 và viết số đó ra giấy. Máy tính sẽ hiển thị một số mà em phải trả lời bằng các phím “d”, “c” hoặc “t” tương ứng với tình huống số máy tính hiển thị đúng, cao hơn hay thấp hơn số em đã chọn. Hãy viết chương trình để sau một số bước, càng ít càng tốt, máy tính tìm ra số em đã chọn. Chạy thử, phát hiện và sửa các lỗi của chương trình đó.<br><i>Gợi ý cho phần kiểm thử tự động:</i> mỗi câu hỏi của máy nên chứa số máy đoán, ví dụ <b>kết hợp “Có phải số ” (đoán)</b>; máy kiểm thử sẽ tự trả lời d, c, t.</div>
+        <div data-sc5></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script src="../chung/scratch.js?v=7"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var V = function(n){ return {r:"var", name:n}; }, A = {r:"answer"}, O = function(op, a, b){ return {r:op, a: b === undefined ? [a] : [a, b]}; };
+      var MEO = function(body){ return [{id:"meo", name:"Mèo", icon:"🐱", x:-110, y:-70, dir:90, body:body}]; };
+      var CTL = ["say","sayFor","ask","set","change","wait","repeat","forever","if","ifElse","untilB","stop"];
+      var SL = "số lần đoán", SB = "số bí mật";
+      function find(body, f){ var r = false; (function w(a){ a.forEach(function(b){ if (f(b)) r = true; if (b.body) w(b.body); if (b.body2) w(b.body2); }); })(body); return r; }
+      function has(x, l){ return x.log.indexOf(l) >= 0; }
+      function cnt(res){ var m = res.says.join(" | ").match(/Số lần đoán:?\s*(\d+)/); return m ? +m[1] : null; }
+      var H151 = [{op:"set", "var":SL, v:0},{op:"set", "var":SB, v:O("rand", 1, 100)},{op:"ask", v:"Hãy cho biết bạn đoán số nào."},
+        {op:"untilB", cond:O("eq", A, V(SB)), body:[{op:"ifElse", cond:O("lt", A, V(SB)), body:[{op:"ask", v:"Quá thấp!"}], body2:[{op:"ask", v:"Quá cao!"}]},{op:"change", "var":SL, v:1}]},
+        {op:"sayFor", v:"HOAN HÔ!", n:2},{op:"sayFor", v:O("join", "Số lần đoán: ", V(SL)), n:5},{op:"stop"}];
+      var T151 = [{name:"Số bí mật 40; đoán 40 (đúng ngay lần đầu)", secret:40, answers:[40], expect:"HOAN HÔ!, Số lần đoán: 1", ok:function(r){ return cnt(r) === 1; }},
+        {name:"Số bí mật 40; đoán 50, 30, 40", secret:40, answers:[50,30,40], expect:"HOAN HÔ!, Số lần đoán: 3", ok:function(r){ return cnt(r) === 3; }},
+        {name:"Số bí mật 40; đoán 20, 60, 45, 35, 40", secret:40, answers:[20,60,45,35,40], expect:"HOAN HÔ!, Số lần đoán: 5", ok:function(r){ return cnt(r) === 5; }}];
+      var allPass = function(x){ return !!x.tests && x.tests.length && x.tests.every(function(t){ return t.pass; }); };
+      Scratch($("[data-sc1]"), {title:"Mô phỏng Scratch: chương trình Hình 15.1 (có lỗi)", sprites:MEO(H151), vars:[SL, SB], expr:true, blocks:CTL, lineNo:true, mon:"hide", debug:true, tests:T151, save:"DoanSo.sb3",
+        note:"Ô theo dõi các biến đang ẩn: đánh dấu ☑ bên cạnh tên biến trong nhóm Các biến số để hiện (như Hình 15.2a).",
+        check:function(x){ return [["Kiểm thử, phát hiện tình huống chạy sai kịch bản", x.log.some(function(l){ return /^test:/.test(l) && !/^test:(\d+)\/\1$/.test(l); })],
+          ["Hiện giá trị biến số lần đoán trên sân khấu (☑)", has(x, "mon:" + SL)],
+          ["Chạy từng lệnh để theo dõi biến", has(x, "step-on") && x.runs.length > 0],
+          ["Sửa lỗi: kiểm thử lại đạt cả 3 tình huống", allPass(x)]]; }});
+      var H153 = [{op:"ask", v:"n = ?"},{op:"ifElse", cond:O("eq", O("mod", V("n"), 2), 0), body:[{op:"sayFor", v:O("join", V("n"), " là số LẺ"), n:5}], body2:[{op:"sayFor", v:O("join", V("n"), " là số CHẴN"), n:5}]},{op:"stop"}];
+      var said = function(r, t){ return r.says.some(function(s){ return s.replace(/\s+/g, " ").trim() === t; }); };
+      Scratch($("[data-sc2]"), {title:"Mô phỏng Scratch: chương trình Hình 15.3 (có lỗi)", sprites:MEO(H153), vars:["n"], expr:true, blocks:CTL, lineNo:true, debug:true,
+        tests:[{name:"Nhập 4", answers:[4], expect:"4 là số CHẴN", ok:function(r){ return said(r, "4 là số CHẴN"); }},{name:"Nhập 7", answers:[7], expect:"7 là số LẺ", ok:function(r){ return said(r, "7 là số LẺ"); }},{name:"Nhập 10", answers:[10], expect:"10 là số CHẴN", ok:function(r){ return said(r, "10 là số CHẴN"); }}],
+        check:function(x){ return [["Kiểm thử, phát hiện lỗi", x.log.some(function(l){ return /^test:/.test(l); })], ["Sửa hết lỗi: kiểm thử đạt cả 3 tình huống", allPass(x)]]; }});
+      var H154 = [{op:"set", "var":SL, v:0},{op:"set", "var":SB, v:O("rand", 1, 100)},{op:"ask", v:"Hãy cho biết bạn đoán số nào."},{op:"change", "var":SL, v:1},
+        {op:"untilB", cond:O("or", O("eq", A, V(SB)), O("gt", V(SL), 7)), body:[{op:"ifElse", cond:O("lt", A, V(SB)), body:[{op:"ask", v:"Quá thấp!"}], body2:[{op:"ask", v:"Quá cao!"}]},{op:"change", "var":SL, v:1}]},
+        {op:"ifElse", cond:O("gt", V(SL), 7), body:[{op:"sayFor", v:"Bạn đã thua!", n:5}], body2:[{op:"sayFor", v:"HOAN HÔ!", n:2},{op:"sayFor", v:O("add", "Số lần đoán: ", V(SL)), n:6}]},{op:"stop"}];
+      var win = function(r, n){ return r.says.indexOf("HOAN HÔ!") >= 0 && cnt(r) === n && r.says.indexOf("Bạn đã thua!") < 0; };
+      var T154 = [{name:"Số bí mật 40; đoán 40", secret:40, answers:[40], expect:"HOAN HÔ!, Số lần đoán: 1", ok:function(r){ return win(r, 1); }},
+        {name:"Số bí mật 40; đoán 50, 30, 40", secret:40, answers:[50,30,40], expect:"HOAN HÔ!, Số lần đoán: 3", ok:function(r){ return win(r, 3); }},
+        {name:"Số bí mật 40; đoán sai 7 lần: 10, 20, 30, 50, 60, 70, 80", secret:40, answers:[10,20,30,50,60,70,80], expect:"Bạn đã thua! ngay sau lần đoán thứ 7, không hỏi thêm", ok:function(r){ return r.ended && r.answers.length === 7 && r.says.indexOf("Bạn đã thua!") >= 0 && r.says.indexOf("HOAN HÔ!") < 0; }},
+        {name:"Số bí mật 40; sai 6 lần rồi đúng ở lần thứ 7: 10, 20, 30, 50, 60, 70, 40", secret:40, answers:[10,20,30,50,60,70,40], expect:"HOAN HÔ!, Số lần đoán: 7", ok:function(r){ return win(r, 7); }}];
+      Scratch($("[data-sc3]"), {title:"Mô phỏng Scratch: chương trình Hình 15.4 cần được gỡ lỗi", sprites:MEO(H154), vars:[SL, SB], expr:true, blocks:CTL, lineNo:true, debug:true, mon:"hide", tests:T154, save:"DoanSo7lan.sb3",
+        check:function(x){ var t = x.tests || [], p = function(i){ return !!t[i] && t[i].pass; };
+          return [["Kiểm thử phát hiện lỗi", x.log.some(function(l){ return /^test:/.test(l); })],
+            ["Sửa lệnh (14): dùng kết hợp thay cho “+” (tình huống 1, 2 đạt)", p(0) && p(1)],
+            ["Sửa điều kiện (6) và (11): báo thua ngay sau lần đoán sai thứ 7 (tình huống 3 đạt)", p(2)],
+            ["Đoán đúng ở lần thứ 7 vẫn thắng (tình huống 4 đạt)", p(3)]]; }});
+      Scratch($("[data-sc4]"), {title:"Mô phỏng Scratch: sửa lỗi Hình 15.1 theo cách khác", sprites:MEO(H151), vars:[SL, SB], expr:true, blocks:CTL, lineNo:true, debug:true, tests:T151,
+        check:function(x){ var b = x.sprites[0].body, sgk = b[3] && b[3].op === "change" && b[3]["var"] === SL;
+          return [["Kiểm thử đạt cả 3 tình huống", allPass(x)], ["Cách sửa khác cách của SGK (không thêm lệnh (4a) ngay sau lệnh (4))", allPass(x) && !sgk]]; }});
+      function guessFn(secret){ return function(q, says){ var src = (q.match(/\d+/g) ? q : says.join(" ")), m = src.match(/\d+/g); if (!m) return "?"; var g = +m[m.length - 1]; return g === secret ? "d" : g > secret ? "c" : "t"; }; }
+      var TV = [1, 60, 77, 120, 33].map(function(s){ return {name:"Em chọn số " + s, answers: guessFn(s), expect:"Máy tìm ra " + s + " sau không quá 7 câu hỏi", ok:function(r){ var qs = r.asks, last = qs.length ? (qs[qs.length - 1].match(/\d+/g) || []) : []; return r.ended && qs.length <= 7 && last.length && +last[last.length - 1] === s; }}; });
+      Scratch($("[data-sc5]"), {title:"Mô phỏng Scratch: máy tính đoán số em chọn (1–120)", sprites:MEO([]), expr:true, blocks:CTL, debug:true, tests:TV, add:false,
+        check:function(x){ return [["Viết chương trình có hỏi và cấu trúc lặp", x.sprites[0].body.some(function(b){ return /until|forever|repeat/.test(b.op); }) && find(x.sprites[0].body, function(b){ return b.op === "ask"; })],
+          ["Kiểm thử: máy tìm đúng số trong cả 5 tình huống, mỗi lần không quá 7 câu hỏi", allPass(x)]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
