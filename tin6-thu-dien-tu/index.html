@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thư điện tử · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 3. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>8</b></div><h1><span class="sr-only">Bài 8. </span>Thư điện tử</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Biết thư điện tử là gì; biết ưu điểm và nhược điểm cơ bản của dịch vụ thư điện tử so với các phương thức liên lạc khác.</li>
+        <li>Biết tài khoản thư điện tử, hộp thư điện tử, thành phần của địa chỉ thư điện tử.</li>
+        <li>Biết cách đăng kí tài khoản thư điện tử và thực hiện được việc đăng nhập, soạn, gửi, đăng xuất hộp thư điện tử.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Thư điện tử">
+      <span class="node">Tài khoản</span>
+      <span class="node">Hộp thư</span>
+      <span class="node io">tên@máy chủ</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Thư điện tử. Tài khoản thư điện tử</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Ưu điểm và nhược điểm của dịch vụ thư điện tử</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Đăng kí tài khoản, đăng nhập, đăng xuất và gửi thư điện tử</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .em{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px}
+      .em input{width:16em;max-width:100%}
+      .em-out{font-size:14px;min-height:1.4em}
+      .em-parts{font-family:ui-monospace,Consolas,monospace;font-size:20px}
+      .em-parts .u{color:#2a8fd6}.em-parts .h{color:#c0392b}.em-parts .d{color:#b0306a}
+      .oc{display:grid;gap:3px;overflow-x:auto;width:100%;justify-items:start}
+      .oc-row{display:grid;grid-template-columns:2.2em repeat(14,30px);gap:2px;align-items:center}
+      .oc-row>b{font-size:13px;text-align:right;padding-right:4px}
+      .oc input{width:30px;height:30px;text-align:center;text-transform:uppercase;font-weight:700;font-size:15px;border:1px solid #9aa;border-radius:3px;padding:0;background:#fff;color:#1d2433}
+      .oc input.key{background:#cfe6ff;border-color:#2a8fd6}
+      .oc input.ok{color:#1b7a2f}.oc input.bad{color:#c0392b}
+      .oc-q{font-size:13.5px;display:grid;gap:2px}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Ba cách gửi thư</div>
+        <div class="reading">Ba hình ảnh trong SGK: 🕊️ chim bồ câu mang thư · 📮 bỏ thư vào hòm thư bưu điện · 🖥️ gửi thư bằng máy tính. Ba hình ảnh đó cho em biết điều gì?</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Thư điện tử. Tài khoản thư điện tử</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Thư điện tử</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Thư điện tử, tài khoản, địa chỉ</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 32–33).<ul><li><b>Thư điện tử</b> (email hay e-mail) là thư được gửi và nhận bằng phương tiện điện tử – một hình thức trao đổi thông tin được rất nhiều người sử dụng.</li><li><b>Dịch vụ thư điện tử</b> là dịch vụ cung cấp các chức năng soạn thảo, gửi, nhận, chuyển tiếp, lưu trữ và quản lí thư cho người sử dụng.</li><li>Người sử dụng đăng kí với nhà cung cấp dịch vụ thư điện tử để mở <b>tài khoản thư điện tử</b>, có thể trả phí hoặc miễn phí (Google, Yahoo, Microsoft,…).</li><li>Khi có tài khoản, người dùng được cấp một <b>hộp thư điện tử</b> trên máy chủ cùng tên đăng nhập và mật khẩu. Hộp thư gắn với một <b>địa chỉ thư điện tử</b> dạng &lt;tên đăng nhập&gt;@&lt;địa chỉ máy chủ thư điện tử&gt;. Tên đăng nhập và mật khẩu do người dùng tự chọn; địa chỉ máy chủ do nhà cung cấp quy định. <i>Mỗi địa chỉ thư điện tử là duy nhất trên toàn cầu.</i></li></ul></div>
+        <figure class="fig" data-em>
+          <div class="em"><label>Gõ một địa chỉ thư:</label><input type="text" value="haiha1704200@gmail.com" spellcheck="false" autocomplete="off"></div>
+          <div class="em-out" aria-live="polite"></div>
+          <figcaption>Hình 3.9. Các thành phần của địa chỉ thư điện tử – thử kiểm tra một địa chỉ</figcaption>
+        </figure>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 33</div>
+        <div data-task="p33a" data-n="1"></div>
+        <div data-task="p33b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Thư điện tử. Tài khoản thư điện tử</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Ưu điểm và nhược điểm của dịch vụ thư điện tử</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Ưu điểm và nhược điểm của dịch vụ thư điện tử</div>
+        <div data-task="hd2" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Ưu điểm, nhược điểm</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 33). Từ khi ra đời, dịch vụ thư điện tử được nhiều cá nhân và tổ chức sử dụng. So với các phương thức liên lạc khác, dịch vụ này có nhiều ưu điểm và cũng có một số nhược điểm.</div>
+        <div data-task="un" data-n="1"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 34</div>
+        <div data-task="p34" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Ưu điểm và nhược điểm</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Đăng kí tài khoản, đăng nhập, đăng xuất và gửi thư điện tử</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Hộp thư điện tử</div>
+        <div class="reading"><b>Nhiệm vụ:</b> tạo một tài khoản thư điện tử mới trên mail.google.com (gmail.com); đăng nhập hộp thư, xem nội dung, soạn thư mới và gửi thư. <b>a) Tạo tài khoản</b> (cần sự đồng ý và trợ giúp của phụ huynh). <b>b) Đăng nhập, xem thư, đăng xuất:</b> truy cập mail.google.com → đăng nhập (chọn tên đăng nhập, nhập mật khẩu, nháy Tiếp theo) → hộp thư mở ra với danh sách thư trong <b>Hộp thư đến</b> → nháy vào tên người gửi hoặc tiêu đề để mở thư → nháy biểu tượng tài khoản, chọn <b>Đăng xuất</b>. <b>c) Soạn thư mới và gửi:</b> nháy <b>Soạn thư</b> → nhập địa chỉ người nhận → nhập tiêu đề → nhập nội dung → nháy <b>Gửi</b> (nút 📎 để gửi kèm tệp).</div>
+        <div data-task="tk" data-n="1"></div>
+        <div data-task="dn" data-n="2"></div>
+        <div data-task="gt" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Thư điện tử</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+        <div data-task="lt3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Thư rác và thư gửi bạn</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Trò chơi</b> Giải ô chữ</div>
+        <div class="reading">Tìm từ khoá (tiếng Việt không dấu) trong cột màu xanh. Mỗi hàng là đáp án thay cho dấu (?) trong các câu dưới đây. Gõ chữ vào từng ô rồi bấm <b>Kiểm tra</b>.</div>
+        <figure class="fig" data-oc>
+          <div class="oc"></div>
+          <div class="row"><button class="btn" type="button" data-chk>Kiểm tra</button><button class="btn" type="button" data-hint>Gợi ý một chữ</button><span class="status" data-st></span></div>
+          <div class="oc-q">
+            <span>1. Để có hộp thư điện tử người sử dụng cần đăng kí (?) thư điện tử với nhà cung cấp dịch vụ thư điện tử.</span>
+            <span>2. Để bảo mật cho tài khoản thư thì người sử dụng cần đặt (?).</span>
+            <span>3. Khi gửi thư, ta cần ghi rõ địa chỉ của (?).</span>
+            <span>4. Muốn vào hộp thư thì người sử dụng cần (?).</span>
+            <span>5. Mỗi hộp thư điện tử được gắn với một (?).</span>
+            <span>6. Nháy nút 📎 (Đính kèm) nếu có gửi kèm (?).</span>
+            <span>7. Nháy nút (?) để ra khỏi hộp thư điện tử.</span>
+            <span>8. Sau khi tạo tài khoản, người sử dụng sẽ có một (?).</span>
+            <span>9. Nháy nút (?) để thư được chuyển đi.</span>
+          </div>
+          <figcaption>Trò chơi giải ô chữ (theo SGK trang 36)</figcaption>
+        </figure>
+        <div data-task="oc" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var E = document.querySelector("[data-em]");
+      if (E) { var i = E.querySelector("input"), o = E.querySelector(".em-out");
+        function ck(){ var v = i.value.trim(), m = v.match(/^([A-Za-z0-9._+-]+)@([A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+)$/);
+          if (m) o.innerHTML = '<div class="em-parts"><span class="u">' + m[1] + '</span><span class="h">@</span><span class="d">' + m[2] + '</span></div>✔ Đúng dạng: <span style="color:#2a8fd6">tên đăng nhập</span> + <span style="color:#c0392b">kí tự bắt buộc @</span> + <span style="color:#b0306a">địa chỉ máy chủ thư điện tử</span>.';
+          else o.innerHTML = "✘ Chưa đúng dạng. " + (v.indexOf("@") < 0 ? "Thiếu kí tự bắt buộc <b>@</b>." : v.split("@").length > 2 ? "Chỉ được có <b>một</b> kí tự @." : /\s/.test(v) ? "Không được có dấu cách." : /[^\x00-\x7F]/.test(v) ? "Không dùng chữ có dấu." : "Phần sau @ phải là địa chỉ máy chủ, ví dụ gmail.com.");
+        }
+        i.addEventListener("input", ck); ck(); }
+      var O = document.querySelector("[data-oc]"); if (!O) return;
+      var W = ["TAIKHOAN","MATKHAU","NGUOINHAN","DANGNHAP","DIACHI","TEP","DANGXUAT","HOPTHU","GUI"], K = "THUDIENTU", COL = 6, grid = O.querySelector(".oc"), inputs = [];
+      var HINT = [[3,"K"],[0,"M"],[2,"U"],[1,"A"],[0,"D"],[2,"P"],[7,"T"],[0,"H"],[0,"G"]];
+      W.forEach(function(w, r){ var k = w.indexOf(K[r]), start = COL - k, row = document.createElement("div"); row.className = "oc-row";
+        var lb = document.createElement("b"); lb.textContent = r + 1; row.appendChild(lb); inputs[r] = [];
+        for (var c = 0; c < 14; c++) { var cell; var j = c - start;
+          if (j >= 0 && j < w.length) { cell = document.createElement("input"); cell.maxLength = 1; cell.setAttribute("aria-label", "Hàng " + (r + 1) + ", chữ " + (j + 1)); if (j === k) cell.className = "key";
+            if (HINT[r][0] === j) { cell.value = HINT[r][1]; }
+            inputs[r][j] = cell; }
+          else cell = document.createElement("span");
+          row.appendChild(cell); }
+        grid.appendChild(row); });
+      grid.addEventListener("input", function(e){ var t = e.target; if (t.tagName !== "INPUT") return; t.value = t.value.toUpperCase().replace(/[^A-Z]/g, ""); t.classList.remove("ok", "bad");
+        if (t.value) { var all = [].slice.call(grid.querySelectorAll("input")), n = all[all.indexOf(t) + 1]; if (n && n.parentNode === t.parentNode) n.focus(); } });
+      var st = O.querySelector("[data-st]");
+      O.querySelector("[data-chk]").addEventListener("click", function(){ var good = 0;
+        W.forEach(function(w, r){ var ok = true; inputs[r].forEach(function(c, j){ var g = c.value === w[j]; if (c.value) c.classList.add(g ? "ok" : "bad"); if (!g) ok = false; }); if (ok) good++; });
+        st.textContent = good === W.length ? "🎉 Giải xong! Từ khoá: " + K : "Đúng " + good + "/9 hàng."; st.className = "status " + (good === W.length ? "ok" : ""); });
+      O.querySelector("[data-hint]").addEventListener("click", function(){ for (var r = 0; r < W.length; r++) for (var j = 0; j < W[r].length; j++) if (inputs[r][j].value !== W[r][j]) { inputs[r][j].value = W[r][j]; inputs[r][j].classList.add("ok"); return; } });
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

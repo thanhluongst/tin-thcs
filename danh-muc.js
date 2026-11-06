@@ -21,10 +21,10 @@ window.CHUONG_TRINH = [
       {so: "5", ten: "Internet", tt: "dang"}]},
     {so: "3", ten: "Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin", bai: [
       {so: "6", ten: "Mạng thông tin toàn cầu", tt: "dang"},
-      {so: "7", ten: "Tìm kiếm thông tin trên Internet"},
-      {so: "8", ten: "Thư điện tử"}]},
+      {so: "7", ten: "Tìm kiếm thông tin trên Internet", tt: "dang"},
+      {so: "8", ten: "Thư điện tử", tt: "dang"}]},
     {so: "4", ten: "Đạo đức, pháp luật và văn hoá trong môi trường số", bai: [
-      {so: "9", ten: "An toàn thông tin trên Internet"}]},
+      {so: "9", ten: "An toàn thông tin trên Internet", tt: "dang"}]},
     {so: "5", ten: "Ứng dụng tin học", bai: [
       {so: "10", ten: "Sơ đồ tư duy"},
       {so: "11", ten: "Định dạng văn bản"},

@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>An toàn thông tin trên Internet · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 4. Đạo đức, pháp luật và văn hoá trong môi trường số</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>9</b></div><h1><span class="sr-only">Bài 9. </span>An toàn thông tin trên Internet</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Biết một số tác hại và nguy cơ khi sử dụng Internet. Nêu và thực hiện được một số biện pháp phòng ngừa.</li>
+        <li>Trình bày được tầm quan trọng của sự an toàn và hợp pháp của thông tin cá nhân và tập thể.</li>
+        <li>Bảo vệ được thông tin và tài khoản cá nhân với sự hỗ trợ của người lớn.</li>
+        <li>Nêu được một vài cách thông dụng để chia sẻ thông tin của bản thân và tập thể sao cho an toàn và hợp pháp.</li>
+        <li>Nhận diện được một số thông điệp lừa đảo hoặc mang nội dung xấu.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="An toàn thông tin trên Internet">
+      <span class="node">Giữ an toàn</span>
+      <span class="node">Không gặp gỡ</span>
+      <span class="node">Đừng chấp nhận</span>
+      <span class="node">Kiểm tra độ tin cậy</span>
+      <span class="node io">Hãy nói ra</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Tác hại và nguy cơ khi sử dụng Internet</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Một số quy tắc an toàn khi sử dụng Internet</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> An toàn thông tin</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .qt5{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;width:100%}
+      .qt5 button{font:inherit;border:0;border-radius:12px;padding:12px 10px;min-height:120px;cursor:pointer;color:#1d2433;text-align:center;display:grid;align-content:center;gap:6px}
+      .qt5 button b{font-family:Lexend,sans-serif;font-size:15px}
+      .qt5 button span{font-size:13px;display:none}
+      .qt5 button[aria-expanded=true] span{display:block}
+      .qt5 button:nth-child(1){background:#fde0e8}.qt5 button:nth-child(2){background:#e6defa}.qt5 button:nth-child(3){background:#dcecfb}.qt5 button:nth-child(4){background:#fbe6d4}.qt5 button:nth-child(5){background:#dcf3df}
+      .pw{display:grid;gap:6px;width:100%;font-size:14px}
+      .pw input{max-width:22em}
+      .pw-bar{height:12px;border-radius:6px;background:var(--sunk);overflow:hidden}.pw-bar i{display:block;height:100%;width:0;transition:width .2s}
+      .pw ul{margin:0;padding-left:1.2em}.pw li.ok{color:#1b7a2f}.pw li.no{color:#a33}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Máy tính của Minh</div>
+        <div class="reading">Một buổi sáng, Minh đến lớp với vẻ mặt buồn thiu tìm An để nói chuyện.<br><b>Minh:</b> Bạn biết không, tối qua tớ làm hỏng máy tính rồi. Tớ lo là các tệp ảnh chụp hôm đi dã ngoại trong máy bị mất.<br><b>An:</b> Bạn đã làm gì để xảy ra sự cố này?<br><b>Minh:</b> Tớ tải một phần mềm trò chơi trên mạng và cài đặt, máy tính khởi động lại rồi bị treo luôn.<br><b>An:</b> Máy tính của bạn có cài phần mềm chống virus không?<br><b>Minh:</b> Có! Nhưng vì háo hức muốn chơi nên tớ đã bỏ qua cảnh báo khi cài đặt.<br><b>An:</b> Vấn đề là ở chỗ ấy đấy! Máy tính nhà bạn có thể bị nhiễm virus hoặc mã độc rồi. Bạn nên nói với bố mẹ nhờ chuyên gia máy tính kiểm tra xem sao.</div>
+        <div data-task="hd1a" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Tác hại và nguy cơ khi sử dụng Internet</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Tác hại và nguy cơ</div>
+        <div data-task="hd1b" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Năm tác hại, nguy cơ</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 37–38). Internet có thể là một công cụ tuyệt vời và hữu ích khi chúng ta biết cách sử dụng và khai thác nhưng cũng có thể có một số tác hại và nguy cơ:<ul><li><b>Thông tin cá nhân bị lộ hoặc bị đánh cắp</b>: không biết cách bảo mật thì thông tin cá nhân có thể bị lộ hoặc bị kẻ xấu đánh cắp, lợi dụng để bôi nhọ danh dự, đe doạ, lừa đảo, tống tiền, khống chế.</li><li><b>Máy tính bị nhiễm virus hay mã độc</b>: dữ liệu trên máy tính bị mất hoặc bị sai lệch.</li><li><b>Bị lừa đảo, dụ dỗ, đe doạ, bắt nạt trên mạng</b>: kẻ xấu dụ dỗ tiếp xúc nội dung không lành mạnh, lôi kéo vào con đường phạm tội, đe doạ khiến nạn nhân xấu hổ, sợ hãi, ảnh hưởng sức khoẻ và tâm lí.</li><li><b>Tiếp nhận thông tin không chính xác</b>: thông tin trên mạng đến từ nhiều nguồn, có nhiều thông tin không được kiểm duyệt; có những kẻ lợi dụng mạng để đưa tài liệu mang tính bạo lực, khuyến khích hoạt động bất hợp pháp,… nên cần luôn cảnh giác và sáng suốt khi lựa chọn thông tin.</li><li><b>Nghiện Internet, nghiện trò chơi trên mạng</b>: dành quá nhiều thời gian vào mạng xã hội, trò chơi trên mạng ảnh hưởng xấu đến tâm lí, sức khoẻ, hành vi; dẫn đến căng thẳng, lo lắng, trầm cảm, bỏ bê việc học tập.</li></ul></div>
+        <div data-task="nc" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 38</div>
+        <div data-task="p38a" data-n="1"></div>
+        <div data-task="p38b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Tác hại và nguy cơ khi dùng Internet</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Một số quy tắc an toàn khi sử dụng Internet</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Quy tắc an toàn</div>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Năm quy tắc an toàn</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 39). <i>Bấm vào từng thẻ để xem nội dung quy tắc.</i></div>
+        <figure class="fig"><div class="qt5" data-qt>
+          <button type="button" aria-expanded="false"><b>GIỮ AN TOÀN</b><span>Bảo mật thông tin cá nhân và gia đình, không tiết lộ thông tin cá nhân trên mạng xã hội và cho người lạ.</span></button>
+          <button type="button" aria-expanded="false"><b>KHÔNG GẶP GỠ</b><span>Không được một mình gặp gỡ người mà bạn chỉ quen biết qua mạng vì có thể bị nguy hiểm nếu gặp phải kẻ xấu. Đi cùng người lớn trong gia đình nếu muốn gặp.</span></button>
+          <button type="button" aria-expanded="false"><b>ĐỪNG CHẤP NHẬN</b><span>Chỉ mở thư điện tử và tin nhắn từ người mà bạn biết. Từ chối các lời mời vào hội nhóm trên mạng mà mình không biết. Cảnh giác với virus và tin nhắn rác.</span></button>
+          <button type="button" aria-expanded="false"><b>KIỂM TRA ĐỘ TIN CẬY</b><span>Chỉ nên tìm kiếm thông tin từ các nguồn có sự kiểm duyệt hoặc các tổ chức, công ti có nguồn gốc và uy tín. Kiểm tra độ tin cậy của thông tin qua sự trợ giúp của người lớn trong gia đình hoặc thầy cô giáo.</span></button>
+          <button type="button" aria-expanded="false"><b>HÃY NÓI RA</b><span>Khi gặp phải tình huống bị bắt nạt, đe doạ, lừa đảo hoặc dụ dỗ trên mạng, hãy chia sẻ với người tin cậy như thầy cô giáo, người lớn trong gia đình.</span></button>
+        </div><figcaption>Năm quy tắc an toàn khi sử dụng Internet (theo SGK) · <i>Góc cha mẹ: Hãy làm bạn với con trong thế giới thông tin trên mạng Internet.</i></figcaption></figure>
+        <div data-task="qt" data-n="1"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 39</div>
+        <div data-task="p39a" data-n="1"></div>
+        <div data-task="p39b" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Một số quy tắc an toàn khi sử dụng Internet</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.3</span> An toàn thông tin</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 3</b> Bảo vệ thông tin cá nhân</div>
+        <div data-task="hd3a" data-n="1"></div>
+        <div data-task="hd3b" data-n="2"></div>
+        <div data-task="hd3c" data-n="3"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Bảo vệ thông tin và tài khoản</div>
+        <div class="reading">Đọc mục <b>3</b> (SGK trang 40).<ul><li><b>Tầm quan trọng của sự an toàn và hợp pháp của thông tin cá nhân và tập thể</b>: trong tình huống ở Hoạt động 3, tài khoản của Minh bị người khác sử dụng với mục đích xấu. Cá nhân, tập thể có thể bị lợi dụng hoặc gặp nguy hiểm nếu thông tin rơi vào tay kẻ xấu. Thông tin cá nhân, tập thể được pháp luật bảo vệ; nếu cần thiết em có thể yêu cầu pháp luật can thiệp.</li><li><b>Bảo vệ thông tin và tài khoản cá nhân với sự giúp đỡ của người lớn</b>: đăng xuất các tài khoản khi đã dùng xong; đặt mật khẩu mạnh (đủ dài, gồm chữ cái viết hoa và viết thường, chữ số, kí tự đặc biệt) để khó bị phát hiện bởi chương trình máy tính hay bị người khác đoán biết; bảo mật mật khẩu khi nhập, tránh bị người khác nhìn thấy. Nhờ người lớn cài đặt chương trình diệt virus. Tránh dùng mạng công cộng. Không truy cập các liên kết lạ; không mở thư và tệp đính kèm từ người không quen biết; không kết bạn, nhắn tin cho người lạ; không tham gia các câu lạc bộ chưa rõ nguồn gốc.</li><li><b>Nhận diện một số thông điệp lừa đảo hoặc mang nội dung xấu</b>: kẻ lừa đảo thường dùng thư điện tử, tin nhắn giả mạo, yêu cầu kết bạn, mời tham gia câu lạc bộ,… để dụ dỗ em chia sẻ thông tin cá nhân, đánh cắp tài khoản và mật khẩu.</li></ul></div>
+        <figure class="fig"><div class="pw" data-pw>
+          <label>Thử độ mạnh của một mật khẩu <b>tự nghĩ ra</b> (đừng gõ mật khẩu thật; máy không lưu và không gửi đi đâu):</label>
+          <input type="text" autocomplete="off" spellcheck="false" placeholder="Ví dụ: hoasen2024">
+          <div class="pw-bar"><i></i></div><div class="pw-msg"></div><ul></ul>
+        </div><figcaption>Kiểm tra mật khẩu mạnh</figcaption></figure>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 4</b> Chia sẻ thông tin an toàn</div>
+        <div data-task="hd4a" data-n="1"></div>
+        <div data-task="hd4b" data-n="2"></div>
+        <div class="reading">Thông tin cá nhân chỉ nên chia sẻ cho người mình biết rõ và tin tưởng ở thế giới thực trong các trường hợp cần thiết. Một trong các đặc điểm của Internet là tính ẩn danh, không ai có thể biết được thực chất người đứng sau một tài khoản trên mạng là ai. Ngay cả khi em nhận được tin nhắn qua mạng hỏi thông tin cá nhân từ tài khoản của người mình tin tưởng thì cũng cần xác nhận lại xem có đúng là người đó hỏi không bằng cách gọi điện thoại hoặc gặp trực tiếp. Nên chặn tài khoản của kẻ xấu và thông báo với bố mẹ hoặc thầy cô giáo. Thông tin trên mạng đến từ nhiều nguồn khác nhau, không có ai kiểm chứng: em cần tiếp nhận thông tin có chọn lọc, không chia sẻ thông tin từ những nguồn không tin tưởng; chỉ nên chia sẻ thông tin từ các cơ quan, tổ chức chính thống; không chia sẻ và lan truyền tin giả làm tổn thương người khác.</div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 41</div>
+        <div data-task="p41" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. An toàn thông tin</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Nhận diện nguy cơ</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Tự bảo vệ trên mạng</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+        <div data-task="vd3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      document.querySelectorAll("[data-qt] button").forEach(function(b){ b.addEventListener("click", function(){ b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") === "true" ? "false" : "true"); }); });
+      var P = document.querySelector("[data-pw]"); if (!P) return;
+      var i = P.querySelector("input"), bar = P.querySelector("i"), msg = P.querySelector(".pw-msg"), ul = P.querySelector("ul");
+      function ck(){ var v = i.value, R = [["Dài từ 8 kí tự trở lên", v.length >= 8], ["Có chữ cái viết thường", /[a-z]/.test(v)], ["Có chữ cái viết hoa", /[A-Z]/.test(v)], ["Có chữ số", /[0-9]/.test(v)], ["Có kí tự đặc biệt (!@#$…)", /[^A-Za-z0-9]/.test(v)], ["Không phải mật khẩu dễ đoán (123456, password, ngày sinh…)", v && !/^(123|abc|qwe|pass|matkhau|111|000)/i.test(v) && !/^\d+$/.test(v)]];
+        var n = R.filter(function(r){ return r[1]; }).length;
+        ul.innerHTML = R.map(function(r){ return '<li class="' + (r[1] ? "ok" : "no") + '">' + (r[1] ? "✔ " : "✘ ") + r[0] + "</li>"; }).join("");
+        bar.style.width = (v ? n / R.length * 100 : 0) + "%"; bar.style.background = n >= 6 ? "#2e9e4f" : n >= 4 ? "#e0a020" : "#d64545";
+        msg.textContent = !v ? "" : n >= 6 ? "Mật khẩu mạnh." : n >= 4 ? "Mật khẩu trung bình – thêm các yêu cầu còn thiếu." : "Mật khẩu yếu – rất dễ bị đoán."; }
+      i.addEventListener("input", ck); ck();
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
