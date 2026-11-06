@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Từ thuật toán đến chương trình · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>12</b></div><h1><span class="sr-only">Bài 12. </span>Từ thuật toán đến chương trình</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Mô tả được kịch bản đơn giản dưới dạng thuật toán và tạo được một chương trình đơn giản.</li>
+        <li>Hiểu được chương trình là dãy các lệnh điều khiển máy tính thực hiện một thuật toán.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Kịch bản, thuật toán, chương trình">
+      <span class="node">Kịch bản</span>
+      <span class="node">Thuật toán (sơ đồ khối)</span>
+      <span class="node io">Chương trình Scratch</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Thuật toán và chương trình</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Điều khiển nhân vật di chuyển</div>
+        <div class="reading">Bằng ngôn ngữ lập trình trực quan, bạn Khoa muốn tạo chương trình điều khiển nhân vật di chuyển theo đường đi là các hình như: tam giác đều, vuông,… Theo em, bạn Khoa cần thực hiện những công việc gì?</div>
+        <figure class="fig sm"><img src="hinh/h121.jpg" alt="Nhân vật bọ rùa đứng ở đỉnh trái của một tam giác đều màu tím"><figcaption>Hình 12.1. Nhân vật di chuyển</figcaption></figure>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Từ thuật toán đến chương trình</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Mô tả kịch bản dưới dạng thuật toán</div>
+        <div class="reading">Với trường hợp nhân vật di chuyển theo đường đi là một tam giác đều, em hãy: 1. Xác định góc quay của nhân vật khi đi hết một cạnh. 2. Liệt kê lần lượt các bước của thuật toán điều khiển nhân vật (bằng ngôn ngữ tự nhiên).</div>
+        <figure class="fig sm"><img src="hinh/h122.jpg" alt="Đường đi của nhân vật: đi hết cạnh nằm ngang rồi quay trái 120 độ để đi tiếp cạnh xiên"><figcaption>Hình 12.2. Đường đi của nhân vật</figcaption></figure>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Từ sơ đồ khối đến chương trình</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 73–74). Tam giác đều là hình có ba cạnh bằng nhau, ba góc bằng nhau và bằng 60 độ. Để di chuyển theo một hình tam giác đều, nhân vật cần lặp lại ba lần việc thực hiện hai hành động sau: di chuyển về phía trước một số bước bằng độ dài cạnh tam giác (ví dụ, di chuyển 60 bước); quay trái 120 độ. Thuật toán sử dụng cấu trúc tuần tự và cấu trúc lặp, trong đó số bước lặp bằng 3 (bằng số cạnh của tam giác đều). Khi thực hiện đủ ba lần thì vòng lặp kết thúc. Kịch bản chương trình được mô tả bằng sơ đồ khối của thuật toán như minh hoạ ở Hình 12.3a.<br>Em đã biết, để mô tả thuật toán, ngoài cách liệt kê các bước bằng ngôn ngữ tự nhiên hoặc dùng sơ đồ khối, chúng ta có thể viết chương trình để máy tính “hiểu” và thực hiện được thuật toán. Để điều khiển nhân vật trên máy tính thực hiện thuật toán được mô tả bằng sơ đồ khối ở Hình 12.3a, em viết chương trình Scratch như Hình 12.3b, trong đó mỗi bước của thuật toán mô tả ở sơ đồ khối đã được thực hiện bằng lệnh tương ứng của ngôn ngữ lập trình Scratch. Như vậy, chương trình là dãy lệnh điều khiển máy tính thực hiện một thuật toán.</div>
+        <figure class="fig"><img src="hinh/h123.jpg" alt="Bên trái: sơ đồ khối Bắt đầu, Lần lặp gán 1, kiểm tra Lần lặp nhỏ hơn hoặc bằng 3, di chuyển 60 bước, quay trái 120 độ, tăng Lần lặp, Kết thúc. Bên phải: chương trình Scratch Khi bấm vào lá cờ, lặp lại 3, di chuyển 60 bước, xoay trái 120 độ; các mũi tên nét đứt nối bước với lệnh tương ứng"><figcaption>Hình 12.3. Sơ đồ khối và chương trình thực hiện thuật toán</figcaption></figure>
+        <div class="reading">Chạy thử chương trình Hình 12.3b trên mô phỏng (đã bật <b>Chạy chậm</b> để thấy nhân vật đi và lệnh đang chạy được tô sáng). Sơ đồ khối bên phải được vẽ tự động từ chương trình: thử đổi số 3 hoặc 120 rồi quan sát sơ đồ.</div>
+        <div data-sc1></div>
+        <div data-task="map" data-n="1"></div>
+        <div data-task="ct" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 74</div>
+        <div class="reading">Bạn An muốn bổ sung lệnh đợi 1 giây để điều khiển nhân vật dừng lại 1 giây sau khi đi hết mỗi cạnh của tam giác. Em hãy bổ sung lệnh này vào sơ đồ khối mô tả thuật toán và nêu vị trí đặt câu lệnh trong chương trình Scratch tương ứng ở Hình 12.3. (Thử trên mô phỏng: nháy vào vạch ▸ ở vị trí cần chèn rồi bấm khối <b>đợi 1 giây</b>.)</div>
+        <div data-task="p74" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Từ thuật toán đến chương trình</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Tạo chương trình điều khiển máy tính thực hiện thuật toán</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ 1, 2</b> Chương trình vẽ tam giác đều</div>
+        <div class="reading"><b>Nhiệm vụ 1:</b> Tạo chương trình điều khiển nhân vật di chuyển theo đường đi là một tam giác đều như minh hoạ trong Hình 12.3. <i>Hướng dẫn</i> (Scratch 3.0, giao diện tiếng Việt): Bước 1. Khởi động phần mềm Scratch, chọn chế độ hiển thị tiếng Việt. Bước 2. Xoá nhân vật chú Mèo, thêm nhân vật chú Bọ rùa. Bước 3. Kéo thả các lệnh để được chương trình như minh hoạ trong Hình 12.3. Bước 4. Nháy chuột vào nút lá cờ xanh để chạy chương trình và xem kết quả.<br><b>Nhiệm vụ 2:</b> Thêm một số lệnh để nhân vật vừa di chuyển, vừa vẽ tam giác đều. <i>Hướng dẫn:</i> Bước 1. Nháy chuột vào nhóm lệnh <b>Bút vẽ</b>, kéo thả các lệnh của nhóm này vào chương trình như minh hoạ trong Hình 12.4. Bước 2. Nháy chuột vào nhóm lệnh <b>Điều khiển</b>, kéo thả lệnh <b>đợi 1 giây</b> vào chương trình như minh hoạ trong Hình 12.4. Bước 3. Nháy chuột vào nút lá cờ để chạy chương trình và xem kết quả. Bước 4. Lưu tệp với tên <b>VeHinh.sb3</b> và thoát khỏi chương trình.</div>
+        <figure class="fig sm"><img src="hinh/h124.jpg" alt="Chương trình Scratch: Khi bấm vào lá cờ, xoá tất cả, đặt bút, chọn bút màu tím, lặp lại 3 gồm di chuyển 60 bước, xoay trái 120 độ, đợi 1 giây; cuối cùng nhấc bút"><figcaption>Hình 12.4. Chương trình vẽ hình tam giác đều</figcaption></figure>
+        <div class="reading">Làm trên mô phỏng: bấm khối ở cột bên trái để thêm vào chương trình (thêm <b>lặp lại</b> thì các khối sau sẽ nằm bên trong nó; nháy vạch ▸ để chọn vị trí chèn khác). Bấm vào số trên khối để sửa.</div>
+        <div data-sc2></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Hình vuông và chiếc xe</div>
+        <div class="reading">1. Em hãy mô tả thuật toán bằng sơ đồ khối trong trường hợp đường đi của nhân vật là một hình vuông.<br>2. Em hãy nâng cấp chương trình VeHinh.sb3 bằng cách bổ sung một nhân vật mới và lập trình để khi nháy chuột vào nhân vật này thì chương trình thực hiện thuật toán vẽ hình vuông.</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div class="reading">Mô phỏng câu 2 (đã có sẵn chương trình vẽ tam giác của Bọ rùa): bấm <b>＋ Thêm nhân vật</b>, viết chương trình vẽ hình vuông, rồi <b>nháy vào nhân vật đó trên sân khấu</b> để chạy. Bật <b>Sơ đồ khối</b> để xem sơ đồ của câu 1.</div>
+        <div data-sc3></div>
+        <div data-task="lt2" data-n="2"></div>
+        <div class="reading">3. Bạn Khoa viết kịch bản mô tả hoạt động của xe ô tô chạy trên đường như sau: Khi xe cách hòn đá nhỏ hơn 120 bước, xe sẽ dừng lại (Hình 12.5). a) Em hãy hoàn thành sơ đồ khối theo kịch bản trên bằng cách ghép mỗi lệnh dưới đây với một ô phù hợp được đánh số 1 và 2 trong Hình 12.6: <b>Di chuyển 5 bước</b>; <b>Cách hòn đá &lt; 120 bước?</b> b) Em hãy viết chương trình Scratch thực hiện thuật toán.</div>
+        <figure class="fig sm"><img src="hinh/h125.jpg" alt="Chiếc xe buýt màu hồng đứng trước một hòn đá"><figcaption>Hình 12.5. Xe dừng lại khi cách hòn đá nhỏ hơn 120 bước</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h126.jpg" alt="Sơ đồ khối: Bắt đầu, hình thoi số 1, nhánh Sai đi tới hình chữ nhật số 2 rồi quay lại hình thoi, nhánh Đúng tới Kết thúc"><figcaption>Hình 12.6. Sơ đồ khối mô tả kịch bản</figcaption></figure>
+        <div data-task="lt3a" data-n="3"></div>
+        <div data-sc4></div>
+        <div data-task="lt3b" data-n="4"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Đa giác đều</div>
+        <div class="reading">Trong bài học trên, đường đi của nhân vật là hình tam giác đều. Đường đi đó có thể là hình vuông, lục giác đều,… Khi đó các con số nào trong chương trình ở Hình 12.3 cần phải thay đổi? Thử trên mô phỏng: đổi hai con số để vẽ lục giác đều, ngũ giác đều.</div>
+        <div data-sc5></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/scratch.js?v=4"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var SH = Scratch.shape, BO = {id:"bo", name:"Bọ rùa", icon:"🐞", x:-30, y:-40, dir:90};
+      function bo(body){ var o = JSON.parse(JSON.stringify(BO)); o.body = body; return [o]; }
+      var TRI = [{op:"repeat", n:3, body:[{op:"move", n:60},{op:"turnL", n:120}]}];
+      var TRI2 = [{op:"clear"},{op:"down"},{op:"color", c:"#8e2c8e"},{op:"repeat", n:3, body:[{op:"move", n:60},{op:"turnL", n:120},{op:"wait", n:1}]},{op:"up"}];
+      function find(body, f){ var r = false; (function w(a){ a.forEach(function(b){ if (f(b)) r = true; if (b.body) w(b.body); }); })(body); return r; }
+      function poly(run, n){ if (!run) return false; var s = SH(run.segs); return s.n === n && s.equal && s.closed; }
+      function lastRun(x, id, hat){ for (var i = x.runs.length - 1; i >= 0; i--) if (x.runs[i].id === id && (!hat || x.runs[i].hat === hat)) return x.runs[i]; return null; }
+      Scratch($("[data-sc1]"), {title:"Mô phỏng Scratch: chương trình Hình 12.3b", sprites:bo(TRI), flow:true, slow:true,
+        check:function(x){ var b = x.sprites[0].body; return [["Chạy chương trình (bấm lá cờ xanh (Chạy))", x.runs.length > 0],
+          ["Câu hỏi tr.74: thêm lệnh đợi 1 giây vào bên trong khối lặp lại", find(b, function(k){ return k.op === "repeat" && k.body.some(function(c){ return c.op === "wait"; }); })]]; }});
+      Scratch($("[data-sc2]"), {title:"Mô phỏng Scratch: VeHinh.sb3", sprites:bo([]), flow:true, save:"VeHinh.sb3",
+        check:function(x){ var b = x.sprites[0].body, r = lastRun(x, "bo");
+          return [["Nhiệm vụ 1: chương trình có lặp lại 3 {di chuyển 60 bước, xoay ↺ 120 độ}", find(b, function(k){ return k.op === "repeat" && +k.n === 3 && k.body.some(function(c){ return c.op === "move" && +c.n === 60; }) && k.body.some(function(c){ return c.op === "turnL" && +c.n === 120; }); })],
+            ["Nhiệm vụ 2: nhân vật vẽ được tam giác đều", poly(r, 3)],
+            ["Có xoá tất cả, chọn bút màu và nhấc bút", find(b, function(k){ return k.op === "clear"; }) && find(b, function(k){ return k.op === "color"; }) && find(b, function(k){ return k.op === "up"; })],
+            ["Dừng 1 giây sau mỗi cạnh (lệnh đợi trong vòng lặp)", !!r && r.waits === 3],
+            ["Lưu tệp VeHinh.sb3", x.log.indexOf("save") >= 0]]; }});
+      Scratch($("[data-sc3]"), {title:"Mô phỏng Scratch: nâng cấp VeHinh.sb3", sprites:bo(TRI2), flow:true, add:true, save:"VeHinh.sb3",
+        check:function(x){ var others = x.sprites.filter(function(s){ return s.id !== "bo"; });
+          return [["Thêm một nhân vật mới", others.length > 0],
+            ["Nhân vật mới bắt đầu bằng “Khi bấm vào nhân vật này”", others.some(function(s){ return s.hat === "click"; })],
+            ["Nháy vào nhân vật mới: vẽ được hình vuông", others.some(function(s){ return poly(lastRun(x, s.id, "click"), 4); })]]; }});
+      Scratch($("[data-sc4]"), {title:"Mô phỏng Scratch: xe dừng trước hòn đá", scene:"xe", sprites:[{id:"xe", name:"Xe ô tô", icon:"🚌", x:-190, y:-40, dir:90, body:[]}], flow:true, blocks:["move","turnL","turnR","repeat","wait","until"],
+        check:function(x){ var r = lastRun(x, "xe"), b = x.sprites[0].body;
+          return [["Dùng khối “lặp lại cho đến khi ⟨khoảng cách đến Hòn đá &lt; 120⟩”", find(b, function(k){ return k.op === "until" && +k.n === 120; })],
+            ["Bên trong là “di chuyển 5 bước”", find(b, function(k){ return k.op === "until" && k.body.some(function(c){ return c.op === "move" && +c.n === 5; }); })],
+            ["Xe dừng lại khi cách hòn đá nhỏ hơn 120 bước (không đâm vào đá)", !!r && r.dist < 120 && r.dist >= 110]]; }});
+      Scratch($("[data-sc5]"), {title:"Mô phỏng Scratch: vẽ đa giác đều", sprites:bo(TRI2), flow:true,
+        check:function(x){ var rs = x.runs.filter(function(r){ return r.id === "bo"; }), has = function(n){ return rs.some(function(r){ return poly(r, n); }); };
+          return [["Vẽ hình vuông", has(4)], ["Vẽ ngũ giác đều", has(5)], ["Vẽ lục giác đều", has(6)]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

@@ -82,7 +82,7 @@ window.CHUONG_TRINH = [
       {so: "10b", ten: "Thêm văn bản, tạo hiệu ứng cho ảnh", slug: "hieu-ung-anh"},
       {so: "11b", ten: "Thực hành tổng hợp", slug: "thuc-hanh-chinh-sua-anh"}]},
     {so: "5", ten: "Giải quyết vấn đề với sự trợ giúp của máy tính", bai: [
-      {so: "12", ten: "Từ thuật toán đến chương trình"},
+      {so: "12", ten: "Từ thuật toán đến chương trình", tt: "dang"},
       {so: "13", ten: "Biểu diễn dữ liệu"},
       {so: "14", ten: "Cấu trúc điều khiển"},
       {so: "15", ten: "Gỡ lỗi"}]},
