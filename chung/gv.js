@@ -9,6 +9,22 @@ const $ = id => document.getElementById(id);
 function el(tag, attrs, html){ const e = document.createElement(tag); if (attrs) for (const a in attrs) e.setAttribute(a, attrs[a]); if (html != null) e.innerHTML = html; return e; }
 function ss(k, v){ try { if (v === undefined) return sessionStorage.getItem(k); if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch(e) { return null; } }
 function ls(k, v){ try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(e) { return null; } }
+/* Đầu trang giáo viên: lấy tên bài (ô BÀI N), chủ đề và hộp "Sau bài học này em sẽ" từ trang học sinh */
+(async function heroFromLesson(){
+  const hero = document.querySelector("header.hero .wrap"), h1 = hero && hero.querySelector("h1");
+  if (!h1 || hero.querySelector(".lesson-title")) return;
+  try {
+    const html = await fetch("index.html").then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
+    const src = new DOMParser().parseFromString(html, "text/html").querySelector("header.hero");
+    const eb = src && src.querySelector(".eyebrow"), lt = src && src.querySelector(".lesson-title"), gl = src && src.querySelector(".goals");
+    if (!lt) return;
+    const myEb = hero.querySelector(".eyebrow");
+    if (eb && myEb) myEb.textContent = eb.textContent.trim() + " · Trang giáo viên";
+    h1.replaceWith(document.importNode(lt, true));
+    const lead = hero.querySelector(".lead");
+    if (gl) { const g = document.importNode(gl, true); if (lead) lead.before(g); else hero.appendChild(g); }
+  } catch(e) { /* giữ tiêu đề "Trang giáo viên" sẵn có */ }
+})();
 const stamp = () => new Date().toLocaleTimeString("vi-VN", {hour:"2-digit", minute:"2-digit", second:"2-digit"});
 function setSync(t){ $("sync").textContent = t; }
 
