@@ -10,8 +10,12 @@
    - Dán (Ctrl+V) văn bản nhiều đoạn vào khung nội dung; tệp văn bản mẫu (opt.doc) để sao chép; Undo; trình chiếu toàn màn hình.
    - Animations: hiệu ứng cho đối tượng (Appear, Fade, Fly In, Float In, Wipe, Zoom), Start (On Click / With / After Previous), Duration,
      Animation Pane (đổi thứ tự, xoá), Preview; Transitions: hiệu ứng chuyển trang, Apply To All.
-   Tuỳ chọn: title, note, slides[], tools[] ("slides","para","font","design","insert","anim","trans","show"), doc{name, html}, extra[], check(x)
-   x = {slides:[{layout, title, sub, lines:[{t, lv, b, c}], theme, bg, tf:{title,sub,body}, imgs:[{g,x,y,w,h,back,bd}]}], log:[…]} */
+   - Insert/Header & Footer (tools "hf"): hộp thoại Header and Footer – thẻ Slide (Date and time: Update automatically / Fixed, Slide number,
+     Footer, Don't show on title slide; Apply / Apply to All) và thẻ Notes and Handouts (Header, Page number, Footer).
+   - opt.advice: bảng "Gợi ý của máy" cho trang đang chọn (độ tương phản chữ/nền, cỡ chữ, độ dài dòng, số màu, số phông).
+   - Ctrl + nháy chọn nhiều trang rồi định dạng chữ: áp dụng cho khung cùng loại ở các trang đã chọn.
+   Tuỳ chọn: title, note, slides[], tools[] ("slides","para","font","design","insert","anim","trans","hf","show"), doc{name, html}, extra[], advice, check(x)
+   x = {slides:[{layout, title, sub, lines:[{t, lv, b, c}], theme, bg, tf:{title,sub,body}, imgs:[{g,x,y,w,h,back,bd}], hf}], log:[…], nh, advice(i)} */
 (function(){
 "use strict";
 var CSS = ".tc{border:1px solid var(--line);border-radius:12px;padding:10px;margin:10px 0;display:grid;gap:8px;min-width:0}"
@@ -56,6 +60,19 @@ var CSS = ".tc{border:1px solid var(--line);border-radius:12px;padding:10px;marg
  + "@keyframes tc-float{from{transform:translateY(40%);opacity:0}to{transform:none;opacity:1}}@keyframes tc-wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}"
  + "@keyframes tc-zoom{from{transform:scale(.2);opacity:0}to{transform:none;opacity:1}}"
  + "@keyframes tr-fade{from{opacity:0}to{opacity:1}}@keyframes tr-push{from{transform:translateX(100%)}to{transform:none}}@keyframes tr-wipe{from{clip-path:inset(0 0 0 100%)}to{clip-path:inset(0)}}"
+ + ".tc .sl .ft{position:absolute;left:5%;right:5%;bottom:2.4%;z-index:2;display:grid;grid-template-columns:1fr 2fr 1fr;gap:2%;pointer-events:none;opacity:.85}"
+ + ".tc .sl .ft span:nth-child(2){text-align:center}.tc .sl .ft span:nth-child(3){text-align:right}"
+ + ".tc .mini .mft{position:absolute;left:4%;right:4%;bottom:3%;display:flex;justify-content:space-between;font-size:5px;opacity:.85;z-index:2}"
+ + ".tc .hfd{border:1px solid #9aa4ae;background:#fff;color:#222;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:13px;max-width:560px}"
+ + ".tc .hfd .hd{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600}"
+ + ".tc .hfd .tabs{display:flex;gap:2px;padding:6px 10px 0}.tc .hfd .tabs button{font:inherit;font-size:12.5px;border:1px solid #ccc;border-bottom:0;background:#eee;border-radius:4px 4px 0 0;padding:3px 10px;cursor:pointer}.tc .hfd .tabs button.on{background:#fff;font-weight:600}"
+ + ".tc .hfd .bx{border-top:1px solid #ccc;padding:8px 10px;display:grid;grid-template-columns:1fr 120px;gap:10px}@media (max-width:520px){.tc .hfd .bx{grid-template-columns:1fr}}"
+ + ".tc .hfd fieldset{border:1px solid #ddd;border-radius:4px;margin:0;padding:6px 8px;display:grid;gap:5px}.tc .hfd legend{font-size:12px;color:#555}"
+ + ".tc .hfd label{display:block}.tc .hfd label input{margin:0 5px 0 0;vertical-align:-2px}.tc .hfd .in{padding-left:20px}"
+ + ".tc .hfd input[type=text]{font:inherit;font-size:13px;border:1px solid #bbb;border-radius:3px;padding:2px 5px;width:100%;box-sizing:border-box;background:#fff;color:#222}.tc .hfd input:disabled{background:#f1f1f1;color:#888}"
+ + ".tc .hfd .pv{border:1px solid #ccc;aspect-ratio:16/9;position:relative;background:#fafafa;max-width:160px}.tc .hfd .pv i{position:absolute;bottom:8%;height:9%;border:1px dashed #999}.tc .hfd .pv i.on{background:#333;border-color:#333}"
+ + ".tc .hfd .ft2{display:flex;justify-content:flex-end;gap:6px;padding:8px 10px;border-top:1px solid #ddd}.tc .hfd .ft2 button{font:inherit;font-size:13px;border:1px solid #999;background:#f6f6f6;color:#222;border-radius:4px;padding:3px 12px;cursor:pointer}.tc .hfd .ft2 button.pr{border-color:#2f6fb3;box-shadow:inset 0 0 0 1px #2f6fb3}"
+ + ".tc .adv{border:1px solid #d6d6d6;border-radius:8px;padding:6px 10px;font-size:13px;display:grid;gap:2px;background:#fbfbfb;color:#222}.tc .adv b{font-size:13px}.tc .adv .g{color:#1c7c54}.tc .adv .w{color:#b9480f}"
  + "@keyframes tr-split{from{clip-path:inset(0 50% 0 50%)}to{clip-path:inset(0)}}@keyframes tr-zoom{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}";
 function addCss(){ var s = document.getElementById("trinhchieu-css"); if (!s) { s = document.createElement("style"); s.id = "trinhchieu-css"; document.head.appendChild(s); } s.textContent = CSS; }
 var PT = 0.1042;                    /* 1 pt = 0.1042 % bề rộng trang chiếu 16:9 (13,33 in) */
@@ -82,6 +99,10 @@ var GALLERY = [
 ];
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function hex(c){ var m = /#([0-9a-f]{6}|[0-9a-f]{3})\b/i.exec(String(c || "")); if (!m) return "#ffffff"; var h = m[1]; if (h.length === 3) h = h.replace(/./g, "$&$&"); return "#" + h.toLowerCase(); }
+function lum(c){ c = hex(c); var v = [1, 3, 5].map(function(i){ var x = parseInt(c.substr(i, 2), 16) / 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; }
+function contrast(a, b){ var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+function today(){ var d = new Date(); return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear(); }
 function blank(lay){ var s = lay === "title" ? {layout:"title", title:"", sub:""} : lay === "only" ? {layout:"only", title:""} : {layout:"content", title:"", lines:[{t:"", lv:1}]}; s.theme = 0; s.tf = {}; s.imgs = []; s.anim = []; return s; }
 function norm(s){ if (!s.tf) s.tf = {}; if (!s.imgs) s.imgs = []; if (s.theme == null) s.theme = 0; if (!s.anim) s.anim = []; return s; }
 function mark(lines, i){ var L = lines[i], b = L.b || "•";
@@ -99,7 +120,8 @@ window.TrinhChieu = function(box, opt){
   addCss(); opt = opt || {};
   var tools = opt.tools || DEF_TOOLS, has = function(t){ return tools.indexOf(t) >= 0; };
   var S, cur, sel, log, ms, hist, lastBox, lastLine = 0, imgSel = null, clip = "", q = function(s){ return box.querySelector(s); };
-  function reset(){ S = clone(opt.slides || [blank("title")]).map(norm); cur = 0; sel = null; log = []; ms = {}; hist = []; lastBox = "title"; imgSel = null; }
+  var NH, HF;
+  function reset(){ S = clone(opt.slides || [blank("title")]).map(norm); cur = 0; sel = null; log = []; ms = {}; hist = []; lastBox = "title"; imgSel = null; NH = {hdr: false, htext: "", num: true, foot: false, ftext: ""}; HF = null; }
   reset();
   function snap(){ hist.push(JSON.stringify({S: S, cur: cur})); if (hist.length > 40) hist.shift(); }
   function th(s){ return THEMES[s.theme || 0] || THEMES[0]; }
@@ -135,6 +157,7 @@ window.TrinhChieu = function(box, opt){
   if (has("trans")) R += '<span class="lb">Transitions</span><select data-tr title="Hiệu ứng chuyển trang cho trang đang chọn"><option value="-">Chuyển trang…</option>' + TRANS.map(function(x){ return '<option value="' + x[0] + '">' + x[1] + "</option>"; }).join("") + "</select>"
     + '<select data-trd title="Duration: thời lượng chuyển trang"><option value="">Thời lượng…</option><option value="0.5">0,5 giây</option><option value="1">1 giây</option><option value="2">2 giây</option></select>'
     + '<button type="button" data-a="trall" title="Apply To All: áp dụng hiệu ứng chuyển trang này cho tất cả các trang">Apply To All</button><span class="sep"></span>';
+  if (has("hf")) R += '<span class="lb">Insert · Text</span><button type="button" data-a="hf" title="Insert/Header &amp; Footer: số trang, ngày giờ, chân trang">▤ Header &amp; Footer</button><button type="button" data-a="hf" title="Insert/Slide Number: mở hộp thoại Header and Footer"># Slide Number</button><button type="button" data-a="hf" title="Insert/Date &amp; Time: mở hộp thoại Header and Footer">📅 Date &amp; Time</button><span class="sep"></span>';
   if (has("show")) R += '<button type="button" data-a="show" title="Trình chiếu từ trang đầu (F5)">▶ Trình chiếu</button>';
   R += '<button type="button" data-a="reset">Làm lại</button>' + (opt.extra || []).map(function(x, i){ return '<button type="button" data-x="' + i + '" title="' + esc(x.title || "") + '">' + x.label + "</button>"; }).join("");
 
@@ -142,10 +165,12 @@ window.TrinhChieu = function(box, opt){
   box.innerHTML = '<div class="t">' + (opt.title || "Phần mềm trình chiếu mô phỏng") + "</div>"
     + (opt.doc ? '<div class="dh">📄 <b>' + esc(opt.doc.name) + "</b> (tệp văn bản) – bôi đen phần cần sao chép rồi bấm <button type='button' data-a='copydoc'>Copy (Ctrl+C)</button></div><div class='doc' data-doc>" + opt.doc.html + "</div>" : "")
     + '<div class="rb">' + R + "</div>"
+    + (has("hf") ? '<div class="hfd" data-hfd hidden></div>' : "")
     + '<div class="pop" data-gal hidden><b>Insert Picture:</b> chọn một hình để chèn vào trang đang chọn' + GALLERY.map(function(g, i){ return '<img src="' + g.src + '" alt="' + g.n + '" title="' + g.n + '" data-g="' + i + '">'; }).join("") + '<button type="button" data-a="galx">Đóng</button></div>'
     + (has("anim") ? '<div class="pane" data-pane></div>' : "")
     + '<div class="wk"><div class="th" data-th></div><div data-ed></div></div>'
     + '<div class="msg" data-msg aria-live="polite"></div>'
+    + (opt.advice ? '<div class="adv" data-adv></div>' : "")
     + (opt.check ? '<ul class="ck" data-ck></ul>' : "")
     + '<div class="note">' + (opt.note || "") + "</div>";
   function say(t, bad){ var m = q("[data-msg]"); m.textContent = t; m.className = "msg" + (bad ? " bad" : ""); }
@@ -162,19 +187,37 @@ window.TrinhChieu = function(box, opt){
     h += live ? '<textarea rows="1" class="tt" data-tt placeholder="Click to add title" aria-label="Tiêu đề" style="' + css(FT) + '">' + esc(s.title) + "</textarea>" : '<div class="stx" data-o="title" style="' + css(FT) + 'padding:2px 4px">' + esc(s.title) + "</div>";
     if (s.layout === "title") { var FS = tf(s, "sub"); h += live ? '<textarea rows="2" class="sb" data-sb placeholder="Click to add subtitle" aria-label="Phụ đề" style="' + css(FS) + '">' + esc(s.sub) + "</textarea>" : '<div class="stx" data-o="sub" style="' + css(FS) + 'padding:2px 4px">' + esc(s.sub) + "</div>"; }
     if (s.layout === "content") h += '<div class="bd"' + (live ? "" : ' data-o="body"') + ">" + s.lines.map(function(L, i){ return lineHtml(s, i, live); }).join("") + "</div>";
-    h += "</div>" + imgsHtml(s, false, live);
+    h += "</div>" + imgsHtml(s, false, live) + footHtml(s);
     if (live && imgSel != null && s.imgs[imgSel]) { var im = s.imgs[imgSel];
       h += '<div class="fr" data-fr style="left:' + im.x + "%;top:" + im.y + "%;width:" + im.w + "%;height:" + im.h + '%"><i data-h="r" style="right:-6px;top:calc(50% - 5px);cursor:ew-resize"></i><i data-h="b" style="bottom:-6px;left:calc(50% - 5px);cursor:ns-resize"></i><i data-h="br" style="right:-6px;bottom:-6px;cursor:nwse-resize"></i><i data-h="t" style="top:-6px;left:calc(50% - 5px);cursor:ns-resize"></i><i data-h="l" style="left:-6px;top:calc(50% - 5px);cursor:ew-resize"></i></div>'; }
     return h + "</div>"; }
+  function footParts(s){ var f = s.hf; if (!f || f.off || !(f.date || f.num || f.foot)) return null;
+    return [f.date ? (f.auto ? today() : (f.fixed || "")) : "", f.foot ? (f.ftext || "") : "", f.num ? String(S.indexOf(s) + 1) : ""]; }
+  function footHtml(s){ var p = footParts(s); if (!p) return ""; var T = th(s), F = tf(s, "body");
+    return '<div class="ft" style="font-family:\'' + F.font + "',sans-serif;font-size:" + (12 * PT).toFixed(3) + "cqw;color:" + T.bc + '"><span>' + esc(p[0]) + "</span><span>" + esc(p[1]) + "</span><span>" + esc(p[2]) + "</span></div>"; }
   function mini(s){ var T = th(s), x = '<span style="position:relative;z-index:2"><b style="color:' + T.tc + '">' + esc(s.title || (s.layout === "title" ? "(Trang tiêu đề)" : "(Chưa có tiêu đề)")) + "</b>";
     if (s.layout === "title") x += "<br>" + esc((s.sub || "").split("\n")[0]); else if (s.lines) x += s.lines.slice(0, 6).map(function(L){ return "<br>" + "&nbsp;".repeat((L.lv - 1) * 3) + "• " + esc(L.t.slice(0, 40)); }).join("");
-    return '<span class="mini" style="' + bgcss(s) + "color:" + T.bc + '">' + s.imgs.map(function(im){ return '<img src="' + GALLERY[im.g].src + '" alt="" style="position:absolute;left:' + im.x + "%;top:" + im.y + "%;width:" + im.w + "%;height:" + im.h + "%;z-index:" + (im.back ? 1 : 3) + '">'; }).join("") + x + "</span></span>"; }
+    return '<span class="mini" style="' + bgcss(s) + "color:" + T.bc + '">' + s.imgs.map(function(im){ return '<img src="' + GALLERY[im.g].src + '" alt="" style="position:absolute;left:' + im.x + "%;top:" + im.y + "%;width:" + im.w + "%;height:" + im.h + "%;z-index:" + (im.back ? 1 : 3) + '">'; }).join("") + x + "</span>" + (footParts(s) ? '<span class="mft">' + footParts(s).map(function(t){ return "<span>" + esc(t) + "</span>"; }).join("") + "</span>" : "") + "</span>"; }
   function thumbs(){ q("[data-th]").innerHTML = S.map(function(s, i){ return '<button type="button" data-s="' + i + '" class="' + (i === cur ? "on" : "") + (ms[i] ? " ms" : "") + '"><span class="n" style="position:relative">' + (i + 1) + ((s.anim && s.anim.length) || s.tr ? '<span class="star" title="Có hiệu ứng">★</span>' : "") + "</span>" + mini(s) + "</button>"; }).join("");
     box.querySelectorAll("[data-s]").forEach(function(b){ b.addEventListener("click", function(ev){ var i = +b.dataset.s;
       if (ev.ctrlKey || ev.metaKey) { if (ms[i]) delete ms[i]; else ms[i] = 1; ms[cur] = 1; say("Đã chọn " + Object.keys(ms).length + " trang (giữ Ctrl để chọn nhiều trang). Mẫu định dạng sẽ áp dụng cho các trang này."); }
       else ms = {};
       cur = i; sel = null; imgSel = null; draw(); }); }); }
-  function check(){ if (opt.check) q("[data-ck]").innerHTML = opt.check({slides: S, log: log}).map(function(x){ return "<li class='" + (x[1] ? "ok" : "") + "'>" + x[0] + "</li>"; }).join(""); }
+  function advice(i){ var s = S[i], T = th(s), bgc = s.bg || T.bg, out = [], FT = tf(s, "title"), FB = tf(s, "body"), FS = tf(s, "sub");
+    var boxes = [["tiêu đề", FT, s.title]].concat(s.layout === "title" ? [["phụ đề", FS, s.sub]] : s.layout === "content" ? [["nội dung", FB, (s.lines || []).map(function(L){ return L.t; }).join(" ")]] : []).filter(function(b){ return String(b[2] || "").trim(); });
+    boxes.forEach(function(b){ var c = contrast(b[1].color, bgc); out.push({k: "ct-" + b[0], ok: c >= 4.5, t: "Độ tương phản chữ " + b[0] + " với màu nền: " + c.toFixed(1).replace(".", ",") + (c >= 4.5 ? " – dễ đọc" : " – khó đọc, nên ≥ 4,5 (chọn màu chữ tương phản với nền)")}); });
+    if (s.layout === "content" && boxes.some(function(b){ return b[0] === "nội dung"; })) {
+      out.push({k: "size", ok: FB.size >= 24, t: "Cỡ chữ nội dung " + FB.size + " pt" + (FB.size >= 24 ? " – đủ lớn" : " – quá nhỏ khi chiếu, nên từ 24 pt trở lên")});
+      var longL = (s.lines || []).filter(function(L){ return L.t.trim().split(/\s+/).length > 12; }).length;
+      out.push({k: "short", ok: !longL, t: longL ? longL + " dòng quá dài (trên 12 từ) – chỉ nêu ý chính, ngắn gọn" : "Các dòng ngắn gọn, chỉ nêu ý chính"}); }
+    var fonts = {}, cols = {}; boxes.forEach(function(b){ fonts[b[1].font] = 1; cols[hex(b[1].color)] = 1; }); cols[hex(bgc)] = 1;
+    var nf = Object.keys(fonts).length, nc = Object.keys(cols).length;
+    out.push({k: "fonts", ok: nf <= 2, t: nf + " phông chữ trên trang" + (nf <= 2 ? "" : " – nên dùng tối đa 2 phông")});
+    out.push({k: "cols", ok: nc <= 3, t: nc + " màu (chữ và nền)" + (nc <= 3 ? " – hài hoà" : " – quá nhiều màu, nên dùng ít màu cùng nhóm")});
+    return out; }
+  function advPanel(){ var el = q("[data-adv]"); if (!el) return; var a = advice(cur);
+    el.innerHTML = "<b>Gợi ý của máy cho trang " + (cur + 1) + ":</b>" + a.map(function(x){ return '<span class="' + (x.ok ? "g" : "w") + '">' + (x.ok ? "✓ " : "⚠ ") + esc(x.t) + "</span>"; }).join(""); }
+  function check(){ advPanel(); if (opt.check) q("[data-ck]").innerHTML = opt.check({slides: S, log: log, nh: NH, advice: advice}).map(function(x){ return "<li class='" + (x[1] ? "ok" : "") + "'>" + x[0] + "</li>"; }).join(""); }
   function fit(el){ el.style.height = "auto"; el.style.height = el.scrollHeight + "px"; }
   function focusLine(i, pos){ var el = q('[data-li="' + i + '"]'); if (el) { el.focus(); var p = pos == null ? el.value.length : pos; el.setSelectionRange(p, p); } }
   var paneSel = null;
@@ -205,7 +248,10 @@ window.TrinhChieu = function(box, opt){
       if (!L.t) { L.t = paras[0]; paras.shift(); } else at = at; paras.forEach(function(p, k){ s.lines.splice(at + 1 + k, 0, {t: p, lv: lv, b: L.b, c: L.c}); }); }
     log.push("paste"); say("Đã dán (Paste) văn bản vào trang " + (cur + 1) + ". Hãy biên tập lại cho ngắn gọn, cô đọng."); draw(); return true; }
   function fmtBox(fn){ var s = S[cur]; snap(); var b = lastBox === "sub" && s.layout !== "title" ? "title" : lastBox; if (b === "body" && s.layout !== "content") b = "title";
-    s.tf[b] = s.tf[b] || {}; fn(s.tf[b], tf(s, b)); log.push("font"); say("Đã định dạng " + {title:"tiêu đề", sub:"phụ đề", body:"khung nội dung"}[b] + " của trang " + (cur + 1) + "."); draw(); }
+    var keys = Object.keys(ms).map(Number).filter(function(i){ return S[i] && (b !== "body" || S[i].layout === "content") && (b !== "sub" || S[i].layout === "title"); });
+    if (keys.length < 2) keys = [cur];
+    var curv = tf(s, b); keys.forEach(function(i){ var x = S[i]; x.tf[b] = x.tf[b] || {}; fn(x.tf[b], curv); });
+    log.push("font"); say("Đã định dạng " + {title:"tiêu đề", sub:"phụ đề", body:"khung nội dung"}[b] + (keys.length > 1 ? " của " + keys.length + " trang đã chọn (" + keys.map(function(i){ return i + 1; }).join(", ") + ")." : " của trang " + (cur + 1) + ".")); draw(); }
 
   /* ---------- Sự kiện trong trang ---------- */
   function bind(){
@@ -278,10 +324,46 @@ window.TrinhChieu = function(box, opt){
       if (!t.trim() || !dc.contains(window.getSelection().anchorNode)) { say("Hãy bôi đen (chọn) phần văn bản cần sao chép trong tệp văn bản trước.", true); return; }
       clip = t; log.push("copy"); say("Đã sao chép (Copy) " + t.trim().split(/\s+/).length + " từ. Đặt con trỏ vào khung cần dán trên trang chiếu rồi bấm Paste (Ctrl+V)."); return; }
     if (a === "show") { show(0); return; }
+    if (a === "hf") { openHF(); return; }
     if (a === "preview") { show(cur, true); return; }
     if (a === "trall") { if (!s.tr) { say("Hãy chọn hiệu ứng chuyển trang cho trang này trước.", true); return; } snap(); S.forEach(function(x){ x.tr = {e: s.tr.e, d: s.tr.d}; }); log.push("trall"); say("Đã áp dụng hiệu ứng chuyển trang " + trName(s.tr.e) + " cho tất cả " + S.length + " trang (Apply To All)."); draw(); return; }
     if (a === "reset") { reset(); q("[data-gal]") && (q("[data-gal]").hidden = true); say("Đã làm lại từ đầu."); draw(); }
   }); });
+  /* ---------- Hộp thoại Header and Footer ---------- */
+  function openHF(){ var f = S[cur].hf || {}; HF = {tab: "slide", date: !!f.date, auto: f.auto !== false, fixed: f.fixed || today(), num: !!f.num, foot: !!f.foot, ftext: f.ftext || "", nt: !!f.nt};
+    if (S[cur].hf && S[cur].hf.off) HF.nt = true; drawHF(); var d = q("[data-hfd]"); d.hidden = false; say("Đã mở hộp thoại Header and Footer. Đánh dấu các mục cần hiện rồi bấm Apply (trang đang chọn) hoặc Apply to All (tất cả các trang)."); }
+  function drawHF(){ var d = q("[data-hfd]"), h = HF, ck = function(k, v){ return '<input type="checkbox" data-hk="' + k + '"' + (v ? " checked" : "") + ">"; };
+    var body = h.tab === "slide"
+      ? '<fieldset><legend>Include on slide</legend><label>' + ck("date", h.date) + " <u>D</u>ate and time</label>"
+        + '<label class="in"><input type="radio" name="hfa" data-hk="auto"' + (h.auto ? " checked" : "") + (h.date ? "" : " disabled") + '> <u>U</u>pdate automatically</label><div class="in" style="padding-left:40px"><input type="text" value="' + today() + '" disabled></div>'
+        + '<label class="in"><input type="radio" name="hfa" data-hk="fix"' + (!h.auto ? " checked" : "") + (h.date ? "" : " disabled") + '> Fi<u>x</u>ed</label><div class="in" style="padding-left:40px"><input type="text" data-hv="fixed" value="' + esc(h.fixed) + '"' + (h.date && !h.auto ? "" : " disabled") + "></div>"
+        + "<label>" + ck("num", h.num) + " Slide <u>n</u>umber</label><label>" + ck("foot", h.foot) + " <u>F</u>ooter</label>"
+        + '<div class="in"><input type="text" data-hv="ftext" value="' + esc(h.ftext) + '"' + (h.foot ? "" : " disabled") + ' placeholder="Nhập thông tin xuất hiện ở chân trang"></div></fieldset>'
+        + "<label>" + ck("nt", h.nt) + " Don't show on title <u>s</u>lide</label>"
+      : '<fieldset><legend>Include on page (Notes and Handouts – bản in phát cho người nghe)</legend><label>' + ck("nhdr", NH.hdr) + " <u>H</u>eader</label>"
+        + '<div class="in"><input type="text" data-hv="htext" value="' + esc(NH.htext) + '"' + (NH.hdr ? "" : " disabled") + ' placeholder="Nội dung đầu trang"></div>'
+        + "<label>" + ck("nnum", NH.num) + " Page number</label><label>" + ck("nfoot", NH.foot) + " <u>F</u>ooter</label>"
+        + '<div class="in"><input type="text" data-hv="nftext" value="' + esc(NH.ftext) + '"' + (NH.foot ? "" : " disabled") + "></div></fieldset>";
+    var pv = h.tab === "slide" ? '<i style="left:6%;width:22%" class="' + (h.date ? "on" : "") + '"></i><i style="left:34%;width:32%" class="' + (h.foot ? "on" : "") + '"></i><i style="right:6%;width:14%" class="' + (h.num ? "on" : "") + '"></i>'
+      : '<i style="left:6%;top:8%;width:40%" class="' + (NH.hdr ? "on" : "") + '"></i><i style="left:6%;width:40%" class="' + (NH.foot ? "on" : "") + '"></i><i style="right:6%;width:14%" class="' + (NH.num ? "on" : "") + '"></i>';
+    d.innerHTML = '<div class="hd">Header and Footer<button type="button" data-hb="cancel" aria-label="Đóng" style="border:0;background:none;font-size:16px;cursor:pointer;color:#222">✕</button></div>'
+      + '<div class="tabs"><button type="button" data-ht="slide" class="' + (h.tab === "slide" ? "on" : "") + '">Slide</button><button type="button" data-ht="notes" class="' + (h.tab === "notes" ? "on" : "") + '">Notes and Handouts</button></div>'
+      + '<div class="bx"><div style="display:grid;gap:6px">' + body + '</div><div><div style="font-size:12px;color:#555">Preview</div><div class="pv">' + pv + "</div></div></div>"
+      + '<div class="ft2">' + (h.tab === "slide" ? '<button type="button" data-hb="apply">Apply</button>' : "") + '<button type="button" class="pr" data-hb="all">Apply to All</button><button type="button" data-hb="cancel">Cancel</button></div>'; }
+  function applyHF(all){ var h = HF, cfg = {date: h.date, auto: h.auto, fixed: h.fixed, num: h.num, foot: h.foot, ftext: h.ftext, nt: h.nt}; snap();
+    var targets = all ? S.map(function(x, i){ return i; }) : [cur];
+    targets.forEach(function(i){ var c = clone(cfg); if (h.nt && S[i].layout === "title") c.off = true; S[i].hf = c; });
+    log.push(all ? "hfall" : "hf1"); q("[data-hfd]").hidden = true; HF = null;
+    say(all ? "Apply to All: đã áp dụng cho tất cả " + S.length + " trang" + (h.nt ? " (trừ trang tiêu đề)." : ".") : "Apply: chỉ áp dụng cho trang " + (cur + 1) + ". Muốn áp dụng cho mọi trang, bấm Apply to All."); draw(); }
+  var hfd = q("[data-hfd]");
+  if (hfd) { hfd.addEventListener("click", function(ev){ var t = ev.target.closest("[data-ht],[data-hb]"); if (!t || !HF) return;
+      if (t.dataset.ht) { HF.tab = t.dataset.ht; drawHF(); return; }
+      var b = t.dataset.hb; if (b === "cancel") { hfd.hidden = true; HF = null; say("Đã đóng hộp thoại, không thay đổi gì (Cancel)."); return; }
+      if (HF.tab === "notes") { log.push("notes"); hfd.hidden = true; HF = null; say("Đã áp dụng đầu trang, chân trang cho bản in Notes and Handouts" + (NH.hdr && NH.htext ? " (đầu trang: “" + NH.htext + "”)" : "") + ". Ở chế độ Slide không thêm được đầu trang."); check(); return; }
+      applyHF(b === "all"); });
+    hfd.addEventListener("change", function(ev){ var k = ev.target.dataset.hk; if (!k || !HF) return; var v = ev.target.checked;
+      if (k === "auto") HF.auto = true; else if (k === "fix") HF.auto = false; else if (k === "nhdr") NH.hdr = v; else if (k === "nnum") NH.num = v; else if (k === "nfoot") NH.foot = v; else HF[k] = v; drawHF(); });
+    hfd.addEventListener("input", function(ev){ var k = ev.target.dataset.hv; if (!k || !HF) return; var v = ev.target.value; if (k === "htext") NH.htext = v; else if (k === "nftext") NH.ftext = v; else HF[k] = v; }); }
   function sel1(name, fn){ var el = q(name); if (el) el.addEventListener("change", function(){ var v = this.value; this.value = this.options[0].value; if (v === "" && this.options[0].value === "") return; if (v === "-") return; fn(v); }); }
   sel1("[data-lay]", function(v){ var s = S[cur]; snap(); var n = blank(v); n.title = s.title || ""; n.theme = s.theme; n.bg = s.bg; n.tf = s.tf; n.imgs = s.imgs;
     if (v === "title") n.sub = s.sub || (s.lines ? s.lines.map(function(L){ return L.t; }).join("\n") : ""); if (v === "content") n.lines = s.lines || (s.sub ? s.sub.split("\n").map(function(t){ return {t: t, lv: 1}; }) : [{t:"", lv:1}]);
@@ -344,4 +426,5 @@ window.TrinhChieu = function(box, opt){
   return api;
 };
 window.TrinhChieu.THEMES = THEMES;
+window.TrinhChieu.contrast = contrast;
 })();

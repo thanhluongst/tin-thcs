@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Định dạng nâng cao cho trang chiếu · Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 8 · Chủ đề 4a. Soạn thảo văn bản và trình chiếu nâng cao</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>10a</b></div><h1><span class="sr-only">Bài 10a. </span>Định dạng nâng cao cho trang chiếu</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Chọn đặt được màu sắc, cỡ chữ hài hoà và hợp lí với nội dung.</li>
+        <li>Thực hiện được thao tác đánh số trang, thêm đầu trang và chân trang.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Văn bản ngắn gọn, màu sắc hài hoà, số trang và chân trang">
+      <span class="node">Văn bản ngắn gọn</span>
+      <span class="node">Màu sắc hài hoà</span>
+      <span class="node io">Số trang, chân trang</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Văn bản và màu sắc</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Số trang, đầu trang, chân trang</a>
+    <a href="#phan-3" data-stage="phan-3"><span class="sn">2.3</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Bài trình chiếu cho lễ ra mắt CLB</div>
+        <div class="reading">Bạn An được giao nhiệm vụ tạo bài trình chiếu để trình chiếu trong lễ ra mắt CLB Tin học. Với mục tiêu ngắn gọn, ấn tượng, sáng tạo,… theo em bạn An cần chú ý đến những điều gì khi tạo bài trình chiếu?</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Văn bản và màu sắc trên trang chiếu</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Đặc điểm của văn bản trên trang chiếu</div>
+        <div class="reading">Em hãy quan sát Hình 10a.1 (nội dung tài liệu mô tả dự án Thành lập CLB Tin học), Hình 10a.2 (nội dung trang chiếu) và trả lời các câu hỏi sau: 1. Văn bản ở hình nào chi tiết, đầy đủ hơn? Văn bản ở hình nào ngắn gọn hơn? 2. Văn bản trên trang chiếu có cần viết đầy đủ các thành phần của câu không?</div>
+        <figure class="fig"><img src="hinh/h1012.jpg" alt="Bên trái: mục tiêu hoạt động của CLB viết thành 5 câu dài trong tệp văn bản. Bên phải: trang chiếu Mục tiêu hoạt động chỉ có 5 ý ngắn gọn"><figcaption>Hình 10a.1. Văn bản trong tệp văn bản · Hình 10a.2. Văn bản trên trang chiếu</figcaption></figure>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Văn bản và màu sắc trên trang chiếu</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 46–47). Khác với văn bản trong tài liệu thông thường, văn bản trên trang chiếu có đặc điểm là ngắn gọn, chỉ nêu ý chính, không nêu chi tiết,… Văn bản trên trang chiếu góp phần quan trọng vào việc tạo ấn tượng, thu hút sự quan tâm, giúp người nghe nhanh chóng tiếp nhận được nội dung tóm tắt của trang chiếu. Màu sắc đóng vai trò quan trọng trong việc thiết kế một bài trình chiếu: một bài trình chiếu đẹp, chuyên nghiệp là sự phối hợp hoàn hảo của nội dung, bố cục và màu sắc. Để chọn đặt được màu sắc cho chữ hài hoà, ngoài những kiến thức cơ bản về màu sắc, cách phối màu,… em cần chú ý một số điểm sau:<ul>
+          <li>Các màu nóng như đỏ, da cam, vàng,… mang lại cảm giác ấm áp, giúp người xem phấn chấn, hoạt bát, năng nổ.</li>
+          <li>Các màu lạnh như xanh, tím,… mang lại cảm giác lạnh, giúp người xem bình tĩnh, hiền hoà, lắng dịu.</li>
+          <li>Các màu trung tính như trắng, đen, be,… mang lại cảm giác lịch sự, nhẹ nhàng.</li>
+          <li>Màu sắc chủ đạo nên được đặt sao cho hài hoà với nội dung. Ví dụ, bài trình chiếu về chủ đề giải trí, lễ hội,… nên dùng gam màu nóng; chủ đề giáo dục, học tập nên dùng gam màu trung tính; chủ đề về nghệ thuật, hay các bài trình chiếu muốn mang lại ấn tượng mạnh, các bài trình chiếu trong các sự kiện tri ân có thể dùng gam màu lạnh.</li>
+          <li>Nên kết hợp các màu cùng nhóm với nhau (ví dụ: màu nóng như đỏ, cam, vàng có thể kết hợp với màu nâu; màu lạnh như xanh dương, xanh lục có thể đi cùng với màu xám).</li>
+          <li>Không sử dụng quá nhiều màu trên một trang chiếu (bao gồm cả màu nền, màu chữ,…).</li>
+          <li>Nên chọn màu văn bản có độ tương phản cao với màu nền.</li></ul>
+          Phần mềm trình chiếu cung cấp các công cụ giúp em chọn đặt được màu sắc, cỡ chữ hài hoà, hợp lí với nội dung.<br>Trên mô phỏng dưới đây, trang chiếu đang dùng văn bản của Hình 10a.1 với màu sắc, cỡ chữ chưa hợp lí. Hãy <b>sửa nội dung cho ngắn gọn</b> (gõ trực tiếp trên trang) và <b>đổi màu chữ, màu nền, cỡ chữ</b> cho tới khi bảng <b>Gợi ý của máy</b> toàn dấu ✓.</div>
+        <div data-tc1></div>
+        <div data-task="mau" data-n="1"></div>
+        <div data-task="gam" data-n="2"></div>
+        <div data-task="nt" data-n="3"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 47</div>
+        <div data-task="p47" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Văn bản và màu sắc trên trang chiếu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Số trang, đầu trang và chân trang</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Các thông tin cần thiết của bài trình chiếu</div>
+        <div class="reading">Theo em, các trang chiếu có cần đánh số không? Có cần thêm các thông tin vào đầu trang và chân trang không? Vì sao?</div>
+        <div data-task="hd2" data-n="1"></div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 47). Giống như phần mềm soạn thảo văn bản, phần mềm trình chiếu cũng cho phép em thêm đầu trang, chân trang và đánh số thứ tự cho các trang bài trình chiếu. Đó là thông tin xuất hiện ở đầu và cuối của tất cả các trang chiếu. Thông tin này thường bao gồm tên người trình chiếu, tên công ti, tiêu đề bài trình chiếu, số trang hay thời gian trình chiếu,…</div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Số trang, đầu trang và chân trang</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-3">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.3</span> Thực hành: Tạo bài trình chiếu cho lễ ra mắt CLB Tin học</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> LeRaMatCLBTinhoc.pptx</div>
+        <div class="reading">Em hãy tạo một bài trình chiếu mới, nhập nội dung cho bốn trang chiếu theo mẫu trong Hình 10a.3 rồi thực hiện các yêu cầu sau: định dạng văn bản trên trang chiếu, đặt màu sắc, cỡ chữ hài hoà và hợp lí với nội dung; đánh số trang, thêm đầu trang và chân trang.</div>
+        <figure class="fig"><img src="hinh/h103.jpg" alt="Nội dung bốn trang chiếu: Chào mừng các bạn đến với CLB Tin học; Mục tiêu hoạt động; Nguyên tắc hoạt động; Kế hoạch hoạt động"><figcaption>Hình 10a.3. Nội dung các trang chiếu</figcaption></figure>
+        <div class="reading"><b>Hướng dẫn</b> (SGK minh hoạ bằng Microsoft PowerPoint 2016):<ul>
+          <li><b>a) Khởi động phần mềm và nhập nội dung.</b> Trang chiếu đầu tiên là trang tiêu đề, chọn mẫu <b>Title Slide</b>. Ba trang tiếp theo chọn mẫu <b>Title and Content</b>. Nhập nội dung văn bản theo mẫu ở Hình 10a.3.</li>
+          <li><b>b) Định dạng văn bản.</b> Trang 1: dòng tiêu đề đặt phông Arial, cỡ 60, màu vàng, in đậm, căn giữa. Trang 2, 3, 4: tiêu đề trang đặt phông Arial, cỡ 54, màu xanh lá, in đậm, căn giữa; nội dung văn bản đặt phông Arial, cỡ 32, màu đen, chữ thường, căn trái, tạo danh sách dấu đầu dòng. Thay đổi vị trí các hộp văn bản để bố cục cân đối.</li>
+          <li><b>c) Đánh số trang, thêm đầu trang và chân trang.</b> Chọn <b>Insert</b>, trong nhóm lệnh <b>Text</b> chọn lệnh <b>Header &amp; Footer</b> hoặc <b>Slide Number</b> (Hình 10a.4) để mở cửa sổ <b>Header and Footer</b> và thực hiện các bước theo hướng dẫn như Hình 10a.5.</li>
+          <li><b>d) Hoàn thiện bài trình chiếu và lưu tệp.</b> Áp dụng một mẫu định dạng cho bài trình chiếu (ví dụ kết quả như Hình 10a.6). Chọn <b>File/Save</b> để lưu tệp với tên <b>LeRaMatCLBTinhoc.pptx</b>.</li></ul></div>
+        <figure class="fig sm"><img src="hinh/h104.jpg" alt="Nhóm lệnh Text trên thẻ Insert gồm Text Box, Header and Footer, WordArt, Date and Time, Slide Number, Object"><figcaption>Hình 10a.4. Nhóm lệnh Text</figcaption></figure>
+        <figure class="fig"><img src="hinh/h105.jpg" alt="Hộp thoại Header and Footer, thẻ Slide: đánh dấu Date and time, Update automatically, Slide number, Footer với nội dung CLB Tin học - Trường THCS, Don't show on title slide, rồi bấm Apply to All"><figcaption>Hình 10a.5. Các bước đánh số trang và thêm đầu trang, chân trang</figcaption></figure>
+        <div class="reading"><i>Lưu ý:</i> Em có thể định dạng cho số trang và thông tin trong phần đầu trang, chân trang giống như định dạng văn bản trên trang chiếu. Phần mềm trình chiếu còn hỗ trợ em in nội dung bài trình chiếu ra giấy (Handouts) để phát cho người nghe; em cũng có thể thêm đầu trang, chân trang vào tài liệu in bằng cách nháy chuột chọn <b>Notes and Handouts</b> trong cửa sổ Header and Footer. Ở chế độ <b>Slide</b> (Hình 10a.5), em không thêm được đầu trang; chỉ ở chế độ <b>Notes and Handouts</b> phần mềm PowerPoint mới có chức năng thêm đầu trang.</div>
+        <div data-task="hf" data-n="1"></div>
+        <div data-task="hf2" data-n="2"></div>
+        <div class="reading">Làm thử trên mô phỏng: nội dung bốn trang đã được nhập sẵn (bước a). Nháy vào tiêu đề hoặc khung nội dung rồi chọn phông, cỡ, màu, <b>B</b>, căn lề. <b>Mẹo:</b> giữ <b>Ctrl</b> và nháy chọn trang 2, 3, 4 ở cột bên trái rồi định dạng một lần cho cả ba trang (trong PowerPoint thật có thể dùng Format Painter hoặc Slide Master). Sau đó bấm <b>Header &amp; Footer</b>.</div>
+        <div data-tc2></div>
+        <figure class="fig"><img src="hinh/h106.jpg" alt="Bốn trang chiếu kết quả dùng mẫu định dạng nền trắng có dải lá xanh: tiêu đề vàng ở trang 1, tiêu đề xanh lá ở trang 2 đến 4, chân trang có tên CLB và ngày"><figcaption>Hình 10a.6. Các trang chiếu kết quả</figcaption></figure>
+        <div data-task="nv1" data-n="3"></div>
+        <div data-concept="c3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 3. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Header &amp; Footer</div>
+        <div class="reading">Có thể kiểm tra từng phương án trên mô phỏng ở phần Thực hành (thử bấm <b>Apply</b> rồi so với <b>Apply to All</b>).</div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Bài trình chiếu giới thiệu một nội dung Tin học</div>
+        <div class="reading">Em hãy tạo bài trình chiếu giới thiệu một nội dung Tin học mà em chọn (ví dụ: giới thiệu một ngôn ngữ lập trình, giới thiệu về bảng tính điện tử,…) để trình chiếu trong buổi sinh hoạt CLB Tin học của trường. Hãy vận dụng kiến thức và kĩ năng đã biết để chọn đặt màu sắc, định dạng văn bản, trình bày các trang chiếu hài hoà, hợp lí với nội dung; đánh số trang, thêm đầu trang, chân trang;…<br>Có thể phác thảo trước trên mô phỏng (New Slide để thêm trang).</div>
+        <div data-tc3></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g6"></div>
+      </div>
+    </section>
+
+    <script src="../chung/trinhchieu.js?v=8"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var NOTE = "Nháy vào tiêu đề hoặc một dòng nội dung để chọn khung cần định dạng. Undo để khôi phục.";
+      TrinhChieu($("[data-tc1]"), {title:"Mô phỏng: sửa trang chiếu cho ngắn gọn, màu sắc hài hoà", tools:["font","para","design"], advice:true, note:NOTE,
+        slides:[{layout:"content", title:"MỤC TIÊU HOẠT ĐỘNG CỦA CLB TIN HỌC", bg:"#fff3c4", tf:{title:{font:"Comic Sans MS", color:"#f1c40f", size:40}, body:{font:"Times New Roman", size:16, color:"#d35400"}},
+          lines:[{t:"CLB là nơi truyền cảm hứng và chia sẻ niềm đam mê Tin học giữa các thành viên.", lv:1, b:"1."},
+            {t:"CLB phải tạo được môi trường giao lưu, hợp tác giữa các thành viên.", lv:1, b:"1."},
+            {t:"CLB cần xây dựng và thu thập tài liệu về các nội dung tin học để giúp các thành viên củng cố, mở rộng kiến thức, từng bước hội nhập với xã hội số.", lv:1, b:"1."},
+            {t:"CLB giúp các thành viên xây dựng ý thức tự giác, nâng cao khả năng tự học. Từ đó mỗi thành viên cố gắng rèn luyện, nâng cao kĩ năng sống.", lv:1, b:"1."},
+            {t:"CLB tổ chức các dự án, các sự kiện mới lạ để kích thích tính chủ động, sáng tạo của các thành viên.", lv:1, b:"1."}]}],
+        check:function(x){ var a = x.advice(0), ok = function(k){ return a.filter(function(i){ return i.k.indexOf(k) === 0; }).every(function(i){ return i.ok; }); };
+          return [["Các dòng ngắn gọn, chỉ nêu ý chính (như Hình 10a.2)", ok("short")], ["Chữ tương phản với màu nền", ok("ct-")], ["Cỡ chữ nội dung từ 24 pt", ok("size")], ["Không quá 3 màu, không quá 2 phông", ok("cols") && ok("fonts")]]; }});
+      var B = function(arr){ return arr.map(function(t){ return {t:t, lv:1, b:"•"}; }); };
+      var SL = [{layout:"title", title:"CHÀO MỪNG CÁC BẠN ĐẾN VỚI CLB TIN HỌC", sub:"Nguyễn Thu An – Lớp 8A – Trường THCS…"},
+        {layout:"content", title:"MỤC TIÊU HOẠT ĐỘNG", lines:B(["Truyền cảm hứng, chia sẻ niềm đam mê Tin học.","Tạo môi trường giao lưu, hợp tác.","Củng cố, mở rộng kiến thức Tin học.","Xây dựng ý thức tự giác, nâng cao khả năng tự học; rèn luyện, nâng cao kĩ năng sống.","Kích thích tính chủ động, sáng tạo."])},
+        {layout:"content", title:"NGUYÊN TẮC HOẠT ĐỘNG", lines:B(["Chất lượng đặt lên hàng đầu.","Thu hút đông đảo thành viên.","Thúc đẩy phong trào học tập.","Nội dung hoạt động đa dạng.","Kết hợp kiến thức và thực tế.","Khuyến khích sáng tạo."])},
+        {layout:"content", title:"KẾ HOẠCH HOẠT ĐỘNG", lines:B(["Tổ chức các chuyên đề thảo luận về phương pháp học tập.","Tổ chức các chuyên đề thảo luận về nội dung chuyên sâu.","Tổ chức tìm hiểu về nghề nghiệp liên quan đến Tin học.","Tổ chức các sự kiện giao lưu, chia sẻ kinh nghiệm."])}];
+      function F(s, b){ var f = (s.tf || {})[b] || {}; return f; }
+      function is(f, font, size, color, bold, al){ return f.font === font && +f.size === size && (color.indexOf(f.color) >= 0) && (bold == null || !!f.b === bold) && (f.al || (al === "left" ? "left" : "")) === al; }
+      TrinhChieu($("[data-tc2]"), {title:"Mô phỏng PowerPoint: LeRaMatCLBTinhoc.pptx", tools:["font","para","design","hf","show"], slides:SL, advice:true, note:NOTE,
+        check:function(x){ var S = x.slides, c = S.slice(1), has = function(l){ return x.log.indexOf(l) >= 0; };
+          var hfOk = function(s){ var h = s.hf; return h && !h.off && h.num && h.date && h.foot && /clb/i.test(h.ftext || ""); };
+          return [["Trang 1: tiêu đề Arial, 60, vàng, in đậm, căn giữa", is(F(S[0], "title"), "Arial", 60, ["#f1c40f"], true, "center") || (F(S[0], "title").font === "Arial" && +F(S[0], "title").size === 60 && F(S[0], "title").color === "#f1c40f" && !F(S[0], "title").al && F(S[0], "title").b !== false)],
+            ["Trang 2–4: tiêu đề Arial, 54, xanh lá, in đậm, căn giữa", c.every(function(s){ var f = F(s, "title"); return f.font === "Arial" && +f.size === 54 && f.color === "#1e8449" && f.b === true && (!f.al || f.al === "center"); })],
+            ["Trang 2–4: nội dung Arial, 32, đen, căn trái, dấu đầu dòng", c.every(function(s){ var f = F(s, "body"); return f.font === "Arial" && +f.size === 32 && f.color === "#000000" && (!f.al || f.al === "left") && s.lines.every(function(L){ return L.b !== "1." && L.b !== "a."; }); })],
+            ["Trang 2–4 có ngày (tự cập nhật), chân trang “CLB Tin học…”, số trang", c.every(hfOk) && c.every(function(s){ return s.hf.auto; })],
+            ["Trang tiêu đề không có chân trang (Don't show on title slide) – Apply to All", has("hfall") && (!S[0].hf || S[0].hf.off)],
+            ["Áp dụng một mẫu định dạng (Design · Themes)", has("theme")]]; }});
+      TrinhChieu($("[data-tc3]"), {title:"Mô phỏng PowerPoint: bài trình chiếu của em", tools:["slides","font","para","design","hf","show"], advice:true, note:NOTE,
+        check:function(x){ var S = x.slides, good = S.every(function(s, i){ return x.advice(i).every(function(a){ return a.ok; }); });
+          return [["Có trang tiêu đề và ít nhất 2 trang nội dung", S[0].layout === "title" && S[0].title.trim() && S.filter(function(s){ return s.layout === "content" && s.title.trim(); }).length >= 2],
+            ["Mọi trang đạt Gợi ý của máy (màu, cỡ chữ, ngắn gọn)", S.length > 1 && good], ["Có số trang và chân trang trên các trang nội dung", S.slice(1).length && S.slice(1).every(function(s){ return s.hf && !s.hf.off && s.hf.num && s.hf.foot; })]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 8 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
