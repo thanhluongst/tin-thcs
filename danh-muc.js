@@ -29,8 +29,8 @@ window.CHUONG_TRINH = [
       {so: "10", ten: "Sơ đồ tư duy", tt: "dang"},
       {so: "11", ten: "Định dạng văn bản", tt: "dang"},
       {so: "12", ten: "Trình bày thông tin ở dạng bảng", slug: "trinh-bay-bang", tt: "dang"},
-      {so: "13", ten: "Thực hành: Tìm kiếm và thay thế"},
-      {so: "14", ten: "Thực hành tổng hợp: Hoàn thiện sổ lưu niệm"}]},
+      {so: "13", ten: "Thực hành: Tìm kiếm và thay thế", tt: "dang"},
+      {so: "14", ten: "Thực hành tổng hợp: Hoàn thiện sổ lưu niệm", tt: "dang"}]},
     {so: "6", ten: "Giải quyết vấn đề với sự trợ giúp của máy tính", bai: [
       {so: "15", ten: "Thuật toán"},
       {so: "16", ten: "Các cấu trúc điều khiển"},

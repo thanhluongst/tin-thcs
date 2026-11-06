@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thực hành: Tìm kiếm và thay thế · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 5. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>13</b></div><h1><span class="sr-only">Bài 13. </span>Thực hành: Tìm kiếm và thay thế</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Trình bày được tác dụng của công cụ tìm kiếm, thay thế trong phần mềm soạn thảo văn bản.</li>
+        <li>Sử dụng được công cụ tìm kiếm và thay thế của phần mềm soạn thảo văn bản.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Thực hành: Tìm kiếm và thay thế">
+      <span class="node">Find</span>
+      <span class="node">Replace</span>
+      <span class="node io">Replace All</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Tại sao phải tìm kiếm và thay thế văn bản?</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Sử dụng công cụ tìm kiếm và thay thế</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .fr{display:grid;gap:8px;width:100%}
+      .fr-dlg{display:grid;gap:6px;background:#eef1f5;border:1px solid #c5ccd4;border-radius:8px;padding:8px;color:#1d2433;font-size:13.5px}
+      .fr-dlg label{display:grid;grid-template-columns:7.5em 1fr;gap:6px;align-items:center}
+      .fr-dlg input{font:inherit;padding:4px 6px;border:1px solid #9aa;border-radius:4px;background:#fff;color:#1d2433}
+      .fr-doc{background:#fff;color:#1d2433;border:1px solid #c5ccd4;border-radius:8px;padding:12px 16px;font-family:"Times New Roman",serif;font-size:15px;line-height:1.5;white-space:pre-wrap}
+      .fr-doc mark{background:#ffd54f}.fr-doc mark.cur{background:#ff9800;color:#fff}
+      .fr-doc .h{color:#c2185b;font-weight:700}
+      .fr-st{font-size:13.5px}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Đổi công thức làm kem</div>
+        <div class="reading">An đã học được cách làm kem sữa chua dưa hấu rất ngon. An đã làm thành công món kem này để mời hai bạn Khoa, Minh cùng thưởng thức. An đã dùng phần mềm soạn thảo văn bản để lưu lại công thức. Minh xin An công thức làm kem nhưng muốn đổi thành món kem sữa chua xoài. Em giúp An sửa công thức làm kem sữa chua dưa hấu thành công thức làm kem sữa chua xoài nhé. <i>(Công thức ở mục 2 bên dưới.)</i></div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+        <div data-task="hd1c" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Tại sao phải tìm kiếm và thay thế văn bản?</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Tìm kiếm và thay thế</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 58). Trong quá trình soạn thảo văn bản, nhu cầu tìm kiếm một từ hoặc cụm từ, hay thay thế một từ hoặc cụm từ này bằng một từ hoặc cụm từ khác thường xuyên xảy ra. Với các văn bản ngắn thì việc tìm kiếm và thay thế dễ dàng và nhanh chóng. Tuy nhiên, với các văn bản dài, hàng trăm trang, thì việc tìm kiếm và thay thế không còn dễ dàng và nhanh chóng nữa. Các phần mềm soạn thảo văn bản có công cụ <b>Tìm kiếm</b> và <b>Thay thế</b> để tìm kiếm và thay thế các từ hoặc cụm từ trong văn bản. Công cụ này giúp thực hiện tìm kiếm, thay thế nhanh chóng và chính xác, vì vậy tiết kiệm thời gian và quan trọng là không bỏ sót bất cứ từ nào. Ví dụ, cần thay “dưa hấu” bằng “xoài” trong công thức làm kem, sử dụng công cụ Tìm kiếm và Thay thế, tất cả các từ “dưa hấu” xuất hiện trong văn bản sẽ được thay bằng từ “xoài”.</div>
+        <div data-task="tl" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Tại sao phải tìm kiếm và thay thế văn bản?</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Sử dụng công cụ tìm kiếm và thay thế</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Thực hành</b> Kem sữa chua xoài</div>
+        <div class="reading"><b>Nhiệm vụ:</b> nhập nội dung công thức làm kem sữa chua dưa hấu của An và định dạng văn bản như Hình 5.22 rồi lưu với tên kemsuachua-duahau.docx. Thực hành tìm kiếm cụm từ “dưa hấu” và thay thế bằng từ “xoài” trong công thức rồi lưu tệp với tên kemsuachua-xoai.docx. <b>a) Tìm kiếm</b>: nháy chuột vào thẻ Home → trong nhóm lệnh Editing chọn <b>Find</b> → gõ từ, cụm từ cần tìm rồi nhấn Enter; các từ tìm thấy được đánh dấu, ô Navigation có liên kết đến các từ tìm thấy. <b>b) Thay thế</b>: trong nhóm lệnh Editing, chọn <b>Replace</b> → gõ từ cần tìm (Find what) → gõ từ thay thế (Replace with) → nháy <b>Replace</b> để thay lần lượt hoặc <b>Replace All</b> để thay tất cả. <i>Luyện tập trước với hộp thoại mô phỏng dưới đây.</i></div>
+        <figure class="fig fr" data-fr>
+          <div class="fr-dlg" role="group" aria-label="Find and Replace">
+            <b>Find and Replace</b>
+            <label>Find what: <input type="text" value="dưa hấu" data-f></label>
+            <label>Replace with: <input type="text" value="xoài" data-r></label>
+            <div class="row"><button class="btn" type="button" data-k="find">Find Next</button><button class="btn" type="button" data-k="rep">Replace</button><button class="btn" type="button" data-k="all">Replace All</button><button class="btn" type="button" data-k="reset">Khôi phục văn bản</button></div>
+          </div>
+          <div class="fr-st" aria-live="polite"></div>
+          <div class="fr-doc"></div>
+          <figcaption>Hình 5.22–5.24. Công thức làm kem sữa chua dưa hấu – tìm kiếm và thay thế (mô phỏng)</figcaption>
+        </figure>
+        <div data-task="th1" data-n="1"></div>
+        <div data-task="th2" data-n="2"></div>
+        <div data-task="th3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Sử dụng công cụ tìm kiếm và thay thế</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Tìm kiếm và thay thế</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Rà soát sổ lưu niệm</div>
+        <div data-task="vd" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var B = document.querySelector("[data-fr]"); if (!B) return;
+      var ORIG = "Kem sữa chua dưa hấu\nNguyên liệu\nDưa hấu: 250 g\nSữa chua: 100 g\nMật ong: 1 thìa cà phê\nDụng cụ\n1 tô to\n4 khuôn làm kem\nHướng dẫn\n1. Cho dưa hấu vào tô.\n2. Nghiền nát dưa hấu.\n3. Cho sữa chua và mật ong vào tô.\n4. Trộn đều hỗn hợp.\n5. Cho hỗn hợp vào khuôn làm kem.\n6. Đặt khuôn kem vào ngăn đá tủ lạnh trong thời gian ít nhất 4 tiếng.\n7. Lấy kem ra thưởng thức.";
+      var txt = ORIG, cur = -1, doc = B.querySelector(".fr-doc"), st = B.querySelector(".fr-st"), F = B.querySelector("[data-f]"), R = B.querySelector("[data-r]");
+      function esc(s){ return s.replace(/[&<>]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]; }); }
+      function hits(){ var q = F.value; if (!q) return []; var out = [], low = txt.toLowerCase(), ql = q.toLowerCase(), i = 0; while ((i = low.indexOf(ql, i)) >= 0) { out.push(i); i += ql.length; } return out; }
+      function draw(){ var h = hits(), q = F.value.length, s = "", p = 0;
+        h.forEach(function(i, k){ s += esc(txt.slice(p, i)) + '<mark class="' + (k === cur ? "cur" : "") + '">' + esc(txt.slice(i, i + q)) + "</mark>"; p = i + q; });
+        s += esc(txt.slice(p)); doc.innerHTML = s.replace(/^([^\n]*)/, '<span class="h">$1</span>'); return h; }
+      function say(m){ st.innerHTML = m; }
+      B.addEventListener("click", function(e){ var b = e.target.closest("[data-k]"); if (!b) return; var k = b.dataset.k, h = hits();
+        if (k === "reset") { txt = ORIG; cur = -1; draw(); say("Đã khôi phục công thức gốc."); return; }
+        if (!h.length) { cur = -1; draw(); say("Không tìm thấy “" + esc(F.value) + "”."); return; }
+        if (k === "find") { cur = (cur + 1) % h.length; draw(); say("Tìm thấy " + h.length + " kết quả – đang ở kết quả " + (cur + 1) + "."); }
+        else if (k === "rep") { if (cur < 0) { cur = 0; draw(); say("Đã đánh dấu kết quả 1/" + h.length + ". Nháy Replace lần nữa để thay."); return; }
+          var i = h[cur]; txt = txt.slice(0, i) + R.value + txt.slice(i + F.value.length); var n = hits().length; cur = n ? Math.min(cur, n - 1) : -1; draw(); say("Đã thay 1 chỗ. Còn " + n + " chỗ."); }
+        else if (k === "all") { var n0 = h.length; txt = txt.split("").join(""); h.slice().reverse().forEach(function(i){ var w = txt.slice(i, i + F.value.length), r = R.value; if (w[0] && w[0] === w[0].toUpperCase() && w[0] !== w[0].toLowerCase()) r = r.charAt(0).toUpperCase() + r.slice(1); txt = txt.slice(0, i) + r + txt.slice(i + F.value.length); });
+          cur = -1; draw(); say("Word đã thay xong <b>" + n0 + "</b> chỗ (Replace All)."); } });
+      F.addEventListener("input", function(){ cur = -1; var n = draw().length; say(F.value ? "Tìm thấy " + n + " kết quả." : ""); });
+      var n = draw().length; say("Tìm thấy " + n + " kết quả “dưa hấu”.");
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

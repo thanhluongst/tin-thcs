@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thực hành tổng hợp: Hoàn thiện sổ lưu niệm · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 5. Ứng dụng tin học</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>14</b></div><h1><span class="sr-only">Bài 14. </span>Thực hành tổng hợp: Hoàn thiện sổ lưu niệm</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Biết cách tổng hợp, sắp xếp các nội dung đã có thành một sản phẩm hoàn chỉnh.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Thực hành tổng hợp: Hoàn thiện sổ lưu niệm">
+      <span class="node">Tập hợp</span>
+      <span class="node">Bổ sung</span>
+      <span class="node">Trang bìa</span>
+      <span class="node io">Xem lại</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Nhiệm vụ</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2</span> Hướng dẫn hoàn thiện sổ lưu niệm</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">3</span> Chia sẻ, đánh giá</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .ck{display:grid;gap:6px;width:100%;font-size:14px}
+      .ck label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+      .ck-bar{height:12px;border-radius:6px;background:var(--sunk);overflow:hidden}.ck-bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Nhiệm vụ</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Hoàn thiện sổ lưu niệm</div>
+        <div class="reading">Từ các kết quả thực hành trong chủ đề này, các nhóm (từ 3 – 5 em) hãy tập hợp và bổ sung thêm nội dung để hoàn thiện cuốn sổ lưu niệm của lớp.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Nhiệm vụ</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2</span> Hướng dẫn hoàn thiện sổ lưu niệm</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Bước 1</b> Tập hợp các nội dung đã có</div>
+        <div class="reading">Trong các bài học trước, các em đã tạo các tệp văn bản chứa nội dung cuốn sổ lưu niệm của lớp như: bài viết cảm nghĩ, danh sách thành viên,… Các em hãy tập hợp các nội dung đó vào một tệp văn bản có tên Soluuniem.docx. Khởi tạo tệp văn bản mới rồi: nháy chuột vào thẻ <b>Insert</b> → trong nhóm lệnh <b>Text</b>, chọn <b>Object</b> → chọn <b>Text from File…</b></div>
+        <div data-task="b1" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Bước 2</b> Bổ sung thêm nội dung</div>
+        <div class="reading">Xem lại sơ đồ tư duy trình bày nội dung cuốn sổ lưu niệm các em đã tạo ở Bài 10 để rà soát lại nội dung xem đã đầy đủ chưa. Phân công các bạn trong nhóm thu thập thông tin, hình ảnh để bổ sung, đặc biệt là thông tin về các thầy cô giáo, các hoạt động mà lớp đã thực hiện như: hoạt động thể thao, văn hoá, văn nghệ, tham quan,… Soạn thảo các nội dung bổ sung, chú ý thực hiện các thao tác định dạng để văn bản được trình bày với bố cục hợp lí và đẹp mắt: định dạng chữ (màu sắc, cỡ chữ,…); căn chỉnh lề đoạn văn bản; định dạng hướng trang, lề trang; bổ sung hình ảnh; chèn bảng (nếu cần); sử dụng chức năng Tìm kiếm và Thay thế để chỉnh sửa văn bản (nếu cần).</div>
+        <div data-task="b2" data-n="1"></div>
+        <div data-task="b2o" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Bước 3</b> Tạo trang bìa cho cuốn sổ</div>
+        <div class="reading">Nháy chuột vào thẻ <b>Insert</b> → trong nhóm lệnh <b>Pages</b>, chọn <b>Cover Page</b> → chọn một mẫu trang bìa → sửa lại nội dung và thay hình trang bìa.</div>
+        <div data-task="b3" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Bước 4</b> Xem lại nội dung</div>
+        <div data-task="b4" data-n="1"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Các bước hoàn thiện</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Chia sẻ, đánh giá</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Đánh giá</b> Bảng kiểm sản phẩm</div>
+        <div class="reading">Các nhóm hãy chia sẻ sản phẩm của mình với cả lớp và cùng thảo luận để cuốn sổ lưu niệm chung của cả lớp có nội dung đầy đủ và trình bày đẹp nhất. Dùng bảng kiểm dưới đây để tự đánh giá (lưu trên máy này).</div>
+        <figure class="fig ck" data-ck>
+          <label><input type="checkbox"> Có trang bìa (tên sổ, tên lớp, năm học, hình ảnh)</label>
+          <label><input type="checkbox"> Có danh sách thành viên trình bày dạng bảng (ảnh, họ tên, ngày sinh)</label>
+          <label><input type="checkbox"> Có thông tin về thầy cô giáo</label>
+          <label><input type="checkbox"> Có ít nhất 2 bài viết cảm nghĩ</label>
+          <label><input type="checkbox"> Có nội dung về hoạt động, sự kiện của lớp kèm hình ảnh</label>
+          <label><input type="checkbox"> Tiêu đề căn giữa, đoạn văn căn thẳng hai lề</label>
+          <label><input type="checkbox"> Hướng trang, lề trang thống nhất</label>
+          <label><input type="checkbox"> Đã rà soát lỗi chính tả (Tìm kiếm và Thay thế)</label>
+          <label><input type="checkbox"> Đã lưu tệp Soluuniem.docx</label>
+          <div class="ck-bar"><i></i></div><div class="ck-out" aria-live="polite"></div>
+          <figcaption>Bảng kiểm tự đánh giá sổ lưu niệm</figcaption>
+        </figure>
+        <div data-task="dg" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Đánh giá</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      var B = document.querySelector("[data-ck]"); if (!B) return;
+      var cs = [].slice.call(B.querySelectorAll("input")), KEY = "ck-tin6b14";
+      try { var sv = JSON.parse(localStorage.getItem(KEY) || "[]"); cs.forEach(function(c, i){ c.checked = sv.indexOf(i) >= 0; }); } catch (e) {}
+      function up(){ var on = cs.map(function(c, i){ return c.checked ? i : -1; }).filter(function(i){ return i >= 0; });
+        B.querySelector(".ck-bar i").style.width = on.length / cs.length * 100 + "%";
+        B.querySelector(".ck-out").textContent = "Đã đạt " + on.length + "/" + cs.length + " tiêu chí" + (on.length === cs.length ? " – sản phẩm hoàn chỉnh! 🎉" : ".");
+        try { localStorage.setItem(KEY, JSON.stringify(on)); } catch (e) {} }
+      B.addEventListener("change", up); up();
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
