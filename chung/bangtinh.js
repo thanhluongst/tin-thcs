@@ -1,6 +1,6 @@
 /* BẢNG TÍNH MÔ PHỎNG dùng chung cho các bài bảng tính (Tin 7 Bài 7, 8, 9,…)
    BangTinh(phần tử, tuỳ chọn) — chọn ô/vùng/hàng/cột, nhập, sửa, xoá, tự căn chỉnh, định dạng, độ rộng cột,
-   đổi tên trang tính, công thức (+ - * / ^, & ghép xâu, so sánh = < > <= >= <>, ngoặc, địa chỉ ô, vùng), hàm SUM AVERAGE MIN MAX COUNT,
+   đổi tên trang tính, công thức (+ - * / ^, & ghép xâu, so sánh = < > <= >= <>, ngoặc, địa chỉ ô, vùng), hàm SUM AVERAGE MIN MAX COUNT COUNTIF SUMIF IF,
    tự động tính lại, sao chép công thức (địa chỉ tương đối), chèn/xoá hàng, cột, ẩn/hiện hàng, cột,
    gộp ô (Merge & Center), Format Cells (Number, Percentage, Date kiểu Việt Nam), cộng trừ ngày tháng,
    kẻ đường viền/khung (Border), màu nền, xem trước khi in (không có đường lưới).
@@ -136,11 +136,30 @@ window.BangTinh = function(box, opt){
       if (x.t === "r") { p++; if (peek(":")) { p++; var y = eat("r"); return {rg:[Math.min(x.c, y.c), Math.min(x.r, y.r), Math.max(x.c, y.c), Math.max(x.r, y.r)]}; } return {rg:[x.c, x.r, x.c, x.r]}; }
       if (x.t === "(") { p++; var v = cmp(); eat(")"); return v; }
       if (x.t === "f") { p++; if (!peek("(")) E("#NAME?"); p++; var args = [];
-        if (!peek(")")) { args.push(expr()); while (peek(",") || peek(";")) { p++; args.push(expr()); } }
+        if (!peek(")")) { args.push(cmp()); while (peek(",") || peek(";")) { p++; args.push(cmp()); } }
         eat(")"); return fn(x.v, args); }
       E("#SYNTAX");
     }
+    function crit(cr){ /* điều kiện của COUNTIF/SUMIF: ">100", "Yes", "Y*", số, giá trị ô */
+      cr = scalar(cr); if (typeof cr === "boolean") cr = cr ? "TRUE" : "FALSE";
+      var op = "=", rhs = cr;
+      if (typeof cr === "string") { var m = /^(<=|>=|<>|<|>|=)?(.*)$/.exec(cr); op = m[1] || "="; rhs = m[2]; }
+      var rn = typeof rhs === "number" ? rhs : isNum(rhs) ? +rhs : null;
+      var re = typeof rhs === "string" && /[*?]/.test(rhs) ? new RegExp("^" + rhs.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i") : null;
+      return function(v){
+        if (rn !== null && op !== "=" && op !== "<>") { if (typeof v !== "number") return false; return op === "<" ? v < rn : op === ">" ? v > rn : op === "<=" ? v <= rn : v >= rn; }
+        var eq;
+        if (rn !== null) eq = typeof v === "number" ? v === rn : isNum(v) && +v === rn;
+        else if (re) eq = typeof v === "string" && re.test(v);
+        else eq = String(v === true ? "TRUE" : v === false ? "FALSE" : v).toLowerCase() === String(rhs).toLowerCase() && !(rhs === "" && v !== "");
+        return op === "<>" ? !eq : eq; }; }
+    function cells(x){ if (!x || !x.rg) E("#VALUE!"); var g = x.rg, out = []; for (var r = g[1]; r <= g[3]; r++) for (var c = g[0]; c <= g[2]; c++) out.push({c: c, r: r, v: cell(c, r)}); return out; }
     function fn(name, args){
+      if (name === "COUNTIF") { if (args.length !== 2) E("#VALUE!"); var t = crit(args[1]); return cells(args[0]).filter(function(o){ return o.v !== "" && t(o.v); }).length; }
+      if (name === "SUMIF") { if (args.length < 2 || args.length > 3) E("#VALUE!"); var t2 = crit(args[1]), rg0 = args[0].rg || E("#VALUE!"), sr = args[2] && args[2].rg ? args[2].rg : rg0;
+        return cells(args[0]).reduce(function(m, o){ if (o.v === "" || !t2(o.v)) return m; var v = cell(sr[0] + (o.c - rg0[0]), sr[1] + (o.r - rg0[1])); return m + (typeof v === "number" ? v : 0); }, 0); }
+      if (name === "IF") { if (args.length < 2 || args.length > 3) E("#VALUE!"); var cnd = scalar(args[0]); if (typeof cnd !== "boolean") { if (typeof cnd === "number") cnd = cnd !== 0; else if (/^(true|false)$/i.test(cnd)) cnd = /^true$/i.test(cnd); else E("#VALUE!"); }
+        var out = cnd ? args[1] : (args.length === 3 ? args[2] : false); out = scalar(out); return out === "" ? 0 : out; }
       if (["SUM","AVERAGE","MIN","MAX","COUNT"].indexOf(name) < 0) E("#NAME?");
       var ns = [];
       args.forEach(function(x){

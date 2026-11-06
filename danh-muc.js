@@ -104,7 +104,7 @@ window.CHUONG_TRINH = [
       {so: "8", ten: "Thực hành: Sử dụng công cụ trực quan trình bày thông tin trong trao đổi và hợp tác", slug: "cong-cu-truc-quan", tt: "dang"}]},
     {so: "4a", nhom: "a", ten: "Sử dụng bảng tính điện tử nâng cao", bai: [
       {so: "9a", ten: "Sử dụng công cụ xác thực dữ liệu", slug: "xac-thuc-du-lieu", tt: "dang"},
-      {so: "10a", ten: "Sử dụng hàm COUNTIF", slug: "ham-countif"},
+      {so: "10a", ten: "Sử dụng hàm COUNTIF", slug: "ham-countif", tt: "dang"},
       {so: "11a", ten: "Sử dụng hàm SUMIF", slug: "ham-sumif"},
       {so: "12a", ten: "Sử dụng hàm IF", slug: "ham-if"},
       {so: "13a", ten: "Hoàn thiện bảng tính quản lí tài chính gia đình", slug: "tai-chinh-gia-dinh"}]},

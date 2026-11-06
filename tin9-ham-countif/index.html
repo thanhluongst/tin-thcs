@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sử dụng hàm COUNTIF · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 4a. Sử dụng bảng tính điện tử nâng cao</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>10a</b></div><h1><span class="sr-only">Bài 10a. </span>Sử dụng hàm COUNTIF</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Sử dụng được hàm đếm theo điều kiện COUNTIF trong giải quyết bài toán thực tế về quản lí tài chính.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Vùng dữ liệu, điều kiện, số ô thoả mãn">
+      <span class="node">range: vùng cần kiểm tra</span>
+      <span class="node">criteria: điều kiện</span>
+      <span class="node io">Số ô thoả mãn</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Hàm COUNTIF</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Tổng hợp thu, chi của gia đình</div>
+        <div class="reading">Trong các bài học trước, em đã sử dụng công cụ xác thực dữ liệu để nhập dữ liệu chính xác cho bảng tính quản lí tài chính gia đình. Để việc chi tiêu của gia đình được kiểm soát thường xuyên hoặc định kì theo khoảng thời gian nào đó tuỳ vào mỗi gia đình, dữ liệu thu và chi cần được tổng hợp để trả lời những câu hỏi sau: Mỗi khoản chi đã được chi bao nhiêu lần? Mỗi khoản thu đã được thu bao nhiêu lần? Tổng số tiền đã chi tiêu của từng khoản chi là bao nhiêu? Tổng số tiền thu nhập của từng khoản thu là bao nhiêu? Thu nhập và chi tiêu của gia đình đã cân đối chưa? Những bài học tiếp theo của chủ đề này sẽ hướng dẫn em trả lời các câu hỏi trên, giúp cho việc chi tiêu của gia đình được kiểm soát hiệu quả.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Hàm COUNTIF</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Các khoản chi được tổng hợp như thế nào?</div>
+        <div class="reading">Giả sử dữ liệu chi tiêu đã được cập nhật trong vùng A3:D10 (Hình 10a.1). Theo em, công thức tại các ô G2, G3,…, G10 là gì để em có thể biết số lần chi tiêu của mỗi khoản?</div>
+        <figure class="fig"><img src="hinh/h101.jpg" alt="Trang tính Chi tiêu có 8 khoản chi từ 14/8/23 đến 30/8/23, cột F liệt kê các khoản chi, cột G Số lần chi đang để dấu hỏi"><figcaption>Hình 10a.1. Bảng dữ liệu về các khoản chi</figcaption></figure>
+        <div data-task="hd1" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Hàm đếm theo điều kiện COUNTIF</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 42). Để đếm số ô tính mà dữ liệu của ô thoả mãn một điều kiện nào đó, em sử dụng hàm đếm theo điều kiện COUNTIF. Bảng 10a.1 dưới đây là một số ví dụ sử dụng hàm này.</div>
+        <figure class="fig"><img src="hinh/b101.jpg" alt="Bảng 10a.1 gồm 4 ví dụ: đếm số ô trong vùng A1:A4 chứa số lớn hơn 100, chứa từ Yes, chứa xâu bắt đầu bằng chữ Y, chứa giá trị giống ô D2, kèm công thức COUNTIF tương ứng"><figcaption>Bảng 10a.1. Một số ví dụ sử dụng hàm COUNTIF</figcaption></figure>
+        <div class="reading">Thử bốn công thức của Bảng 10a.1 trên bảng tính mô phỏng: nhập vào các ô C1 đến C4 (ví dụ gõ <b>=COUNTIF(A1:A4,"&gt;100")</b> rồi nhấn Enter).</div>
+        <div data-bt0></div>
+        <div data-task="vd" data-n="1"></div>
+        <div class="reading">Công thức chung của COUNTIF là: <b>=COUNTIF(range, criteria)</b>. Trong đó, ý nghĩa của các tham số như sau: <b>range</b>: phạm vi chứa các ô tính cần kiểm tra để đếm; <b>criteria</b>: điều kiện kiểm tra các ô tính trong phạm vi range. Trong Hình 10a.1, để biết mỗi khoản chi đã được chi bao nhiêu lần, em dùng hàm COUNTIF để đếm số ô tính trong vùng B3:B10 chứa mỗi khoản chi. Như vậy, công thức ở ô G2 là =COUNTIF($B$3:$B$10,"Ở") cho biết khoản Ở đã được chi bao nhiêu lần. Tuy nhiên, tên của khoản chi này đã được lưu ở ô F2. Vì vậy công thức tại ô G2 được sửa lại là <b>=COUNTIF($B$3:$B$10,F2)</b> như Hình 10a.2. Khi sao chép công thức này sang các ô còn lại từ G3 đến G10, công thức sẽ trả về kết quả là số lần chi của các khoản chi còn lại.</div>
+        <figure class="fig"><img src="hinh/h102.jpg" alt="Trang tính Chi tiêu: ô G2 có công thức =COUNTIF($B$3:$B$10,F2), cột G hiện số lần chi của từng khoản"><figcaption>Hình 10a.2. Công thức tính số lần chi của mỗi khoản chi</figcaption></figure>
+        <div data-task="thamso" data-n="2"></div>
+        <div data-task="g2" data-n="3"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 43</div>
+        <div class="reading">Trong Hình 10a.2, công thức ở ô G2 là =COUNTIF($B$3:$B$10,F2). Em hãy trả lời các câu hỏi sau: a) Khi sao chép công thức trên sang các ô G3,…, G10 công thức sẽ thay đổi như thế nào? b) Nếu bỏ các dấu $ thì công thức ở ô G2 sẽ là =COUNTIF(B3:B10,F2). Sau khi sao chép công thức này sang các ô từ G3 đến G10, kết quả trả về tại các ô đó có đúng không? Tại sao? (Thử ngay trên bảng tính của phần Thực hành: chọn ô, xem công thức ở vùng nhập dữ liệu.)</div>
+        <div data-task="p43a" data-n="1"></div>
+        <div data-task="p43b" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Hàm COUNTIF</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Sử dụng hàm COUNTIF</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ</b> Tổng hợp chi tiêu theo mỗi khoản</div>
+        <div class="reading">Sử dụng hàm COUNTIF để tổng hợp chi tiêu theo mỗi khoản. <b>Hướng dẫn. a) Tính số lần chi của mỗi khoản chi trong trang tính Chi tiêu:</b> mở tệp bảng tính TaiChinhGiaDinh.xlsx, chọn trang tính Chi tiêu; nhập dữ liệu cho trang tính để được kết quả tương tự như Hình 10a.1; tại ô G2, nhập công thức <b>=COUNTIF($B$3:$B$10,F2)</b> như minh hoạ trong Hình 10a.2; sao chép công thức trong ô G2 sang các ô từ G3 đến G10; lưu bảng tính.<br><b>b) Tính số lần thu của mỗi khoản thu trong trang tính Thu nhập:</b> chọn trang tính Thu nhập; nhập dữ liệu cho trang tính để được nội dung tương tự như Hình 10a.3; tại ô G2, nhập công thức <b>=COUNTIF($B$3:$B$8,F2)</b> để tính số lần thu của khoản Lương (Hình 10a.4); sao chép công thức trong ô G2 sang các ô từ G3 đến G6 để tính số lần thu của các khoản thu còn lại (Hình 10a.5); lưu tệp.</div>
+        <div class="reading"><b>Trên bảng tính mô phỏng</b> (dữ liệu đã nhập sẵn): chọn G2, gõ công thức rồi Enter; chọn lại G2, bấm <b>📋 Sao chép</b>, kéo chọn vùng G3:G10 rồi bấm <b>📌 Dán</b>.</div>
+        <div data-bt1></div>
+        <figure class="fig"><img src="hinh/h103.jpg" alt="Trang tính Thu nhập có 6 khoản thu từ 13/8/23 đến 30/8/23 và danh sách khoản thu ở cột F"><figcaption>Hình 10a.3. Bảng dữ liệu về các khoản thu</figcaption></figure>
+        <figure class="fig"><img src="hinh/h104.jpg" alt="Ô G2 trang tính Thu nhập đang nhập công thức =COUNTIF($B$3:$B$8,F2)"><figcaption>Hình 10a.4. Nhập công thức tại G2</figcaption></figure>
+        <figure class="fig"><img src="hinh/h105.jpg" alt="Sau khi sao chép công thức từ G2 sang G3 đến G6: Lương 1, Thưởng 1, Làm thêm 2, Được cho tặng 1, Khác 1"><figcaption>Hình 10a.5. Sao chép công thức trong ô G2 sang các ô từ G3 đến G6</figcaption></figure>
+        <div data-bt2></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Bổ sung dữ liệu và khảo sát chọn trường</div>
+        <div class="reading">1. Em hãy bổ sung thêm một số dòng dữ liệu thu, chi vào cả hai trang tính Thu nhập và Chi tiêu. Hãy điều chỉnh công thức COUNTIF ở cột G để kết quả tổng hợp số lần thu, chi của mỗi khoản được chính xác.</div>
+        <div data-bt3></div>
+        <div data-task="lt1" data-n="1"></div>
+        <div class="reading">2. Em hãy thực hiện cuộc khảo sát về việc chọn trường THPT của các bạn trong lớp. Nhập thông tin mà em thu thập được vào bảng tính và sử dụng hàm COUNTIF để tổng hợp kết quả khảo sát như minh hoạ ở Hình 10a.6.</div>
+        <figure class="fig sm"><img src="hinh/h106.jpg" alt="Bảng Khảo sát chọn trường THPT: 10 học sinh HS01 đến HS10 chọn các trường A, B, C, D; bảng Thống kê số lượng theo từng trường đang để dấu hỏi"><figcaption>Hình 10a.6. Kết quả khảo sát về việc chọn trường THPT</figcaption></figure>
+        <div data-bt4></div>
+        <div data-task="lt2" data-n="2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Kinh phí Triển lãm tin học</div>
+        <div class="reading">Em hãy mở bảng tính KinhPhiTrienLam.xlsx đã tạo ở phần Vận dụng, Bài 9a và sử dụng hàm COUNTIF để tính số lần thu của mỗi khoản thu, số lần chi của mỗi khoản chi của dự án Triển lãm tin học. Lưu tệp sau khi hoàn thành công việc.</div>
+        <div data-bt5></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/bangtinh.js?v=7"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var TOOLS = ["copy","paste","|","b","fill","left","center","right","|","valid","|","reset"];
+      var NOTE = "Chọn ô rồi gõ (công thức bắt đầu bằng =), nhấn Enter. Sao chép: chọn ô → 📋 Sao chép → chọn vùng đích → 📌 Dán.";
+      function f(x, col){ var r = /=COUNTIF\(\s*\$B\$3\s*:\s*\$B\$(\d+)\s*,\s*F(\d+)\s*\)/i.exec(String(x || "").replace(/\s/g, "")); return r; }
+      function okCol(x, from, to, last, exp){ for (var r = from; r <= to; r++) { var m = f(x.d["G" + r]); if (!m || +m[2] !== r || +m[1] < last) return false; if (exp && x.val("G" + r) !== exp[r - from]) return false; } return true; }
+      /* Bảng 10a.1 */
+      BangTinh($("[data-bt0]"), {title:"Thử các ví dụ của Bảng 10a.1", cols:4, rows:5, widths:[90,70,170,80], tools:["reset"], note:NOTE,
+        data:{A1:"150", A2:"Yes", A3:"Yêu cầu", A4:"80", D1:"Ô D2:", D2:"Yes"}, fmt:{D1:{i:true}},
+        check:function(x){ var m = function(k, re, v){ return re.test(String(x.d[k] || "").replace(/\s/g, "")) && x.val(k) === v; };
+          return [['C1: =COUNTIF(A1:A4,">100") → 1', m("C1", /^=COUNTIF\(A1:A4,">100"\)$/i, 1)], ['C2: =COUNTIF(A1:A4,"Yes") → 1', m("C2", /^=COUNTIF\(A1:A4,"Yes"\)$/i, 1)],
+            ['C3: =COUNTIF(A1:A4,"Y*") → 2', m("C3", /^=COUNTIF\(A1:A4,"Y\*"\)$/i, 2)], ["C4: =COUNTIF(A1:A4,D2) → 1", m("C4", /^=COUNTIF\(A1:A4,D2\)$/i, 1)]]; }});
+      var W = [64,120,140,140,20,130,80];
+      function sheet(title, colB, items, rows, extraG){ var d = {A1:title, A2:"Ngày", B2:colB, C2:"Nội dung", D2:"Số tiền (nghìn đồng)", F1:colB, G1:extraG || "Số lần"}; items.forEach(function(t, i){ d["F" + (i + 2)] = t; });
+        rows.forEach(function(r, i){ d["A" + (i + 3)] = r[0]; d["B" + (i + 3)] = r[1]; d["C" + (i + 3)] = r[2]; d["D" + (i + 3)] = String(r[3]); }); return d; }
+      function fm(n, col){ var o = {A1:{big:true}, A2:{b:true, al:"center"}, B2:{b:true, al:"center"}, C2:{b:true, al:"center"}, D2:{b:true, al:"center"}, F1:{b:true, al:"center"}, G1:{b:true, al:"center"}}; for (var i = 2; i < 2 + n; i++) o["F" + i] = {fill: col}; return o; }
+      var CHI = ["Ở","Ăn","Di chuyển","Học tập","Sức khoẻ","Giải trí","Quà tặng/Từ thiện","Tiết kiệm","Khác"], THU = ["Lương","Thưởng","Làm thêm","Được cho/tặng","Khác"];
+      var RCHI = [["14/8/23","Ở","Tiền điện tháng 8",800],["14/8/23","Sức khoẻ","Mua thuốc",620],["15/8/23","Học tập","Học phí tháng 8",2200],["20/8/23","Quà tặng/Từ thiện","Quà tặng",300],["22/8/23","Di chuyển","Gửi xe, xăng xe",600],["26/8/23","Ở","Tiền nước tháng 8",120],["26/8/23","Tiết kiệm","Tiết kiệm tháng 8",1000],["30/8/23","Ăn","Tiền ăn tháng 8",8000]];
+      var RTHU = [["13/8/23","Lương","Lương tháng 8",10000],["15/8/23","Làm thêm","Bán hàng trực tuyến",1500],["18/8/23","Được cho/tặng","Người thân tặng",500],["25/8/23","Thưởng","Thưởng tháng 8",3000],["29/8/23","Khác","Tiết kiệm tiền đi lại",500],["30/8/23","Làm thêm","Làm thêm tháng 8",2000]];
+      BangTinh($("[data-bt1]"), {title:"Bảng tính mô phỏng: TaiChinhGiaDinh.xlsx – trang tính Chi tiêu", cols:7, rows:10, widths:W, tools:TOOLS, sheet:"Chi tiêu", note:NOTE,
+        data:sheet("Chi tiêu", "Khoản chi", CHI, RCHI, "Số lần chi"), fmt:fm(9, "#f8c9b5"),
+        check:function(x){ return [["G2: =COUNTIF($B$3:$B$10,F2)", (function(){ var m = f(x.d.G2); return !!m && +m[1] === 10 && +m[2] === 2; })()],
+          ["Sao chép công thức sang G3 đến G10", okCol(x, 3, 10, 10)], ["Kết quả đúng: Ở 2; Giải trí 0; Khác 0", x.val("G2") === 2 && x.val("G7") === 0 && x.val("G10") === 0 && x.val("G3") === 1]]; }});
+      BangTinh($("[data-bt2]"), {title:"Bảng tính mô phỏng: TaiChinhGiaDinh.xlsx – trang tính Thu nhập", cols:7, rows:8, widths:W, tools:TOOLS, sheet:"Thu nhập", note:NOTE,
+        data:sheet("Thu nhập", "Khoản thu", THU, RTHU, "Số lần thu"), fmt:fm(5, "#c9d9ee"),
+        check:function(x){ return [["G2: =COUNTIF($B$3:$B$8,F2)", (function(){ var m = f(x.d.G2); return !!m && +m[1] === 8 && +m[2] === 2; })()], ["Sao chép sang G3 đến G6, kết quả 1, 1, 2, 1, 1", okCol(x, 2, 6, 8, [1,1,2,1,1])]]; }});
+      var gChi = {}; for (var r = 2; r <= 10; r++) gChi["G" + r] = "=COUNTIF($B$3:$B$10,F" + r + ")";
+      var d3 = sheet("Chi tiêu", "Khoản chi", CHI, RCHI, "Số lần chi"); for (var k in gChi) d3[k] = gChi[k];
+      BangTinh($("[data-bt3]"), {title:"Luyện tập 1: bổ sung dữ liệu vào trang tính Chi tiêu", cols:7, rows:16, widths:W, tools:TOOLS, sheet:"Chi tiêu", note:NOTE + " Nhập thêm ở hàng 11, 12,… rồi sửa vùng trong công thức cột G.",
+        data:d3, fmt:fm(9, "#f8c9b5"),
+        check:function(x){ var last = 10; for (var r = 11; r <= 16; r++) if (x.text("B" + r)) last = r; var cnt = function(name){ var n = 0; for (var r = 3; r <= 16; r++) if (String(x.text("B" + r)).toLowerCase() === name.toLowerCase()) n++; return n; };
+          var ok = true; for (var r2 = 2; r2 <= 10; r2++) if (x.val("G" + r2) !== cnt(x.text("F" + r2))) ok = false;
+          return [["Thêm ít nhất 2 dòng dữ liệu chi (hàng 11 trở đi)", last >= 12], ["Mở rộng vùng đếm cho đủ các dòng mới, sao chép lại cột G", okCol(x, 2, 10, last)], ["Kết quả cột G khớp với dữ liệu", last >= 12 && ok]]; }});
+      var S = {A1:"Khảo sát chọn trường THPT", A3:"Mã số học sinh", B3:"Tên trường", D3:"Thống kê", D4:"Tên trường", E4:"Số lượng", D5:"A", D6:"B", D7:"C", D8:"D"};
+      ["A","B","C","D","A","C","B","D","C","A"].forEach(function(t, i){ S["A" + (i + 4)] = "HS" + ("0" + (i + 1)).slice(-2); S["B" + (i + 4)] = t; });
+      BangTinh($("[data-bt4]"), {title:"Luyện tập 2: khảo sát chọn trường THPT (Hình 10a.6)", cols:5, rows:13, widths:[90,90,20,90,80], tools:TOOLS, note:NOTE + " Có thể sửa dữ liệu cột B theo kết quả khảo sát lớp em.",
+        data:S, fmt:{A1:{b:true}, A3:{b:true, al:"center"}, B3:{b:true, al:"center"}, D3:{b:true, al:"center"}, D4:{b:true, al:"center"}, E4:{b:true, al:"center"}},
+        check:function(x){ var ok = true, tot = 0; for (var r = 5; r <= 8; r++) { var t = String(x.d["E" + r] || "").replace(/\s/g, ""), n = 0; for (var q = 4; q <= 13; q++) if (String(x.text("B" + q)).toUpperCase() === String(x.text("D" + r)).toUpperCase()) n++;
+            if (!/^=COUNTIF\(\$B\$4:\$B\$13,D\d+\)$/i.test(t) || x.val("E" + r) !== n) ok = false; tot += +x.val("E" + r) || 0; }
+          return [["E5:E8 dùng =COUNTIF($B$4:$B$13,D5) (sao chép xuống) và cho kết quả đúng", ok], ["Tổng số lượng bằng số học sinh (10)", tot === 10]]; }});
+      BangTinh($("[data-bt5]"), {title:"KinhPhiTrienLam.xlsx – trang tính Các khoản chi", cols:7, rows:8, widths:W, tools:TOOLS, sheet:"Các khoản chi", note:NOTE,
+        data:sheet("Các khoản chi cho Triển lãm tin học", "Khoản chi", ["Văn phòng phẩm","In tài liệu"], [["5/9/23","Văn phòng phẩm","Mua giấy, bút",150],["6/9/23","In tài liệu","In tờ rơi",300],["8/9/23","In tài liệu","In áp phích",250]], "Số lần chi"), fmt:fm(2, "#f8c9b5"),
+        check:function(x){ return [["G2, G3 dùng COUNTIF với vùng cố định ($) và cho kết quả 1, 2", /COUNTIF/i.test(x.d.G2 || "") && /\$/.test(x.d.G2 || "") && x.val("G2") === 1 && x.val("G3") === 2]]; }});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
