@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Các cấu trúc điều khiển · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 6. Giải quyết vấn đề với sự trợ giúp của máy tính</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>16</b></div><h1><span class="sr-only">Bài 16. </span>Các cấu trúc điều khiển</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Biết các cấu trúc: tuần tự, rẽ nhánh và lặp.</li>
+        <li>Mô tả được thuật toán đơn giản có các cấu trúc tuần tự, rẽ nhánh và lặp dưới dạng liệt kê hoặc sơ đồ khối.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Các cấu trúc điều khiển">
+      <span class="node">Tuần tự</span>
+      <span class="node">Rẽ nhánh</span>
+      <span class="node io">Lặp</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Cấu trúc tuần tự, cấu trúc rẽ nhánh</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Cấu trúc lặp</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;width:100%;align-items:end}
+      .figs>div{display:grid;justify-items:center;gap:4px}
+      .figs .cap{font-size:13px;color:#2f6f63;font-style:italic;text-align:center}
+      .dhs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;width:100%;align-items:start}
+      @media (max-width:720px){.dhs{grid-template-columns:1fr}}
+      .dhs-card{background:#fff;color:#1d2433;border:2px solid #90a4ae;border-radius:12px;padding:14px;display:grid;gap:10px;text-align:center}
+      .dhs-card .phieu{font-size:18px;font-weight:600;min-height:3.2em;display:grid;place-items:center;background:#fffde7;border:1px dashed #c9a800;border-radius:8px;padding:8px}
+      .dhs-card .big{font-size:22px;font-weight:700}
+      .dhs-card .row{justify-content:center}
+      .dhs-card .ok{color:#2e7d32}.dhs-card .no{color:#c62828}
+      .dhs-card select{font:inherit;padding:4px}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Trò chơi</b> Đúng hay sai?</div>
+        <div class="reading"><b>Chuẩn bị:</b> thầy cô chuẩn bị các phiếu thuộc hai chủ đề Sinh học và Toán, mỗi phiếu ghi một câu khẳng định đúng hoặc sai (ví dụ “Voi thuộc loài ăn thịt” là câu sai). Chọn ra 4 bạn chơi, chia thành hai cặp. <b>Cách chơi:</b> mỗi lượt chơi có hai bạn, chọn một chủ đề. Trong một phút, bạn thứ nhất đọc câu ghi trong phiếu; bạn thứ hai trả lời bằng cách <b>gật đầu</b> (đồng ý) hoặc <b>lắc đầu</b> (không đồng ý). Mỗi câu trả lời đúng được một điểm. Cặp có số điểm cao hơn thắng cuộc.<br>Cả lớp có thể chơi thử trên máy dưới đây: sơ đồ khối bên cạnh sẽ sáng lên đúng bước đang diễn ra.</div>
+        <figure class="fig">
+          <div class="dhs" data-dhs>
+            <div class="dhs-card">
+              <div class="row"><label>Chủ đề: <select data-cd><option value="sinh">Sinh học</option><option value="toan">Toán</option></select></label><button class="btn primary" type="button" data-start>Bắt đầu (1 phút)</button></div>
+              <div class="row"><span>⏱ <b class="big" data-time>60</b> giây</span><span>Điểm: <b class="big" data-score>0</b></span></div>
+              <div class="phieu" data-phieu>Bấm “Bắt đầu” để bốc phiếu đầu tiên.</div>
+              <div class="row"><button class="btn" type="button" data-ans="1" disabled>🙂 Gật đầu (Đúng)</button><button class="btn" type="button" data-ans="0" disabled>🙃 Lắc đầu (Sai)</button></div>
+              <div data-kq aria-live="polite"></div>
+            </div>
+            <div class="ld-box" data-label="Sơ đồ khối trò chơi Đúng hay sai" data-ld='[{"t":"start","s":"Bắt đầu","id":"s"},{"t":"while","s":"Còn thời gian?","id":"w","body":[{"t":"op","s":"Đọc phiếu và trả lời","id":"r"},{"t":"if","s":"Trả lời đúng?","id":"c","yes":[{"t":"op","s":"Cộng 1 điểm","id":"p"}],"no":[]}]},{"t":"io","s":"Thông báo điểm","id":"o"},{"t":"end","s":"Kết thúc","id":"e"}]'></div>
+          </div>
+          <figcaption>Trò chơi “Đúng hay sai?” (mô phỏng) và sơ đồ khối của trò chơi</figcaption>
+        </figure>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Cấu trúc tuần tự, cấu trúc rẽ nhánh</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Đánh giá kết quả chơi</div>
+        <div class="reading">Làm việc theo nhóm.</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Tuần tự và rẽ nhánh</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 67–68). Các bước gấp hình trò chơi Đông-Tây-Nam-Bắc ở Bài 15 được thực hiện lần lượt từ bắt đầu đến kết thúc: đó là <b>cấu trúc tuần tự</b> (Hình 6.6). Trong trò chơi “Đúng hay sai?”, với mỗi phiếu, nếu bạn thứ hai trả lời đúng thì cặp chơi được cộng một điểm. Tuỳ kết quả kiểm tra là đúng hay sai mà bước tiếp theo đi theo “nhánh” tương ứng: đó là <b>cấu trúc rẽ nhánh</b> (hay cấu trúc lựa chọn). Trong sơ đồ khối, điều kiện được vẽ bằng <b>hình thoi</b>. Ở Hình 6.7, chỉ có một việc (cộng điểm) được làm khi điều kiện đúng: đó là <b>rẽ nhánh dạng thiếu</b>. Ở Hình 6.8, bạn thứ hai gật đầu nếu câu khẳng định đúng, lắc đầu nếu câu sai, cả hai trường hợp đều có việc làm: đó là <b>rẽ nhánh dạng đủ</b>.</div>
+        <figure class="fig">
+          <div class="figs">
+            <div><div class="ld-box" data-arrows data-ld='[{"t":"op","s":"Lệnh 1"},{"t":"op","s":"Lệnh 2"},{"t":"op","s":"Lệnh 3"}]'></div><span class="cap">Hình 6.6. Cấu trúc tuần tự</span></div>
+            <div><div class="ld-box" data-arrows data-ld='[{"t":"if","s":"Trả lời đúng?","yes":[{"t":"op","s":"Cộng 1 điểm"}],"no":[]}]'></div><span class="cap">Hình 6.7. Rẽ nhánh dạng thiếu</span></div>
+            <div><div class="ld-box" data-arrows data-ld='[{"t":"if","s":"Câu khẳng định\nđúng hay sai?","yes":[{"t":"op","s":"Gật đầu"}],"no":[{"t":"op","s":"Lắc đầu"}]}]'></div><span class="cap">Hình 6.8. Rẽ nhánh dạng đủ</span></div>
+          </div>
+          <figcaption>Sơ đồ khối của cấu trúc tuần tự và cấu trúc rẽ nhánh</figcaption>
+        </figure>
+        <div data-task="q1" data-n="1"></div>
+        <div data-task="q2" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Cấu trúc tuần tự, cấu trúc rẽ nhánh</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Cấu trúc lặp</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Cấu trúc lặp</div>
+        <div data-task="hd2a" data-n="1"></div>
+        <div data-task="hd2b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Cấu trúc lặp</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 69). Trong trò chơi, mỗi lần bạn thứ nhất đọc một phiếu, bạn thứ hai phải trả lời câu khẳng định đó đúng hay sai. Việc đọc phiếu và trả lời được <b>lặp lại</b> cho đến khi hết thời gian. Việc lặp này được biểu diễn bởi <b>cấu trúc lặp</b> (Hình 6.9). Trong cấu trúc lặp, bao giờ cũng có khâu kiểm tra điều kiện kết thúc quá trình lặp: ở Hình 6.9, trước mỗi lượt, thuật toán kiểm tra “Còn thời gian?” để quyết định chơi tiếp hay kết thúc.</div>
+        <figure class="fig">
+          <div class="figs">
+            <div><div class="ld-box" data-arrows data-ld='[{"t":"while","s":"Còn thời gian?","body":[{"t":"op","s":"Đọc phiếu và\ntrả lời"}]}]'></div><span class="cap">Hình 6.9. Sơ đồ khối mô tả cấu trúc lặp</span></div>
+            <div><div class="ld-box" data-arrows data-ld='[{"t":"while","s":"Điều kiện","body":[{"t":"op","s":"Lệnh"}]}]'></div><span class="cap">Cấu trúc lặp (tổng quát)</span></div>
+          </div>
+          <figcaption>Cấu trúc lặp</figcaption>
+        </figure>
+        <div data-task="q3" data-n="1"></div>
+        <div class="reading">Bạn Khoa đang lập trình bằng Scratch, Khoa muốn chú mèo di chuyển 10 bước một liên tục cho đến khi chạm biên thì dừng lại. Các bước: 1. Di chuyển 10 bước. 2. Chưa chạm biên? 3. Đúng. 4. Sai. 5. Dừng lại.</div>
+        <div data-task="q4a" data-n="2a"></div>
+        <figure class="fig"><div class="ld-box" data-arrows data-ld='[{"t":"while","s":"①","yl":"②","nl":"④","body":[{"t":"blank","s":"③"}]},{"t":"blank","s":"⑤"}]'></div><figcaption>Hình 6.10. Sơ đồ khối chưa hoàn thành</figcaption></figure>
+        <div data-task="q4b" data-n="2b"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Cấu trúc lặp</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Nhận biết các cấu trúc</div>
+        <div data-task="lt1" data-n="1"></div>
+        <div data-task="lt2" data-n="2"></div>
+        <figure class="fig">
+          <div class="figs">
+            <div><div class="ld-box" data-arrows data-ld='[{"t":"while","s":"Chưa trúng đích?","body":[{"t":"op","s":"Ném bóng vào đích"}]}]'></div><span class="cap">Hình 6.11a</span></div>
+            <div><div class="ld-box" data-arrows data-ld='[{"t":"if","s":"Chưa trúng đích?","yes":[{"t":"op","s":"Ném bóng vào đích"}],"no":[]}]'></div><span class="cap">Hình 6.11b</span></div>
+          </div>
+        </figure>
+        <div data-task="lt3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Cấu trúc điều khiển trong cuộc sống</div>
+        <figure class="fig">
+          <div class="figs">
+            <div><div class="ld-box" data-arrows data-ld='[{"t":"if","s":"Chưa hiểu bài?","yes":[{"t":"op","s":"Đọc lại sách"}],"no":[]},{"t":"op","s":"Làm bài tập"}]'></div><span class="cap">Hình 6.12a</span></div>
+            <div><div class="ld-box" data-arrows data-ld='[{"t":"while","s":"Chưa hiểu bài?","body":[{"t":"op","s":"Đọc lại sách"}]},{"t":"op","s":"Làm bài tập"}]'></div><span class="cap">Hình 6.12b</span></div>
+          </div>
+        </figure>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+        <div data-task="vd3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      /* Trò chơi Đúng hay sai: mỗi bước của trò chơi tô sáng hình tương ứng trong sơ đồ khối */
+      var B = document.querySelector("[data-dhs]"); if (!B) return;
+      var PH = {
+        sinh: [["Voi thuộc loài ăn thịt.",0],["Cá thở bằng mang.",1],["Dơi là một loài chim.",0],["Cây xanh cần ánh sáng để quang hợp.",1],["Ếch là động vật lưỡng cư.",1],["Nhện có sáu chân.",0],["Cá voi là động vật có vú.",1],["Nấm là thực vật có hoa.",0]],
+        toan: [["7 là số nguyên tố.",1],["15 chia hết cho 4.",0],["0 là số tự nhiên nhỏ nhất.",1],["Hình vuông có 3 trục đối xứng.",0],["2³ = 6.",0],["Tổng ba góc của một tam giác bằng 180°.",1],["Mọi số chẵn đều chia hết cho 4.",0],["1 giờ = 60 phút.",1]]
+      };
+      var $ = function(s){ return B.querySelector(s); }, box = B.querySelector("[data-ld]");
+      var deck = [], cur = null, score = 0, left = 60, tick = null, busy = false;
+      function hi(id){ if (box._ld) box._ld.hi(id); }
+      function btns(on){ B.querySelectorAll("[data-ans]").forEach(function(b){ b.disabled = !on; }); }
+      function draw(){ $("[data-time]").textContent = left; $("[data-score]").textContent = score; }
+      function next(){
+        hi("w"); busy = true;
+        setTimeout(function(){
+          if (left <= 0 || !deck.length) return stop();
+          cur = deck.shift(); hi("r"); $("[data-phieu]").textContent = cur[0]; btns(true); busy = false;
+        }, 500);
+      }
+      function stop(){
+        clearInterval(tick); tick = null; btns(false); hi("o");
+        $("[data-phieu]").textContent = left <= 0 ? "Hết giờ!" : "Hết phiếu!";
+        $("[data-kq]").innerHTML = "Cặp chơi được <b>" + score + "</b> điểm. Điều kiện “Còn thời gian?” sai → thoát khỏi vòng lặp.";
+        setTimeout(function(){ hi("e"); }, 900);
+      }
+      $("[data-start]").addEventListener("click", function(){
+        var cd = $("[data-cd]").value; deck = PH[cd].slice().sort(function(){ return Math.random() - .5; });
+        score = 0; left = 60; draw(); $("[data-kq]").textContent = ""; hi("s");
+        clearInterval(tick); tick = setInterval(function(){ left--; draw(); if (left <= 0 && !busy) { btns(false); stop(); } }, 1000);
+        setTimeout(next, 500);
+      });
+      B.querySelectorAll("[data-ans]").forEach(function(b){ b.addEventListener("click", function(){
+        if (!cur || busy) return; btns(false); busy = true;
+        var ok = Number(b.dataset.ans) === cur[1]; hi("c");
+        $("[data-kq]").innerHTML = ok ? '<span class="ok">Trả lời đúng!</span>' : '<span class="no">Chưa đúng: câu này ' + (cur[1] ? "đúng" : "sai") + ".</span>";
+        setTimeout(function(){ if (ok) { score++; draw(); hi("p"); } setTimeout(function(){ if (left > 0) next(); else stop(); }, ok ? 600 : 0); }, 600);
+      }); });
+      draw();
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/luu-do.js?v=1"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

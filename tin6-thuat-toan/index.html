@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Thuật toán · Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 6 · Chủ đề 6. Giải quyết vấn đề với sự trợ giúp của máy tính</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>15</b></div><h1><span class="sr-only">Bài 15. </span>Thuật toán</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Diễn tả được sơ lược khái niệm thuật toán, nêu được một vài ví dụ minh hoạ.</li>
+        <li>Biết thuật toán có thể được mô tả dưới dạng liệt kê hoặc sơ đồ khối.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Thuật toán">
+      <span class="node">Đầu vào</span>
+      <span class="node">Các bước</span>
+      <span class="node io">Đầu ra</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 6A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 6A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Thuật toán</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Mô tả thuật toán</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <style>
+      .stp{display:grid;gap:8px;justify-items:center}
+      .stp-msg{min-height:1.6em;font-weight:600;color:var(--accent,#0c665e);text-align:center}
+      .gap6{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;width:100%}
+      .gap6 .pc{display:grid;justify-items:center;gap:4px;background:#fff;border:1px solid #cfd8dc;border-radius:8px;padding:6px;color:#1d2433}
+      .gap6 .pc b{font-size:15px}
+      .steps6{margin:0;padding-left:1.4em;display:grid;gap:4px}
+      .tbc-in{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center}
+      .tbc-in input{width:80px;font:inherit;padding:4px 6px}
+    </style>
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Gấp hình trò chơi Đông-Tây-Nam-Bắc</div>
+        <div class="reading">Mỗi nhóm lấy một tờ giấy hình vuông và gấp hình trò chơi Đông-Tây-Nam-Bắc theo hướng dẫn ở Hình 6.1 (SGK trang 63). Các bước trong hướng dẫn đã bị xáo trộn, em hãy xếp lại cho đúng rồi gấp thử.</div>
+        <div data-task="kd" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Thuật toán</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Khái niệm thuật toán</div>
+        <div class="reading">Nhắc lại sáu bước gấp hình trò chơi:
+          <ol class="steps6">
+            <li>Gấp hai đường chéo của tờ giấy hình vuông để tạo nếp gấp, mở tờ giấy ra.</li>
+            <li>Gấp bốn góc của tờ giấy vào tâm.</li>
+            <li>Lật mặt bên kia.</li>
+            <li>Tiếp tục gấp bốn góc vào tâm.</li>
+            <li>Đặt tờ giấy đã gấp nằm ngang, luồn ngón cái và ngón trỏ của hai tay vào bốn góc ở mặt dưới.</li>
+            <li>Chỉnh sửa các nếp gấp.</li>
+          </ol></div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Thuật toán</div>
+        <div class="reading">Đọc mục <b>1</b> (SGK trang 64). Bắt đầu từ một tờ giấy hình vuông, làm lần lượt đủ sáu bước như hướng dẫn thì nhóm nào cũng được hình gấp trò chơi giống nhau. Bỏ qua một bước hay đổi thứ tự các bước thì kết quả sẽ khác. Hướng dẫn sáu bước này là một <b>thuật toán</b>: tờ giấy hình vuông là <b>đầu vào</b> (Input), hình gấp trò chơi là <b>đầu ra</b> (Output). Mỗi bước phải cụ thể, rõ ràng, và thứ tự các bước rất quan trọng. Thuật toán có ở khắp nơi: quy trình chế biến một món ăn, cách giải một bài toán, quy trình gấp một chiếc áo,…</div>
+        <div data-task="q1" data-n="1"></div>
+        <div data-task="q2" data-n="2"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Thuật toán</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.2</span> Mô tả thuật toán</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 2</b> Mô tả thuật toán</div>
+        <div data-task="hd2" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> Sơ đồ khối</div>
+        <div class="reading">Đọc mục <b>2</b> (SGK trang 64–65). Ngoài cách liệt kê các bước bằng ngôn ngữ tự nhiên như ở phần khởi động, người ta còn mô tả thuật toán bằng <b>sơ đồ khối</b>. Sơ đồ khối gồm một số hình mô tả các bước và đường có mũi tên chỉ trình tự thực hiện. Quy ước các hình:</div>
+        <figure class="fig">
+          <div class="ld-legend">
+            <span><span data-ld='[{"t":"start","s":"Bắt đầu"}]' class="ld-box" style="width:auto"></span> Bắt đầu hoặc Kết thúc</span>
+            <span><span data-ld='[{"t":"io","s":"Vào / Ra"}]' class="ld-box" style="width:auto"></span> Đầu vào hoặc Đầu ra</span>
+            <span><span data-ld='[{"t":"op","s":"Xử lí"}]' class="ld-box" style="width:auto"></span> Bước xử lí</span>
+            <span><span data-ld='[{"t":"cond","s":"Điều kiện?"}]' class="ld-box" style="width:auto"></span> Bước kiểm tra điều kiện</span>
+            <span><b style="font-size:22px;padding:0 50px">↓</b> Chỉ hướng thực hiện tiếp theo</span>
+          </div>
+          <figcaption>Quy ước các hình trong sơ đồ khối</figcaption>
+        </figure>
+        <figure class="fig stp" data-stp="h62">
+          <div class="ld-box" id="h62" data-label="Sơ đồ khối gấp hình trò chơi" data-ld='[{"t":"start","s":"Bắt đầu","id":"s"},{"t":"io","s":"Tờ giấy hình vuông","id":"i"},{"t":"op","s":"Gấp hai đường chéo của hình vuông để\ntạo nếp gấp, mở tờ giấy ra.","id":"b1"},{"t":"op","s":"Gấp bốn góc của tờ giấy vào tâm.","id":"b2"},{"t":"op","s":"Lật mặt bên kia.","id":"b3"},{"t":"op","s":"Tiếp tục gấp bốn góc vào tâm.","id":"b4"},{"t":"op","s":"Đặt tờ giấy đã gấp nằm ngang, luồn ngón cái\nvà ngón trỏ của hai tay vào bốn góc ở mặt dưới.","id":"b5"},{"t":"op","s":"Chỉnh sửa các nếp gấp.","id":"b6"},{"t":"io","s":"Hình trò chơi Đông-Tây-Nam-Bắc","id":"o"},{"t":"end","s":"Kết thúc","id":"e"}]'></div>
+          <div class="row"><button class="btn" type="button" data-stp-go>Thực hiện bước tiếp theo ▶</button><button class="btn" type="button" data-stp-reset>Làm lại</button></div>
+          <div class="stp-msg" aria-live="polite"></div>
+          <figcaption>Hình 6.2. Sơ đồ khối mô tả cách gấp hình trò chơi Đông-Tây-Nam-Bắc</figcaption>
+        </figure>
+        <div data-task="q3" data-n="1"></div>
+        <div data-task="q4" data-n="2"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Mô tả thuật toán</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Đầu vào, đầu ra, sơ đồ khối</div>
+        <div data-task="lt1" data-n="1"></div>
+        <figure class="fig"><div class="ld-box" data-label="Hình 6.3" data-ld='[{"t":"start","s":"Bắt đầu"},{"t":"io","s":"Giá trị a, giá trị b"},{"t":"op","s":"Tổng ← a + b"},{"t":"io","s":"Giá trị tổng"},{"t":"end","s":"Kết thúc"}]'></div><figcaption>Hình 6.3. Sơ đồ khối</figcaption></figure>
+        <div data-task="lt2" data-n="2"></div>
+        <figure class="fig">
+          <div class="gap6">
+            <div class="pc"><b>1</b><div class="ld-box" data-ld='[{"t":"start","s":"Bắt đầu"}]'></div></div>
+            <div class="pc"><b>2</b><div class="ld-box" data-ld='[{"t":"op","s":"Tổng ← a + b"}]'></div></div>
+            <div class="pc"><b>3</b><div class="ld-box" data-ld='[{"t":"io","s":"Giá trị a, giá trị b"}]'></div></div>
+            <div class="pc"><b>4</b><div class="ld-box" data-ld='[{"t":"op","s":"Trung bình cộng ← Tổng : 2"}]'></div></div>
+            <div class="pc"><b>5</b><div class="ld-box" data-ld='[{"t":"end","s":"Kết thúc"}]'></div></div>
+            <div class="pc"><b>6</b><div class="ld-box" data-ld='[{"t":"io","s":"Giá trị trung bình cộng\ncủa a và b"}]'></div></div>
+          </div>
+          <figcaption>Hình 6.4. Các hình trong sơ đồ khối biểu diễn thuật toán tính trung bình cộng của hai số</figcaption>
+        </figure>
+        <div data-task="lt3" data-n="3"></div>
+        <figure class="fig stp" data-stp="tbc">
+          <div class="tbc-in"><label>a = <input type="number" value="7" data-a></label><label>b = <input type="number" value="10" data-b></label></div>
+          <div class="ld-box" id="tbc" data-label="Thuật toán tính trung bình cộng" data-ld='[{"t":"start","s":"Bắt đầu","id":"s"},{"t":"io","s":"Giá trị a, giá trị b","id":"i"},{"t":"op","s":"Tổng ← a + b","id":"t"},{"t":"op","s":"Trung bình cộng ← Tổng : 2","id":"m"},{"t":"io","s":"Giá trị trung bình cộng của a và b","id":"o"},{"t":"end","s":"Kết thúc","id":"e"}]'></div>
+          <div class="row"><button class="btn" type="button" data-stp-go>Thực hiện bước tiếp theo ▶</button><button class="btn" type="button" data-stp-reset>Làm lại</button></div>
+          <div class="stp-msg" aria-live="polite"></div>
+          <figcaption>Thử chạy thuật toán tính trung bình cộng (sau khi đã xếp xong câu 3)</figcaption>
+        </figure>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Thuật toán trong cuộc sống</div>
+        <div class="reading">Bạn An đã sửa công thức làm kem sữa chua dưa hấu thành công thức làm <b>kem sữa chua xoài</b> (Hình 6.5). <b>Nguyên liệu:</b> xoài 250 g; sữa chua 100 g; mật ong 1 thìa cà phê. <b>Dụng cụ:</b> 1 tô to, 4 khuôn làm kem. <b>Hướng dẫn:</b> (1) Cho xoài vào tô. (2) Nghiền nát xoài. (3) Cho sữa chua và mật ong vào tô. (4) Trộn đều hỗn hợp. (5) Cho hỗn hợp vào khuôn làm kem. (6) Đặt khuôn kem vào ngăn đá tủ lạnh trong thời gian ít nhất 4 tiếng. (7) Lấy kem ra thưởng thức.</div>
+        <div data-task="vd1" data-n="1"></div>
+        <div data-task="vd2" data-n="2"></div>
+        <div data-task="vd3" data-n="3"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script>
+    (function(){
+      /* Chạy thuật toán từng bước: mỗi lần bấm, hình đang thực hiện được tô sáng */
+      var PLANS = {
+        h62: function(){ return [["s","Bắt đầu."],["i","Đầu vào: một tờ giấy hình vuông."],["b1","Bước 1: gấp hai đường chéo, mở tờ giấy ra."],["b2","Bước 2: gấp bốn góc vào tâm."],["b3","Bước 3: lật mặt bên kia."],["b4","Bước 4: tiếp tục gấp bốn góc vào tâm."],["b5","Bước 5: luồn ngón cái và ngón trỏ vào bốn góc."],["b6","Bước 6: chỉnh sửa các nếp gấp."],["o","Đầu ra: hình trò chơi Đông-Tây-Nam-Bắc."],["e","Kết thúc thuật toán."]]; },
+        tbc: function(f){ var a = Number(f.querySelector("[data-a]").value) || 0, b = Number(f.querySelector("[data-b]").value) || 0, t = a + b, m = t / 2;
+          var r = function(x){ return String(Math.round(x * 1000) / 1000).replace(".", ","); };
+          return [["s","Bắt đầu."],["i","Nhập a = " + r(a) + ", b = " + r(b) + "."],["t","Tổng ← " + r(a) + " + " + r(b) + " = " + r(t)],["m","Trung bình cộng ← " + r(t) + " : 2 = " + r(m)],["o","Đưa ra: trung bình cộng của a và b là " + r(m) + "."],["e","Kết thúc."]]; }
+      };
+      document.querySelectorAll("[data-stp]").forEach(function(f){
+        var k = f.dataset.stp, box = f.querySelector("[data-ld]"), msg = f.querySelector(".stp-msg"), i = -1, plan = null;
+        function show(){ var ld = box._ld; if (!ld) return; if (i < 0) { ld.clear(); msg.textContent = "Bấm “Thực hiện bước tiếp theo” để bắt đầu."; return; } ld.hi(plan[i][0]); msg.textContent = plan[i][1]; }
+        f.querySelector("[data-stp-go]").addEventListener("click", function(){ if (i < 0 || !plan) plan = PLANS[k](f); if (i < plan.length - 1) i++; else { i = 0; plan = PLANS[k](f); } show(); });
+        f.querySelector("[data-stp-reset]").addEventListener("click", function(){ i = -1; plan = null; show(); });
+        f.querySelectorAll("input").forEach(function(x){ x.addEventListener("input", function(){ i = -1; plan = null; show(); }); });
+        setTimeout(show, 300);
+      });
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/luu-do.js?v=1"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>

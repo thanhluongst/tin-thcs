@@ -32,9 +32,9 @@ window.CHUONG_TRINH = [
       {so: "13", ten: "Thực hành: Tìm kiếm và thay thế", tt: "dang"},
       {so: "14", ten: "Thực hành tổng hợp: Hoàn thiện sổ lưu niệm", tt: "dang"}]},
     {so: "6", ten: "Giải quyết vấn đề với sự trợ giúp của máy tính", bai: [
-      {so: "15", ten: "Thuật toán"},
-      {so: "16", ten: "Các cấu trúc điều khiển"},
-      {so: "17", ten: "Chương trình máy tính"}]}
+      {so: "15", ten: "Thuật toán", tt: "dang"},
+      {so: "16", ten: "Các cấu trúc điều khiển", tt: "dang"},
+      {so: "17", ten: "Chương trình máy tính", tt: "dang"}]}
   ]},
   {lop: 7, chuDe: [
     {so: "1", ten: "Máy tính và cộng đồng", bai: [
