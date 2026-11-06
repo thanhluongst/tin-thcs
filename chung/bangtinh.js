@@ -4,6 +4,8 @@
    tự động tính lại, sao chép công thức (địa chỉ tương đối), chèn/xoá hàng, cột, ẩn/hiện hàng, cột,
    gộp ô (Merge & Center), Format Cells (Number, Percentage, Date kiểu Việt Nam), cộng trừ ngày tháng,
    kẻ đường viền/khung (Border), màu nền, xem trước khi in (không có đường lưới).
+   Data Validation (tools "valid"): Settings (Any value, Whole number, Decimal, List, Date, Text length; between, greater than,…; Source),
+   Input Message, Error Alert (Stop / Warning / Information); danh sách thả xuống ▾ ở ô; thông báo lỗi khi nhập sai. Lưu trong f[ô].dv.
    Tuỳ chọn: title, note, cols, rows, widths[], data{A1:"…"}, fmt{A1:{b,fill,al,nf,m}}, sheet, tools[], extra[{label,title,run(api)}],
              check(x) → [[nhãn, đúng?],…]
    x = {d, f, sheet, w, hr, hc, log, C, R, val(địa chỉ), text(địa chỉ): chữ hiển thị} */
@@ -40,6 +42,18 @@ var CSS = ".bt{border:1px solid var(--line);border-radius:12px;padding:10px;marg
  + ".bt .tab input{font:inherit;font-size:13px;width:14em;padding:0 2px}"
  + ".bt .msg{font-size:13.5px;min-height:1.2em}.bt .msg.bad{color:#c0392b}"
  + ".bt .ck{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:13.5px}"
+ + ".bt{position:relative}.bt td .dd{float:right;margin-right:-3px;width:16px;height:18px;border:1px solid #999;background:#f3f3f3;font-size:10px;line-height:16px;text-align:center;cursor:pointer;color:#333}"
+ + ".bt .ddl{position:absolute;z-index:20;background:#fff;color:#111;border:1px solid #888;box-shadow:0 3px 10px rgba(0,0,0,.2);max-height:200px;overflow:auto;font:13.5px Calibri,'Be Vietnam Pro',Arial,sans-serif;min-width:120px}"
+ + ".bt .ddl div{padding:2px 8px;cursor:pointer;white-space:nowrap}.bt .ddl div:hover{background:#d3e3fb}"
+ + ".bt .imt{position:absolute;z-index:15;background:#ffffe1;color:#111;border:1px solid #777;padding:4px 8px;font:12.5px Calibri,'Be Vietnam Pro',Arial,sans-serif;max-width:220px;box-shadow:1px 2px 4px rgba(0,0,0,.2);pointer-events:none}"
+ + ".bt .dvd{border:1px solid #9aa4ae;background:#fff;color:#111;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:13px;max-width:460px}"
+ + ".bt .dvd .hd{display:flex;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600}.bt .dvd .hd button{border:0;background:none;font-size:16px;cursor:pointer}"
+ + ".bt .dvd .tabs2{display:flex;gap:2px;padding:6px 10px 0}.bt .dvd .tabs2 button{font:inherit;font-size:12.5px;border:1px solid #ccc;border-bottom:0;background:#eee;border-radius:4px 4px 0 0;padding:3px 10px;cursor:pointer;color:#111}.bt .dvd .tabs2 button.on{background:#fff;font-weight:600}"
+ + ".bt .dvd .bx{border-top:1px solid #ccc;padding:8px 10px;display:grid;gap:6px}.bt .dvd label{display:block}.bt .dvd .two{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}"
+ + ".bt .dvd select,.bt .dvd input[type=text],.bt .dvd textarea{font:inherit;font-size:13px;border:1px solid #bbb;border-radius:3px;padding:2px 5px;width:100%;box-sizing:border-box;background:#fff;color:#111}.bt .dvd textarea{min-height:52px}"
+ + ".bt .dvd .ft2{display:flex;gap:6px;justify-content:space-between;padding:8px 10px;border-top:1px solid #ddd}.bt .dvd .ft2 button,.bt .ea button{font:inherit;font-size:13px;border:1px solid #999;background:#f6f6f6;color:#111;border-radius:4px;padding:3px 12px;cursor:pointer}"
+ + ".bt .ea{position:absolute;z-index:30;left:50%;top:40%;transform:translate(-50%,-50%);background:#fff;color:#111;border:1px solid #888;box-shadow:0 6px 24px rgba(0,0,0,.3);min-width:280px;max-width:92%;border-radius:4px;font-size:13.5px}"
+ + ".bt .ea .hd{padding:6px 10px;border-bottom:1px solid #ddd;font-weight:600}.bt .ea .bd{display:flex;gap:10px;align-items:center;padding:12px}.bt .ea .ic{font-size:26px}.bt .ea .bt2{display:flex;gap:6px;justify-content:center;padding:0 12px 12px}"
  + ".bt .ck li::before{content:'☐ '}.bt .ck li.ok::before{content:'☑ ';color:#1c7c54}.bt .ck li.ok{color:#1c7c54;font-weight:600}";
 function addCss(){ if (document.getElementById("bangtinh-css")) return; var s = document.createElement("style"); s.id = "bangtinh-css"; s.textContent = CSS; document.head.appendChild(s); }
 
@@ -52,6 +66,7 @@ var TOOLS = {
   border:['▦ Kẻ viền','Format Cells → Border: kẻ đường viền ô và khung bao quanh vùng'], fillc:['🎨 Màu nền','Chọn màu nền cho ô'],
   print:['🖨 Xem trước khi in','File/Print: xem trang in (đang chọn vùng thì in vùng chọn – Print Selection)'],
   b:['<b>B</b>','Chữ đậm'], i:['<i>I</i>','Chữ nghiêng'], big:['A⁺','Tăng cỡ chữ'], green:['<span style="color:#1d8a3a;font-weight:700">A</span>','Chữ xanh lá'],
+  valid:['✅ Data Validation','Data/Data Tools/Data Validation: giới hạn kiểu dữ liệu hoặc giá trị nhập vào ô'],
   fill:['🟨 Nền','Màu nền vàng'], left:['⇤','Căn trái'], center:['↔','Căn giữa'], right:['⇥','Căn phải'], reset:['Làm lại','Làm lại từ đầu']
 };
 var DEF_TOOLS = ["copy","paste","|","b","fill","left","center","right","|","reset"];
@@ -193,11 +208,11 @@ window.BangTinh = function(box, opt){
     + '<div class="row"><button type="button" data-fok>OK</button><button type="button" data-fno>Cancel</button></div></div>'
     + '<div class="fc" data-bd hidden><div class="h">Format Cells · Border</div><div class="row">Presets: <button type="button" data-bp="none">None</button><button type="button" data-bp="outline">Outline</button><button type="button" data-bp="inside">Inside</button><button type="button" data-bp="all">Outline + Inside</button><button type="button" data-bp="x">Đóng</button></div><div class="row" style="font-size:12.5px">None: không kẻ khung · Outline: kẻ khung bên ngoài · Inside: kẻ đường viền ô bên trong</div></div>'
     + '<div class="pal" data-pal hidden>Màu nền: <button type="button" data-pc="#ffe94d" style="background:#ffe94d" title="Vàng"></button><button type="button" data-pc="#f4a340" style="background:#f4a340" title="Cam"></button><button type="button" data-pc="#3e9b5a" style="background:#3e9b5a" title="Xanh lá đậm"></button><button type="button" data-pc="#a9dcb5" style="background:#a9dcb5" title="Xanh lá nhạt"></button><button type="button" data-pc="#9cc3f0" style="background:#9cc3f0" title="Xanh dương nhạt"></button><button type="button" data-pc="#f3b6c8" style="background:#f3b6c8" title="Hồng"></button><button type="button" data-pc="" style="background:#fff" title="Không màu">✕</button></div>'
-    + '<div class="pv" data-pv hidden></div>'
+    + '<div class="pv" data-pv hidden></div><div class="dvd" data-dvd hidden></div>'
     + '<div class="fb"><span class="nb" data-nb>A1</span><span class="fx">fx</span><input data-in aria-label="Vùng nhập dữ liệu" placeholder="Vùng nhập dữ liệu (công thức bắt đầu bằng =)" autocomplete="off" spellcheck="false"></div>'
     + '<div class="gw"><table data-g></table></div>'
     + '<div class="tabs"><span class="tab" data-tab title="Nháy đúp để đổi tên"></span></div>'
-    + '<div class="msg" data-msg aria-live="polite"></div>'
+    + '<div class="msg" data-msg aria-live="polite"></div><div class="ddl" data-ddl hidden></div><div class="imt" data-imt hidden></div><div class="ea" data-ea hidden role="alertdialog"></div>'
     + (opt.check ? '<ul class="ck" data-ck></ul>' : "")
     + '<div class="note">' + (opt.note || "") + "</div>";
   box.tabIndex = 0;
@@ -255,14 +270,16 @@ window.BangTinh = function(box, opt){
         var inP = pick && c >= pick.g[0] && c <= pick.g[2] && r >= pick.g[1] && r <= pick.g[3];
         var cls = inP ? "pk" : (c === a[0] && r === a[1]) ? "act" : inC ? "cp" : (c >= g[0] && c <= g[2] && r >= g[1] && r <= g[3] && (g[0] !== g[2] || g[1] !== g[3])) ? "sel" : "";
         if (err) cls += " err";
-        h += "<td data-k='" + key + "' data-c='" + c + "' data-r='" + r + "' class='" + cls + "' style='" + st + "'" + span + ">" + text(key).replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</td>"; }
+        var dvA = c === a[0] && r === a[1] && F.dv && F.dv.allow === "list" && F.dv.drop !== false ? "<span class='dd' data-dd title='Chọn từ danh sách'>▼</span>" : "";
+        h += "<td data-k='" + key + "' data-c='" + c + "' data-r='" + r + "' class='" + cls + "' style='" + st + "'" + span + ">" + dvA + text(key).replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</td>"; }
       h += "</tr>"; }
     q("[data-g]").innerHTML = h;
     var n = (g[2] - g[0] + 1) * (g[3] - g[1] + 1), mg = mergeAt(a[0], a[1]);
     q("[data-nb]").textContent = n > 1 && !(mg && mg[0] === g[0] && mg[1] === g[1] && mg[2] === g[2] && mg[3] === g[3]) ? k(g[0], g[1]) + ":" + k(g[2], g[3]) : k(a[0], a[1]);
     if (document.activeElement !== inp) inp.value = d[k(a[0], a[1])] || "";
     if (!q("[data-tab] input")) q("[data-tab]").textContent = sheet;
-    if (opt.check) { var res = opt.check({d: d, f: f, sheet: sheet, w: w, hr: hr, hc: hc, log: log, C: C, R: R, val: val, text: text});
+    imsg();
+    if (opt.check) { var res = opt.check({d: d, f: f, sheet: sheet, dv: function(key){ return (f[key] || {}).dv || null; }, w: w, hr: hr, hc: hc, log: log, C: C, R: R, val: val, text: text});
       q("[data-ck]").innerHTML = res.map(function(x){ return "<li class='" + (x[1] ? "ok" : "") + "'>" + x[0] + "</li>"; }).join(""); }
   }
   function say(t, bad){ var m = q("[data-msg]"); m.textContent = t; m.className = "msg" + (bad ? " bad" : ""); }
@@ -272,10 +289,13 @@ window.BangTinh = function(box, opt){
       : n > 1 && !mergeAt(a[0], a[1]) ? "Đã chọn vùng " + k(g[0], g[1]) + ":" + k(g[2], g[3]) + " (" + n + " ô)."
       : "Ô " + key + (raw ? ": dữ liệu kiểu " + kind(raw) + (raw[0] === "=" ? ", kết quả " + text(key) : "") + "." : " đang trống.")); }
   function selectCell(ce){ var mg = mergeAt(ce[0], ce[1]); if (mg) { a = [mg[0], mg[1]]; s = [mg[0], mg[1]]; e = [mg[2], mg[3]]; } else { a = ce.slice(); s = a.slice(); e = a.slice(); } }
-  function commit(move){
+  function commit(move, force){
     var key = k(a[0], a[1]), v = inp.value.trim(); pick = null;
     if (v[0] === "=") { var t = compile(v.slice(1), 0);
       if (t === "#SYNTAX" || t === "#NAME?" || v.length === 1) { say("Công thức " + v + " có lỗi" + (t === "#NAME?" ? " (tên hàm không đúng hoặc có kí tự lạ)" : " (thiếu hoặc thừa dấu ngoặc, thiếu phép toán, thiếu dấu phẩy…)") + ". Em sửa lại rồi nhấn Enter.", true); return; } }
+    var DV = (f[key] || {}).dv;
+    if (DV && !(force === true) && !(v === "" && DV.blank !== false) && !dvOK(DV, v)) { log.push("dv-reject"); errAlert(DV, key, v); return; }
+    if (DV && v) log.push("dv-ok");
     if (v) d[key] = v; else delete d[key];
     if (v) say("Đã nhập vào " + key + ": " + kind(v) + (v[0] === "=" ? " → kết quả " + text(key) + ". Vùng nhập dữ liệu hiện công thức, ô hiện kết quả." : "."));
     if (move) { var mg = mergeAt(a[0], a[1]), nr = (mg ? mg[3] : a[1]) + 1; while (nr < R - 1 && hr[nr]) nr++; if (nr < R) a[1] = nr; }
@@ -343,11 +363,87 @@ window.BangTinh = function(box, opt){
     for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {}; if (nf) F.nf = JSON.parse(JSON.stringify(nf)); else delete F.nf; }
     fc.hidden = true; log.push("fmt-" + cat); say("Đã định dạng " + q("[data-nb]").textContent + " kiểu " + {gen:"General", num:"Number", pct:"Percentage", date:"Date (Việt Nam)"}[cat] + ". Chỉ cách hiển thị thay đổi, dữ liệu trong ô vẫn giữ nguyên."); draw(); box.focus(); });
 
+  /* ---------- Data Validation ---------- */
+  var ALLOW = [["any","Any value"],["whole","Whole number"],["decimal","Decimal"],["list","List"],["date","Date"],["time","Time"],["len","Text length"],["custom","Custom"]];
+  var OPS = [["between","between"],["nbetween","not between"],["eq","equal to"],["ne","not equal to"],["gt","greater than"],["lt","less than"],["ge","greater than or equal to"],["le","less than or equal to"]];
+  function listItems(src){ src = String(src || "").trim().replace(/^=/, "").replace(/\$/g, "");
+    var m = /^([A-Za-z]{1,2})(\d+):([A-Za-z]{1,2})(\d+)$/.exec(src);
+    if (m) { var out = [], c0 = colIdx(m[1]), r0 = +m[2] - 1, c1 = colIdx(m[3]), r1 = +m[4] - 1; for (var r = Math.min(r0, r1); r <= Math.max(r0, r1); r++) for (var c = Math.min(c0, c1); c <= Math.max(c0, c1); c++) { var t = text(k(c, r)); if (t !== "") out.push(t); } return out; }
+    return src ? src.split(/[,;]/).map(function(x){ return x.trim(); }).filter(Boolean) : []; }
+  function dvNum(x){ x = String(x == null ? "" : x).trim(); if (/^[A-Za-z]{1,2}\d+$/.test(x)) return val(x.toUpperCase()); var dt = parseDate(x); return dt !== null ? dt : isNum(x) ? +x : NaN; }
+  function cmpOp(op, v, a1, b1){ switch (op) { case "between": return v >= a1 && v <= b1; case "nbetween": return v < a1 || v > b1; case "eq": return v === a1; case "ne": return v !== a1; case "gt": return v > a1; case "lt": return v < a1; case "ge": return v >= a1; case "le": return v <= a1; } return true; }
+  function dvOK(D, raw){ var t = String(raw).trim();
+    if (D.allow === "any" || D.allow === "custom" || D.allow === "time") return true;
+    if (D.allow === "list") { var it = listItems(D.src).map(function(x){ return x.toLowerCase(); }); return it.indexOf(t.toLowerCase()) >= 0; }
+    if (t[0] === "=") { var cv = compile(t.slice(1), 0); t = String(cv); }
+    var v;
+    if (D.allow === "len") v = t.length;
+    else if (D.allow === "date") { v = parseDate(t); if (v === null) return false; }
+    else { if (!isNum(t)) return false; v = +t; if (D.allow === "whole" && Math.floor(v) !== v) return false; }
+    return cmpOp(D.op, v, dvNum(D.min), dvNum(D.max)); }
+  function dvDefaultMsg(D){ var o = (OPS.filter(function(x){ return x[0] === D.op; })[0] || ["",""])[1];
+    return "Giá trị này không khớp với các hạn chế xác thực dữ liệu đã đặt cho ô (" + (ALLOW.filter(function(x){ return x[0] === D.allow; })[0] || ["", D.allow])[1] + (D.allow === "list" ? ": " + listItems(D.src).join(", ") : ", " + o + " " + (D.min || "") + (/between/.test(D.op) ? " và " + (D.max || "") : "")) + ")."; }
+  var EA = null;
+  function errAlert(D, key, v){ var E = D.err || {}, st = E.style || "stop", ea = q("[data-ea]");
+    if (E.show === false) { d[key] = v; say("Đã nhập vào " + key + " (Error Alert đang tắt nên không báo lỗi)."); inp.blur(); draw(); return; }
+    var ic = st === "stop" ? "⛔" : st === "warn" ? "⚠️" : "ℹ️", msg = E.text || "This value doesn't match the data validation restrictions defined for this cell.";
+    var btns = st === "stop" ? [["retry","Retry"],["cancel","Cancel"],["help","Help"]] : st === "warn" ? [["yes","Yes"],["no","No"],["cancel","Cancel"]] : [["ok","OK"],["cancel","Cancel"]];
+    ea.innerHTML = '<div class="hd">' + (E.title || "Microsoft Excel").replace(/</g, "&lt;") + '</div><div class="bd"><span class="ic">' + ic + "</span><div>" + msg.replace(/</g, "&lt;") + (st === "warn" ? "<br><b>Continue?</b>" : "") + '</div></div><div class="bt2">' + btns.map(function(b){ return '<button type="button" data-eb="' + b[0] + '">' + b[1] + "</button>"; }).join("") + "</div>";
+    ea.hidden = false; EA = {key: key, v: v}; say("Ô " + key + " không nhận giá trị “" + v + "”. " + dvDefaultMsg(D), true);
+    var first = ea.querySelector("button"); if (first) first.focus(); }
+  q("[data-ea]").addEventListener("click", function(ev){ var b = ev.target.closest("[data-eb]"); if (!b || !EA) return; var t = b.dataset.eb, ea = q("[data-ea]");
+    if (t === "help") { say("Retry: nhập lại giá trị; Cancel: huỷ, giữ dữ liệu cũ."); return; }
+    ea.hidden = true; var o = EA; EA = null;
+    if (t === "retry" || t === "no") { inp.focus(); inp.select(); say("Nhập lại giá trị cho ô " + o.key + " rồi nhấn Enter."); return; }
+    if (t === "cancel") { inp.value = d[o.key] || ""; inp.blur(); draw(); box.focus(); say("Đã huỷ, ô " + o.key + " giữ nguyên dữ liệu cũ."); return; }
+    inp.value = o.v; commit(true, true); log.push("dv-override"); });
+  function imsg(){ var im = q("[data-imt]"), F = f[k(a[0], a[1])] || {}, D = F.dv, td = q("td[data-k='" + k(a[0], a[1]) + "']");
+    if (!D || !D.imsg || D.imsg.show === false || !(D.imsg.title || D.imsg.text) || !td) { im.hidden = true; return; }
+    var br = box.getBoundingClientRect(), tr = td.getBoundingClientRect();
+    im.innerHTML = (D.imsg.title ? "<b>" + D.imsg.title.replace(/</g, "&lt;") + "</b><br>" : "") + (D.imsg.text || "").replace(/</g, "&lt;");
+    im.style.left = Math.max(0, tr.left - br.left + 12) + "px"; im.style.top = (tr.bottom - br.top + 4) + "px"; im.hidden = false; }
+  function openList(){ var key = k(a[0], a[1]), D = (f[key] || {}).dv, td = q("td[data-k='" + key + "']"); if (!D || !td) return;
+    var dl = q("[data-ddl]"), br = box.getBoundingClientRect(), tr = td.getBoundingClientRect(), it = listItems(D.src);
+    dl.innerHTML = it.length ? it.map(function(x){ return "<div data-li>" + x.replace(/</g, "&lt;") + "</div>"; }).join("") : "<div>(danh sách trống)</div>";
+    dl.style.left = (tr.left - br.left) + "px"; dl.style.top = (tr.bottom - br.top) + "px"; dl.style.minWidth = tr.width + "px"; dl.hidden = false; q("[data-imt]").hidden = true; }
+  q("[data-ddl]").addEventListener("mousedown", function(ev){ var t = ev.target.closest("[data-li]"); ev.preventDefault(); if (!t) return; q("[data-ddl]").hidden = true;
+    inp.value = t.textContent; log.push("dv-pick"); commit(false); say("Đã chọn “" + t.textContent + "” từ danh sách thả xuống của ô " + k(a[0], a[1]) + "."); });
+  var DVT = null, DVTAB = "set";
+  function dvOpen(){ var F = f[k(a[0], a[1])] || {}, D = F.dv ? JSON.parse(JSON.stringify(F.dv)) : {allow: "any", op: "between", min: "", max: "", src: "", blank: true, drop: true, imsg: {show: true, title: "", text: ""}, err: {show: true, style: "stop", title: "", text: ""}};
+    DVT = D; DVTAB = "set"; dvDraw(); q("[data-dvd]").hidden = false; say("Hộp thoại Data Validation cho vùng " + q("[data-nb]").textContent + ". Đặt điều kiện rồi bấm OK."); }
+  function sel(name, opts, v){ return '<select data-dvk="' + name + '">' + opts.map(function(o){ return '<option value="' + o[0] + '"' + (o[0] === v ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") + "</select>"; }
+  function txt(name, v, ph){ return '<input type="text" data-dvk="' + name + '" value="' + String(v || "").replace(/"/g, "&quot;") + '"' + (ph ? ' placeholder="' + ph + '"' : "") + ">"; }
+  function dvDraw(){ var D = DVT, el = q("[data-dvd]"), body;
+    if (DVTAB === "set") { var one = /^(eq|ne|gt|lt|ge|le)$/.test(D.op), lab = {eq:"Value", ne:"Value", gt:"Minimum", ge:"Minimum", lt:"Maximum", le:"Maximum"}[D.op] || "Minimum";
+      body = '<b style="font-size:12px;color:#555">Validation criteria</b><div class="two"><label>Allow:' + sel("allow", ALLOW, D.allow) + '</label><div><label><input type="checkbox" data-dvc="blank"' + (D.blank !== false ? " checked" : "") + "> Ignore blank</label>" + (D.allow === "list" ? '<label><input type="checkbox" data-dvc="drop"' + (D.drop !== false ? " checked" : "") + "> In-cell dropdown</label>" : "") + "</div></div>"
+        + (D.allow === "any" ? "" : D.allow === "list" ? "<label>Source:" + txt("src", D.src, "Ví dụ =$F$2:$F$10 hoặc Quỹ,Tài trợ") + "</label>" : D.allow === "custom" || D.allow === "time" ? '<div style="font-size:12.5px;color:#555">(Mô phỏng chưa kiểm tra kiểu này.)</div>'
+          : "<label>Data:" + sel("op", OPS, D.op) + "</label>" + (one ? "<label>" + lab + ":" + txt("min", D.min) + "</label>" : '<div class="two"><label>Minimum:' + txt("min", D.min) + "</label><label>Maximum:" + txt("max", D.max) + "</label></div>")); }
+    else if (DVTAB === "im") body = '<label><input type="checkbox" data-dvc="imsg.show"' + (D.imsg.show !== false ? " checked" : "") + "> Show input message when cell is selected</label><div style=\"font-size:12px;color:#555\">When cell is selected, show this input message:</div><label>Title:" + txt("imsg.title", D.imsg.title) + '</label><label>Input message:<textarea data-dvk="imsg.text">' + (D.imsg.text || "").replace(/</g, "&lt;") + "</textarea></label>";
+    else body = '<label><input type="checkbox" data-dvc="err.show"' + (D.err.show !== false ? " checked" : "") + "> Show error alert after invalid data is entered</label><div style=\"font-size:12px;color:#555\">When user enters invalid data, show this error alert:</div><div class=\"two\"><label>Style:" + sel("err.style", [["stop","⛔ Stop"],["warn","⚠️ Warning"],["info","ℹ️ Information"]], D.err.style) + "</label><label>Title:" + txt("err.title", D.err.title) + '</label></div><label>Error message:<textarea data-dvk="err.text">' + (D.err.text || "").replace(/</g, "&lt;") + "</textarea></label>";
+    el.innerHTML = '<div class="hd">Data Validation<button type="button" data-dvb="x" aria-label="Đóng">✕</button></div><div class="tabs2">' + [["set","Settings"],["im","Input Message"],["err","Error Alert"]].map(function(t){ return '<button type="button" data-dvt="' + t[0] + '" class="' + (t[0] === DVTAB ? "on" : "") + '">' + t[1] + "</button>"; }).join("")
+      + '</div><div class="bx">' + body + '</div><div class="ft2"><button type="button" data-dvb="clear">Clear All</button><span style="display:flex;gap:6px"><button type="button" data-dvb="ok" style="border-color:#2f6fb3">OK</button><button type="button" data-dvb="x">Cancel</button></span></div>'; }
+  function dvSet(path, v){ var ks = path.split("."), o = DVT; for (var i = 0; i < ks.length - 1; i++) o = o[ks[i]]; o[ks[ks.length - 1]] = v; }
+  var dvd = q("[data-dvd]");
+  dvd.addEventListener("click", function(ev){ var t = ev.target.closest("[data-dvt],[data-dvb]"); if (!t || !DVT) return;
+    if (t.dataset.dvt) { DVTAB = t.dataset.dvt; dvDraw(); return; }
+    var b = t.dataset.dvb, g = rg();
+    if (b === "x") { dvd.hidden = true; DVT = null; say("Đã đóng hộp thoại (Cancel)."); box.focus(); return; }
+    if (b === "clear") { DVT = {allow: "any", op: "between", min: "", max: "", src: "", blank: true, drop: true, imsg: {show: true, title: "", text: ""}, err: {show: true, style: "stop", title: "", text: ""}}; dvDraw(); return; }
+    if (DVT.allow === "list" && !listItems(DVT.src).length) { say("Ô Source chưa có danh sách hợp lệ (ví dụ =$F$2:$F$10).", true); return; }
+    if (!/^(any|list|custom|time)$/.test(DVT.allow) && (DVT.min === "" || (/between/.test(DVT.op) && DVT.max === ""))) { say("Hãy nhập giá trị Minimum/Maximum (hoặc Value).", true); return; }
+    for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {}; if (DVT.allow === "any" && !DVT.imsg.title && !DVT.imsg.text) delete F.dv; else F.dv = JSON.parse(JSON.stringify(DVT)); }
+    var rgT = q("[data-nb]").textContent; log.push("dv:" + DVT.allow + ":" + rgT); dvd.hidden = true; DVT = null;
+    say("Đã đặt xác thực dữ liệu cho vùng " + rgT + ". Thử nhập dữ liệu vào các ô của vùng này."); draw(); box.focus(); });
+  dvd.addEventListener("input", function(ev){ var t = ev.target; if (!DVT) return; if (t.dataset.dvk) dvSet(t.dataset.dvk, t.value); });
+  dvd.addEventListener("change", function(ev){ var t = ev.target; if (!DVT) return;
+    if (t.dataset.dvc) dvSet(t.dataset.dvc, t.checked); else if (t.dataset.dvk) { dvSet(t.dataset.dvk, t.value); if (t.tagName === "SELECT") dvDraw(); } });
   function cellAt(ev){ var t = ev.target; return t && t.tagName === "TD" ? [+t.dataset.c, +t.dataset.r] : null; }
   function pickText(){ var g = pick.g; return g[0] === g[2] && g[1] === g[3] ? k(g[0], g[1]) : k(g[0], g[1]) + ":" + k(g[2], g[3]); }
   var tbl = q("[data-g]"), rz = null;
   tbl.addEventListener("mousedown", function(ev){
     var t = ev.target, ce = cellAt(ev);
+    if (t.dataset.dd != null) { ev.preventDefault(); openList(); return; }
+    q("[data-ddl]").hidden = true;
     if (t.dataset.rz != null) { rz = {c: +t.dataset.rz, x: ev.clientX, w: w[+t.dataset.rz]}; ev.preventDefault(); return; }
     /* Đang gõ công thức: nháy/kéo chuột để đưa địa chỉ ô, vùng vào công thức */
     if (ce && document.activeElement === inp && inp.value.trim()[0] === "=" && /[=(+\-*/^,;:]\s*$/.test(inp.value.slice(0, inp.selectionStart))) {
@@ -400,6 +496,7 @@ window.BangTinh = function(box, opt){
     if (t === "border") { q("[data-bd]").hidden = !q("[data-bd]").hidden; return; }
     if (t === "fillc") { q("[data-pal]").hidden = !q("[data-pal]").hidden; return; }
     if (t === "print") { preview(); return; }
+    if (t === "valid") { if (q("[data-dvd]").hidden) dvOpen(); else q("[data-dvd]").hidden = true; return; }
     var first = f[k(g[0], g[1])] || {}, on = !first[t];
     for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {};
       if (t === "left" || t === "center" || t === "right") F.al = t; else F[t] = on; }
@@ -409,7 +506,7 @@ window.BangTinh = function(box, opt){
   box.querySelectorAll("[data-pc]").forEach(function(b){ b.addEventListener("click", function(){ var g = rg(), col = b.dataset.pc;
     for (var c = g[0]; c <= g[2]; c++) for (var r = g[1]; r <= g[3]; r++) { var key = k(c, r), F = f[key] = f[key] || {}; if (col) F.fill = col; else delete F.fill; }
     say(col ? "Đã tô màu nền vùng " + q("[data-nb]").textContent + "." : "Đã bỏ màu nền."); draw(); box.focus(); }); });
-  var api = {val: val, text: text, raw: function(key){ return d[key]; }, set: function(key, v){ if (v) d[key] = v; else delete d[key]; }, redraw: function(){ draw(); }, say: say};
+  var api = {dv: function(key){ return (f[key] || {}).dv || null; }, log: function(x){ log.push(x); }, sheet: function(){ return sheet; }, val: val, text: text, raw: function(key){ return d[key]; }, set: function(key, v){ if (v) d[key] = v; else delete d[key]; }, redraw: function(){ draw(); }, say: say};
   box.querySelectorAll("[data-x]").forEach(function(b){ b.addEventListener("click", function(){ opt.extra[+b.dataset.x].run(api); draw(); box.focus(); }); });
   q("[data-tab]").addEventListener("dblclick", function(){
     var tab = q("[data-tab]"); if (tab.querySelector("input")) return; tab.innerHTML = "<input value='" + sheet.replace(/'/g, "&#39;") + "'>"; var i = tab.querySelector("input"), ok = false; i.focus(); i.select();

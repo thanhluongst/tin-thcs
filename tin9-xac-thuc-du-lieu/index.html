@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sử dụng công cụ xác thực dữ liệu · Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../chung/style.css?v=28">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tin học 9 · Chủ đề 4a. Sử dụng bảng tính điện tử nâng cao</div>
+    <div class="lesson-title"><div class="bai-badge" aria-hidden="true"><span>BÀI</span><b>9a</b></div><h1><span class="sr-only">Bài 9a. </span>Sử dụng công cụ xác thực dữ liệu</h1></div>
+    <div class="goals">
+      <p class="goals-t">Sau bài học này em sẽ:</p>
+      <ul>
+        <li>Sử dụng được công cụ xác thực dữ liệu (Data Validation) của phần mềm bảng tính để giải quyết bài toán quản lí tài chính.</li>
+      </ul>
+    </div>
+    <div class="flow" aria-label="Cấu trúc bảng tính, xác thực dữ liệu, nhập dữ liệu chính xác">
+      <span class="node">Cấu trúc bảng tính thu, chi</span>
+      <span class="node">Data Validation</span>
+      <span class="node io">Dữ liệu nhập chính xác</span>
+    </div>
+    <div class="panel">
+    <p class="lead">Nhập <b>tên nhóm</b> và <b>mã buổi học</b> thầy cô cho, rồi bấm <b>Vào buổi học</b>. Em đọc sách giáo khoa, trả lời từng câu hỏi và bấm <b>Nộp câu trả lời</b>. Sau khi các nhóm trình bày, thầy cô nhận xét và <b>chốt kiến thức</b>.</p>
+    <div class="groups" id="group-bar" hidden>
+      <span class="gl">Đang làm bài của nhóm (bấm để chuyển nhóm):</span>
+      <div class="gchips" id="gchips"></div>
+    </div>
+    <div class="who">
+      <label for="hs-name" id="name-label">Họ tên / Nhóm:</label>
+      <input id="hs-name" type="text" placeholder="Ví dụ: Nhóm 3 – 9A1" autocomplete="off">
+    </div>
+    <div class="join" id="join-box">
+      <label for="buoi">Mã buổi học:</label>
+      <input id="buoi" type="text" placeholder="Ví dụ: 9A1-T1" autocomplete="off" style="width:160px">
+      <button class="btn primary" id="join-go" type="button">Vào buổi học</button>
+      <span class="status bad" id="join-msg"></span>
+    </div>
+    <div class="join" id="join-info" hidden>
+      Buổi học: <b id="join-code"></b>
+      <button class="btn" id="leave" type="button">Rời buổi học</button>
+    </div>
+    <div class="mode" id="mode-bar">
+      <span class="pill" id="mode-pill">Học sinh</span>
+      <span id="mode-text">Bài làm được lưu trên máy này.</span>
+      <span class="sync" id="sync"></span>
+    </div>
+    <div class="tools">
+      <span id="pin-box" class="tools">
+        <label for="pin" class="status">Mã giáo viên</label>
+        <input id="pin" type="password" autocomplete="off" style="width:120px">
+        <button class="btn" id="pin-go" type="button">Vào chế độ GV</button>
+        <span class="status bad" id="pin-msg"></span>
+      </span>
+      <button class="btn" id="t-exit" type="button" hidden>Thoát chế độ GV</button>
+      <button class="btn keybtn" id="reveal-all" type="button" hidden>Chốt tất cả</button>
+      <button class="btn chieu-btn" id="chieu-all" type="button" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg>Chiếu ghi bài</button>
+      <button class="btn keybtn" id="hide-all" type="button" hidden>Ẩn tất cả phần chốt</button>
+      <button class="btn" id="reset" type="button">Làm lại từ đầu</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span id="reset-q">Xoá toàn bộ câu trả lời của em?</span>
+        <button class="btn" id="reset-yes" type="button">Xoá</button>
+        <button class="btn" id="reset-all" type="button" hidden>Xoá bài của tất cả nhóm</button>
+        <button class="btn" id="reset-no" type="button">Huỷ</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Mục lục">
+  <div class="wrap">
+    <a href="#theo-doi" id="toc-dash" hidden>Theo dõi lớp</a>
+    <a href="#mo-dau" data-stage="mo-dau"><span class="sn">1</span> Khởi động</a>
+    <a href="#phan-1" data-stage="phan-1"><span class="sn">2.1</span> Công cụ xác thực dữ liệu</a>
+    <a href="#phan-2" data-stage="phan-2"><span class="sn">2.2</span> Thực hành</a>
+    <a href="#luyen-tap" data-stage="luyen-tap"><span class="sn">3</span> Luyện tập</a>
+    <a href="#van-dung" data-stage="van-dung"><span class="sn">4</span> Vận dụng</a>
+    <span class="prog" id="prog"></span>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="outline" id="outline" aria-label="Tiến trình bài học"></aside>
+<main>
+  <div class="wrap">
+
+    <section class="part" id="theo-doi" hidden>
+      <div class="part-head"><div class="eyebrow">Dành cho giáo viên</div><h2>Theo dõi lớp</h2></div>
+      <div class="act">
+        <div class="dash-sum" id="dash-sum"></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Học sinh / Nhóm</th><th>Đã nộp</th><th>Cập nhật</th><th id="dash-open-h"></th></tr></thead><tbody id="dash-rows"></tbody></table></div>
+      </div>
+      <div class="act">
+        <div class="dash-q">
+          <label for="dash-select"><b>Xem câu trả lời của cả lớp:</b></label>
+          <select id="dash-select"></select>
+          <button class="btn keybtn" id="dash-reveal" type="button">GV chốt câu này</button>
+        </div>
+        <div class="ans-list" id="dash-answers"></div>
+      </div>
+    </section>
+
+    <section class="part" id="mo-dau">
+      <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Khởi động</b> Dự án Quản lí tài chính gia đình</div>
+        <div class="reading">Ở các lớp trước, em đã biết sử dụng các công cụ cơ bản của phần mềm bảng tính để giải quyết bài toán trong thực tế. Trong chủ đề này, em sẽ tiếp tục tìm hiểu và sử dụng các công cụ nâng cao của phần mềm bảng tính để giải quyết bài toán thực tế (bài toán quản lí tài chính gia đình) bằng cách hoàn thành một dự án nhỏ (dự án <b>Quản lí tài chính gia đình</b>). Dự án gồm các nội dung sau đây: xây dựng cấu trúc của bảng tính cho bài toán quản lí tài chính gia đình; sử dụng một số công cụ cơ bản và nâng cao của phần mềm bảng tính để giải quyết bài toán. Em hãy khám phá kiến thức để thực hiện dự án nhé.</div>
+        <div data-task="kd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Khởi động</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g1"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-1">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Hình thành kiến thức mới</div><h2><span class="sn">2.1</span> Công cụ xác thực dữ liệu</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Hoạt động 1</b> Xây dựng cấu trúc bảng tính</div>
+        <div class="reading">Dựa trên hiểu biết về những khoản chi tiêu của gia đình, em hãy cho biết: 1. Chi tiêu gia đình gồm những khoản mục gì? 2. Nêu cấu trúc một bảng tính điện tử quản lí tài chính mà em thấy phù hợp với gia đình em.</div>
+        <div data-task="hd1a" data-n="1"></div>
+        <div data-task="hd1b" data-n="2"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> a) Sử dụng bảng tính để quản lí tài chính gia đình</div>
+        <div class="reading">Đọc mục <b>1a</b> (SGK trang 34). Ưu điểm nổi bật của phần mềm bảng tính là xử lí dữ liệu tự động. Sử dụng chương trình bảng tính để quản lí tài chính sẽ giúp kiểm soát được tình hình tài chính một cách cụ thể, trực quan, từ đó điều chỉnh chi tiêu sao cho phù hợp với thu nhập gia đình và mục tiêu phát triển. Có nhiều cách khác nhau để quản lí tài chính gia đình hiệu quả. Ví dụ: lên kế hoạch chi tiết cho từng khoản chi tiêu, theo dõi ngân sách định kì, quản lí các khoản tiết kiệm và đầu tư,… Mỗi gia đình lại có các khoản mục tài chính khác nhau. Các khoản mục đó thường được phân thành hai loại là <b>Thu</b> và <b>Chi</b>. Do vậy, thông tin lưu trữ trong bảng tính điện tử quản lí tài chính gia đình sẽ gồm ít nhất hai loại đó. Ví dụ về các khoản thu, chi thường có của một gia đình được minh hoạ ở Hình 9a.1.</div>
+        <figure class="fig sm"><img src="hinh/h91.jpg" alt="Hai bảng: Khoản thu gồm lương, thưởng, làm thêm, được cho tặng, khác; Khoản chi gồm ở, ăn, di chuyển, học tập, sức khoẻ, giải trí, quà tặng từ thiện, tiết kiệm, khác"><figcaption>Hình 9a.1. Khoản mục thu, chi gia đình</figcaption></figure>
+        <div data-task="thuchi" data-n="1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Đọc hiểu</b> b) Công cụ xác thực dữ liệu</div>
+        <div class="reading">Đọc mục <b>1b</b> (SGK trang 35–36). Khi dùng bảng tính để quản lí tài chính gia đình, em có thể lưu trữ dữ liệu Thu và Chi trên cùng một trang tính hoặc ở hai trang tính khác nhau. Hình 9a.2 minh hoạ trang tính Chi tiêu ghi lại các khoản chi của một gia đình (các khoản thu được lưu ở trang tính Thu nhập). Trong Hình 9a.2, em có thể thấy danh sách các khoản chi được lưu ở cột F. Khi cập nhật thông tin về khoản chi cho dữ liệu ở cột B, em chỉ cần chọn trong danh sách đã có. Để hạn chế loại dữ liệu hoặc giá trị của dữ liệu khi nhập vào ô tính, em sử dụng <b>công cụ xác thực dữ liệu</b> (Data Validation). Hình 9a.3 minh hoạ một ví dụ khác cần sử dụng công cụ này khi cập nhật dữ liệu.</div>
+        <figure class="fig"><img src="hinh/h92.jpg" alt="Trang tính Chi tiêu: ô B5 có danh sách thả xuống gồm các khoản chi lấy từ cột F"><figcaption>Hình 9a.2. Trang tính ghi thông tin chi tiêu của gia đình, dữ liệu mỗi ô ở cột B được lấy từ danh sách các khoản chi ở cột F</figcaption></figure>
+        <figure class="fig"><img src="hinh/h93.jpg" alt="Trang tính Chi tiêu: ô D5 đang được chọn hiện thông báo Dữ liệu kiểu số, giá trị lớn hơn 0"><figcaption>Hình 9a.3. Dữ liệu khi nhập vào ô tính của cột Số tiền (nghìn đồng) phải là dữ liệu kiểu số và có giá trị lớn hơn 0</figcaption></figure>
+        <div class="reading">Khám phá trên bảng tính mô phỏng (đã đặt sẵn xác thực dữ liệu như Hình 9a.2, 9a.3): chọn một ô từ B5 đến B10, bấm nút <b>▼</b> để chọn khoản chi; chọn một ô cột D để xem thông báo, rồi thử nhập <b>-100</b> hoặc <b>abc</b>.</div>
+        <div data-bt0></div>
+        <div class="reading">Để sử dụng công cụ xác thực dữ liệu, trong nhóm lệnh <b>Data Tools</b> của dải lệnh <b>Data</b>, chọn <b>Data Validation</b> (Hình 9a.4). Hộp thoại Data Validation xuất hiện. Tại ô <b>Allow</b> trong thẻ <b>Settings</b>, em lựa chọn kiểu dữ liệu hoặc giá trị dữ liệu cho phù hợp với yêu cầu của từng bài toán cụ thể (Hình 9a.5). Ý nghĩa của mỗi kiểu dữ liệu hoặc giá trị dữ liệu ở Hình 9a.5 được giải thích trong Bảng 9a.1.</div>
+        <figure class="fig sm"><img src="hinh/h94.jpg" alt="Nút lệnh Data Validation trong nhóm Data Tools, có chú thích Pick from a list of rules to limit the type of data that can be entered in a cell"><figcaption>Hình 9a.4. Nút lệnh Data Validation trong nhóm lệnh Data Tools</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h95.jpg" alt="Hộp thoại Data Validation, thẻ Settings, ô Allow mở danh sách Any value, Whole number, Decimal, List, Date, Time, Text length, Custom"><figcaption>Hình 9a.5. Lựa chọn kiểu dữ liệu hoặc giá trị dữ liệu</figcaption></figure>
+        <figure class="fig"><img src="hinh/b91.jpg" alt="Bảng 9a.1: Any value bất kì giá trị nào; Whole number số nguyên; Decimal số thập phân; List danh sách thả xuống; Date ngày tháng; Time thời gian; Text length độ dài văn bản; Custom tuỳ chỉnh bằng công thức"><figcaption>Bảng 9a.1. Các kiểu dữ liệu hoặc giá trị dữ liệu cho phép</figcaption></figure>
+        <div data-task="dv" data-n="2"></div>
+        <div data-task="allow" data-n="3"></div>
+        <div data-concept="c1"></div>
+      </div>
+      <div class="act">
+        <div class="act-tag"><b>Câu hỏi</b> SGK trang 36</div>
+        <div class="reading">Trang tính Thu nhập trong Hình 9a.6 lưu dữ liệu về các khoản thu của gia đình. Em hãy quan sát Hình 9a.6 và cho biết dữ liệu ở cột B cần được thiết lập để thoả mãn điều kiện xác thực nào.</div>
+        <figure class="fig"><img src="hinh/h96.jpg" alt="Trang tính Thu nhập: hàng 3 ngày 13/8/23, khoản thu Lương, nội dung Lương tháng 8, số tiền 7000; cột F liệt kê lương, thưởng, làm thêm, được cho tặng, khác"><figcaption>Hình 9a.6. Trang tính lưu các khoản thu của gia đình</figcaption></figure>
+        <div data-task="p36" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 1. Công cụ xác thực dữ liệu</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g2"></div>
+      </div>
+    </section>
+
+    <section class="part" id="phan-2">
+      <div class="part-head"><div class="eyebrow">Bước 2 · Thực hành</div><h2><span class="sn">2.2</span> Thực hành: Sử dụng công cụ xác thực dữ liệu để tạo bảng tính quản lí tài chính gia đình</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Nhiệm vụ 1, 2</b> TaiChinhGiaDinh.xlsx</div>
+        <div class="reading"><b>Nhiệm vụ 1:</b> Tạo bảng tính có trang tính Chi tiêu theo mẫu trong Hình 9a.2. Sử dụng công cụ xác thực dữ liệu cho các khoản chi của gia đình. <i>Hướng dẫn</i> (Microsoft Excel 2016): <b>a) Tạo trang tính lưu các khoản chi:</b> khởi động phần mềm bảng tính; đặt tên cho trang tính hiện hành là <b>Chi tiêu</b>; tạo bảng và nhập dữ liệu khoản chi (cột F) như minh hoạ ở Hình 9a.7. <b>b) Sử dụng công cụ xác thực dữ liệu thuộc danh sách cho trước:</b> để dữ liệu ở mỗi ô của cột B là một mục trong danh sách cho trước ở cột F: chọn các ô của cột B để nhập dữ liệu thoả mãn điều kiện xác thực, ví dụ các ô từ B3 đến B10; trong nhóm lệnh Data Tools của dải lệnh Data, chọn Data Validation, hộp thoại Data Validation xuất hiện; trong thẻ Settings, nhập yêu cầu xác thực dữ liệu cho từng tiêu chí: <b>Allow</b>: dữ liệu nhập vào cột Khoản chi cần thuộc danh sách cho trước, vì vậy em chọn giá trị là <b>List</b> để chọn dữ liệu từ danh sách thả xuống; <b>Source</b>: là vùng dữ liệu chứa danh sách; chọn vùng dữ liệu chứa danh sách các khoản chi là F2:F10, khi đó địa chỉ của vùng được đưa vào ô Source (Hình 9a.8); chọn OK để hoàn thành công việc. Nhập dữ liệu cho trang tính, trong đó dữ liệu cột B được lấy từ danh sách thả xuống (Hình 9a.2). Lưu tệp bảng tính với tên <b>TaiChinhGiaDinh.xlsx</b>.</div>
+        <figure class="fig"><img src="hinh/h97.jpg" alt="Trang tính Chi tiêu trống với tiêu đề các cột Ngày, Khoản chi, Nội dung, Số tiền và danh sách khoản chi ở cột F"><figcaption>Hình 9a.7. Trang tính lưu các khoản chi</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h98.jpg" alt="Hộp thoại Data Validation: Allow là List, Ignore blank và In-cell dropdown được đánh dấu, Source là =$F$2:$F$10"><figcaption>Hình 9a.8. Chọn vùng dữ liệu chứa danh sách các khoản chi</figcaption></figure>
+        <div class="reading"><b>Nhiệm vụ 2:</b> Sử dụng công cụ xác thực dữ liệu để xác thực cho dữ liệu cột Số tiền (nghìn đồng) (cột D) chỉ chấp nhận kiểu số lớn hơn 0 và yêu cầu này hiển thị trên màn hình khi nhập dữ liệu như minh hoạ ở Hình 9a.3. <i>Hướng dẫn:</i> chọn trang tính Chi tiêu; chọn vùng sẽ nhập dữ liệu của cột Số tiền (nghìn đồng), ví dụ vùng D3:D10; chọn Data/Data Tools/Data Validation, hộp thoại Data Validation xuất hiện; trong thẻ <b>Settings</b>, nhập yêu cầu xác thực dữ liệu như Hình 9a.9; trong thẻ <b>Input Message</b>, nhập nội dung thông báo như Hình 9a.10; trong thẻ <b>Error Alert</b>, nhập nội dung thông báo lỗi khi nhập dữ liệu như Hình 9a.11. Nhập thêm dữ liệu vào bảng. Nếu em nhập dữ liệu không đúng với yêu cầu xác thực của ô thì màn hình sẽ xuất hiện thông báo như Hình 9a.12. Lưu tệp.</div>
+        <figure class="fig sm"><img src="hinh/h99.jpg" alt="Thẻ Settings: Allow là Whole number, Data là greater than, Minimum là 0"><figcaption>Hình 9a.9. Nhập các yêu cầu xác thực dữ liệu của cột Số tiền</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h910.jpg" alt="Thẻ Input Message: tiêu đề Dữ liệu kiểu số, nội dung Giá trị lớn hơn 0"><figcaption>Hình 9a.10. Nhập nội dung thông báo sẽ hiển thị khi nhập dữ liệu</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h911.jpg" alt="Thẻ Error Alert: Style là Stop, tiêu đề Dữ liệu nhập sai, nội dung Hãy nhập lại dữ liệu kiểu số và lớn hơn 0"><figcaption>Hình 9a.11. Nhập nội dung thông báo lỗi</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h912.jpg" alt="Hộp thông báo Dữ liệu nhập sai với các nút Retry, Cancel, Help"><figcaption>Hình 9a.12. Thông báo xuất hiện khi dữ liệu nhập vào ô tính không đúng kiểu hoặc không đúng giá trị cho phép</figcaption></figure>
+        <div class="reading"><b>Làm trên bảng tính mô phỏng:</b> nháy đúp vào tên trang tính để đổi tên; kéo chọn B3:B10 rồi bấm <b>✅ Data Validation</b>; ở ô Source gõ <b>=$F$2:$F$10</b>. Làm tương tự với D3:D10 (ba thẻ Settings, Input Message, Error Alert).</div>
+        <div data-bt1></div>
+        <div data-task="nv1" data-n="1"></div>
+        <div data-task="nv2" data-n="2"></div>
+        <div data-task="nv3" data-n="3"></div>
+        <div data-concept="c2"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> 2. Thực hành</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g3"></div>
+      </div>
+    </section>
+
+    <section class="part" id="luyen-tap">
+      <div class="part-head"><div class="eyebrow">Bước 3</div><h2><span class="sn">3</span> Luyện tập</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Luyện tập</b> Trang tính Thu nhập</div>
+        <div class="reading">1. Mở tệp bảng tính TaiChinhGiaDinh.xlsx và thực hiện các yêu cầu sau: a) Tạo thêm một trang tính mới, đặt tên là <b>Thu nhập</b>. b) Nhập dữ liệu khoản thu (cột F), nhập nội dung các khoản thu của gia đình như minh hoạ ở Hình 9a.6, trong đó sử dụng công cụ xác thực dữ liệu để khoản thu ở cột B được lấy từ danh sách ở cột F.<br>2. Mở trang tính Thu nhập trong tệp bảng tính TaiChinhGiaDinh.xlsx (Hình 9a.13). Sử dụng công cụ xác thực dữ liệu để hạn chế kiểu dữ liệu và giá trị dữ liệu cho cột Số tiền (nghìn đồng) tương tự như yêu cầu của trang tính Chi tiêu. Hãy nhập thêm ít nhất ba hàng dữ liệu vào bảng.</div>
+        <figure class="fig"><img src="hinh/h913.jpg" alt="Trang tính Thu nhập với hàng 13/8/23, Lương, Lương tháng 8, 7000 và danh sách khoản thu ở cột F"><figcaption>Hình 9a.13. Trang tính lưu các khoản thu</figcaption></figure>
+        <div data-bt2></div>
+        <div data-task="lt1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g4"></div>
+      </div>
+    </section>
+
+    <section class="part" id="van-dung">
+      <div class="part-head"><div class="eyebrow">Bước 4</div><h2><span class="sn">4</span> Vận dụng</h2></div>
+      <div class="act">
+        <div class="act-tag"><b>Vận dụng</b> Kinh phí Triển lãm tin học</div>
+        <div class="reading">Em hãy tạo bảng tính để quản lí tài chính cho dự án <b>Triển lãm tin học</b>. Nhập dữ liệu các khoản thu, chi của dự án. Trong đó, các khoản thu (ví dụ như: kinh phí tài trợ, quỹ lớp,…) được lưu ở một trang tính (Hình 9a.14), các khoản chi cho triển lãm (ví dụ như: mua văn phòng phẩm, in tài liệu,…) được lưu ở một trang tính khác (Hình 9a.15). Hãy sử dụng công cụ xác thực dữ liệu để việc nhập dữ liệu các khoản thu, chi được chính xác. Lưu tệp bảng tính với tên <b>KinhPhiTrienLam.xlsx</b>.</div>
+        <figure class="fig"><img src="hinh/h91415.jpg" alt="Hai trang tính: Các khoản thu của Triển lãm tin học với cột F gồm Quỹ, Tài trợ; Các khoản chi cho Triển lãm tin học với cột F gồm Văn phòng phẩm, In tài liệu"><figcaption>Hình 9a.14. Trang tính lưu các khoản thu · Hình 9a.15. Trang tính lưu các khoản chi</figcaption></figure>
+        <div data-bt3></div>
+        <div data-bt4></div>
+        <div data-task="vd1" data-n="1"></div>
+      </div>
+      <div class="act act-ghi">
+        <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
+        <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
+        <div data-concept="g5"></div>
+      </div>
+    </section>
+
+    <script src="../chung/bangtinh.js?v=6"></script>
+    <script>
+    (function(){
+      var $ = function(s){ return document.querySelector(s); };
+      var TOOLS = ["valid","|","copy","paste","|","b","fill","left","center","right","|","reset"];
+      var CHI = ["Ở","Ăn","Di chuyển","Học tập","Sức khoẻ","Giải trí","Quà tặng/Từ thiện","Tiết kiệm","Khác"], THU = ["Lương","Thưởng","Làm thêm","Được cho/tặng","Khác"];
+      var W = [64,120,140,140,20,130];
+      function sheetData(title, colB, items, extra){ var d = {A1:title, A2:"Ngày", B2:colB, C2:"Nội dung", D2:"Số tiền (nghìn đồng)", F1:colB}; items.forEach(function(t, i){ d["F" + (i + 2)] = t; }); for (var k in (extra || {})) d[k] = extra[k]; return d; }
+      function fmtF(n, col){ var f = {A1:{big:true}, A2:{b:true, al:"center"}, B2:{b:true, al:"center"}, C2:{b:true, al:"center"}, D2:{b:true, al:"center"}, F1:{b:true, al:"center"}}; for (var i = 2; i < 2 + n; i++) f["F" + i] = {fill: col}; return f; }
+      function addDV(f, rng, dv){ var m = /^([A-Z])(\d+):([A-Z])(\d+)$/.exec(rng); for (var r = +m[2]; r <= +m[4]; r++) { var k = m[1] + r; f[k] = f[k] || {}; f[k].dv = JSON.parse(JSON.stringify(dv)); } return f; }
+      var LIST = function(src){ return {allow:"list", op:"between", src:src, blank:true, drop:true, imsg:{show:true}, err:{show:true, style:"stop"}}; };
+      var MONEY = {allow:"whole", op:"gt", min:"0", blank:true, imsg:{show:true, title:"Dữ liệu kiểu số", text:"Giá trị lớn hơn 0"}, err:{show:true, style:"stop", title:"Dữ liệu nhập sai", text:"Hãy nhập lại dữ liệu kiểu số và lớn hơn 0"}};
+      function has(x, re){ return x.log.some(function(l){ return re.test(l); }); }
+      function dvAll(x, col, r0, r1, f){ for (var r = r0; r <= r1; r++) { var v = x.dv(col + r); if (!v || !f(v)) return false; } return true; }
+      function isList(src){ return function(v){ return v.allow === "list" && v.src.replace(/[=$\s]/g, "").toUpperCase() === src; }; }
+      var isMoney = function(v){ return (v.allow === "whole" || v.allow === "decimal") && v.op === "gt" && +v.min === 0; };
+      function rows(x, col, r0, r1){ var n = 0; for (var r = r0; r <= r1; r++) if (x.text(col + r)) n++; return n; }
+      /* Bảng tính đã đặt sẵn xác thực dữ liệu để khám phá */
+      var f0 = fmtF(9, "#f8c9b5"); addDV(f0, "B3:B10", LIST("=$F$2:$F$10")); addDV(f0, "D3:D10", MONEY);
+      BangTinh($("[data-bt0]"), {title:"Khám phá: trang tính Chi tiêu đã có xác thực dữ liệu", cols:6, rows:10, widths:W, sheet:"Chi tiêu", tools:["reset"],
+        data:sheetData("Chi tiêu", "Khoản chi", CHI, {A3:"14/8/23", B3:"Ở", C3:"Tiền điện tháng 8", D3:"800", A4:"15/8/23", B4:"Học tập", C4:"Học phí tháng 8", D4:"2200"}), fmt:f0,
+        check:function(x){ return [["Chọn khoản chi từ danh sách thả xuống ▼", has(x, /^dv-pick$/)], ["Thử nhập dữ liệu sai vào cột Số tiền và xem thông báo lỗi", has(x, /^dv-reject$/)]]; }});
+      var saved1 = false;
+      BangTinh($("[data-bt1]"), {title:"Bảng tính mô phỏng: TaiChinhGiaDinh.xlsx", cols:6, rows:10, widths:W, tools:TOOLS, data:sheetData("Chi tiêu", "Khoản chi", CHI), fmt:fmtF(9, "#f8c9b5"),
+        extra:[{label:"💾 Lưu TaiChinhGiaDinh.xlsx", title:"File/Save", run:function(api){ saved1 = true; api.log("save"); api.say("Đã lưu tệp TaiChinhGiaDinh.xlsx."); }}],
+        check:function(x){ return [["Đổi tên trang tính thành Chi tiêu", x.sheet.trim() === "Chi tiêu"],
+          ["Nhiệm vụ 1: B3:B10 lấy từ danh sách =$F$2:$F$10 (List)", dvAll(x, "B", 3, 10, isList("F2:F10"))],
+          ["Nhập ít nhất 3 khoản chi, cột B chọn từ danh sách thả xuống", rows(x, "B", 3, 10) >= 3 && has(x, /^dv-pick$/)],
+          ["Nhiệm vụ 2: D3:D10 là số nguyên lớn hơn 0 (Whole number, greater than, 0)", dvAll(x, "D", 3, 10, isMoney)],
+          ["Input Message như Hình 9a.10", dvAll(x, "D", 3, 10, function(v){ return v.imsg && v.imsg.show !== false && !!(v.imsg.title || "").trim() && !!(v.imsg.text || "").trim(); })],
+          ["Error Alert kiểu Stop như Hình 9a.11", dvAll(x, "D", 3, 10, function(v){ return v.err && v.err.style === "stop" && !!(v.err.title || "").trim() && !!(v.err.text || "").trim(); })],
+          ["Thử nhập sai và thấy thông báo lỗi (Hình 9a.12)", has(x, /^dv-reject$/)],
+          ["Lưu tệp TaiChinhGiaDinh.xlsx", saved1]]; }});
+      BangTinh($("[data-bt2]"), {title:"Bảng tính mô phỏng: trang tính mới của TaiChinhGiaDinh.xlsx", cols:6, rows:8, widths:W, tools:TOOLS, sheet:"Sheet2",
+        check:function(x){ var F = []; for (var r = 2; r <= 6; r++) F.push(x.text("F" + r));
+          return [["1a) Đặt tên trang tính là Thu nhập", x.sheet.trim() === "Thu nhập"],
+            ["1b) Nhập danh sách khoản thu vào F2:F6", F.filter(Boolean).length >= 5],
+            ["1b) Cột B (B3:B8) lấy từ danh sách các khoản thu ở cột F", dvAll(x, "B", 3, 8, function(v){ return v.allow === "list" && /F\$?2:\$?F\$?6$/i.test(v.src.replace(/\s/g, "")); })],
+            ["2) Cột D (D3:D8) chỉ nhận số lớn hơn 0, có thông báo", dvAll(x, "D", 3, 8, function(v){ return isMoney(v) && v.err && v.err.show !== false; })],
+            ["2) Nhập ít nhất ba hàng dữ liệu", rows(x, "B", 3, 8) >= 3 && rows(x, "D", 3, 8) >= 3]]; }});
+      var vdChk = function(name, items){ return function(x){ return [["Cột B lấy từ danh sách ở cột F (" + items + ")", dvAll(x, "B", 3, 6, function(v){ return v.allow === "list"; })], ["Cột D chỉ nhận số tiền lớn hơn 0", dvAll(x, "D", 3, 6, isMoney)], ["Nhập ít nhất hai hàng dữ liệu", rows(x, "B", 3, 6) >= 2 && rows(x, "D", 3, 6) >= 2]]; }; };
+      BangTinh($("[data-bt3]"), {title:"KinhPhiTrienLam.xlsx – trang tính Các khoản thu", cols:6, rows:6, widths:W, tools:TOOLS, sheet:"Các khoản thu", data:sheetData("Các khoản thu của Triển lãm tin học", "Khoản thu", ["Quỹ","Tài trợ"]), fmt:fmtF(2, "#c9d9ee"), check:vdChk("thu", "Quỹ, Tài trợ")});
+      BangTinh($("[data-bt4]"), {title:"KinhPhiTrienLam.xlsx – trang tính Các khoản chi", cols:6, rows:6, widths:W, tools:TOOLS, sheet:"Các khoản chi", data:sheetData("Các khoản chi cho Triển lãm tin học", "Khoản chi", ["Văn phòng phẩm","In tài liệu"]), fmt:fmtF(2, "#f8c9b5"), check:vdChk("chi", "Văn phòng phẩm, In tài liệu")});
+    })();
+    </script>
+  </div>
+</main>
+</div>
+
+<footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 9 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a></div></footer>
+<script src="../chung/config.js?v=22"></script>
+<script src="content.js?v=22"></script>
+<script src="../chung/outline.js?v=22"></script>
+<script src="../chung/api.js?v=22"></script>
+<script src="../chung/chieu.js?v=22"></script>
+<script src="../chung/hs.js?v=28"></script>
+</body>
+</html>
