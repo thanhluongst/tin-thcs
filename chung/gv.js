@@ -110,6 +110,7 @@ async function loadLesson(){
     box.innerHTML = "";
     [...wrap.children].forEach(n => box.appendChild(document.importNode(n, true)));
   } catch(e) { box.innerHTML = '<p class="status bad">Không tải được nội dung bài học (' + esc(e.message) + ').</p>'; return; }
+  if (window.HinhVe) HinhVe.render(box);
   box.querySelectorAll("[data-task]").forEach(buildTaskPanel);
   box.querySelectorAll("[data-concept]").forEach(buildConceptPanel);
   lessonReady = true;
