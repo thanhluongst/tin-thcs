@@ -6,7 +6,7 @@
 <title>Thực hành: Tìm kiếm và thay thế · Tin học 6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="../chung/style.css?v=29">
+<link rel="stylesheet" href="../chung/style.css?v=32">
 </head>
 <body>
 <header class="hero">
@@ -107,10 +107,10 @@
     </section>
 
     <style>
-      .fr{display:grid;gap:8px;width:100%}
+      .fr{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%}
       .fr-dlg{display:grid;gap:6px;background:#eef1f5;border:1px solid #c5ccd4;border-radius:8px;padding:8px;color:#1d2433;font-size:13.5px}
-      .fr-dlg label{display:grid;grid-template-columns:7.5em 1fr;gap:6px;align-items:center}
-      .fr-dlg input{font:inherit;padding:4px 6px;border:1px solid #9aa;border-radius:4px;background:#fff;color:#1d2433}
+      .fr-dlg label{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:6px;align-items:center}
+      .fr-dlg input{font:inherit;min-width:0;width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid #9aa;border-radius:4px;background:#fff;color:#1d2433}
       .fr-doc{background:#fff;color:#1d2433;border:1px solid #c5ccd4;border-radius:8px;padding:12px 16px;font-family:"Times New Roman",serif;font-size:15px;line-height:1.5;white-space:pre-wrap}
       .fr-doc mark{background:#ffd54f}.fr-doc mark.cur{background:#ff9800;color:#fff}
       .fr-doc .h{color:#c2185b;font-weight:700}
@@ -233,7 +233,7 @@
 <script src="content.js?v=22"></script>
 <script src="../chung/outline.js?v=22"></script>
 <script src="../chung/api.js?v=22"></script>
-<script src="../chung/chieu.js?v=25"></script>
+<script src="../chung/chieu.js?v=26"></script>
 <script src="../chung/hs.js?v=28"></script>
 </body>
 </html>

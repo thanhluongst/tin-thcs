@@ -86,7 +86,7 @@ section.part{display:grid;gap:18px;scroll-margin-top:64px}
 .act-tag b{background:var(--accent);color:var(--accent-ink);padding:2px 10px;border-radius:6px;font-weight:600}
 .reading{background:var(--sunk);border-radius:10px;padding:12px 14px;font-size:15px}
 
-figure.fig{margin:0;display:grid;gap:6px;justify-items:center;background:#ffffff;border:1px solid var(--line);border-radius:10px;padding:10px}
+figure.fig{margin:0;display:grid;grid-template-columns:minmax(0,1fr);min-width:0;max-width:100%;gap:6px;justify-items:center;background:#ffffff;border:1px solid var(--line);border-radius:10px;padding:10px}
 /* Ảnh cắt từ SGK có độ phân giải thấp: hiện đúng cỡ thật (không kéo giãn cho đỡ nhoè), bấm vào để phóng to */
 figure.fig img{display:block;width:auto;max-width:100%;height:auto;cursor:zoom-in}
 .zoom-ov{position:fixed;inset:0;z-index:9999;background:rgba(10,20,30,.88);display:grid;place-items:center;padding:12px;cursor:zoom-out}
@@ -122,7 +122,7 @@ textarea[readonly]{background:var(--sunk)}
 
 .opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 @media (max-width:520px){.opts{grid-template-columns:1fr}}
-.opt{text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:8px 12px;border-radius:8px}
+.opt{text-align:left;min-width:0;overflow-wrap:anywhere;border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:8px 12px;border-radius:8px}
 .opt .l{font-weight:700;margin-right:6px;color:var(--accent)}
 .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
 .opt.right{border-color:var(--ok);background:var(--ok-soft)}
@@ -376,9 +376,9 @@ header.hero .eyebrow{color:var(--pink)}
 /* Đề mục lớn: "1. HỆ ĐIỀU HÀNH" màu hồng, chữ in hoa */
 .part-head{border-bottom:0;padding-bottom:0;gap:2px}
 .part-head .eyebrow{color:var(--accent)}
-.part-head h2{color:var(--pink);text-transform:uppercase;font-size:clamp(20px,3.4vw,25px);letter-spacing:.01em;display:flex;align-items:center;gap:10px}
+.part-head h2{color:var(--pink);text-transform:uppercase;font-size:clamp(20px,3.4vw,25px);letter-spacing:.01em;display:flex;align-items:baseline;gap:10px}
 .part-head h2::before{content:"";flex:none;width:14px;height:14px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 4px var(--pink-soft)}
-.part-head h2 .sn{color:var(--pink);margin-right:0}
+.part-head h2 .sn{color:var(--pink);margin-right:0;flex:none}
 #luyen-tap .part-head h2::before,#van-dung .part-head h2::before{width:30px;height:30px;box-shadow:none;background:var(--i-ques) center/contain no-repeat}
 
 /* Khung hoạt động: viền xanh ngọc, nhãn dạng thẻ "Hoạt động 1 | Điều hành" */
@@ -427,7 +427,7 @@ details.ol{border-color:var(--accent);border-width:1.5px}
 :root[data-theme="dark"] .lesson-title h1{background-color:#0c665e}
 
 /* ===== Trắc nghiệm: phương án em chọn nổi bật hẳn ===== */
-.q .opt{display:flex;align-items:center;gap:4px;border-width:2px;transition:background .15s,border-color .15s,opacity .15s}
+.q .opt{display:flex;min-width:0;align-items:center;gap:4px;border-width:2px;transition:background .15s,border-color .15s,opacity .15s}
 .q .opt:hover:not(:disabled){border-color:var(--accent)}
 .q .opt .l{flex:none;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;margin-right:6px;border:2px solid var(--qline);background:var(--surface)}
 .q .opt.sel{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700;box-shadow:0 0 0 4px var(--accent-soft)}

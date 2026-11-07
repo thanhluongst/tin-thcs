@@ -6,7 +6,7 @@
 <title>Trình bày bảng tính · Tin học 7</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="../chung/style.css?v=29">
+<link rel="stylesheet" href="../chung/style.css?v=32">
 </head>
 <body>
 <header class="hero">
@@ -114,7 +114,7 @@
       <div class="act">
         <div class="act-tag"><b>Khởi động</b> Nhận xét bảng tính dự án</div>
         <div class="reading">Quan sát một phần bảng tính của dự án <b>Trường học xanh</b> trong Hình 9.1, em có nhận xét gì? Có cần chỉnh sửa, định dạng hay trình bày dữ liệu cho đẹp hơn không?</div>
-        <figure class="fig"><img src="hinh/h91.jpg" alt="Bảng dự kiến phân bổ cây: cột Trung bình có 11.66666667, cột Chi phí ghi 1400000.00" style="max-width:640px"><figcaption>Hình 9.1. Một bảng dữ liệu của dự án Trường học xanh</figcaption></figure>
+        <figure class="fig"><img src="hinh/h91.jpg" alt="Bảng dự kiến phân bổ cây: cột Trung bình có 11.66666667, cột Chi phí ghi 1400000.00" style="max-width:min(100%,640px)"><figcaption>Hình 9.1. Một bảng dữ liệu của dự án Trường học xanh</figcaption></figure>
         <div data-task="kd1" data-n="1"></div>
       </div>
       <div class="act act-ghi">
@@ -130,7 +130,7 @@
       <div class="act">
         <div class="act-tag"><b>Hoạt động 1</b> Làm quen với lệnh định dạng dữ liệu (Format Cells)</div>
         <div class="reading">1. Cột dữ liệu Trung bình cần điều chỉnh gì để hiển thị dễ đọc, dễ so sánh hơn? 2. Dữ liệu tại cột Chi phí nên trình bày lại như thế nào để phù hợp với dữ liệu là số tiền?<br><br><b>a) Định dạng dữ liệu số.</b> Dữ liệu số trong bảng tính được hiểu là các số nguyên hoặc số thập phân (là số có phần số nguyên và phần thập phân). Tất cả các phần mềm bảng tính đều cho phép thiết lập cách định dạng thể hiện các số này. Ví dụ chỉ cho phép hiện bao nhiêu chữ số thập phân, hoặc quy định dùng dấu “,” phân tách hàng nghìn, hàng triệu,… Để thực hiện định dạng các số tại một ô hoặc vùng dữ liệu, em cần chọn vùng dữ liệu và chọn <b>Home</b>, nháy chuột vào mũi tên bên cạnh nhóm lệnh <b>Number</b> để mở cửa sổ <b>Format Cells</b>. Sau đó em nhập các tham số định dạng kiểu dữ liệu số thực trong cửa sổ Format Cells như Hình 9.2: chọn số chữ số thập phân; nháy chuột chọn dùng dấu “,” ngăn cách hàng nghìn, hàng triệu; nháy nút <b>OK</b>.</div>
-        <figure class="fig"><img src="hinh/h92.jpg" alt="Cửa sổ Format Cells thẻ Number: Decimal places 2, Use 1000 Separator, nút OK" style="max-width:480px"><figcaption>Hình 9.2. Cửa sổ Format Cells</figcaption></figure>
+        <figure class="fig"><img src="hinh/h92.jpg" alt="Cửa sổ Format Cells thẻ Number: Decimal places 2, Use 1000 Separator, nút OK" style="max-width:min(100%,480px)"><figcaption>Hình 9.2. Cửa sổ Format Cells</figcaption></figure>
         <div class="reading">Thử trên bảng mô phỏng: chọn vùng E4:E8 (Trung bình) → bấm <b>Format Cells</b> → Number, 2 chữ số thập phân → OK. Làm tương tự với vùng F4:F8 (Chi phí), chọn thêm <b>Use 1000 Separator</b>.</div>
         <div class="bt" data-bt1></div>
         <div data-task="hd1a" data-n="1"></div>
@@ -144,7 +144,7 @@
         <div class="bt" data-bt2></div>
         <div data-task="pct" data-n="1"></div>
         <div class="reading"><b>c) Định dạng dữ liệu ngày tháng.</b> Các phần mềm bảng tính cho phép nhập dữ liệu ngày tháng theo khuôn dạng: <b>mm/dd/yyyy</b>, tức là nhập tháng, sau đó nhập ngày, sau đó là năm, các số cách nhau bởi dấu “/” hoặc “–”. Mặc định dữ liệu ngày tháng cũng thể hiện trên màn hình dưới dạng “mm/dd/yyyy”. Muốn thay đổi lại cách thể hiện ngày tháng: đánh dấu vùng dữ liệu, trong cửa sổ Format Cells chọn <b>Number</b> → <b>Date</b> → Locale <b>Vietnamese</b> → chọn kiểu ngày/tháng/năm → <b>OK</b> (Hình 9.5). Lưu ý: việc chỉnh sửa chỉ thay đổi cách hiển thị, còn việc nhập dữ liệu vẫn cần tuân theo thứ tự mặc định của phần mềm.<br><br><b>Lưu ý:</b> Dữ liệu ngày tháng có thể thực hiện các phép cộng với số nguyên (mỗi số nguyên được tính là một ngày) và phép trừ hai dữ liệu ngày tháng (Hình 9.6).</div>
-        <figure class="fig"><img src="hinh/h95.jpg" alt="Format Cells: chọn Number, chọn Date, Locale Vietnamese, chọn kiểu ngày/tháng/năm, nháy OK" style="max-width:520px"><figcaption>Hình 9.5. Cách thiết lập hiển thị ngày tháng của Việt Nam</figcaption></figure>
+        <figure class="fig"><img src="hinh/h95.jpg" alt="Format Cells: chọn Number, chọn Date, Locale Vietnamese, chọn kiểu ngày/tháng/năm, nháy OK" style="max-width:min(100%,520px)"><figcaption>Hình 9.5. Cách thiết lập hiển thị ngày tháng của Việt Nam</figcaption></figure>
         <div class="bt" data-bt3></div>
         <div data-task="ngay" data-n="2"></div>
         <div data-task="phep" data-n="3"></div>
@@ -213,7 +213,7 @@
             <li><b>d) Định dạng dữ liệu cho trang tính</b> (có thể theo mẫu Hình 9.13) và lưu kết quả.</li>
           </ul></div>
         <div class="bt" data-bt6></div>
-        <figure class="fig"><img src="hinh/h913.jpg" alt="Trang tính 5. Tổng kết: cột Đơn giá, Chi phí, tổng chi phí" style="max-width:640px"><figcaption>Hình 9.13. Trang tính 5. Tổng kết (để đối chiếu)</figcaption></figure>
+        <figure class="fig"><img src="hinh/h913.jpg" alt="Trang tính 5. Tổng kết: cột Đơn giá, Chi phí, tổng chi phí" style="max-width:min(100%,640px)"><figcaption>Hình 9.13. Trang tính 5. Tổng kết (để đối chiếu)</figcaption></figure>
         <div data-task="nv1" data-n="1"></div>
         <div data-task="nv2" data-n="2"></div>
         <div data-task="nvkq" data-n="3"></div>
@@ -354,7 +354,7 @@
 <script src="content.js?v=22"></script>
 <script src="../chung/outline.js?v=22"></script>
 <script src="../chung/api.js?v=22"></script>
-<script src="../chung/chieu.js?v=25"></script>
+<script src="../chung/chieu.js?v=26"></script>
 <script src="../chung/hs.js?v=28"></script>
 </body>
 </html>

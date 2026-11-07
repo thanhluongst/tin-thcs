@@ -155,7 +155,7 @@ window.Chieu = {open, close, parts: PARTS};
   }
   function strokes(){ const k = ctxInfo().key; return LAYERS[k] || (LAYERS[k] = []); }
   function mount(){ const h = ctxInfo().host; [cv, bar, fab].forEach(function(x){ if (x.parentNode !== h) h.appendChild(x); }); }
-  function size(){ const r = window.devicePixelRatio || 1; cv.width = Math.round(innerWidth * r); cv.height = Math.round(innerHeight * r); cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px"; draw(); }
+  function size(){ const r = window.devicePixelRatio || 1, w = Math.min(innerWidth, document.documentElement.clientWidth || innerWidth); cv.width = Math.round(w * r); cv.height = Math.round(innerHeight * r); cv.style.width = w + "px"; cv.style.height = innerHeight + "px"; draw(); }
   function path(g, s, ox, oy){
     const p = s.p; g.beginPath(); g.moveTo(p[0][0] - ox, p[0][1] - oy);
     if (p.length === 1) g.lineTo(p[0][0] - ox + .1, p[0][1] - oy);
