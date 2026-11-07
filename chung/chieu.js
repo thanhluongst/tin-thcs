@@ -348,3 +348,21 @@ window.Chieu = {open, close, parts: PARTS};
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
   window.DemNguoc = {start: function(sec){ preset(sec); render(); }, reset: reset};
 })();
+
+/* ẨN/HIỆN NÚT GÓC PHẢI (⏱ và ✏️): trên máy có chuột, hai nút ẩn đi cho gọn; rê chuột vào góc phải dưới thì hiện,
+   rời khỏi góc khoảng 1 giây thì ẩn lại. Nút luôn hiện khi đang dùng bút, đang mở bảng đếm ngược, hoặc khi chọn bằng phím Tab.
+   Màn hình cảm ứng (không có chuột) thì nút luôn hiện. Ô số giờ đang đếm vẫn luôn hiện. */
+(function(){
+  const css = "@media (hover:hover) and (pointer:fine){"
+    + ".pen-fab,.tm-fab{transition:opacity .2s,transform .2s}"
+    + "html:not(.fab-show) .pen-fab:not([aria-pressed=true]):not(:focus-visible),html:not(.fab-show) .tm-fab:not([aria-expanded=true]):not(:focus-visible){opacity:0;transform:translateY(10px);pointer-events:none}"
+    + "}";
+  const st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+  const root = document.documentElement; let t = 0;
+  function near(x, y){ return x > innerWidth - 200 && y > innerHeight - 110; }
+  document.addEventListener("mousemove", function(e){
+    if (near(e.clientX, e.clientY)) { clearTimeout(t); t = 0; root.classList.add("fab-show"); }
+    else if (root.classList.contains("fab-show") && !t) t = setTimeout(function(){ root.classList.remove("fab-show"); t = 0; }, 1000);
+  }, {passive: true});
+  document.addEventListener("mouseleave", function(){ clearTimeout(t); t = setTimeout(function(){ root.classList.remove("fab-show"); t = 0; }, 1000); });
+})();
