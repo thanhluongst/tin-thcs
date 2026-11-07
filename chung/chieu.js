@@ -238,3 +238,113 @@ window.Chieu = {open, close, parts: PARTS};
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
   window.But = {on: function(){ setOn(true); }, off: function(){ setOn(false); }, layers: LAYERS};
 })();
+
+/* ĐỒNG HỒ ĐẾM NGƯỢC: nút ⏱ ở góc phải dưới (cạnh nút bút). Chọn nhanh 1–15 phút hoặc tự đặt phút:giây, bắt đầu / tạm dừng / đặt lại.
+   Khi chạy: ô giờ nổi ở góc, bấm vào số để phóng to giữa màn hình (cho máy chiếu). 10 giây cuối chuyển đỏ.
+   Hết giờ: hiện "Hết giờ!" và đổ chuông (bật/tắt bằng nút 🔔, nhớ trên máy). Dùng được cả khi đang chiếu toàn màn hình. */
+(function(){
+  const css = ".tm-fab{position:fixed;right:70px;bottom:14px;z-index:310;width:46px;height:46px;border-radius:50%;border:2px solid var(--accent,#0c665e);background:var(--surface,#fff);color:var(--fg,#1d2433);font-size:22px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.25);display:grid;place-items:center;padding:0}"
+    + ".tm-fab[aria-expanded=true]{background:var(--accent,#0c665e);color:#fff}"
+    + ".tm-pan{position:fixed;right:14px;bottom:70px;z-index:311;width:min(300px,calc(100vw - 28px));box-sizing:border-box;display:grid;gap:10px;padding:12px;border-radius:14px;background:var(--surface,#fff);color:var(--fg,#1d2433);border:1px solid var(--line,#ccd);box-shadow:0 4px 16px rgba(0,0,0,.25);font-size:15px}"
+    + ".tm-pan[hidden]{display:none}.tm-pan .h{display:flex;justify-content:space-between;align-items:center;font-weight:700}"
+    + ".tm-pan .pre{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}"
+    + ".tm-pan button{font:inherit;font-size:14px;border:1px solid var(--line,#ccd);background:var(--bg,#fff);color:inherit;border-radius:9px;padding:6px 8px;cursor:pointer}"
+    + ".tm-pan button:hover{border-color:var(--accent,#0c665e)}.tm-pan button.main{background:var(--accent,#0c665e);color:#fff;border-color:var(--accent,#0c665e);font-weight:700}"
+    + ".tm-pan .set{display:flex;align-items:center;justify-content:center;gap:6px}"
+    + ".tm-pan .set input{width:3.2em;font:700 22px/1.2 var(--font-display,inherit);text-align:center;padding:4px;border:1px solid var(--line,#ccd);border-radius:8px;background:var(--bg,#fff);color:inherit}"
+    + ".tm-pan .set b{font-size:22px}.tm-pan .set button{width:38px;font-size:20px;padding:2px}.tm-pan .row{display:grid;grid-template-columns:1fr 1fr;gap:6px}"
+    + ".tm-pan .snd{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px}"
+    + ".tm-pill{position:fixed;right:126px;bottom:14px;z-index:309;height:46px;padding:0 14px;border-radius:23px;border:2px solid var(--accent,#0c665e);background:var(--surface,#fff);color:var(--fg,#1d2433);font:700 26px/42px var(--font-display,inherit);font-variant-numeric:tabular-nums;box-shadow:0 3px 10px rgba(0,0,0,.25);cursor:pointer;white-space:nowrap}"
+    + ".tm-pill[hidden]{display:none}.tm-pill.warn{border-color:#d32f2f;color:#d32f2f}.tm-pill.pause{opacity:.65}"
+    + ".tm-pill.big{right:50%;bottom:50%;transform:translate(50%,50%);height:auto;padding:2vh 6vw;border-radius:4vw;font-size:min(22vw,40vh);line-height:1.1;border-width:4px;z-index:312}"
+    + ".tm-pill.end{border-color:#d32f2f;background:#d32f2f;color:#fff;animation:tm-blink .8s steps(2,start) infinite}"
+    + "@keyframes tm-blink{to{background:#fff;color:#d32f2f}}"
+    + "@media (prefers-reduced-motion:reduce){.tm-pill.end{animation:none}}"
+    + "@media (max-width:480px){.tm-pill{right:auto;left:14px}}"
+    + ".chieu .chieu-bar{padding-right:240px}"
+    + "@media (max-width:700px){.chieu .chieu-bar{padding-right:16px;padding-bottom:70px}}"
+    + "@media print{.tm-fab,.tm-pan,.tm-pill{display:none}}";
+  const st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+  const ls = function(k, v){ try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch(e) { return null; } };
+
+  const fab = document.createElement("button"); fab.type = "button"; fab.className = "tm-fab"; fab.textContent = "⏱";
+  fab.title = "Đồng hồ đếm ngược"; fab.setAttribute("aria-label", "Đồng hồ đếm ngược"); fab.setAttribute("aria-expanded", "false");
+  const pan = document.createElement("div"); pan.className = "tm-pan"; pan.hidden = true; pan.setAttribute("role", "dialog"); pan.setAttribute("aria-label", "Đặt thời gian đếm ngược");
+  pan.innerHTML = '<div class="h"><span>⏱ Đếm ngược</span><button type="button" data-a="x" aria-label="Đóng" title="Đóng">✕</button></div>'
+    + '<div class="pre">' + [1, 2, 3, 5, 10, 15].map(function(m){ return '<button type="button" data-m="' + m + '">' + m + ' phút</button>'; }).join("") + '</div>'
+    + '<div class="set"><button type="button" data-d="-60" aria-label="Bớt 1 phút" title="Bớt 1 phút">−</button><input type="number" min="0" max="99" value="5" aria-label="Phút" data-f="m"><b>:</b><input type="number" min="0" max="59" step="5" value="0" aria-label="Giây" data-f="s"><button type="button" data-d="60" aria-label="Thêm 1 phút" title="Thêm 1 phút">+</button></div>'
+    + '<div class="row"><button type="button" class="main" data-a="go">▶ Bắt đầu</button><button type="button" data-a="reset">↺ Đặt lại</button></div>'
+    + '<div class="snd"><span>Chuông khi hết giờ</span><span><button type="button" data-a="snd" aria-pressed="true">🔔 Bật</button> <button type="button" data-a="test" title="Nghe thử chuông">▷ Thử</button></span></div>';
+  const pill = document.createElement("button"); pill.type = "button"; pill.className = "tm-pill"; pill.hidden = true; pill.title = "Bấm để phóng to / thu nhỏ";
+  const inM = pan.querySelector('[data-f="m"]'), inS = pan.querySelector('[data-f="s"]'), bGo = pan.querySelector('[data-a="go"]'), bSnd = pan.querySelector('[data-a="snd"]');
+
+  /* state: idle | run | pause | end */
+  let total = 300, left = 300, endAt = 0, timer = 0, state = "idle", sound = ls("tm-sound") !== "0", ac = null;
+  const last = Number(ls("tm-last")); if (last > 0) { total = left = last; }
+  function fmt(s){ s = Math.max(0, Math.ceil(s)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }
+  function setInputs(){ inM.value = Math.floor(total / 60); inS.value = total % 60; }
+  function readInputs(){ const m = Math.min(99, Math.max(0, parseInt(inM.value, 10) || 0)), s = Math.min(59, Math.max(0, parseInt(inS.value, 10) || 0)); return m * 60 + s; }
+  function render(){
+    pill.hidden = state === "idle";
+    pill.textContent = state === "end" ? "Hết giờ!" : fmt(left);
+    pill.classList.toggle("warn", state === "run" && left <= 10); pill.classList.toggle("pause", state === "pause"); pill.classList.toggle("end", state === "end");
+    pill.setAttribute("aria-label", state === "end" ? "Hết giờ. Bấm để tắt" : "Còn " + fmt(left) + ". Bấm để phóng to hoặc thu nhỏ");
+    bGo.textContent = state === "run" ? "⏸ Tạm dừng" : state === "pause" ? "▶ Chạy tiếp" : "▶ Bắt đầu";
+    bSnd.setAttribute("aria-pressed", String(sound)); bSnd.textContent = sound ? "🔔 Bật" : "🔕 Tắt";
+    fab.setAttribute("aria-expanded", String(!pan.hidden));
+  }
+  function audio(){ try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === "suspended") ac.resume(); } catch(e) { ac = null; } return ac; }
+  function ring(rounds){
+    const a = audio(); if (!a) return;
+    const t0 = a.currentTime + .05;
+    for (let r = 0; r < rounds; r++) for (let i = 0; i < 3; i++) {
+      const t = t0 + r * 1.3 + i * .28, o = a.createOscillator(), g = a.createGain();
+      o.type = "sine"; o.frequency.value = i === 2 ? 1175 : 880;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.35, t + .02); g.gain.exponentialRampToValueAtTime(.001, t + .24);
+      o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + .25);
+    }
+  }
+  function tick(){
+    left = (endAt - Date.now()) / 1000;
+    if (left <= 0) { left = 0; clearInterval(timer); state = "end"; if (sound) ring(3); }
+    render();
+  }
+  function start(){
+    if (state === "idle" || state === "end") { total = readInputs(); if (!total) return; left = total; ls("tm-last", total); }
+    audio(); endAt = Date.now() + left * 1000; state = "run"; clearInterval(timer); timer = setInterval(tick, 200); tick();
+  }
+  function pause(){ clearInterval(timer); left = (endAt - Date.now()) / 1000; state = "pause"; render(); }
+  function reset(){ clearInterval(timer); state = "idle"; left = total; pill.classList.remove("big"); render(); }
+  function preset(sec){ total = sec; setInputs(); clearInterval(timer); state = "idle"; start(); }
+
+  fab.addEventListener("click", function(){ pan.hidden = !pan.hidden; if (!pan.hidden && state === "idle") setInputs(); mount(); render(); });
+  pill.addEventListener("click", function(){ if (state === "end") { reset(); return; } pill.classList.toggle("big"); });
+  pan.addEventListener("click", function(e){ const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.m) preset(Number(b.dataset.m) * 60);
+    else if (b.dataset.d) {
+      const d = Number(b.dataset.d);
+      if (state === "run" || state === "pause") { left = Math.max(1, left + d); endAt = Date.now() + left * 1000; }
+      else { total = Math.max(0, Math.min(99 * 60 + 59, readInputs() + d)); setInputs(); }
+    }
+    else if (b.dataset.a === "go") { if (state === "run") pause(); else start(); }
+    else if (b.dataset.a === "reset") reset();
+    else if (b.dataset.a === "snd") { sound = !sound; ls("tm-sound", sound ? "1" : "0"); if (sound) audio(); }
+    else if (b.dataset.a === "test") ring(1);
+    else if (b.dataset.a === "x") pan.hidden = true;
+    render(); });
+  pan.addEventListener("keydown", function(e){
+    if (e.key === "Enter" && e.target.tagName === "INPUT") { e.preventDefault(); clearInterval(timer); state = "idle"; start(); render(); }
+    if (e.key === "Escape") { pan.hidden = true; render(); fab.focus(); }
+  });
+  /* đặt nút vào đúng chỗ: trang học hoặc màn "Chiếu ghi bài" (kể cả toàn màn hình) */
+  function host(){ const b = document.querySelector(".chieu"); return b && !b.hidden ? b : document.body; }
+  function mount(){ const h = host(); [pill, pan, fab].forEach(function(x){ if (x.parentNode !== h) h.appendChild(x); }); }
+  function init(){
+    setInputs(); mount(); render();
+    new MutationObserver(mount).observe(document.documentElement, {attributes: true, attributeFilter: ["class"]});
+    new MutationObserver(mount).observe(document.body, {childList: true});
+    document.addEventListener("fullscreenchange", function(){ setTimeout(mount, 60); });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+  window.DemNguoc = {start: function(sec){ preset(sec); render(); }, reset: reset};
+})();
