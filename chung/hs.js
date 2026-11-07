@@ -177,9 +177,22 @@ function makePeer(id, t){
       busy = false; }
     timer = setTimeout(load, 20000 + Math.random() * 5000);
   }
+  /* Lớp đông (tới 50 bài): mỗi máy thấy các bài theo một thứ tự xáo riêng (cố định trên máy đó), để tim và nhận xét
+     chia đều cho các nhóm, không dồn vào mấy bài đầu danh sách; hiện 10 bài một lần, bấm "Xem thêm". */
+  let limit = 10;
+  const more = el("button", {class:"btn", type:"button", hidden:""});
+  more.addEventListener("click", () => { limit += 10; draw(lastL); });
+  let lastL = [];
+  const rank = cid => { let h = 2166136261; const s = S.clientId + "|" + cid; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b); h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16; return h >>> 0; };
   function draw(L){
+    lastL = L;
     const seen = new Set();
-    L.sort((a, b) => (a.mine - b.mine) || String(a.group).localeCompare(String(b.group), "vi", {numeric: true}));
+    L = L.slice().sort((a, b) => (a.mine - b.mine) || rank(a.cid) - rank(b.cid));
+    const others = L.filter(p => !p.mine);
+    L = others.slice(0, limit).concat(L.filter(p => p.mine));
+    more.hidden = others.length <= limit;
+    more.textContent = "Xem thêm bài các bạn (còn " + (others.length - limit) + ")";
     L.forEach(p => {
       seen.add(p.cid);
       let it = items.get(p.cid);
@@ -188,6 +201,8 @@ function makePeer(id, t){
       it.update(p);
     });
     items.forEach((it, cid) => { if (!seen.has(cid)) { it.card.remove(); items.delete(cid); } });
+    const mineCard = list.querySelector(".peer-card.mine");
+    list.insertBefore(more, mineCard);   /* nút "Xem thêm" nằm sau bài các bạn, trước bài của em */
   }
   function makeCard(p){
     const card = el("div", {class:"peer-card" + (p.mine ? " mine" : "")});
@@ -461,23 +476,40 @@ function renderDash(){
 
 /* ================= BUỔI HỌC TRỰC TUYẾN (Google Sheets) ================= */
 function stamp(){ return new Date().toLocaleTimeString("vi-VN", {hour:"2-digit", minute:"2-digit"}); }
+/* Gửi bài lên Google Sheets. Lớp tới 50 máy dùng chung một Apps Script nên gửi tiết kiệm:
+   bấm Nộp / Sửa → gửi sau 1,5 giây; đang gõ nháp → gửi tối đa mỗi 8 giây; không đổi gì thì không gửi;
+   lỗi mạng hoặc máy chủ bận → thử lại sau 15, 30, 60 giây (cộng thêm vài giây ngẫu nhiên để các máy không dồn cùng lúc). */
 function makeWriter(){
-  let timer = null, busy = false, again = false, retry = null;
+  let timer = null, due = 0, busy = false, again = false, retry = null, fails = 0, lastSig = "", lastSub = -1;
   async function flush(){
+    timer = null; due = 0;
     if (mode !== "online") return;
     if (busy) { again = true; return; }
+    const data = {ans: S.ans, sub: S.sub, mcq: S.mcq, sort: S.sort, match: S.match, order: S.order};
+    const sig = JSON.stringify([S.session, S.name || "", data]);
+    if (sig === lastSig) return;
     busy = true; setSync("Đang gửi bài…");
     try {
-      await API.submit({bai: window.LESSON.id, buoi: S.session, clientId: S.clientId, group: S.name || "", sub: countSub(S),
-        data: {ans: S.ans, sub: S.sub, mcq: S.mcq, sort: S.sort, match: S.match, order: S.order}, cols: window.LESSON.summary(S)});
+      const sub = countSub(S);
+      await API.submit({bai: window.LESSON.id, buoi: S.session, clientId: S.clientId, group: S.name || "", sub, data, cols: window.LESSON.summary(S)});
+      lastSig = sig; lastSub = sub; fails = 0;
       clearTimeout(retry); setSync("Đã gửi lúc " + stamp());
     } catch(e) {
-      setSync("Chưa gửi được (" + e.message + "). Bài vẫn lưu trên máy, trang sẽ tự gửi lại.");
-      clearTimeout(retry); retry = setTimeout(flush, 15000);
+      fails++;
+      const wait = Math.min(60000, 15000 * Math.pow(2, fails - 1)) + Math.random() * 5000;
+      setSync("Chưa gửi được (" + e.message + "). Bài vẫn lưu trên máy, trang tự gửi lại sau " + Math.round(wait / 1000) + " giây.");
+      clearTimeout(retry); retry = setTimeout(flush, wait);
     }
     busy = false; if (again) { again = false; flush(); }
   }
-  return { queue(){ clearTimeout(timer); timer = setTimeout(flush, 1500); }, now(){ clearTimeout(timer); return flush(); } };
+  return {
+    queue(){
+      const urgent = countSub(S) !== lastSub, at = Date.now() + (urgent ? 1500 : 8000);
+      if (timer && due <= at) return;            // đã hẹn gửi sớm hơn: giữ lịch cũ
+      clearTimeout(timer); due = at; timer = setTimeout(flush, at - Date.now());
+    },
+    now(){ clearTimeout(timer); timer = null; lastSig = ""; return flush(); }
+  };
 }
 
 let pollTimer = null;

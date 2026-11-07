@@ -7,7 +7,7 @@ const cfg = window.APP_CONFIG || {};
 const URL_API = String(cfg.API_URL || "").trim();
 const demo = !URL_API;
 const fake = demo || URL_API === "demo:";   // "demo:" = thử quy trình trực tuyến bằng máy chủ giả trong trình duyệt
-const TIMEOUT = 20000;
+const TIMEOUT = 30000;      // lớp đông: máy chủ có thể phải xếp hàng ghi bài
 
 function normSession(s){
   return String(s || "").trim().toUpperCase().replace(/\s+/g, "-").replace(/[^A-Z0-9_.\-]/g, "").slice(0, 40);
