@@ -436,7 +436,24 @@ function trungBay(o){
     docs: () => DOCS.map(d => Object.assign({key: d.clientId}, d)),
     rev: id => !!REV[id],
     hearts: (id, d) => (((d.ban || {})[id]) || {}).n || 0,
-    liked: (id, d) => !!(d.nx && d.nx[LIKE(id)])
+    liked: (id, d) => !!(d.nx && d.nx[LIKE(id)]),
+    getComment: (id, d) => (d.nx && d.nx[id]) || "",
+    commentHint: "gửi cho nhóm, nhóm thấy ngay trên máy",
+    comment: async (id, d, text) => {
+      const doc = DOCS.find(x => x.clientId === d.key); if (!doc) throw new Error("Không tìm thấy bài của nhóm");
+      const nx = await API.setComment(BAI, BUOI, PIN, doc.clientId, doc.name, id, text);
+      doc.nx = (nx && typeof nx === "object") ? nx : Object.assign({}, doc.nx, {[id]: text});
+      if (!text) delete doc.nx[id];
+      renderTable(); renderPanel(id);
+    },
+    like: async (id, d) => {
+      const doc = DOCS.find(x => x.clientId === d.key); if (!doc) throw new Error("Không tìm thấy bài của nhóm");
+      const liked = !!(doc.nx && doc.nx[LIKE(id)]);
+      const nx = await API.setComment(BAI, BUOI, PIN, doc.clientId, doc.name, LIKE(id), liked ? "" : "Thích");
+      if (nx && typeof nx === "object") doc.nx = nx;
+      else { doc.nx = Object.assign({}, doc.nx); if (liked) delete doc.nx[LIKE(id)]; else doc.nx[LIKE(id)] = "Thích"; }
+      renderTable(); renderPanel(id);
+    }
   }, o));
 }
 if ($("chieu-all") && window.TrungBay) {

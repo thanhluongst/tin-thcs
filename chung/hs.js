@@ -422,7 +422,11 @@ if ($("chieu-all") && window.TrungBay) {
     if (groupsOn()) stash();
     window.TrungBay.open({
       docs: () => { const out = []; for (let i = 1; i <= S.ngroups; i++) { const k = "g" + i, g = groupData(k); if (countSub(g) || Object.keys(g.ans || {}).some(x => (g.ans[x] || "").trim()) || Object.keys(g.mcq || {}).length) out.push(Object.assign({key: k}, g, {name: g.name || ("Nhóm " + i)})); } return out; },
-      rev: id => isRev(id)
+      rev: id => isRev(id),
+      getComment: (id, d) => S.note[d.key + "|" + id] || "",
+      commentLabel: "Lưu nhận xét",
+      commentHint: "ghi trên máy này, hiện ở ô nhận xét của câu",
+      comment: async (id, d, text) => { if (text) S.note[d.key + "|" + id] = text; else delete S.note[d.key + "|" + id]; saveLocal(); renderAll(); }
     });
   });
   $("chieu-all").after(b);
