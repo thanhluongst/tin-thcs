@@ -248,17 +248,3 @@ window.LESSON = {STAGES, id: "tin7-bai6", title: "Bài 6. Làm quen với phần
   notePh: "Ví dụ: Nhóm 2 viết địa chỉ ô là 6B vì…",
   commentPh: "Ví dụ: Nhóm nhập đúng dữ liệu; cần căn giữa cột STT."};
 })();
-
-/* Hình vẽ lại (nét hơn ảnh chụp SGK) — chung/hinh-ve.js */
-window.HINH_VE = {
-  h61: {loai:"bang", cols:8, rows:11, widths:{B:150,C:40,D:80,E:80,F:60,G:60,H:40}, cell:"B6", tabs:["Sheet1","Sheet2"],
-  alt:"Giao diện Excel: ô hiện thời B6, hộp địa chỉ, vùng nhập dữ liệu, hàng tên cột, cột tên hàng, các trang tính, khu vực hiển thị dữ liệu",
-  data:{D2:"BẢNG ĐIỂM LỚP 7A", D3:"NĂM HỌC: 2020-2021", B5:"Họ tên học sinh", D5:"Ngữ văn", E5:"Ngoại ngữ", F5:"Toán",
-    B6:"Bùi Lê Đình Anh", D6:7, E6:9, F6:9, B7:"Nguyễn Thị Bình", D7:8, E7:7, F7:9, B8:"Nguyễn Đức Hà", D8:6, E8:7, F8:8,
-    B9:"Trần Thế Hải", D9:9, E9:8, F9:7, B10:"Nguyễn Thị Hiền", D10:8, E10:6, F10:8},
-  fmt:{D2:{b:1}, D3:{b:1}},
-  marks:[{n:1,at:"B6",t:"<b>Ô hiện thời</b> (ô đang chọn)"},{n:2,at:"namebox",t:"<b>Hộp địa chỉ</b>: tên ô hiện thời"},
-    {n:3,at:"fx",t:"<b>Vùng nhập dữ liệu</b> (thanh công thức)"},{n:4,at:"cols",t:"<b>Hàng ghi tên các cột</b>: A, B, C,…"},
-    {n:5,at:"rows",t:"<b>Cột ghi tên các hàng</b>: 1, 2, 3,…"},{n:6,at:"tabs",t:"<b>Các trang tính</b> có tên Sheet1, Sheet2"},
-    {n:7,at:"grid",t:"<b>Khu vực hiển thị dữ liệu</b>"}]}
-};
