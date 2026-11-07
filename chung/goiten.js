@@ -172,7 +172,7 @@ function render(){
     return;
   }
   const pool = l.ds.filter(n => l.goi.indexOf(n) < 0 && l.vang.indexOf(n) < 0);
-  box.querySelector(".chieu-part").textContent = "Lớp " + D.cur;
+  box.querySelector(".chieu-part").textContent = /^lớp/i.test(D.cur) ? D.cur : "Lớp " + D.cur;   /* tên đã có chữ "Lớp" thì không thêm nữa */
   box.querySelector(".chieu-n").textContent = "Đã gọi " + l.goi.length + "/" + l.ds.length + (l.vang.length ? " · vắng " + l.vang.length : "");
   page.innerHTML =
     '<div class="gt-stage">' +
