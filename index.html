@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="author" content="Nguyễn Thanh Lương – Trường THCS Nhơn Mỹ, Cần Thơ">
 <title>Tin học THCS · Trang học tương tác</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lexend:wght@500;600;700&display=swap">
@@ -76,6 +77,8 @@ main{padding:20px 0 40px}
 @media (max-width:560px){.lesson{grid-template-columns:44px minmax(0,1fr)}.links{grid-column:2;justify-content:flex-start}.meta{grid-column:2}}
 .empty{color:var(--muted);padding:24px 0}
 footer{color:var(--muted);font-size:13px;padding:0 0 32px}
+footer .cr{margin:6px 0 0}
+footer .cr a{color:inherit}
 /* Phong cách SGK: xanh ngọc + hồng */
 :root{--pink:#d0186e;--pink-soft:#fde8f1}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pink:#f472b6;--pink-soft:#3a1529}}
@@ -144,7 +147,7 @@ header{border-bottom:6px solid var(--accent)}
   </section>
   <div id="list"></div>
 </div></main>
-<footer><div class="wrap">Cập nhật trạng thái trong tệp <code>danh-muc.js</code>. Quy ước đặt tên xem <code>README.md</code>.</div></footer>
+<footer><div class="wrap">Cập nhật trạng thái trong tệp <code>danh-muc.js</code>. Quy ước đặt tên xem <code>README.md</code>.<p class="cr">© 2026 <b>Nguyễn Thanh Lương</b> – Giáo viên Trường THCS Nhơn Mỹ, xã Nhơn Mỹ, thành phố Cần Thơ · Zalo: <a href="https://zalo.me/0907654137" target="_blank" rel="noopener">0907 654 137</a></p></div></footer>
 <!-- Luôn tải danh mục mới nhất (GitHub Pages cho trình duyệt giữ tệp cũ tới 10 phút) -->
 <script>document.write('<script src="danh-muc.js?t=' + Date.now() + '"><\/script>');</script>
 <script src="chung/config.js"></script>
