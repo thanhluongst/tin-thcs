@@ -286,7 +286,7 @@ document.querySelectorAll("[data-task]").forEach(slot => {
   const st = el("span", {class:"status"});
   row.append(bSub, bKey, st); slot.appendChild(row);
   const kb = keyBox(id, (t.type === "mcq" ? "Đáp án đúng: <b>" + L[t.a] + "</b>. " : "") + t.k);
-  const liked = el("div", {class:"liked"}, THUMB + "Thầy cô khen câu trả lời của em!");
+  const liked = el("div", {class:"liked praise"}, '<span class="praise-medal">' + (window.Khen ? window.Khen.STAR : THUMB) + '</span><span class="praise-tx"><b>Thầy cô khen câu trả lời của em!</b><span>Rất tốt, em hãy tiếp tục phát huy nhé.</span></span>');
   const fb = el("div", {class:"feedback"}, '<span class="fl">Nhận xét của thầy cô</span>');
   const fbText = el("span", {class:"ft"}); fb.appendChild(fbText);
   slot.insertBefore(fb, row.nextSibling);
@@ -315,6 +315,7 @@ document.querySelectorAll("[data-task]").forEach(slot => {
     const nx = mode === "online" ? (NX[id] || "") : "";
     fbText.textContent = nx; fb.hidden = !nx;
     liked.hidden = !(mode === "online" && NX["like." + id]);
+    slot.classList.toggle("praised", !liked.hidden);
     peer.render();
     /* màu trạng thái: chưa làm / đang làm / đã nộp / đúng / cần sửa */
     const gg = rev ? grade(id, S) : null;
@@ -351,7 +352,23 @@ document.querySelectorAll("[data-concept]").forEach(slot => {
 });
 
 /* ================= TIẾN ĐỘ, CHẾ ĐỘ ================= */
-function updateProgress(){ document.getElementById("prog").textContent = "Đã nộp " + countSub(S) + "/" + TASK_IDS.length + " câu"; }
+function updateProgress(){
+  const n = mode === "online" ? Object.keys(NX).filter(k => k.indexOf("like.") === 0 && TASKS[k.slice(5)]).length : 0;
+  const p = document.getElementById("prog");
+  p.innerHTML = "Đã nộp " + countSub(S) + "/" + TASK_IDS.length + " câu" + (n ? ' <span class="praise-count" title="Số câu được thầy cô khen">⭐ ' + n + " lời khen</span>" : "");
+}
+/* Lời khen mới của thầy cô: chúc mừng một lần cho mỗi câu (nhớ trên máy, tải lại trang không lặp lại) */
+function celebrateNew(){
+  if (mode !== "online" || !S.session) return;
+  const liked = Object.keys(NX).filter(k => k.indexOf("like.") === 0).map(k => k.slice(5)).filter(id => TASKS[id]);
+  S.seenLike = S.seenLike || {};
+  const seen = S.seenLike[S.session] = S.seenLike[S.session] || {};
+  Object.keys(seen).forEach(id => { if (liked.indexOf(id) < 0) delete seen[id]; });   /* thầy cô bỏ khen rồi khen lại thì chúc mừng lại */
+  const fresh = liked.filter(id => !seen[id]);
+  if (!fresh.length) return;
+  fresh.forEach(id => { seen[id] = 1; }); saveLocal();
+  if (window.Khen) window.Khen.celebrate(fresh.map(id => ({id, label: TASKS[id].label, el: document.querySelector('[data-task="' + id + '"]')})), liked.length);
+}
 
 const $ = id => document.getElementById(id);
 function setSync(t){ $("sync").textContent = t; }
@@ -541,7 +558,7 @@ async function pollReveal(){
       const changedKeys = Object.keys(st.nx).filter(k => st.nx[k] !== NX[k]);
       const newLike = changedKeys.some(k => k.indexOf("like.") === 0), newNx = changedKeys.some(k => k.indexOf("like.") !== 0);
       const banMore = Object.keys(st.ban || {}).some(k => { const a = st.ban[k], b = BAN[k] || {n: 0, cm: []}; return a.n > b.n || (a.cm || []).length > (b.cm || []).length; });
-      REV = st.rev; NX = st.nx; BAN = st.ban || {}; renderAll();
+      REV = st.rev; NX = st.nx; BAN = st.ban || {}; renderAll(); celebrateNew();
       if (banMore && !(newNx || newLike)) setSync("Các bạn vừa bình chọn bài của em lúc " + stamp() + ".");
       if (newNx || newLike) setSync("Thầy cô vừa " + (newNx && newLike ? "gửi nhận xét và khen" : newLike ? "khen câu trả lời của em" : "gửi nhận xét mới") + " lúc " + stamp() + ".");
     }
