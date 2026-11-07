@@ -6,7 +6,7 @@
 <title>Sử dụng hàm COUNTIF · Tin học 9</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="../chung/style.css?v=32">
+<link rel="stylesheet" href="../chung/style.css?v=34">
 </head>
 <body>
 <header class="hero">
@@ -124,18 +124,18 @@
       <div class="act">
         <div class="act-tag"><b>Hoạt động 1</b> Các khoản chi được tổng hợp như thế nào?</div>
         <div class="reading">Giả sử dữ liệu chi tiêu đã được cập nhật trong vùng A3:D10 (Hình 10a.1). Theo em, công thức tại các ô G2, G3,…, G10 là gì để em có thể biết số lần chi tiêu của mỗi khoản?</div>
-        <figure class="fig"><img src="hinh/h101.jpg" alt="Trang tính Chi tiêu có 8 khoản chi từ 14/8/23 đến 30/8/23, cột F liệt kê các khoản chi, cột G Số lần chi đang để dấu hỏi"><figcaption>Hình 10a.1. Bảng dữ liệu về các khoản chi</figcaption></figure>
+        <figure class="fig"><img src="hinh/h101.jpg" alt="Trang tính Chi tiêu có 8 khoản chi từ 14/8/23 đến 30/8/23, cột F liệt kê các khoản chi, cột G Số lần chi đang để dấu hỏi" width="845" height="295" style="width:100%;max-width:659px"><figcaption>Hình 10a.1. Bảng dữ liệu về các khoản chi</figcaption></figure>
         <div data-task="hd1" data-n="1"></div>
       </div>
       <div class="act">
         <div class="act-tag"><b>Đọc hiểu</b> Hàm đếm theo điều kiện COUNTIF</div>
         <div class="reading">Đọc mục <b>1</b> (SGK trang 42). Để đếm số ô tính mà dữ liệu của ô thoả mãn một điều kiện nào đó, em sử dụng hàm đếm theo điều kiện COUNTIF. Bảng 10a.1 dưới đây là một số ví dụ sử dụng hàm này.</div>
-        <figure class="fig"><img src="hinh/b101.jpg" alt="Bảng 10a.1 gồm 4 ví dụ: đếm số ô trong vùng A1:A4 chứa số lớn hơn 100, chứa từ Yes, chứa xâu bắt đầu bằng chữ Y, chứa giá trị giống ô D2, kèm công thức COUNTIF tương ứng"><figcaption>Bảng 10a.1. Một số ví dụ sử dụng hàm COUNTIF</figcaption></figure>
+        <figure class="fig"><img src="hinh/b101.jpg" alt="Bảng 10a.1 gồm 4 ví dụ: đếm số ô trong vùng A1:A4 chứa số lớn hơn 100, chứa từ Yes, chứa xâu bắt đầu bằng chữ Y, chứa giá trị giống ô D2, kèm công thức COUNTIF tương ứng" width="1016" height="362" style="width:100%;max-width:792px"><figcaption>Bảng 10a.1. Một số ví dụ sử dụng hàm COUNTIF</figcaption></figure>
         <div class="reading">Thử bốn công thức của Bảng 10a.1 trên bảng tính mô phỏng: nhập vào các ô C1 đến C4 (ví dụ gõ <b>=COUNTIF(A1:A4,"&gt;100")</b> rồi nhấn Enter).</div>
         <div data-bt0></div>
         <div data-task="vd" data-n="1"></div>
         <div class="reading">Công thức chung của COUNTIF là: <b>=COUNTIF(range, criteria)</b>. Trong đó, ý nghĩa của các tham số như sau: <b>range</b>: phạm vi chứa các ô tính cần kiểm tra để đếm; <b>criteria</b>: điều kiện kiểm tra các ô tính trong phạm vi range. Trong Hình 10a.1, để biết mỗi khoản chi đã được chi bao nhiêu lần, em dùng hàm COUNTIF để đếm số ô tính trong vùng B3:B10 chứa mỗi khoản chi. Như vậy, công thức ở ô G2 là =COUNTIF($B$3:$B$10,"Ở") cho biết khoản Ở đã được chi bao nhiêu lần. Tuy nhiên, tên của khoản chi này đã được lưu ở ô F2. Vì vậy công thức tại ô G2 được sửa lại là <b>=COUNTIF($B$3:$B$10,F2)</b> như Hình 10a.2. Khi sao chép công thức này sang các ô còn lại từ G3 đến G10, công thức sẽ trả về kết quả là số lần chi của các khoản chi còn lại.</div>
-        <figure class="fig"><img src="hinh/h102.jpg" alt="Trang tính Chi tiêu: ô G2 có công thức =COUNTIF($B$3:$B$10,F2), cột G hiện số lần chi của từng khoản"><figcaption>Hình 10a.2. Công thức tính số lần chi của mỗi khoản chi</figcaption></figure>
+        <figure class="fig"><img src="hinh/h102.jpg" alt="Trang tính Chi tiêu: ô G2 có công thức =COUNTIF($B$3:$B$10,F2), cột G hiện số lần chi của từng khoản" width="947" height="278" style="width:100%;max-width:739px"><figcaption>Hình 10a.2. Công thức tính số lần chi của mỗi khoản chi</figcaption></figure>
         <div data-task="thamso" data-n="2"></div>
         <div data-task="g2" data-n="3"></div>
         <div data-concept="c1"></div>
@@ -161,9 +161,9 @@
         <div class="reading">Sử dụng hàm COUNTIF để tổng hợp chi tiêu theo mỗi khoản. <b>Hướng dẫn. a) Tính số lần chi của mỗi khoản chi trong trang tính Chi tiêu:</b> mở tệp bảng tính TaiChinhGiaDinh.xlsx, chọn trang tính Chi tiêu; nhập dữ liệu cho trang tính để được kết quả tương tự như Hình 10a.1; tại ô G2, nhập công thức <b>=COUNTIF($B$3:$B$10,F2)</b> như minh hoạ trong Hình 10a.2; sao chép công thức trong ô G2 sang các ô từ G3 đến G10; lưu bảng tính.<br><b>b) Tính số lần thu của mỗi khoản thu trong trang tính Thu nhập:</b> chọn trang tính Thu nhập; nhập dữ liệu cho trang tính để được nội dung tương tự như Hình 10a.3; tại ô G2, nhập công thức <b>=COUNTIF($B$3:$B$8,F2)</b> để tính số lần thu của khoản Lương (Hình 10a.4); sao chép công thức trong ô G2 sang các ô từ G3 đến G6 để tính số lần thu của các khoản thu còn lại (Hình 10a.5); lưu tệp.</div>
         <div class="reading"><b>Trên bảng tính mô phỏng</b> (dữ liệu đã nhập sẵn): chọn G2, gõ công thức rồi Enter; chọn lại G2, bấm <b>📋 Sao chép</b>, kéo chọn vùng G3:G10 rồi bấm <b>📌 Dán</b>.</div>
         <div data-bt1></div>
-        <figure class="fig"><img src="hinh/h103.jpg" alt="Trang tính Thu nhập có 6 khoản thu từ 13/8/23 đến 30/8/23 và danh sách khoản thu ở cột F"><figcaption>Hình 10a.3. Bảng dữ liệu về các khoản thu</figcaption></figure>
-        <figure class="fig"><img src="hinh/h104.jpg" alt="Ô G2 trang tính Thu nhập đang nhập công thức =COUNTIF($B$3:$B$8,F2)"><figcaption>Hình 10a.4. Nhập công thức tại G2</figcaption></figure>
-        <figure class="fig"><img src="hinh/h105.jpg" alt="Sau khi sao chép công thức từ G2 sang G3 đến G6: Lương 1, Thưởng 1, Làm thêm 2, Được cho tặng 1, Khác 1"><figcaption>Hình 10a.5. Sao chép công thức trong ô G2 sang các ô từ G3 đến G6</figcaption></figure>
+        <figure class="fig"><img src="hinh/h103.jpg" alt="Trang tính Thu nhập có 6 khoản thu từ 13/8/23 đến 30/8/23 và danh sách khoản thu ở cột F" width="957" height="259" style="width:100%;max-width:746px"><figcaption>Hình 10a.3. Bảng dữ liệu về các khoản thu</figcaption></figure>
+        <figure class="fig"><img src="hinh/h104.jpg" alt="Ô G2 trang tính Thu nhập đang nhập công thức =COUNTIF($B$3:$B$8,F2)" width="945" height="221" style="width:100%;max-width:737px"><figcaption>Hình 10a.4. Nhập công thức tại G2</figcaption></figure>
+        <figure class="fig"><img src="hinh/h105.jpg" alt="Sau khi sao chép công thức từ G2 sang G3 đến G6: Lương 1, Thưởng 1, Làm thêm 2, Được cho tặng 1, Khác 1" width="859" height="240" style="width:100%;max-width:670px"><figcaption>Hình 10a.5. Sao chép công thức trong ô G2 sang các ô từ G3 đến G6</figcaption></figure>
         <div data-bt2></div>
         <div data-task="nv1" data-n="1"></div>
         <div data-task="nv2" data-n="2"></div>
@@ -183,7 +183,7 @@
         <div data-bt3></div>
         <div data-task="lt1" data-n="1"></div>
         <div class="reading">2. Em hãy thực hiện cuộc khảo sát về việc chọn trường THPT của các bạn trong lớp. Nhập thông tin mà em thu thập được vào bảng tính và sử dụng hàm COUNTIF để tổng hợp kết quả khảo sát như minh hoạ ở Hình 10a.6.</div>
-        <figure class="fig sm"><img src="hinh/h106.jpg" alt="Bảng Khảo sát chọn trường THPT: 10 học sinh HS01 đến HS10 chọn các trường A, B, C, D; bảng Thống kê số lượng theo từng trường đang để dấu hỏi"><figcaption>Hình 10a.6. Kết quả khảo sát về việc chọn trường THPT</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h106.jpg" alt="Bảng Khảo sát chọn trường THPT: 10 học sinh HS01 đến HS10 chọn các trường A, B, C, D; bảng Thống kê số lượng theo từng trường đang để dấu hỏi" width="673" height="458" style="width:100%;max-width:525px"><figcaption>Hình 10a.6. Kết quả khảo sát về việc chọn trường THPT</figcaption></figure>
         <div data-bt4></div>
         <div data-task="lt2" data-n="2"></div>
       </div>

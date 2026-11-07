@@ -6,7 +6,7 @@
 <title>Cấu trúc điều khiển · Tin học 8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="../chung/style.css?v=32">
+<link rel="stylesheet" href="../chung/style.css?v=34">
 </head>
 <body>
 <header class="hero">
@@ -130,15 +130,15 @@
       <div class="act">
         <div class="act-tag"><b>Đọc hiểu</b> a) Cấu trúc tuần tự</div>
         <div class="reading">Đọc mục <b>1a</b> (SGK trang 80). Dựa trên kịch bản đã xây dựng, em sẽ từng bước lập chương trình của trò chơi này bằng ngôn ngữ lập trình trực quan. Nhận xét rằng, trong trò chơi, chỉ cần sử dụng hai biến số: số thứ nhất do máy tính lấy ngẫu nhiên, được đặt tên là <i>số bí mật</i> và số thứ hai do người chơi đoán và nhập vào máy tính là <i>trả lời</i>. Biến này có sẵn trong Scratch. Để đảm bảo các lệnh đọc, ghi và gán giá trị với hai biến trên hoạt động bình thường, em có thể yêu cầu máy tính gán cho <i>số bí mật</i> một giá trị ngẫu nhiên, sau đó hỏi để nhận vào <i>trả lời</i> một giá trị số từ người chơi, rồi hiển thị hai giá trị đó ra. Trong ngôn ngữ lập trình trực quan, cấu trúc tuần tự được thể hiện bằng cách lắp ghép các khối lệnh thành phần theo đúng trình tự của các hoạt động, từ trên xuống dưới, như Hình 14.1b.</div>
-        <figure class="fig"><img src="hinh/h141.jpg" alt="a) Mô tả thuật toán đọc và hiển thị dữ liệu gồm 6 bước. b) Chương trình Scratch: đặt số bí mật thành lấy ngẫu nhiên từ 1 đến 100, hỏi, nói số bí mật trong 2 giây, nói trả lời trong 2 giây, dừng lại tất cả"><figcaption>Hình 14.1. Thuật toán sử dụng cấu trúc tuần tự</figcaption></figure>
+        <figure class="fig"><img src="hinh/h141.jpg" alt="a) Mô tả thuật toán đọc và hiển thị dữ liệu gồm 6 bước. b) Chương trình Scratch: đặt số bí mật thành lấy ngẫu nhiên từ 1 đến 100, hỏi, nói số bí mật trong 2 giây, nói trả lời trong 2 giây, dừng lại tất cả" width="838" height="327" style="width:100%;max-width:654px"><figcaption>Hình 14.1. Thuật toán sử dụng cấu trúc tuần tự</figcaption></figure>
         <div data-sc1></div>
         <div data-task="tt" data-n="1"></div>
       </div>
       <div class="act">
         <div class="act-tag"><b>Đọc hiểu</b> b) Cấu trúc rẽ nhánh</div>
         <div class="reading">Đọc mục <b>1b</b> (SGK trang 81). Sau khi đảm bảo các biến đã hoạt động đúng, em có thể thay thế các thao tác hiển thị trong kịch bản trên bằng thao tác so sánh hai số và cho biết giá trị của biến <i>trả lời</i> bằng, thấp hơn hay cao hơn giá trị của biến <i>số bí mật</i>: nếu trả lời bằng số bí mật thì thông báo “HOAN HÔ!”; nếu trả lời nhỏ hơn số bí mật thì thông báo “Quá thấp”; nếu trả lời lớn hơn số bí mật thì thông báo “Quá cao”. Nhận xét rằng ba trường hợp “bằng”, “nhỏ hơn” và “lớn hơn” loại trừ lẫn nhau nên không cần kiểm tra cả ba trường hợp đó mà chỉ cần kiểm tra hai lần. Trong ngôn ngữ lập trình trực quan, cấu trúc rẽ nhánh được thể hiện bằng khối lệnh chứa một điều kiện hay một biểu thức lôgic. Tuỳ tình huống, điều kiện này nhận giá trị đúng hay sai, chương trình sẽ định hướng đến khối lệnh tiếp theo để máy tính thực hiện.</div>
-        <figure class="fig"><img src="hinh/h142.jpg" alt="a) Mô tả thuật toán so sánh bằng cấu trúc rẽ nhánh. b) Sơ đồ: kiểm tra trả lời bằng số bí mật, đúng thì HOAN HÔ, sai thì kiểm tra trả lời nhỏ hơn số bí mật: đúng thì Quá thấp, sai thì Quá cao"><figcaption>Hình 14.2. Thuật toán sử dụng cấu trúc rẽ nhánh</figcaption></figure>
-        <figure class="fig"><img src="hinh/h143.jpg" alt="a) Khối nếu thì. b) Khối nếu thì, nếu không thì. c) Đoạn chương trình so sánh trả lời với số bí mật lồng hai khối rẽ nhánh"><figcaption>Hình 14.3. Các cấu trúc rẽ nhánh và đoạn chương trình trong Scratch</figcaption></figure>
+        <figure class="fig"><img src="hinh/h142.jpg" alt="a) Mô tả thuật toán so sánh bằng cấu trúc rẽ nhánh. b) Sơ đồ: kiểm tra trả lời bằng số bí mật, đúng thì HOAN HÔ, sai thì kiểm tra trả lời nhỏ hơn số bí mật: đúng thì Quá thấp, sai thì Quá cao" width="884" height="327" style="width:100%;max-width:690px"><figcaption>Hình 14.2. Thuật toán sử dụng cấu trúc rẽ nhánh</figcaption></figure>
+        <figure class="fig"><img src="hinh/h143.jpg" alt="a) Khối nếu thì. b) Khối nếu thì, nếu không thì. c) Đoạn chương trình so sánh trả lời với số bí mật lồng hai khối rẽ nhánh" width="901" height="281" style="width:100%;max-width:703px"><figcaption>Hình 14.3. Các cấu trúc rẽ nhánh và đoạn chương trình trong Scratch</figcaption></figure>
         <div class="reading">Thử đoạn chương trình Hình 14.3c (số bí mật được đặt sẵn là 45 để dễ kiểm tra): chạy ba lần, lần lượt nhập một số nhỏ hơn, lớn hơn và bằng 45.</div>
         <div data-sc2></div>
         <div data-task="rn" data-n="1"></div>
@@ -146,7 +146,7 @@
       <div class="act">
         <div class="act-tag"><b>Đọc hiểu</b> c) Cấu trúc lặp</div>
         <div class="reading">Đọc mục <b>1c</b> (SGK trang 82). Trong trò chơi, việc đoán số không chỉ được thực hiện một lần mà được người chơi thực hiện lặp lại cho đến khi đoán đúng số bí mật. Mỗi khi người chơi đoán sai, máy tính hỏi lại và câu trả lời mới lại được đem ra so sánh với số bí mật. Lưu ý rằng việc lặp lại chỉ thực hiện khi người chơi đoán sai. Điều đó cũng có nghĩa rằng người chơi đoán đúng là điều kiện kết thúc vòng lặp. Thuật toán được mô tả bằng cấu trúc lặp như trong Hình 14.4a và được thể hiện trong ngôn ngữ lập trình trực quan bằng khối lệnh “lặp lại cho đến khi” (Hình 14.4d). Trong ngôn ngữ lập trình Scratch, có ba khối lệnh lặp, bao gồm: lặp với số lần định trước (Hình 14.4b), lặp vô hạn (Hình 14.4c), và lặp có điều kiện kết thúc (Hình 14.4d).</div>
-        <figure class="fig"><img src="hinh/h144.jpg" alt="a) Sơ đồ cấu trúc lặp có điều kiện. b) Khối lặp lại 10. c) Khối liên tục. d) Khối lặp lại cho đến khi trả lời bằng số bí mật"><figcaption>Hình 14.4. Cấu trúc lặp</figcaption></figure>
+        <figure class="fig"><img src="hinh/h144.jpg" alt="a) Sơ đồ cấu trúc lặp có điều kiện. b) Khối lặp lại 10. c) Khối liên tục. d) Khối lặp lại cho đến khi trả lời bằng số bí mật" width="900" height="460" style="width:100%;max-width:702px"><figcaption>Hình 14.4. Cấu trúc lặp</figcaption></figure>
         <div data-task="ct" data-n="1"></div>
         <div data-task="lap" data-n="2"></div>
         <div data-concept="c1"></div>
@@ -168,10 +168,10 @@
         <div class="act-tag"><b>Nhiệm vụ</b> Lập chương trình trò chơi Đoán số</div>
         <div class="reading">Lập chương trình trò chơi Đoán số như đã được mô tả trong Hoạt động 1. <b>Hướng dẫn:</b> Bước 1. Tạo các biến: tạo biến <i>số bí mật</i> (có thể tạo biến mới hoặc đổi tên biến có sẵn “my variable”); biến <i>trả lời</i> đã có sẵn trong nhóm lệnh Cảm biến. Bước 2. Tạo khung chương trình gồm 6 khối lệnh lắp ghép với nhau theo cấu trúc tuần tự, từ trên xuống dưới (Hình 14.5). Bước 3. Tạo các biểu thức: chọn phép toán và điền các giá trị để có biểu thức “lấy ngẫu nhiên từ 1 đến 100”; chọn phép so sánh “=” và lắp các biến vào chỗ trống để có biểu thức lôgic “trả lời = số bí mật”; lắp ghép các biểu thức vào vị trí phù hợp trong khung chương trình (Hình 14.6a). Bước 4. Tạo khối lệnh rẽ nhánh với điều kiện “trả lời &lt; số bí mật”; chọn từ nhóm Cảm biến các khối lệnh “hỏi” và lắp vào vị trí phù hợp như Hình 14.6b. Bước 5. Hoàn thành chương trình: lắp khối lệnh rẽ nhánh vào khung chương trình; đối sánh thuật toán được mô tả dưới dạng sơ đồ với chương trình hoàn chỉnh ở Hình 14.7.</div>
         <figure class="fig sm"><img src="hinh/h145.jpg" alt="Khung chương trình: Khi bấm vào lá cờ, đặt số bí mật thành 0, hỏi Hãy cho biết bạn đoán số nào và đợi, lặp lại cho đến khi điều kiện trống, nói HOAN HÔ trong 2 giây, dừng lại tất cả"><figcaption>Hình 14.5. Khung chương trình</figcaption></figure>
-        <figure class="fig"><img src="hinh/h146.jpg" alt="a) Khung chương trình đã có biểu thức lấy ngẫu nhiên từ 1 đến 100 và điều kiện trả lời bằng số bí mật. b) Khối nếu trả lời nhỏ hơn số bí mật thì hỏi Quá thấp, nếu không thì hỏi Quá cao"><figcaption>Hình 14.6. Tạo các biểu thức trong khối lệnh</figcaption></figure>
+        <figure class="fig"><img src="hinh/h146.jpg" alt="a) Khung chương trình đã có biểu thức lấy ngẫu nhiên từ 1 đến 100 và điều kiện trả lời bằng số bí mật. b) Khối nếu trả lời nhỏ hơn số bí mật thì hỏi Quá thấp, nếu không thì hỏi Quá cao" width="858" height="338" style="width:100%;max-width:669px"><figcaption>Hình 14.6. Tạo các biểu thức trong khối lệnh</figcaption></figure>
         <div class="reading"><b>Trên mô phỏng:</b> tạo biến <i>số bí mật</i>; thêm các khối của Hình 14.5 (nháy vạch ▸ để chọn chỗ chèn). Trong ô giá trị hoặc ô điều kiện hình lục giác, bấm <b>▾</b> để đặt <b>lấy ngẫu nhiên từ ( ) đến ( )</b>, phép so sánh <b>( ) = ( )</b>, <b>( ) &lt; ( )</b>, biến <i>số bí mật</i> hoặc <i>trả lời</i>.</div>
         <div data-sc3></div>
-        <figure class="fig"><img src="hinh/h147.jpg" alt="Sơ đồ khối và chương trình hoàn chỉnh của trò chơi Đoán số"><figcaption>Hình 14.7. Chương trình hoàn chỉnh</figcaption></figure>
+        <figure class="fig"><img src="hinh/h147.jpg" alt="Sơ đồ khối và chương trình hoàn chỉnh của trò chơi Đoán số" width="908" height="542" style="width:100%;max-width:708px"><figcaption>Hình 14.7. Chương trình hoàn chỉnh</figcaption></figure>
         <div data-task="nv1" data-n="1"></div>
         <div data-task="nv2" data-n="2"></div>
         <div data-concept="c2"></div>
@@ -188,7 +188,7 @@
       <div class="act">
         <div class="act-tag"><b>Luyện tập</b> Đoạn lệnh và hình vẽ</div>
         <div class="reading">Em hãy ghép mỗi đoạn lệnh ở hàng trên với kết quả tương ứng mà đoạn lệnh đó vẽ ở hàng dưới trong Bảng 14.1.</div>
-        <figure class="fig"><img src="hinh/b141.jpg" alt="Bốn đoạn lệnh: đặt bút, lặp lại 4, 5, 6, 3 lần di chuyển 100 bước rồi xoay phải 90, 72, 60, 120 độ; kết quả: hình ba cạnh, bốn cạnh, năm cạnh, sáu cạnh"><figcaption>Bảng 14.1. Các đoạn lệnh và kết quả thực hiện</figcaption></figure>
+        <figure class="fig"><img src="hinh/b141.jpg" alt="Bốn đoạn lệnh: đặt bút, lặp lại 4, 5, 6, 3 lần di chuyển 100 bước rồi xoay phải 90, 72, 60, 120 độ; kết quả: hình ba cạnh, bốn cạnh, năm cạnh, sáu cạnh" width="891" height="392" style="width:100%;max-width:695px"><figcaption>Bảng 14.1. Các đoạn lệnh và kết quả thực hiện</figcaption></figure>
         <div class="reading">Kiểm tra bằng mô phỏng: sửa hai con số rồi chạy cho từng đoạn lệnh a, b, c, d.</div>
         <div data-sc4></div>
         <div data-task="lt1" data-n="1"></div>
@@ -205,7 +205,7 @@
       <div class="act">
         <div class="act-tag"><b>Vận dụng</b> Phương trình ax + b = 0</div>
         <div class="reading">1. Em hãy ghép các khối lệnh a, b, c, d vào các vị trí 1, 2, 3, 4 ở Hình 14.8 để được chương trình giải phương trình ax + b = 0 trong ngôn ngữ lập trình Scratch với các giá trị a, b nhập từ bàn phím.</div>
-        <figure class="fig"><img src="hinh/h148.jpg" alt="Khung chương trình có vị trí 1 và 2, và các khối lệnh a (nói nghiệm), b (hỏi hệ số a, b), c (nếu b bằng 0 thì vô số nghiệm, nếu không thì vô nghiệm), d (nếu a bằng 0 thì vị trí 3, nếu không thì vị trí 4)"><figcaption>Hình 14.8. Các khối lệnh</figcaption></figure>
+        <figure class="fig"><img src="hinh/h148.jpg" alt="Khung chương trình có vị trí 1 và 2, và các khối lệnh a (nói nghiệm), b (hỏi hệ số a, b), c (nếu b bằng 0 thì vô số nghiệm, nếu không thì vô nghiệm), d (nếu a bằng 0 thì vị trí 3, nếu không thì vị trí 4)" width="855" height="505" style="width:100%;max-width:667px"><figcaption>Hình 14.8. Các khối lệnh</figcaption></figure>
         <div data-task="vd1" data-n="1"></div>
         <div class="reading">Lắp chương trình trên mô phỏng (biến a, b đã tạo sẵn) và chạy thử với ba trường hợp: a = 2, b = −4; a = 0, b = 0; a = 0, b = 3.</div>
         <div data-sc5></div>

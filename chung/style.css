@@ -514,3 +514,6 @@ html.chieu-on,html.chieu-on body{overflow:hidden}
 main .wrap,.part,.act,.act>*,.q,.q>*{min-width:0}
 .reading,.q-text,.concept,.fig figcaption{overflow-wrap:anywhere}
 main select{max-width:100%}
+
+/* Bảng tính mô phỏng không đẩy rộng khung trên màn hình hẹp */
+.bt{min-width:0;max-width:100%;box-sizing:border-box;grid-template-columns:minmax(0,1fr)}

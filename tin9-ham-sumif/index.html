@@ -6,7 +6,7 @@
 <title>Sử dụng hàm SUMIF · Tin học 9</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="../chung/style.css?v=32">
+<link rel="stylesheet" href="../chung/style.css?v=34">
 </head>
 <body>
 <header class="hero">
@@ -124,21 +124,21 @@
       <div class="act">
         <div class="act-tag"><b>Hoạt động 1</b> Tổng hợp chi tiêu theo từng khoản</div>
         <div class="reading">Hình 11a.1 là trang tính Chi tiêu đã được bổ sung thêm cột Tổng tiền. Theo em, con số 920 ở ô H2 mang ý nghĩa gì? Công thức ở ô H2 liên quan đến những dữ liệu nào trong vùng dữ liệu A3:D10?</div>
-        <figure class="fig"><img src="hinh/h111.jpg" alt="Trang tính Chi tiêu có thêm cột H Tổng tiền: Ở 920, Ăn 8000, Di chuyển 600, Học tập 2200, Sức khoẻ 620, Giải trí 0, Quà tặng từ thiện 300, Tiết kiệm 1000, Khác 0"><figcaption>Hình 11a.1. Trang tính Chi tiêu đã bổ sung thêm cột Tổng tiền</figcaption></figure>
+        <figure class="fig"><img src="hinh/h111.jpg" alt="Trang tính Chi tiêu có thêm cột H Tổng tiền: Ở 920, Ăn 8000, Di chuyển 600, Học tập 2200, Sức khoẻ 620, Giải trí 0, Quà tặng từ thiện 300, Tiết kiệm 1000, Khác 0" width="910" height="232" style="width:100%;max-width:710px"><figcaption>Hình 11a.1. Trang tính Chi tiêu đã bổ sung thêm cột Tổng tiền</figcaption></figure>
         <div data-task="hd1a" data-n="1"></div>
         <div data-task="hd1b" data-n="2"></div>
       </div>
       <div class="act">
         <div class="act-tag"><b>Đọc hiểu</b> Hàm tính tổng theo điều kiện SUMIF</div>
         <div class="reading">Đọc mục <b>1</b> (SGK trang 45–46). Trong bài toán quản lí tài chính gia đình, em cần biết tổng số tiền thu, chi theo từng khoản để cân đối sao cho hợp lí. Ví dụ: với việc chi tiêu, nhìn vào dữ liệu tổng hợp, em có thể tránh được việc chi quá nhiều cho những nhu cầu không thiết yếu. Để tính tổng số tiền theo từng khoản mục, em sử dụng hàm tính tổng theo điều kiện SUMIF. Công thức chung của hàm SUMIF là: <b>=SUMIF(range, criteria, [sum_range])</b>. Trong đó, ý nghĩa của các tham số như sau: <b>range</b>: phạm vi chứa các giá trị cần kiểm tra hoặc tính tổng các giá trị nếu không có tham số sum_range; <b>criteria</b>: điều kiện kiểm tra; <b>sum_range</b> (tuỳ chọn): phạm vi chứa các giá trị cần tính tổng, nếu sum_range bị bỏ qua thì tính tổng các ô trong tham số range thoả mãn điều kiện. Có hai dạng sử dụng hàm SUMIF như ví dụ trong Bảng 11a.1.</div>
-        <figure class="fig"><img src="hinh/b111.jpg" alt="Bảng 11a.1: =SUMIF(A1:A5, lớn hơn 5) tính tổng các giá trị lớn hơn 5 trong A1:A5 (kết quả 15); =SUMIF(A2:A5, Khoa, B2:B5) tính tổng tiền Khoa đã chi (kết quả 750 000)"><figcaption>Bảng 11a.1. Ví dụ sử dụng hàm SUMIF</figcaption></figure>
+        <figure class="fig"><img src="hinh/b111.jpg" alt="Bảng 11a.1: =SUMIF(A1:A5, lớn hơn 5) tính tổng các giá trị lớn hơn 5 trong A1:A5 (kết quả 15); =SUMIF(A2:A5, Khoa, B2:B5) tính tổng tiền Khoa đã chi (kết quả 750 000)" width="940" height="501" style="width:100%;max-width:733px"><figcaption>Bảng 11a.1. Ví dụ sử dụng hàm SUMIF</figcaption></figure>
         <div class="reading">Thử hai công thức của Bảng 11a.1 trên bảng tính mô phỏng (gõ vào ô D1).</div>
         <div data-bt0></div>
         <div data-bt0b></div>
         <div data-task="b111" data-n="1"></div>
         <div data-task="thamso" data-n="2"></div>
         <div class="reading">Trong Hình 11a.1, tại ô H2, em dùng hàm SUMIF để tính tổng tiền của khoản chi Ở. Trong đó, phạm vi chứa giá trị cần kiểm tra là ở cột Khoản chi là B3:B10, điều kiện kiểm tra là tên của khoản chi Ở, phạm vi chứa các giá trị cần tính tổng là ở cột Số tiền là D3:D10. Do đó, công thức tại ô H2 là =SUMIF(B3:B10,"Ở",D3:D10). Nhưng vì tên khoản chi Ở đã được lưu ở ô F2 nên để dữ liệu đảm bảo chính xác khi sao chép sang các ô khác, điều kiện kiểm tra cần thay đổi thành F2 và các địa chỉ trong công thức phải là địa chỉ tuyệt đối. Khi đó, công thức tại ô H2 là <b>=SUMIF($B$3:$B$10,F2,$D$3:$D$10)</b> như minh hoạ trong Hình 11a.2.</div>
-        <figure class="fig"><img src="hinh/h112.jpg" alt="Ô H2 đang nhập =SUMIF($B$3:$B$10,F2,$D$3:$D$10); vùng B3:B10 và D3:D10 được tô màu"><figcaption>Hình 11a.2. Công thức tính tổng số tiền của khoản chi Ở</figcaption></figure>
+        <figure class="fig"><img src="hinh/h112.jpg" alt="Ô H2 đang nhập =SUMIF($B$3:$B$10,F2,$D$3:$D$10); vùng B3:B10 và D3:D10 được tô màu" width="883" height="252" style="width:100%;max-width:689px"><figcaption>Hình 11a.2. Công thức tính tổng số tiền của khoản chi Ở</figcaption></figure>
         <div data-task="chon" data-n="3"></div>
         <div data-task="h2" data-n="4"></div>
         <div data-concept="c1"></div>
@@ -146,7 +146,7 @@
       <div class="act">
         <div class="act-tag"><b>Câu hỏi</b> SGK trang 47</div>
         <div class="reading">Hình 11a.3 minh hoạ dữ liệu của trang tính Thu nhập. Em hãy cho biết công thức cần nhập vào ô H2 là gì, giá trị của ô H2 có ý nghĩa gì.</div>
-        <figure class="fig"><img src="hinh/h113.jpg" alt="Trang tính Thu nhập có cột G Số lần thu và cột H Tổng tiền, ô H2 đang để dấu hỏi"><figcaption>Hình 11a.3. Trang tính Thu nhập</figcaption></figure>
+        <figure class="fig"><img src="hinh/h113.jpg" alt="Trang tính Thu nhập có cột G Số lần thu và cột H Tổng tiền, ô H2 đang để dấu hỏi" width="843" height="260" style="width:100%;max-width:658px"><figcaption>Hình 11a.3. Trang tính Thu nhập</figcaption></figure>
         <div data-task="p47" data-n="1"></div>
       </div>
       <div class="act act-ghi">

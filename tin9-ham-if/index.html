@@ -6,7 +6,7 @@
 <title>Sử dụng hàm IF · Tin học 9</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lexend:wght@500;600;700&display=swap">
-<link rel="stylesheet" href="../chung/style.css?v=32">
+<link rel="stylesheet" href="../chung/style.css?v=34">
 </head>
 <body>
 <header class="hero">
@@ -141,7 +141,7 @@
       <div class="act">
         <div class="act-tag"><b>Đọc hiểu</b> Hàm IF lồng nhau</div>
         <div class="reading">Trên thực tế, nhận xét về tình trạng chi tiêu có thể cần chi tiết hơn. Ví dụ với mục chi Nhu cầu thiết yếu có thể nhận xét theo hai mức: <i>Nếu tỉ lệ chi lớn hơn 80% thì nhận xét “Nhiều quá”, nếu tỉ lệ chi lớn hơn 50% thì nhận xét “Nhiều hơn”, còn không thì nhận xét là “Ít hơn”.</i> Trong trường hợp tiêu chí kiểm tra cần thoả mãn nhiều mức hơn, em sử dụng các hàm IF lồng nhau. Ví dụ sử dụng hàm IF lồng nhau cho nhận xét trên như minh hoạ trong Hình 12a.4 là <b>=IF(N3&gt;80%,"Nhiều quá",IF(N3&gt;50%,"Nhiều hơn","Ít hơn"))</b>.</div>
-        <figure class="fig"><img src="hinh/h124.jpg" alt="Ô O3 có công thức =IF(N3>80%,Nhiều quá,IF(N3>50%,Nhiều hơn,Ít hơn)) cho kết quả Nhiều quá"><figcaption>Hình 12a.4. Sử dụng hai hàm IF lồng nhau</figcaption></figure>
+        <figure class="fig"><img src="hinh/h124.jpg" alt="Ô O3 có công thức =IF(N3>80%,Nhiều quá,IF(N3>50%,Nhiều hơn,Ít hơn)) cho kết quả Nhiều quá" width="748" height="308" style="width:100%;max-width:583px"><figcaption>Hình 12a.4. Sử dụng hai hàm IF lồng nhau</figcaption></figure>
         <div class="reading">Thử trên bảng tính mô phỏng: nhập công thức IF lồng nhau vào B2, sao chép xuống B4, rồi sửa các tỉ lệ ở cột A (gõ dạng 85%) để xem nhận xét thay đổi.</div>
         <div data-bt0></div>
         <div data-task="long" data-n="1"></div>
@@ -164,8 +164,8 @@
       <div class="act">
         <div class="act-tag"><b>Nhiệm vụ</b> Bảng tổng hợp các mục chi</div>
         <div class="reading">Bổ sung cột mục chi cho bảng tổng hợp khoản chi (như Hình 12a.2) và tạo bảng dữ liệu tổng hợp các mục chi (như Hình 12a.3). <b>Hướng dẫn. a) Tạo bảng dữ liệu:</b> mở bảng tính TaiChinhGiaDinh.xlsx, nháy chuột chọn trang tính Chi tiêu; tại cột I, bổ sung tiêu đề cột Mục chi và nhập dữ liệu cho cột này như minh hoạ ở Hình 12a.2; trong vùng dữ liệu K1:O5, tạo bảng dữ liệu tổng hợp mục chi như minh hoạ ở Hình 12a.5; lưu bảng tính.<br><b>b) Tính Tổng chi và Tỉ lệ của mỗi mục chi:</b> ta có tổng chi của mỗi mục chi ở cột M được lấy từ dữ liệu các khoản chi trong bảng ở Hình 12a.2, vì vậy cần sử dụng hàm SUMIF để tính tổng theo từng mục. Tại ô M3, nhập công thức <b>=SUMIF($I$2:$I$10,K3,$H$2:$H$10)</b> để tổng hợp số tiền của mục Nhu cầu thiết yếu như minh hoạ ở Hình 12a.6; sao chép công thức của ô M3 sang các ô M4 và M5 để tính tổng chi của các mục chi còn lại. Tỉ lệ ở cột N là tổng chi của mỗi mục chi so với tổng tiền của tất cả các khoản (lưu tại ô H11). Vì vậy, em nhập công thức tại ô N3 là <b>=M3/$H$11*100%</b>; sao chép công thức của ô N3 sang các ô N4 và N5 để tính tỉ lệ của các mục chi còn lại.<br><b>c) Điền nhận xét vào cột Trạng thái của từng mục chi:</b> tại ô O3, nhập công thức <b>=IF(N3&gt;50%,"Nhiều hơn","Ít hơn")</b> để điền nhận xét của mục Nhu cầu thiết yếu; tại ô O4, nhập công thức <b>=IF(N4&gt;30%,"Nhiều hơn","Ít hơn")</b> để điền nhận xét của mục Mong muốn cá nhân; tại ô O5, nhập công thức <b>=IF(N5&gt;20%,"Nhiều hơn","Ít hơn")</b> để điền nhận xét của mục Tiết kiệm; lưu bảng tính.</div>
-        <figure class="fig sm"><img src="hinh/h125.jpg" alt="Bảng dữ liệu tổng hợp mục chi trong vùng K1:O5 với các cột Mục chi, Nội dung, Tổng chi, Tỉ lệ, Trạng thái"><figcaption>Hình 12a.5. Bảng dữ liệu tổng hợp mục chi</figcaption></figure>
-        <figure class="fig"><img src="hinh/h126.jpg" alt="Ô M3 đang nhập =SUMIF($I$2:$I$10,K3,$H$2:$H$10), vùng I2:I10 và H2:H10 được tô màu"><figcaption>Hình 12a.6. Nhập công thức tính tổng chi của mục Nhu cầu thiết yếu</figcaption></figure>
+        <figure class="fig sm"><img src="hinh/h125.jpg" alt="Bảng dữ liệu tổng hợp mục chi trong vùng K1:O5 với các cột Mục chi, Nội dung, Tổng chi, Tỉ lệ, Trạng thái" width="664" height="270" style="width:100%;max-width:518px"><figcaption>Hình 12a.5. Bảng dữ liệu tổng hợp mục chi</figcaption></figure>
+        <figure class="fig"><img src="hinh/h126.jpg" alt="Ô M3 đang nhập =SUMIF($I$2:$I$10,K3,$H$2:$H$10), vùng I2:I10 và H2:H10 được tô màu" width="938" height="376" style="width:100%;max-width:732px"><figcaption>Hình 12a.6. Nhập công thức tính tổng chi của mục Nhu cầu thiết yếu</figcaption></figure>
         <div class="reading"><b>Trên bảng tính mô phỏng</b>: cột F, G, H (khoản chi, số lần chi, tổng tiền) và khung bảng K1:O5 đã có sẵn; dữ liệu chi tiết ở cột A–D vẫn được dùng cho các công thức. Kéo sang phải trong bảng tính để thấy cột I đến O. Cột tỉ lệ N đã định dạng phần trăm.</div>
         <div data-bt1></div>
         <div data-task="nv1" data-n="1"></div>
