@@ -517,3 +517,29 @@ main select{max-width:100%}
 
 /* Bảng tính mô phỏng không đẩy rộng khung trên màn hình hẹp */
 .bt{min-width:0;max-width:100%;box-sizing:border-box;grid-template-columns:minmax(0,1fr)}
+
+/* Bạn bè thích, nhận xét bài của nhau */
+.peer{display:grid;gap:8px;margin-top:4px}
+.peer-tog{display:inline-flex;gap:6px;align-items:center;border-color:var(--pink-line);color:var(--pink)}
+.peer-tog[aria-pressed=true]{background:var(--pink);border-color:var(--pink);color:#fff}
+.peer-tog .ico,.heart .ico,.heart-n .ico{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
+.peer-list{display:grid;gap:8px}
+.peer-card{border:1px solid var(--line);border-left:4px solid var(--pink-line);border-radius:10px;padding:8px 12px;display:grid;gap:6px;background:var(--surface)}
+.peer-card.mine{border-left-color:var(--accent);background:var(--sunk)}
+.peer-card .txt{white-space:pre-wrap}
+.peer-card textarea{min-height:44px}
+.heart{display:inline-flex;gap:6px;align-items:center;color:var(--pink);border-color:var(--pink-line)}
+.heart[aria-pressed=true]{background:var(--pink);border-color:var(--pink);color:#fff}
+.heart[aria-pressed=true] .ico{fill:currentColor}
+.chip.heart-n,.heart-n{display:inline-flex;gap:4px;align-items:center;color:var(--pink);background:var(--pink-soft)}
+.heart-n .ico{fill:currentColor;stroke:none}
+.peer-cms{list-style:none;margin:0;padding:6px 10px;display:grid;gap:4px;background:var(--pink-soft);border-radius:8px;font-size:14px}
+.peer-cms[hidden]{display:none}
+.peer-cms.gv li.an{opacity:.6;text-decoration:line-through}
+.peer-cms .lb{font-size:12px;font-weight:700;color:var(--pink);text-transform:uppercase;letter-spacing:.05em}
+.btn.mini{font-size:12px;padding:1px 8px;border-radius:6px;margin-left:4px}
+.peer-got{border-left:3px solid var(--pink);background:var(--pink-soft);border-radius:0 10px 10px 0;padding:8px 12px;display:grid;gap:4px}
+.peer-got[hidden]{display:none}
+.peer-got .fl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pink)}
+.peer-got .heart-n{background:transparent;font-weight:700;justify-self:start}
+.peer-got ul{margin:0;padding-left:18px;display:grid;gap:2px}

@@ -39,6 +39,8 @@ let mode = "local";
 let REV = {};            // phần chốt giáo viên mở cho buổi học
 let NX = {};             // nhận xét giáo viên gửi cho máy này (theo từng câu); khoá "like.<câu>" là lượt khen
 const THUMB = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+let BAN = {};            // bạn bè thích / nhận xét bài của máy này: {câu: {n, cm:[{g, t}]}}
+const HEART = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4h2c.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
 let myWriter = null;
 const classDocs = [];
 if (!S.clientId) S.clientId = "m" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -145,6 +147,113 @@ const BODY = {
   }
 };
 
+/* ================= BẠN BÈ THÍCH, NHẬN XÉT BÀI CỦA NHAU =================
+   Chỉ khi học trực tuyến và thầy cô đã mở câu đó (khoá "ban.<câu>"). Mỗi nhóm thả tim một lần và viết một nhận xét
+   (sửa được) cho bài của mỗi nhóm khác. Thầy cô xem được và ẩn được nhận xét không phù hợp. */
+const peerOpen = id => mode === "online" && !!REV["ban." + id];
+function peerText(id, t, d){
+  if (t.type === "open") return esc(((d.ans || {})[id]) || "");
+  if (t.type === "mcq") { const i = (d.mcq || {})[id]; return i == null ? "" : "<b>" + L[i] + ".</b> " + esc(t.o[i]); }
+  const g = grade(id, d); return g ? esc(g.text) : "";
+}
+function makePeer(id, t){
+  /* những gì bạn bè gửi cho bài của em */
+  const got = el("div", {class:"peer-got", hidden:""});
+  /* nút mở danh sách bài các bạn */
+  const box = el("div", {class:"peer", hidden:""});
+  const tog = el("button", {class:"btn peer-tog", type:"button", "aria-expanded":"false"});
+  const msg = el("span", {class:"status"});
+  const list = el("div", {class:"peer-list", hidden:""});
+  const head = el("div", {class:"row"}); head.append(tog, msg);
+  box.append(head, list);
+  let open = false, timer = null, items = new Map(), busy = false;
+  tog.addEventListener("click", () => { open = !open; render(); if (open) load(); else clearTimeout(timer); });
+  async function load(){
+    clearTimeout(timer);
+    if (!open || !peerOpen(id)) return;
+    if (!busy) { busy = true;
+      try { const L = await API.getPeers(window.LESSON.id, S.session, id, S.clientId); draw(L); msg.textContent = L.filter(x => !x.mine).length ? "" : "Chưa có nhóm nào khác nộp câu này."; msg.className = "status"; }
+      catch(e) { msg.textContent = e.message; msg.className = "status bad"; }
+      busy = false; }
+    timer = setTimeout(load, 20000 + Math.random() * 5000);
+  }
+  function draw(L){
+    const seen = new Set();
+    L.sort((a, b) => (a.mine - b.mine) || String(a.group).localeCompare(String(b.group), "vi", {numeric: true}));
+    L.forEach(p => {
+      seen.add(p.cid);
+      let it = items.get(p.cid);
+      if (!it) { it = makeCard(p); items.set(p.cid, it); }
+      list.appendChild(it.card);   // giữ đúng thứ tự
+      it.update(p);
+    });
+    items.forEach((it, cid) => { if (!seen.has(cid)) { it.card.remove(); items.delete(cid); } });
+  }
+  function makeCard(p){
+    const card = el("div", {class:"peer-card" + (p.mine ? " mine" : "")});
+    const who = el("div", {class:"who-l"}), txt = el("div", {class:"txt"}), cms = el("ul", {class:"peer-cms"});
+    card.append(who, txt);
+    const it = {card, p, dirty: false};
+    if (!p.mine) {
+      const like = el("button", {class:"btn heart", type:"button", "aria-pressed":"false"});
+      const taId = "pc-" + id + "-" + p.cid;
+      const ta = el("textarea", {id: taId, rows:"2", maxlength:"300", placeholder:"Nhận xét ngắn cho nhóm bạn: khen điều hay, góp ý điều cần sửa…"});
+      const lab = el("label", {for: taId, class:"sr-only"}, "Nhận xét của em cho " + esc(p.group));
+      const send = el("button", {class:"btn", type:"button"}, "Gửi nhận xét");
+      const st = el("span", {class:"status"});
+      const row = el("div", {class:"row"}); row.append(like, send, st);
+      card.append(cms, lab, ta, row);
+      Object.assign(it, {like, ta, send, st});
+      ta.addEventListener("input", () => { it.dirty = true; st.textContent = "Chưa gửi"; st.className = "status"; });
+      ta.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) send.click(); });
+      like.addEventListener("click", () => react(it, {like: !it.p.liked}));
+      send.addEventListener("click", () => react(it, {text: ta.value}));
+    } else card.appendChild(cms);
+    it.update = q => {
+      it.p = q;
+      who.innerHTML = esc(q.group || "(chưa có tên)") + (q.mine ? ' <span class="chip info">Bài của em</span>' : "") + (q.n ? ' <span class="chip heart-n">' + HEART + q.n + "</span>" : "");
+      txt.innerHTML = peerText(id, t, q.data || {}) || '<span class="empty">Chưa trả lời</span>';
+      const others = (q.cm || []).filter(c => !c.mine);
+      cms.innerHTML = others.map(c => "<li><b>" + esc(c.g || "Bạn") + ":</b> " + esc(c.t) + "</li>").join("");
+      cms.hidden = !others.length;
+      if (it.like) {
+        it.like.setAttribute("aria-pressed", String(!!q.liked));
+        it.like.innerHTML = HEART + (q.liked ? "Đã thích" : "Thích");
+        const mineCm = (q.cm || []).find(c => c.mine);
+        if (!it.dirty && document.activeElement !== it.ta) it.ta.value = mineCm ? mineCm.t : "";
+      }
+    };
+    return it;
+  }
+  async function react(it, change){
+    if (it.saving) return;
+    it.saving = true; it.like.disabled = it.send.disabled = true; it.st.textContent = "Đang gửi…"; it.st.className = "status";
+    try {
+      const mine = await API.react(Object.assign({bai: window.LESSON.id, buoi: S.session, task: id, clientId: S.clientId, group: S.name || "", to: it.p.cid, toGroup: it.p.group}, change));
+      const p = Object.assign({}, it.p);
+      if ("like" in change) { p.n = Math.max(0, (p.n || 0) + (mine.like ? 1 : 0) - (p.liked ? 1 : 0)); p.liked = !!mine.like; }
+      if ("text" in change) { p.cm = (p.cm || []).filter(c => !c.mine); if (mine.text) p.cm.push({g: S.name, t: mine.text, mine: true}); it.dirty = false; }
+      it.update(p);
+      it.st.textContent = "like" in change ? (mine.like ? "Đã thả tim" : "Đã bỏ thích") : (mine.text ? "Đã gửi lúc " + stamp() : "Đã xoá nhận xét"); it.st.className = "status ok";
+    } catch(e) { it.st.textContent = e.message; it.st.className = "status bad"; }
+    it.saving = false; it.like.disabled = it.send.disabled = false;
+  }
+  function render(){
+    const on = peerOpen(id);
+    box.hidden = !on;
+    if (!on && open) { open = false; clearTimeout(timer); }
+    tog.setAttribute("aria-expanded", String(open));
+    tog.innerHTML = open ? "Ẩn bài của các bạn" : "👀 Xem bài các bạn, thả tim và nhận xét";
+    list.hidden = !open;
+    const b = mode === "online" ? BAN[id] : null;
+    got.hidden = !b;
+    if (b) got.innerHTML = '<span class="fl">Các bạn bình chọn bài của em</span>'
+      + (b.n ? '<span class="heart-n">' + HEART + b.n + " bạn thích</span>" : "")
+      + ((b.cm || []).length ? "<ul>" + b.cm.map(c => "<li><b>" + esc(c.g || "Bạn") + ":</b> " + esc(c.t) + "</li>").join("") + "</ul>" : "");
+  }
+  return {box, got, render};
+}
+
 const syncers = [];
 document.querySelectorAll("[data-task]").forEach(slot => {
   const id = slot.dataset.task, t = TASKS[id];
@@ -168,6 +277,9 @@ document.querySelectorAll("[data-task]").forEach(slot => {
   slot.insertBefore(fb, row.nextSibling);
   slot.insertBefore(liked, fb);
   slot.appendChild(kb.box);
+  const peer = makePeer(id, t);
+  slot.insertBefore(peer.got, fb.nextSibling);
+  slot.appendChild(peer.box);
   let err = "";
   function render(){
     const sub = !!S.sub[id], rev = isRev(id), T = isTeacher();
@@ -188,6 +300,7 @@ document.querySelectorAll("[data-task]").forEach(slot => {
     const nx = mode === "online" ? (NX[id] || "") : "";
     fbText.textContent = nx; fb.hidden = !nx;
     liked.hidden = !(mode === "online" && NX["like." + id]);
+    peer.render();
     /* màu trạng thái: chưa làm / đang làm / đã nộp / đúng / cần sửa */
     const gg = rev ? grade(id, S) : null;
     const state = !body.has() ? "empty" : !sub ? "draft" : gg ? (gg.ok ? "right" : "wrong") : "sub";
@@ -372,11 +485,14 @@ async function pollReveal(){
   if (mode !== "online") return;
   try {
     const st = await API.getStatus(window.LESSON.id, S.session, S.clientId);
-    const fresh = JSON.stringify(st.rev) !== JSON.stringify(REV) || JSON.stringify(st.nx) !== JSON.stringify(NX);
+    const banNew = JSON.stringify(st.ban || {}) !== JSON.stringify(BAN);
+    const fresh = banNew || JSON.stringify(st.rev) !== JSON.stringify(REV) || JSON.stringify(st.nx) !== JSON.stringify(NX);
     if (fresh) {
       const changedKeys = Object.keys(st.nx).filter(k => st.nx[k] !== NX[k]);
       const newLike = changedKeys.some(k => k.indexOf("like.") === 0), newNx = changedKeys.some(k => k.indexOf("like.") !== 0);
-      REV = st.rev; NX = st.nx; renderAll();
+      const banMore = Object.keys(st.ban || {}).some(k => { const a = st.ban[k], b = BAN[k] || {n: 0, cm: []}; return a.n > b.n || (a.cm || []).length > (b.cm || []).length; });
+      REV = st.rev; NX = st.nx; BAN = st.ban || {}; renderAll();
+      if (banMore && !(newNx || newLike)) setSync("Các bạn vừa bình chọn bài của em lúc " + stamp() + ".");
       if (newNx || newLike) setSync("Thầy cô vừa " + (newNx && newLike ? "gửi nhận xét và khen" : newLike ? "khen câu trả lời của em" : "gửi nhận xét mới") + " lúc " + stamp() + ".");
     }
   } catch(e) { setSync("Chưa nhận được phần chốt (" + e.message + ")."); }
@@ -406,13 +522,13 @@ function joinSession(){
   S.active = k;
   GF.forEach(f => S[f] = clone(g[f]));
   S.name = name; nm.value = name;
-  REV = {}; NX = {};
+  REV = {}; NX = {}; BAN = {};
   goOnline();
 }
 function leaveSession(){
   stash();
   clearTimeout(pollTimer);
-  myWriter = null; mode = "local"; REV = {}; NX = {};
+  myWriter = null; mode = "local"; REV = {}; NX = {}; BAN = {};
   const k = S.localActive && S.localActive[0] === "g" ? S.localActive : "g1";
   const g = groupData(k);
   S.active = k; S.session = "";

@@ -23,6 +23,8 @@ const SHEET_CU = "BaiLam";        // bản cũ: mọi bài chung một trang
 const SHEET_CHOT = "Chot";
 const SHEET_NX = "NhanXet";
 const CHOT_HEADERS = ["Khóa", "Bài", "Buổi", "Đã chốt", "Cập nhật"];
+const SHEET_BAN = "BanBe";        // học sinh thích / nhận xét bài của bạn
+const BAN_HEADERS = ["Khóa", "Bài", "Buổi", "Câu", "Nhóm gửi", "Mã gửi", "Nhóm nhận", "Mã nhận", "Thích", "Nhận xét", "GV ẩn", "Cập nhật"];
 const NX_HEADERS = ["Khóa", "Bài", "Buổi", "Nhóm / Học sinh", "Mã máy", "Nhận xét (không sửa)", "Tóm tắt nhận xét", "Cập nhật"];
 const BASE_HEADERS = ["Khóa", "Bài", "Buổi", "Nhóm / Học sinh", "Mã máy", "Cập nhật", "Đã nộp", "Dữ liệu (không sửa)"];
 const COL_JSON = 8;               // cột "Dữ liệu"
@@ -36,7 +38,8 @@ function doGet(e) {
     switch (p.action) {
       case "ping": return {};
       case "reveal": return { rev: getReveal_(id_(p.bai), id_(p.buoi)) };
-      case "status": return { rev: getReveal_(id_(p.bai), id_(p.buoi)), nx: getNx_(id_(p.bai), id_(p.buoi), id_(p.clientId)) };
+      case "status": return { rev: getReveal_(id_(p.bai), id_(p.buoi)), nx: getNx_(id_(p.bai), id_(p.buoi), id_(p.clientId)), ban: banFor_(id_(p.bai), id_(p.buoi), id_(p.clientId)) };
+      case "peers": return { list: getPeers_(id_(p.bai), id_(p.buoi), id_(p.task), id_(p.clientId)) };
       case "checkpin": checkPin_(p.pin); return {};
       case "class": checkPin_(p.pin); return { docs: getClass_(id_(p.bai), id_(p.buoi)) };
       default: throw new Error("Hành động không hợp lệ");
@@ -53,6 +56,8 @@ function doPost(e) {
       case "setReveal": checkPin_(b.pin); setReveal_(id_(b.bai), id_(b.buoi), b.rev); return {};
       case "comment": checkPin_(b.pin); return { nx: setComment_(b) };
       case "stats": checkPin_(b.pin); return { bai: getStats_() };
+      case "react": return { mine: react_(b) };
+      case "banHide": checkPin_(b.pin); banHide_(b); return {};
       default: throw new Error("Hành động không hợp lệ");
     }
   });
@@ -167,13 +172,14 @@ function getClass_(bai, buoi) {
   // bài nộp trước khi nâng cấp, còn nằm trong trang chung "BaiLam"
   rows_(ss.getSheetByName(SHEET_CU)).forEach(v => { if (String(v[1]) === bai && !seen[String(v[0])]) vals.push(v); });
   const allNx = getAllNx_(bai, buoi);
+  const ban = getBan_(bai, buoi);
   const out = [];
   vals.forEach(v => {
     if (String(v[1]) !== bai || String(v[2]) !== buoi) return;   // Sheets có thể đổi "1104" thành số
     let data = {};
     try { data = JSON.parse(v[COL_JSON - 1] || "{}"); } catch (err) {}
     const g = String(v[3] || "");
-    out.push({ group: g.charAt(0) === "'" ? g.slice(1) : g, clientId: v[4], t: v[5] instanceof Date ? v[5].getTime() : 0, data: data, nx: allNx[String(v[4])] || {} });
+    out.push({ group: g.charAt(0) === "'" ? g.slice(1) : g, clientId: v[4], t: v[5] instanceof Date ? v[5].getTime() : 0, data: data, nx: allNx[String(v[4])] || {}, ban: banOf_(ban, String(v[4]), true) });
   });
   return out;
 }
@@ -298,11 +304,128 @@ function setReveal_(bai, buoi, rev) {
   }
 }
 
+/* ---------- Bạn bè thích / nhận xét bài của nhau ----------
+   Giáo viên mở từng câu bằng khoá "ban.<mã câu>" trong phần chốt. Mỗi nhóm thích (một lần) và nhận xét
+   (một nhận xét, sửa được) bài của nhóm khác. Giáo viên ẩn được nhận xét không phù hợp. */
+function unq_(v) { const s = String(v == null ? "" : v); return s.charAt(0) === "'" ? s.slice(1) : s; }
+
+function banOpen_(bai, buoi, task) {
+  if (!getReveal_(bai, buoi)["ban." + task]) throw new Error("Thầy cô chưa mở phần xem bài của bạn cho câu này");
+}
+
+/* Lượt thích, nhận xét của một buổi: { câu: { mã nhận: { like: {mã gửi: 1}, cm: {mã gửi: [nhóm, chữ, ẩn]} } } } */
+function getBan_(bai, buoi) {
+  const cache = CacheService.getScriptCache();
+  const ck = "ban|" + bai + "|" + buoi;
+  const hit = cache.get(ck);
+  if (hit) return JSON.parse(hit);
+  const out = {};
+  const sh = SpreadsheetApp.getActive().getSheetByName(SHEET_BAN);
+  if (sh && sh.getLastRow() >= 2) {
+    sh.getRange(2, 1, sh.getLastRow() - 1, BAN_HEADERS.length).getValues().forEach(v => {
+      if (String(v[1]) !== bai || String(v[2]) !== buoi) return;
+      const task = String(v[3]), from = String(v[5]), to = String(v[7]);
+      const r = ((out[task] = out[task] || {})[to] = out[task][to] || { like: {}, cm: {} });
+      if (v[8]) r.like[from] = 1;
+      if (v[9] !== "") r.cm[from] = [unq_(v[4]), unq_(v[9]), v[10] ? 1 : 0];
+    });
+  }
+  try { cache.put(ck, JSON.stringify(out), CACHE_S); } catch (err) {}
+  return out;
+}
+
+/* Những gì bài của một nhóm nhận được, theo từng câu. withHidden: giáo viên xem cả nhận xét đã ẩn. */
+function banOf_(ban, cid, withHidden) {
+  const out = {};
+  Object.keys(ban).forEach(task => {
+    const r = ban[task][cid];
+    if (!r) return;
+    const cm = Object.keys(r.cm).filter(f => withHidden || !r.cm[f][2])
+      .map(f => withHidden ? { g: r.cm[f][0], t: r.cm[f][1], from: f, an: r.cm[f][2] } : { g: r.cm[f][0], t: r.cm[f][1] });
+    const n = Object.keys(r.like).length;
+    if (n || cm.length) out[task] = { n: n, cm: cm };
+  });
+  return out;
+}
+function banFor_(bai, buoi, cid) { return banOf_(getBan_(bai, buoi), cid, false); }
+
+/* Bài các nhóm đã nộp cho một câu (cả lớp đọc chung, Sheet được đọc tối đa mỗi 20 giây một lần) */
+function getPeers_(bai, buoi, task, me) {
+  banOpen_(bai, buoi, task);
+  const cache = CacheService.getScriptCache();
+  const ck = "peer|" + bai + "|" + buoi + "|" + task;
+  let docs;
+  const hit = cache.get(ck);
+  if (hit) docs = JSON.parse(hit);
+  else {
+    docs = [];
+    rows_(SpreadsheetApp.getActive().getSheetByName(bai)).forEach(v => {
+      if (String(v[1]) !== bai || String(v[2]) !== buoi) return;
+      let data = {};
+      try { data = JSON.parse(v[COL_JSON - 1] || "{}"); } catch (err) {}
+      if (!(data.sub && data.sub[task])) return;
+      const part = {};
+      ["ans", "mcq", "sort", "match", "order", "sub"].forEach(f => { if (data[f] && data[f][task] != null) { part[f] = {}; part[f][task] = data[f][task]; } });
+      docs.push({ cid: String(v[4]), group: unq_(v[3]), data: part });
+    });
+    try { cache.put(ck, JSON.stringify(docs), 20); } catch (err) {}
+  }
+  const ban = getBan_(bai, buoi)[task] || {};
+  return docs.map(d => {
+    const r = ban[d.cid] || { like: {}, cm: {} };
+    return { cid: d.cid, group: d.group, data: d.data, mine: d.cid === me, n: Object.keys(r.like).length, liked: !!r.like[me],
+      cm: Object.keys(r.cm).filter(f => !r.cm[f][2]).map(f => ({ g: r.cm[f][0], t: r.cm[f][1], mine: f === me })) };
+  });
+}
+
+/* Học sinh thích / bỏ thích (like: true/false) hoặc gửi nhận xét (text) cho bài của nhóm "to" */
+function react_(b) {
+  const bai = id_(b.bai), buoi = id_(b.buoi), task = id_(b.task), from = id_(b.clientId), to = id_(b.to);
+  if (from === to) throw new Error("Em không tự bình chọn bài của mình được");
+  banOpen_(bai, buoi, task);
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  try {
+    const sh = sheet_(SHEET_BAN, BAN_HEADERS);
+    const key = [bai, buoi, task, from, to].join("|");
+    const r = findRow_(sh, key);
+    const row = r ? sh.getRange(r, 1, 1, BAN_HEADERS.length).getValues()[0] : [key, bai, buoi, task, "", from, "", to, "", "", "", ""];
+    row[4] = safe_(String(b.group || "").slice(0, 80));
+    if (b.toGroup != null) row[6] = safe_(String(b.toGroup).slice(0, 80));
+    if (b.like != null) row[8] = b.like ? 1 : "";
+    if (b.text != null) { row[9] = safe_(String(b.text).trim().slice(0, 300)); row[10] = ""; }
+    row[11] = new Date();
+    if (r) sh.getRange(r, 1, 1, row.length).setValues([row]);
+    else sh.appendRow(row);
+    CacheService.getScriptCache().remove("ban|" + bai + "|" + buoi);
+    return { like: !!row[8], text: unq_(row[9]) };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/* Giáo viên ẩn / hiện lại một nhận xét của học sinh */
+function banHide_(b) {
+  const bai = id_(b.bai), buoi = id_(b.buoi), task = id_(b.task), from = id_(b.from), to = id_(b.to);
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  try {
+    const sh = SpreadsheetApp.getActive().getSheetByName(SHEET_BAN);
+    const r = sh ? findRow_(sh, [bai, buoi, task, from, to].join("|")) : 0;
+    if (!r) throw new Error("Không tìm thấy nhận xét");
+    sh.getRange(r, 11).setValue(b.hide ? 1 : "");
+    CacheService.getScriptCache().remove("ban|" + bai + "|" + buoi);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 /* Chạy trong trình soạn thảo Apps Script để tạo sẵn trang Chot và NhanXet.
    Trang bài làm của từng bài tự tạo khi có bài nộp đầu tiên. */
 function khoiTao() {
   sheet_(SHEET_CHOT, CHOT_HEADERS);
   sheet_(SHEET_NX, NX_HEADERS);
+  sheet_(SHEET_BAN, BAN_HEADERS);
 }
 
 /* Chạy MỘT LẦN sau khi nâng cấp từ bản cũ: chuyển bài làm trong trang chung "BaiLam" sang trang của

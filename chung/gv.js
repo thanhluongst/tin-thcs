@@ -35,6 +35,8 @@ const isLikeKey = k => k.indexOf("like.") === 0;
 const nComments = d => Object.keys(d.nx || {}).filter(k => !isLikeKey(k)).length;
 const nLikes = d => Object.keys(d.nx || {}).filter(isLikeKey).length;
 const THUMB = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+const HEART = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4h2c.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
+const BAN = id => "ban." + id;   /* khoá trong phần chốt: mở cho học sinh xem, thích, nhận xét bài của nhau ở câu này */
 let PIN = ss("gv-pin") || "", BUOI = ls("gv-buoi") || "";
 let REV = {}, DOCS = [], pollTimer = null, lessonReady = false;
 
@@ -131,14 +133,16 @@ function buildTaskPanel(slot){
   const row = el("div", {class:"row"});
   const chot = el("button", {class:"btn keybtn", type:"button"});
   const bulk = el("button", {class:"btn", type:"button", hidden:""});
+  const peer = el("button", {class:"btn peer-tog", type:"button", "aria-pressed":"false", title:"Học sinh xem bài các nhóm khác ở câu này, thả tim và nhận xét cho nhau"});
   const stats = el("span", {class:"status"});
-  row.append(chot, bulk, stats); slot.appendChild(row);
+  row.append(chot, peer, bulk, stats); slot.appendChild(row);
+  peer.addEventListener("click", () => toggleRev(BAN(id)));
   bulk.addEventListener("click", () => bulkSend(id));
   const list = el("div", {class:"ans-list"});
   const empty = el("p", {class:"empty"}, "Chưa có nhóm nào trả lời câu này.");
   slot.append(list, empty);
   chot.addEventListener("click", () => toggleRev(id));
-  PANELS[id] = {chot, bulk, stats, list, empty, items: new Map(), bulkBusy: false};
+  PANELS[id] = {chot, peer, bulk, stats, list, empty, items: new Map(), bulkBusy: false};
 }
 
 function buildConceptPanel(slot){
@@ -189,8 +193,10 @@ function makeItem(id, d){
   const like = el("button", {class:"btn like-btn", type:"button", "aria-pressed":"false"});
   const st = el("span", {class:"status"});
   row.append(like, send, st); fb.append(lab, chips, ta, row);
-  item.append(head, txt, fb);
-  const it = {item, head, txt, ta, send, like, st, chips, chipSig: "", lastChip: "", cid: d.clientId, dirty: false, saving: false};
+  const pcm = el("ul", {class:"peer-cms gv", hidden:""});
+  pcm.addEventListener("click", e => { const b = e.target.closest("[data-from]"); if (b) hidePeer(id, it, b.getAttribute("data-from"), b.getAttribute("data-an") !== "1"); });
+  item.append(head, txt, pcm, fb);
+  const it = {item, head, txt, pcm, ta, send, like, st, chips, chipSig: "", lastChip: "", cid: d.clientId, dirty: false, saving: false};
   like.addEventListener("click", () => toggleLike(id, it));
   ta.addEventListener("input", () => { it.dirty = true; st.textContent = "Chưa gửi"; st.className = "status"; });
   ta.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) send.click(); });
@@ -246,6 +252,18 @@ async function bulkSend(id){
   p.stats.textContent += fail ? " · Lỗi: " + fail : " · Đã gửi nhận xét cho " + done + " nhóm";
 }
 
+/* Ẩn / hiện lại nhận xét của một nhóm gửi cho nhóm khác */
+async function hidePeer(id, it, from, hide){
+  const d = DOCS.find(x => x.clientId === it.cid); if (!d) return;
+  it.st.textContent = hide ? "Đang ẩn nhận xét…" : "Đang hiện lại…"; it.st.className = "status";
+  try {
+    await API.banHide(BAI, BUOI, PIN, id, from, it.cid, hide);
+    const c = ((d.ban || {})[id] || {cm: []}).cm.find(x => x.from === from); if (c) c.an = hide ? 1 : 0;
+    renderPanel(id);
+    it.st.textContent = hide ? "Đã ẩn nhận xét với học sinh" : "Đã hiện lại nhận xét"; it.st.className = "status ok";
+  } catch(e) { it.st.textContent = e.message; it.st.className = "status bad"; }
+}
+
 async function toggleLike(id, it){
   const d = DOCS.find(x => x.clientId === it.cid); if (!d || it.saving) return;
   const liked = !!(d.nx && d.nx[LIKE(id)]);
@@ -266,6 +284,8 @@ function renderPanel(id){
   let nSub = 0, nOk = 0, shown = 0;
   p.chot.textContent = REV[id] ? "Ẩn phần chốt câu này" : "Chốt câu này cho cả lớp";
   p.chot.className = "btn " + (REV[id] ? "" : "keybtn");
+  p.peer.setAttribute("aria-pressed", String(!!REV[BAN(id)]));
+  p.peer.innerHTML = HEART + (REV[BAN(id)] ? "Đang mở bạn bè bình chọn (bấm để đóng)" : "Mở cho HS xem bài nhau, thả tim, nhận xét");
   const seen = new Set();
   DOCS.forEach(d => {
     const a = answerOf(id, d), nx = (d.nx && d.nx[id]) || "";
@@ -275,7 +295,12 @@ function renderPanel(id){
     if (!a.body && !nx) { if (it) it.item.hidden = true; return; }
     if (!it) { it = makeItem(id, d); p.items.set(d.clientId, it); p.list.appendChild(it.item); }
     const liked = !!(d.nx && d.nx[LIKE(id)]);
-    it.head.innerHTML = esc(d.name) + " " + a.chip + (nx ? ' <span class="chip nx">Đã nhận xét</span>' : "") + (liked ? ' <span class="chip like">' + THUMB + "Đã khen</span>" : "");
+    const pb = (d.ban || {})[id] || {n: 0, cm: []};
+    it.head.innerHTML = esc(d.name) + " " + a.chip + (nx ? ' <span class="chip nx">Đã nhận xét</span>' : "") + (liked ? ' <span class="chip like">' + THUMB + "Đã khen</span>" : "")
+      + (pb.n ? ' <span class="chip heart-n" title="Số nhóm bạn thả tim">' + HEART + pb.n + "</span>" : "");
+    it.pcm.hidden = !(pb.cm || []).length;
+    it.pcm.innerHTML = (pb.cm || []).length ? '<li class="lb">Các bạn nhận xét:</li>' + pb.cm.map(c => '<li class="' + (c.an ? "an" : "") + '"><b>' + esc(c.g || "Bạn") + ":</b> " + esc(c.t)
+      + ' <button class="btn mini" type="button" data-from="' + esc(c.from) + '" data-an="' + (c.an ? 1 : 0) + '">' + (c.an ? "Hiện lại" : "Ẩn") + "</button>" + (c.an ? ' <span class="chip draft">Đã ẩn</span>' : "") + "</li>").join("") : "";
     it.like.innerHTML = THUMB + (liked ? "Đã khen" : "Khen");
     it.like.setAttribute("aria-pressed", liked ? "true" : "false");
     it.like.classList.toggle("suggest", !liked && a.ok === true);
@@ -369,7 +394,7 @@ async function poll(){
     const docs = await API.getClass(BAI, BUOI, PIN);
     const local = new Map(DOCS.map(d => [d.clientId, d]));
     DOCS = docs.map(x => {
-      const d = Object.assign({name: x.group || "(chưa nhập tên)", t: x.t, clientId: String(x.clientId), nx: x.nx || {}}, x.data || {});
+      const d = Object.assign({name: x.group || "(chưa nhập tên)", t: x.t, clientId: String(x.clientId), nx: x.nx || {}, ban: x.ban || {}}, x.data || {});
       const old = local.get(d.clientId); if (old && old.nx && !x.nx) d.nx = old.nx;
       return d;
     }).sort((a, b) => String(a.name).localeCompare(String(b.name), "vi", {numeric: true}));
@@ -393,7 +418,7 @@ async function pushRev(){
   saving = false; if (again) { again = false; pushRev(); }
 }
 function toggleRev(id){ REV = Object.assign({}, REV, {[id]: !REV[id]}); TASK_IDS.forEach(renderPanel); renderConcepts(); if (outline) outline.update(); pushRev(); }
-function setAll(v){ const n = {}; ALL_REV.forEach(k => n[k] = v); REV = n; TASK_IDS.forEach(renderPanel); renderConcepts(); if (outline) outline.update(); pushRev(); }
+function setAll(v){ const n = {}; Object.keys(REV).forEach(k => { if (k.indexOf("ban.") === 0) n[k] = REV[k]; }); ALL_REV.forEach(k => n[k] = v); REV = n; TASK_IDS.forEach(renderPanel); renderConcepts(); if (outline) outline.update(); pushRev(); }
 $("rev-all").addEventListener("click", () => setAll(true));
 /* Chiếu ghi bài: phần nào được chiếu thì chốt luôn cho cả lớp */
 function chotGhi(k){ if (!REV[k]) toggleRev(k); }

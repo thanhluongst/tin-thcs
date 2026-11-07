@@ -69,6 +69,7 @@ Mọi bài dùng **chung một Google Sheet và một Apps Script**, tức là c
   1. tạo Google Sheet mới;
   2. dán `Code.gs`, đặt `MA_GIAO_VIEN`, triển khai;
   3. thay `API_URL` trong `chung/config.js` và đẩy kho `tin-thcs` lên lại.
+- **Bạn bè bình chọn (tháng 11/2026):** trên trang giáo viên, mỗi câu có nút **Mở cho HS xem bài nhau, thả tim, nhận xét**. Khi mở, học sinh (đang học trực tuyến) thấy bài các nhóm đã nộp câu đó, thả ❤ một lần và viết một nhận xét (sửa được) cho mỗi nhóm khác. Mỗi nhóm thấy số tim và nhận xét các bạn gửi cho mình. Giáo viên thấy số tim, đọc mọi nhận xét và bấm **Ẩn** nhận xét không phù hợp. Dữ liệu nằm ở trang tính `BanBe`. Cần dán `Code.gs` mới (cách làm như mục dưới); chưa dán thì trang báo “Cần dán Code.gs mới…”.
 - **Bật thống kê theo bài (cần làm một lần, tháng 11/2026):** mở Apps Script → dán toàn bộ `apps-script/Code.gs` mới → **Triển khai → Quản lý các bản triển khai → biểu tượng bút chì → Phiên bản: Phiên bản mới → Triển khai**. Giữ nguyên bản triển khai cũ để link `/exec` không đổi. Chưa làm bước này thì bảng thống kê báo “Cần dán Code.gs mới…”.
 - **Nâng cấp từ bản cũ** (một trang `BaiLam` chung): xem mục *Nâng cấp Apps Script* trong README của từng bài. Tóm tắt: dán `Code.gs` mới, tạo phiên bản triển khai mới, chạy hàm `chuyenDuLieuCu` một lần.
 
