@@ -141,6 +141,8 @@
         <div class="act-tag"><b>Bước 3</b> Tạo trang bìa cho cuốn sổ</div>
         <div class="reading">Nháy chuột vào thẻ <b>Insert</b> → trong nhóm lệnh <b>Pages</b>, chọn <b>Cover Page</b> → chọn một mẫu trang bìa → sửa lại nội dung và thay hình trang bìa.</div>
         <div data-task="b3" data-n="1"></div>
+        <div class="reading"><b>Thực hành trên mô phỏng:</b> tệp Soluuniem.docx đã có một số nội dung. Em tạo trang bìa và hoàn thiện cuốn sổ theo các yêu cầu bên dưới.</div>
+        <div data-st1></div>
       </div>
       <div class="act">
         <div class="act-tag"><b>Bước 4</b> Xem lại nội dung</div>
@@ -198,6 +200,19 @@
 </div>
 
 <footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a><p class="cr">© 2026 <b>Nguyễn Thanh Lương</b> – Giáo viên Trường THCS Nhơn Mỹ, xã Nhơn Mỹ, thành phố Cần Thơ · Zalo: <a href="https://zalo.me/0907654137" target="_blank" rel="noopener">0907 654 137</a></p></div></footer>
+<script src="../chung/soanthao.js?v=1"></script>
+<script>
+(function(){
+  var C = document.querySelector("[data-st1]"); if (!C) return;
+  SoanThao(C, {title: "Mô phỏng: hoàn thiện Soluuniem.docx", name: "Soluuniem.docx", tools: ["cover","picture","table","font","para","find","replace","layout","print","save"],
+    note: "Bấm <b>Insert → Cover Page ▾</b> và chọn một mẫu. Bôi đen từng dòng trong ngoặc [ … ] rồi gõ nội dung: tên sổ, tên lớp, năm học.",
+    html: '<p style="text-align:center"><b><span style="font-size:16pt">CẢM NGHĨ VỀ NHÓM BẠN THÂN LỚP 6A</span></b></p><p style="text-align:justify">Mỗi buổi sáng đến lớp, tớ đều mong được gặp nhóm bạn thân. Chúng tớ cùng học, cùng chơi và luôn giúp đỡ nhau.</p><p style="text-align:center"><b><span style="font-size:16pt">DANH SÁCH LỚP 6A</span></b></p><table><tbody><tr><td><b>STT</b></td><td><b>Họ và tên</b></td><td><b>Ngày sinh</b></td></tr><tr><td>1</td><td>Nguyễn An</td><td>12/3</td></tr><tr><td>2</td><td>Trần Bình</td><td>5/9</td></tr></tbody></table><p><br></p>',
+    check: function(x){ var cv = x.page.querySelector(".wd-cover"), ct = cv ? (cv.textContent || "").normalize("NFC") : "";
+      return [["Chèn trang bìa (Insert → Cover Page)", !!cv], ["Trang bìa có tên sổ (có chữ “lưu niệm”) và tên lớp", !!cv && /lưu niệm/i.test(ct) && /\b6\s*[A-Za-z]?\d*/.test(ct)],
+        ["Trang bìa có năm học (ví dụ 2026 – 2027)", !!cv && /20\d\d/.test(ct)], ["Đã sửa hết các chữ mẫu trong ngoặc [ … ]", !!cv && !/\[[^\]]*\]/.test(ct)],
+        ["Trang bìa có hình ảnh", !!cv && !!cv.querySelector("img")], ["Xem trước trang in", x.ev.printed > 0], ["Lưu tệp Soluuniem.docx (Save As)", /^soluuniem\.docx$/i.test(x.ev.saved || "")]]; }});
+})();
+</script>
 <script src="../chung/config.js?v=23"></script>
 <script src="content.js?v=22"></script>
 <script src="../chung/outline.js?v=22"></script>
@@ -208,6 +223,6 @@
 <script src="../chung/hinh-ve.js?v=3"></script>
 <script src="../chung/khen.js?v=2"></script>
 <script src="../chung/hs.js?v=36"></script>
-<script src="../chung/doc-tieng-anh.js?v=1"></script>
+<script src="../chung/doc-tieng-anh.js?v=2"></script>
 </body>
 </html>

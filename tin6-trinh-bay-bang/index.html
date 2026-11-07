@@ -176,6 +176,8 @@
         <div class="act-tag"><b>Câu hỏi</b> SGK trang 55</div>
         <div data-task="p55a" data-n="1"></div>
         <div data-task="p55b" data-n="2"></div>
+        <div class="reading"><b>Thử trên mô phỏng:</b> tạo bảng kết quả khảo sát (Hình 5.12) bằng <b>Insert → Table</b>. Nhấn phím <b>Tab</b> để chuyển sang ô kế tiếp.</div>
+        <div data-st1></div>
       </div>
       <div class="act act-ghi">
         <div class="act-tag"><b>Ghi bài</b> 2. Tạo bảng</div>
@@ -208,6 +210,7 @@
         <div class="act-tag"><b>Thực hành</b> Danh sách thành viên của lớp</div>
         <div class="reading"><b>Nhiệm vụ:</b> tạo bảng danh sách thành viên của lớp như minh hoạ trong Hình 5.11; nhập dữ liệu gồm họ tên, ngày sinh và ảnh của giáo viên chủ nhiệm và từng thành viên trong lớp; chỉnh sửa, định dạng bảng. <b>Hướng dẫn:</b> a) Tạo bảng: xác định số cột, số hàng (Hình 5.11 có 4 cột, 4 hàng; em có thể ước tính theo số thành viên của lớp, hoặc tạo hai bảng: giáo viên và học sinh). b) Chỉnh sửa bảng: phần thông tin giáo viên chủ nhiệm trình bày trong một ô to được gộp từ 4 ô nhỏ. c) Nhập thông tin các thành viên vào ô: ảnh, họ tên, ngày sinh; có thể bổ sung địa chỉ, sở thích,… và chèn thêm hàng, cột cho đủ thành viên.</div>
         <div data-task="th1" data-n="1"></div>
+        <div data-st2></div>
         <div data-task="th2" data-n="2"></div>
       </div>
     </section>
@@ -217,7 +220,9 @@
       <div class="act">
         <div class="act-tag"><b>Luyện tập</b> Bảng khảo sát, bảng đọc sách</div>
         <div data-task="lt1" data-n="1"></div>
+        <div data-st3></div>
         <div data-task="lt2" data-n="2"></div>
+        <div data-st4></div>
       </div>
       <div class="act act-ghi">
         <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
@@ -262,6 +267,46 @@
 </div>
 
 <footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a><p class="cr">© 2026 <b>Nguyễn Thanh Lương</b> – Giáo viên Trường THCS Nhơn Mỹ, xã Nhơn Mỹ, thành phố Cần Thơ · Zalo: <a href="https://zalo.me/0907654137" target="_blank" rel="noopener">0907 654 137</a></p></div></footer>
+<script src="../chung/soanthao.js?v=1"></script>
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var low = function(t){ return String(t || "").toLowerCase().normalize("NFC"); };
+  function find(x, rows, cols){ for (var i = 0; i < x.tables.length; i++) if ((!rows || x.tables[i].rows === rows) && (!cols || x.tables[i].cols === cols)) return x.tables[i]; return null; }
+  function row(t, r){ var a = []; for (var c = 0; c < t.cols; c++) a.push(t.text(r, c)); return a; }
+  function colHas(t, c, list){ return list.every(function(v, i){ return low(t.text(i + 1, c)).replace(/\s/g, "") === low(v).replace(/\s/g, ""); }); }
+  var GAMES = [["1","Kéo co","19","16"],["2","Ném bóng trúng đích","12","15"],["3","Lò cò tiếp sức","16","18"],["4","Trốn tìm","8","10"]];
+  var HEAD = ["STT","Tên trò chơi","Số bạn nam thích","Số bạn nữ thích"];
+  function tbl(rows, head){ return "<table><tbody>" + (head ? "<tr>" + head.map(function(h){ return "<td><b>" + h + "</b></td>"; }).join("") + "</tr>" : "") + rows.map(function(r){ return "<tr>" + r.map(function(v){ return "<td>" + (v || "<br>") + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table>"; }
+  /* 1. Tạo bảng kết quả khảo sát */
+  SoanThao($("[data-st1]"), {title: "Mô phỏng: tạo bảng kết quả khảo sát trò chơi tập thể", tools: ["font","para","table"],
+    note: "Nháy chuột vào dòng trống dưới tiêu đề → <b>Insert → Table ▾</b> → rê chuột chọn <b>4 cột × 5 hàng</b> (hoặc Insert Table… nhập Number of columns: 4, Number of rows: 5).",
+    html: "<p><b>KẾT QUẢ KHẢO SÁT TRÒ CHƠI TẬP THỂ LỚP 6A</b></p><p><br></p>",
+    check: function(x){ var t = find(x, 5, 4) || x.tables[0];
+      return [["Chèn bảng 4 cột, 5 hàng (Insert → Table)", !!find(x, 5, 4) || x.ev.table.some(function(a){ return a[0] === 5 && a[1] === 4; })], ["Hàng đầu: STT | Tên trò chơi | Số bạn nam thích | Số bạn nữ thích", !!t && t.cols >= 4 && HEAD.every(function(h, i){ return low(t.text(0, i)) === low(h); })],
+        ["Nhập đủ số liệu của 4 trò chơi", !!t && t.rows >= 5 && GAMES.every(function(g, r){ return g.every(function(v, c){ return low(t.text(r + 1, c)) === low(v); }); })]]; }});
+  /* 2. Danh sách lớp: gộp ô */
+  SoanThao($("[data-st2]"), {title: "Mô phỏng: bảng danh sách thành viên lớp (Hình 5.11)", tools: ["font","para","table","picture"],
+    note: "<b>Kéo chuột</b> từ ô trên cùng bên trái sang ô bên dưới bên phải để chọn 4 ô (2 hàng × 2 cột, được tô xanh) → <b>Merge Cells</b>. Nháy vào ô cuối cùng → <b>Insert Below</b> để thêm hàng.",
+    html: "<p><b>DANH SÁCH LỚP 6A</b></p>" + tbl([["Giáo viên chủ nhiệm", "", "Nguyễn An", "Trần Bình"], ["", "", "Lê Chi", "Phạm Dũng"], ["Hoàng Giang", "Vũ Hà", "Đỗ Khoa", "Bùi Lan"]]) + "<p><br></p>",
+    check: function(x){ var t = x.tables[0]; if (!t) return [["Bảng danh sách", false]];
+      var gv = t.el.querySelector("td"), m = gv && gv.rowSpan === 2 && gv.colSpan === 2 && /giáo viên chủ nhiệm/i.test(gv.textContent);
+      return [["Gộp 4 ô góc trên bên trái (2 hàng × 2 cột) thành một ô “Giáo viên chủ nhiệm”", !!m], ["Chèn ảnh vào ô giáo viên chủ nhiệm", !!m && !!gv.querySelector("img")],
+        ["Thêm một hàng mới ở cuối bảng và nhập tên một bạn", t.rows >= 4 && row(t, t.rows - 1).some(function(v){ return v.length > 1; }) && t.rows > 3]]; }});
+  /* 3. Luyện tập 1: thêm cột Tổng số */
+  SoanThao($("[data-st3]"), {title: "Mô phỏng Luyện tập 1: thêm cột “Tổng số”", tools: ["font","para","table"],
+    note: "Nháy vào một ô của cột “Số bạn nữ thích” → <b>Insert Right</b>, rồi nhập tiêu đề và số liệu cho cột mới.",
+    html: "<p><b>KẾT QUẢ KHẢO SÁT TRÒ CHƠI TẬP THỂ LỚP 6A</b></p>" + tbl(GAMES, HEAD) + "<p><br></p>",
+    check: function(x){ var t = x.tables[0]; return [["Chèn cột bên phải cột “Số bạn nữ thích” (bảng có 5 cột)", !!t && t.cols === 5 && /nữ/i.test(t.text(0, 3))],
+      ["Tiêu đề cột mới: Tổng số", !!t && t.cols === 5 && /tổng/i.test(t.text(0, 4))], ["Tổng số đúng: 35, 27, 34, 18", !!t && t.cols === 5 && colHas(t, 4, ["35","27","34","18"])]]; }});
+  /* 4. Luyện tập 2: phong trào đọc sách */
+  SoanThao($("[data-st4]"), {title: "Mô phỏng Luyện tập 2: bảng “Phong trào đọc sách”", tools: ["font","para","table"],
+    note: "Nháy vào ô “2017” → <b>Insert Above</b> để thêm hàng năm 2016 phía trên.",
+    html: "<p><b>PHONG TRÀO ĐỌC SÁCH CỦA HỌC SINH KHỐI 6</b></p>" + tbl([["2017","230","52%"],["2018","256","64%"],["2019","345","78%"]], ["Năm","Số học sinh thích đọc sách","Tỉ lệ (%)"]) + "<p><br></p>",
+    check: function(x){ var t = x.tables[0]; return [["Chèn hàng phía trên hàng năm 2017", !!t && t.rows === 5 && t.text(2, 0) === "2017"],
+      ["Nhập hàng 2016 – 175 – 45%", !!t && t.text(1, 0) === "2016" && t.text(1, 1) === "175" && /^45\s*%?$/.test(t.text(1, 2))], ["Hàng tiêu đề chữ đậm, căn giữa", ["Năm", "Số học sinh thích", "Tỉ lệ"].every(function(h){ var st = x.style(h); return !!st && st.b && st.align === "center"; })]]; }});
+})();
+</script>
 <script src="../chung/config.js?v=23"></script>
 <script src="content.js?v=22"></script>
 <script src="../chung/outline.js?v=22"></script>
@@ -272,6 +317,6 @@
 <script src="../chung/hinh-ve.js?v=3"></script>
 <script src="../chung/khen.js?v=2"></script>
 <script src="../chung/hs.js?v=36"></script>
-<script src="../chung/doc-tieng-anh.js?v=1"></script>
+<script src="../chung/doc-tieng-anh.js?v=2"></script>
 </body>
 </html>

@@ -108,14 +108,6 @@
     </section>
 
     <style>
-      .fr{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%}
-      .fr-dlg{display:grid;gap:6px;background:#eef1f5;border:1px solid #c5ccd4;border-radius:8px;padding:8px;color:#1d2433;font-size:13.5px}
-      .fr-dlg label{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:6px;align-items:center}
-      .fr-dlg input{font:inherit;min-width:0;width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid #9aa;border-radius:4px;background:#fff;color:#1d2433}
-      .fr-doc{background:#fff;color:#1d2433;border:1px solid #c5ccd4;border-radius:8px;padding:12px 16px;font-family:"Times New Roman",serif;font-size:15px;line-height:1.5;white-space:pre-wrap}
-      .fr-doc mark{background:#ffd54f}.fr-doc mark.cur{background:#ff9800;color:#fff}
-      .fr-doc .h{color:#c2185b;font-weight:700}
-      .fr-st{font-size:13.5px}
     </style>
     <section class="part" id="mo-dau">
       <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
@@ -153,17 +145,7 @@
       <div class="act">
         <div class="act-tag"><b>Thực hành</b> Kem sữa chua xoài</div>
         <div class="reading"><b>Nhiệm vụ:</b> nhập nội dung công thức làm kem sữa chua dưa hấu của An và định dạng văn bản như Hình 5.22 rồi lưu với tên kemsuachua-duahau.docx. Thực hành tìm kiếm cụm từ “dưa hấu” và thay thế bằng từ “xoài” trong công thức rồi lưu tệp với tên kemsuachua-xoai.docx. <b>a) Tìm kiếm</b>: nháy chuột vào thẻ Home → trong nhóm lệnh Editing chọn <b>Find</b> → gõ từ, cụm từ cần tìm rồi nhấn Enter; các từ tìm thấy được đánh dấu, ô Navigation có liên kết đến các từ tìm thấy. <b>b) Thay thế</b>: trong nhóm lệnh Editing, chọn <b>Replace</b> → gõ từ cần tìm (Find what) → gõ từ thay thế (Replace with) → nháy <b>Replace</b> để thay lần lượt hoặc <b>Replace All</b> để thay tất cả. <i>Luyện tập trước với hộp thoại mô phỏng dưới đây.</i></div>
-        <figure class="fig fr" data-fr>
-          <div class="fr-dlg" role="group" aria-label="Find and Replace">
-            <b>Find and Replace</b>
-            <label>Find what: <input type="text" value="dưa hấu" data-f></label>
-            <label>Replace with: <input type="text" value="xoài" data-r></label>
-            <div class="row"><button class="btn" type="button" data-k="find">Find Next</button><button class="btn" type="button" data-k="rep">Replace</button><button class="btn" type="button" data-k="all">Replace All</button><button class="btn" type="button" data-k="reset">Khôi phục văn bản</button></div>
-          </div>
-          <div class="fr-st" aria-live="polite"></div>
-          <div class="fr-doc"></div>
-          <figcaption>Hình 5.22–5.24. Công thức làm kem sữa chua dưa hấu – tìm kiếm và thay thế (mô phỏng)</figcaption>
-        </figure>
+        <div data-st1></div>
         <div data-task="th1" data-n="1"></div>
         <div data-task="th2" data-n="2"></div>
         <div data-task="th3" data-n="3"></div>
@@ -180,6 +162,7 @@
       <div class="act">
         <div class="act-tag"><b>Luyện tập</b> Tìm kiếm và thay thế</div>
         <div data-task="lt1" data-n="1"></div>
+        <div data-st2></div>
         <div data-task="lt2" data-n="2"></div>
       </div>
       <div class="act act-ghi">
@@ -194,6 +177,7 @@
       <div class="act">
         <div class="act-tag"><b>Vận dụng</b> Rà soát sổ lưu niệm</div>
         <div data-task="vd" data-n="1"></div>
+        <div data-st3></div>
       </div>
       <div class="act act-ghi">
         <div class="act-tag"><b>Ghi bài</b> Vận dụng</div>
@@ -201,35 +185,44 @@
         <div data-concept="g5"></div>
       </div>
     </section>
-
-    <script>
-    (function(){
-      var B = document.querySelector("[data-fr]"); if (!B) return;
-      var ORIG = "Kem sữa chua dưa hấu\nNguyên liệu\nDưa hấu: 250 g\nSữa chua: 100 g\nMật ong: 1 thìa cà phê\nDụng cụ\n1 tô to\n4 khuôn làm kem\nHướng dẫn\n1. Cho dưa hấu vào tô.\n2. Nghiền nát dưa hấu.\n3. Cho sữa chua và mật ong vào tô.\n4. Trộn đều hỗn hợp.\n5. Cho hỗn hợp vào khuôn làm kem.\n6. Đặt khuôn kem vào ngăn đá tủ lạnh trong thời gian ít nhất 4 tiếng.\n7. Lấy kem ra thưởng thức.";
-      var txt = ORIG, cur = -1, doc = B.querySelector(".fr-doc"), st = B.querySelector(".fr-st"), F = B.querySelector("[data-f]"), R = B.querySelector("[data-r]");
-      function esc(s){ return s.replace(/[&<>]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]; }); }
-      function hits(){ var q = F.value; if (!q) return []; var out = [], low = txt.toLowerCase(), ql = q.toLowerCase(), i = 0; while ((i = low.indexOf(ql, i)) >= 0) { out.push(i); i += ql.length; } return out; }
-      function draw(){ var h = hits(), q = F.value.length, s = "", p = 0;
-        h.forEach(function(i, k){ s += esc(txt.slice(p, i)) + '<mark class="' + (k === cur ? "cur" : "") + '">' + esc(txt.slice(i, i + q)) + "</mark>"; p = i + q; });
-        s += esc(txt.slice(p)); doc.innerHTML = s.replace(/^([^\n]*)/, '<span class="h">$1</span>'); return h; }
-      function say(m){ st.innerHTML = m; }
-      B.addEventListener("click", function(e){ var b = e.target.closest("[data-k]"); if (!b) return; var k = b.dataset.k, h = hits();
-        if (k === "reset") { txt = ORIG; cur = -1; draw(); say("Đã khôi phục công thức gốc."); return; }
-        if (!h.length) { cur = -1; draw(); say("Không tìm thấy “" + esc(F.value) + "”."); return; }
-        if (k === "find") { cur = (cur + 1) % h.length; draw(); say("Tìm thấy " + h.length + " kết quả – đang ở kết quả " + (cur + 1) + "."); }
-        else if (k === "rep") { if (cur < 0) { cur = 0; draw(); say("Đã đánh dấu kết quả 1/" + h.length + ". Nháy Replace lần nữa để thay."); return; }
-          var i = h[cur]; txt = txt.slice(0, i) + R.value + txt.slice(i + F.value.length); var n = hits().length; cur = n ? Math.min(cur, n - 1) : -1; draw(); say("Đã thay 1 chỗ. Còn " + n + " chỗ."); }
-        else if (k === "all") { var n0 = h.length; txt = txt.split("").join(""); h.slice().reverse().forEach(function(i){ var w = txt.slice(i, i + F.value.length), r = R.value; if (w[0] && w[0] === w[0].toUpperCase() && w[0] !== w[0].toLowerCase()) r = r.charAt(0).toUpperCase() + r.slice(1); txt = txt.slice(0, i) + r + txt.slice(i + F.value.length); });
-          cur = -1; draw(); say("Word đã thay xong <b>" + n0 + "</b> chỗ (Replace All)."); } });
-      F.addEventListener("input", function(){ cur = -1; var n = draw().length; say(F.value ? "Tìm thấy " + n + " kết quả." : ""); });
-      var n = draw().length; say("Tìm thấy " + n + " kết quả “dưa hấu”.");
-    })();
-    </script>
   </div>
 </main>
 </div>
 
 <footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a><p class="cr">© 2026 <b>Nguyễn Thanh Lương</b> – Giáo viên Trường THCS Nhơn Mỹ, xã Nhơn Mỹ, thành phố Cần Thơ · Zalo: <a href="https://zalo.me/0907654137" target="_blank" rel="noopener">0907 654 137</a></p></div></footer>
+<script src="../chung/soanthao.js?v=1"></script>
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var P = function(a){ return a.map(function(t){ return "<p>" + t + "</p>"; }).join(""); };
+  var KEM = '<p style="text-align:center"><b><span style="font-size:20pt;color:#c2185b">Kem sữa chua dưa hấu</span></b></p><p><b>Nguyên liệu</b></p>' + P(["Dưa hấu: 250 g", "Sữa chua: 100 g", "Mật ong: 1 thìa cà phê"])
+    + "<p><b>Dụng cụ</b></p>" + P(["1 tô to", "4 khuôn làm kem"]) + "<p><b>Hướng dẫn</b></p>"
+    + P(["1. Cho dưa hấu vào tô.", "2. Nghiền nát dưa hấu.", "3. Cho sữa chua và mật ong vào tô.", "4. Trộn đều hỗn hợp.", "5. Cho hỗn hợp vào khuôn làm kem.", "6. Đặt khuôn kem vào ngăn đá tủ lạnh trong thời gian ít nhất 4 tiếng.", "7. Lấy kem ra thưởng thức."]);
+  SoanThao($("[data-st1]"), {title: "Mô phỏng: kemsuachua-duahau.docx (Hình 5.22–5.24)", name: "kemsuachua-duahau.docx", tools: ["find","replace","font","para","save"],
+    note: "a) <b>Find</b>: gõ “dưa hấu” vào ô Search document của ngăn Navigation, xem số kết quả và bấm vào từng kết quả. b) <b>Replace</b>: Find what “dưa hấu”, Replace with “xoài” → <b>Replace All</b>. c) <b>Save As</b> với tên kemsuachua-xoai.docx.",
+    html: KEM,
+    check: function(x){ var f = x.ev.find.some(function(a){ return /^dưa hấu$/i.test(a.s.normalize("NFC")) && a.n >= 4; });
+      return [["Tìm kiếm (Find) cụm từ “dưa hấu”: thấy 4 kết quả", f], ["Thay thế “dưa hấu” bằng “xoài” (Replace All hoặc Replace)", x.find("dưa hấu") === 0 && x.find("xoài") >= 4],
+        ["Tên món trở thành “Kem sữa chua xoài”", /kem sữa chua xoài/i.test(x.text)], ["Lưu tệp mới với tên kemsuachua-xoai.docx", /^kemsuachua-xoai\.docx$/i.test(x.name)]]; }});
+  /* Luyện tập 1: tìm bài viết về nhóm bạn thân trong tệp dài */
+  var BAI = [["Cảm nghĩ về mái trường", "Ngôi trường của em có hàng phượng vĩ rợp bóng. Mỗi mùa hè, hoa phượng nở đỏ rực cả sân trường."],
+    ["Cảm nghĩ về thầy cô", "Cô giáo chủ nhiệm luôn dịu dàng, kiên nhẫn giảng bài và động viên chúng em mỗi khi gặp khó khăn."],
+    ["Cảm nghĩ về buổi cắm trại", "Buổi cắm trại đầu năm giúp cả lớp hiểu nhau hơn. Chúng em cùng dựng lều, nấu ăn và hát vang bên đống lửa trại."],
+    ["Cảm nghĩ về nhóm bạn thân lớp 6A", "Nhóm bạn thân của tớ có bốn người. Chúng tớ cùng học, cùng chơi và luôn giúp đỡ nhau."],
+    ["Cảm nghĩ về thư viện", "Thư viện trường là nơi em thích nhất vào giờ ra chơi, với rất nhiều sách hay và những góc đọc yên tĩnh."]];
+  SoanThao($("[data-st2]"), {title: "Mô phỏng Luyện tập 1: tệp CamNghi.docx có nhiều bài viết", name: "CamNghi.docx", tools: ["find"],
+    note: "Dùng <b>Find</b> để tìm nhanh bài viết về <b>nhóm bạn thân</b>, rồi bấm vào kết quả trong ngăn Navigation để chuyển tới bài đó.",
+    html: BAI.map(function(b){ return "<p><b>" + b[0] + "</b></p><p>" + b[1] + "</p><p><br></p>"; }).join(""),
+    check: function(x){ return [["Tìm “nhóm bạn thân” bằng Find (thấy kết quả)", x.ev.find.some(function(a){ return /nhóm bạn thân/i.test(a.s.normalize("NFC")) && a.n > 0; })]]; }});
+  /* Vận dụng: sửa từ viết tắt, viết sai */
+  SoanThao($("[data-st3]"), {title: "Mô phỏng Vận dụng: rà soát lỗi trong sổ lưu niệm", name: "SoLuuNiem.docx", tools: ["find","replace","save"],
+    note: "Đoạn văn có các từ viết tắt và viết sai. Dùng <b>Replace</b> để sửa: “ko” → “không”, “hs” → “học sinh”, “xinh nhật” → “sinh nhật”. Chú ý: đánh dấu <b>Match case</b> khi chỉ muốn thay đúng chữ thường.",
+    html: "<p><b>Kỉ niệm lớp 6A</b></p><p>Ngày xinh nhật của lớp, các hs mang đến rất nhiều bánh kẹo. Ai cũng vui, ko bạn nào vắng mặt.</p><p>Cô giáo nói: “Các hs hãy giữ mãi tình bạn này nhé!”. Chúng em hứa sẽ ko quên buổi xinh nhật đáng nhớ ấy.</p>",
+    check: function(x){ var t = x.text;
+      return [["Không còn “ko”, đã thay bằng “không”", !/(^|[^\p{L}])ko([^\p{L}]|$)/iu.test(t) && /không quên/.test(t) && /không bạn/.test(t)], ["Không còn “hs”, đã thay bằng “học sinh”", !/(^|[^\p{L}])hs([^\p{L}]|$)/iu.test(t) && (t.match(/học sinh/g) || []).length >= 2],
+        ["Không còn “xinh nhật”, đã thay bằng “sinh nhật”", !/xinh nhật/i.test(t) && (t.match(/sinh nhật/g) || []).length >= 2]]; }});
+})();
+</script>
 <script src="../chung/config.js?v=23"></script>
 <script src="content.js?v=22"></script>
 <script src="../chung/outline.js?v=22"></script>
@@ -240,6 +233,6 @@
 <script src="../chung/hinh-ve.js?v=3"></script>
 <script src="../chung/khen.js?v=2"></script>
 <script src="../chung/hs.js?v=36"></script>
-<script src="../chung/doc-tieng-anh.js?v=1"></script>
+<script src="../chung/doc-tieng-anh.js?v=2"></script>
 </body>
 </html>

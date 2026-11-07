@@ -205,6 +205,8 @@
         <div class="act-tag"><b>Thực hành</b> Bài viết cảm nghĩ</div>
         <div class="reading"><b>Nhiệm vụ:</b> cuốn sổ lưu niệm của lớp chứa những bài viết cảm nghĩ về bạn bè, thầy cô và mái trường. Hình 5.8 là bài viết “Cảm nghĩ về nhóm bạn thân lớp 6A” của bạn An. Em hãy tham khảo bài viết này để soạn một bài viết cảm nghĩ của em trên phần mềm soạn thảo văn bản. Một số công việc cần làm: nhập nội dung văn bản, chèn hình ảnh (Insert/Picture); căn lề các đoạn văn bản; chọn hướng trang, chọn lề trang; xem trang in để điều chỉnh lại (nếu cần); lưu tệp văn bản (File/Save, tên CamNghiVeBan.docx). Trong bài viết của An, phần tiêu đề, hình ảnh và giới thiệu tên của An được căn lề giữa, phần văn bản còn lại được căn đều hai bên.</div>
         <div data-task="th1" data-n="1"></div>
+        <div class="reading"><b>Thực hành trên mô phỏng:</b> trang văn bản dưới đây có sẵn nội dung bài viết. Em định dạng theo các yêu cầu bên dưới (danh sách tự đánh dấu ☑ khi em làm đúng).</div>
+        <div data-st1></div>
         <div data-task="th2" data-n="2"></div>
         <div data-task="th3" data-n="3"></div>
       </div>
@@ -221,7 +223,9 @@
         <div class="act-tag"><b>Luyện tập</b> Hướng trang và căn lề</div>
         <div data-task="lt1" data-n="1"></div>
         <div data-task="lt2" data-n="2"></div>
+        <div data-st2></div>
         <div data-task="lt3" data-n="3"></div>
+        <div data-st3></div>
       </div>
       <div class="act act-ghi">
         <div class="act-tag"><b>Ghi bài</b> Luyện tập</div>
@@ -265,6 +269,41 @@
 </div>
 
 <footer class="foot"><div class="wrap"><a href="../">← Danh mục bài học</a> · Tin học 6 – Kết nối tri thức với cuộc sống · <a href="giaovien.html">Trang giáo viên</a><p class="cr">© 2026 <b>Nguyễn Thanh Lương</b> – Giáo viên Trường THCS Nhơn Mỹ, xã Nhơn Mỹ, thành phố Cần Thơ · Zalo: <a href="https://zalo.me/0907654137" target="_blank" rel="noopener">0907 654 137</a></p></div></footer>
+<script src="../chung/soanthao.js?v=1"></script>
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  function al(x, s, a){ var p = x.paraOf(s); return !!p && p.align === a; }
+  function allAl(x, list, a){ return list.every(function(s){ return al(x, s, a); }); }
+  /* Thực hành: bài viết cảm nghĩ */
+  var B = ["Mỗi buổi sáng đến lớp, tớ đều mong được gặp nhóm bạn thân. Chúng tớ ngồi gần nhau, cùng học, cùng chơi và luôn giúp đỡ nhau những lúc khó khăn.",
+           "Nhóm có bốn thành viên với bốn tính cách khác nhau: người vui tính, người chăm chỉ, người khéo tay, người hay hỏi. Nhờ vậy mà giờ học nhóm lúc nào cũng sôi nổi.",
+           "Tớ mong tình bạn của chúng tớ sẽ mãi bền chặt, dù sau này mỗi đứa có thể học ở một ngôi trường khác."];
+  SoanThao($("[data-st1]"), {title: "Mô phỏng: bài viết “Cảm nghĩ về nhóm bạn thân lớp 6A”", tools: ["font","para","picture","layout","print","save"],
+    note: "Nháy chuột ngay sau dòng tiêu đề rồi dùng <b>Insert → Picture</b> để chèn ảnh. Muốn căn lề đoạn nào thì nháy chuột vào đoạn đó (hoặc bôi đen nhiều đoạn) rồi bấm nút căn lề.",
+    html: "<p>CẢM NGHĨ VỀ NHÓM BẠN THÂN LỚP 6A</p><p><br></p><p>Tớ là An</p>" + B.map(function(t){ return "<p>" + t + "</p>"; }).join(""),
+    check: function(x){ var img = x.imgs[0], st = x.style("CẢM NGHĨ VỀ NHÓM");
+      return [["Tiêu đề: chữ đậm, cỡ chữ từ 16 trở lên", !!st && st.b && st.size >= 16], ["Tiêu đề căn giữa", al(x, "CẢM NGHĨ VỀ NHÓM", "center")],
+        ["Chèn một hình ảnh và căn giữa hình ảnh", !!img && img.align === "center"], ["Dòng “Tớ là An” căn giữa", al(x, "Tớ là An", "center")],
+        ["Ba đoạn văn còn lại căn đều hai bên (Justify)", allAl(x, ["Mỗi buổi sáng", "Nhóm có bốn", "Tớ mong tình bạn"], "justify")],
+        ["Hướng trang đứng (Portrait), lề Normal", x.orient === "portrait" && x.margin === "Normal" && x.ev.orient + x.ev.margin > 0],
+        ["Xem trước trang in (File → Print)", x.ev.printed > 0], ["Lưu tệp với tên CamNghiVeBan.docx", /^camnghiveban\.docx$/i.test(x.name)]]; }});
+  /* Luyện tập 2: bài thơ lục bát */
+  SoanThao($("[data-st2]"), {title: "Mô phỏng: trình bày bài ca dao lục bát", tools: ["font","para"],
+    html: "<p>CÔNG CHA NGHĨA MẸ</p><p>Công cha như núi Thái Sơn,</p><p>Nghĩa mẹ như nước trong nguồn chảy ra.</p><p>Một lòng thờ mẹ kính cha,</p><p>Cho tròn chữ hiếu mới là đạo con.</p><p><i>(Ca dao)</i></p>",
+    check: function(x){ return [["Tên bài căn giữa, chữ đậm", al(x, "CÔNG CHA NGHĨA MẸ", "center") && !!x.style("CÔNG CHA NGHĨA MẸ") && x.style("CÔNG CHA NGHĨA MẸ").b],
+      ["Bốn câu thơ căn giữa", allAl(x, ["Công cha như", "Nghĩa mẹ như", "Một lòng thờ", "Cho tròn chữ"], "center")], ["Dòng (Ca dao) căn phải", al(x, "(Ca dao)", "right")]]; }});
+  /* Luyện tập 3: đơn xin nghỉ học */
+  SoanThao($("[data-st3]"), {title: "Mô phỏng: Đơn xin nghỉ học", tools: ["font","para","layout","print","save"],
+    note: "Thay các dấu … bằng thông tin của em (có thể gõ trực tiếp vào trang).",
+    html: "<p>CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</p><p>Độc lập – Tự do – Hạnh phúc</p><p><br></p><p>ĐƠN XIN NGHỈ HỌC</p><p>Kính gửi: Thầy (Cô) giáo chủ nhiệm lớp 6…</p><p>Em tên là: …, học sinh lớp 6…</p><p>Em viết đơn này xin phép thầy (cô) cho em được nghỉ học ngày … vì lí do: … Em xin hứa sẽ chép bài và làm đầy đủ bài tập được giao.</p><p>Em xin chân thành cảm ơn!</p><p>Người viết đơn</p><p>…</p>",
+    check: function(x){ var b = function(s){ var t = x.style(s); return !!t && t.b; };
+      return [["Quốc hiệu, tiêu ngữ căn giữa; quốc hiệu chữ đậm", allAl(x, ["CỘNG HOÀ XÃ HỘI", "Độc lập – Tự do"], "center") && b("CỘNG HOÀ XÃ HỘI")],
+        ["Tên đơn căn giữa, chữ đậm, cỡ chữ từ 14 trở lên", al(x, "ĐƠN XIN NGHỈ HỌC", "center") && b("ĐƠN XIN NGHỈ HỌC") && x.style("ĐƠN XIN NGHỈ HỌC").size >= 14],
+        ["Đoạn nội dung căn đều hai bên", al(x, "Em viết đơn này", "justify")], ["“Người viết đơn” căn phải", al(x, "Người viết đơn", "right")],
+        ["Trang đứng (Portrait)", x.orient === "portrait" && x.ev.orient > 0], ["Lưu tệp (Save As) với tên tuỳ chọn", !!x.ev.saved]]; }});
+})();
+</script>
 <script src="../chung/config.js?v=23"></script>
 <script src="content.js?v=22"></script>
 <script src="../chung/outline.js?v=22"></script>
@@ -275,6 +314,6 @@
 <script src="../chung/hinh-ve.js?v=3"></script>
 <script src="../chung/khen.js?v=2"></script>
 <script src="../chung/hs.js?v=36"></script>
-<script src="../chung/doc-tieng-anh.js?v=1"></script>
+<script src="../chung/doc-tieng-anh.js?v=2"></script>
 </body>
 </html>

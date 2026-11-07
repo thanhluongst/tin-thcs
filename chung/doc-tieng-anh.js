@@ -71,7 +71,7 @@ function strict(k, m){ var w = KEY[k.toLowerCase()] || k; if (w.length > 3 && !/
   return m === w || m === w.toUpperCase() || (!/[A-Z]/.test(w.slice(1)) && m === w.charAt(0).toUpperCase() + w.slice(1)); }
 var BLOCK = ".act,.chieu,.zoom-ov,header.hero,section,.concept";
 
-var SKIP = "script,style,textarea,input,select,option,button,a,code,pre,svg,canvas,[contenteditable],.ta-w,.bt,.vb,.tc,.tc-show,.scx,.mc,.tk,.sx,.tt,.hv,.toc,.pager,footer,.who,.join,.tools,.mode,.status,.no-ta,[data-no-ta]";
+var SKIP = "script,style,textarea,input,select,option,button,a,code,pre,svg,canvas,[contenteditable],.ta-w,.bt,.vb,.wd,.tc,.tc-show,.scx,.mc,.tk,.sx,.tt,.hv,.toc,.pager,footer,.who,.join,.tools,.mode,.status,.no-ta,[data-no-ta]";
 var ROOTS = "main,header.hero,.chieu,.zoom-ov";
 
 function wrap(root){
