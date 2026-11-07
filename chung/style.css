@@ -625,3 +625,30 @@ main select{max-width:100%}
 .khen-x{border:0;background:transparent;font-size:18px;color:#8a5a00;cursor:pointer;padding:4px 6px;border-radius:6px}
 @media (max-width:520px){.khen-toast{flex-wrap:wrap}.khen-act{width:100%;justify-content:space-between}}
 @media (prefers-reduced-motion:reduce){.liked.praise::after,.q.khen-new .praise-medal,.q.khen-new .liked.praise,.khen-toast .khen-medal,.q.khen-flash{animation:none}.khen-toast{transition:none}}
+
+/* ===== GỌI TÊN HỌC SINH ===== */
+.goiten .chieu-top{background:#5b3fc4;color:#fff}.goiten .chieu-part{color:#fff}
+.gt-page{max-width:1100px;margin:0 auto}
+.gt-setup{display:grid;gap:10px;max-width:760px;margin:0 auto;font-size:15px}
+.gt-help{margin:0;line-height:1.6;background:var(--surface);border:1px solid var(--line);border-left:5px solid #5b3fc4;border-radius:10px;padding:10px 14px}
+.gt-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gt-row label{display:flex;gap:6px;align-items:center;font-weight:700}
+.gt-name{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;width:12em;background:var(--bg);color:var(--fg)}
+.gt-ta{font:inherit;font-size:16px;line-height:1.5;min-height:14em;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);resize:vertical}
+.gt-note{margin:0;font-size:13px;color:var(--muted)}
+.gt-stage{display:grid;gap:16px;justify-items:center;padding-top:2vh}
+.gt-card{display:grid;gap:.2em;justify-items:center;min-width:min(86vw,720px);padding:4vh 4vw;border-radius:28px;background:var(--surface);border:4px solid var(--line);box-shadow:0 10px 40px rgba(0,0,0,.12)}
+.gt-card.rolling{border-color:#5b3fc4}
+.gt-card.has,.gt-card.win{border-color:#5b3fc4;background:linear-gradient(180deg,var(--surface),#efeaff)}
+.gt-card.win{animation:tb-pop .5s ease-out}
+.gt-h{font-family:var(--font-display);font-weight:700;font-size:clamp(16px,2.2vw,26px);color:var(--muted)}
+.gt-name-big{font-family:var(--font-display);font-weight:700;font-size:clamp(40px,8vw,120px);line-height:1.15;text-align:center;color:#5b3fc4;overflow-wrap:anywhere}
+.gt-sao{font-size:clamp(20px,3vw,36px);color:#f2b705;letter-spacing:.08em}
+.gt-acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.gt-acts .btn{font-size:18px;padding:10px 20px}
+.gt-acts .gt-go{background:#5b3fc4;border-color:#5b3fc4;color:#fff;font-size:22px;padding:12px 30px}
+.gt-left{margin:0;color:var(--muted);font-size:16px}
+.gt-hist{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;max-width:1000px;font-size:15px}
+.gt-hist .chip{font-size:13px;background:var(--sunk);color:var(--fg)}.gt-hist .chip.cur{background:#5b3fc4;color:#fff}
+@media (prefers-reduced-motion:reduce){.gt-card.win{animation:none}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gt-card.has,:root:not([data-theme="light"]) .gt-card.win{background:linear-gradient(180deg,var(--surface),#2a2150)}:root:not([data-theme="light"]) .gt-name-big{color:#b9a8ff}}

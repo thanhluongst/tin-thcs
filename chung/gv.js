@@ -460,6 +460,8 @@ if ($("chieu-all") && window.TrungBay) {
   const b = el("button", {class:"btn tb-btn", type:"button", id:"tb-all"}, TB_ICON + "Trưng bày bài nhóm");
   b.addEventListener("click", () => trungBay({}));
   $("chieu-all").after(b);
+  if (window.GoiTen) { const gtb = el("button", {class:"btn tb-btn", type:"button", id:"gt-btn"}, "🎯 Gọi tên học sinh");
+  gtb.addEventListener("click", () => window.GoiTen.open()); b.after(gtb); }
 }
 
 /* ================= CSV ================= */

@@ -59,6 +59,7 @@ function build(){
       '<button class="btn primary" type="button" data-k="next">Tiếp →</button>' +
       '<button class="btn tb-pick" type="button" data-k="pick" title="Chọn ngẫu nhiên một bài để cả lớp cùng sửa">🎲 Gọi ngẫu nhiên</button>' +
       '<span class="chieu-sp"></span>' +
+      (window.GoiTen ? '<button class="btn" type="button" data-k="goiten" title="Gọi tên một học sinh trong lớp">🎯 Gọi tên</button>' : "") +
       '<button class="btn" type="button" data-k="anon" aria-pressed="false">Ẩn tên nhóm</button>' +
       '<button class="btn" type="button" data-k="minus" aria-label="Chữ nhỏ hơn">A−</button>' +
       '<button class="btn" type="button" data-k="plus" aria-label="Chữ to hơn">A+</button>' +
@@ -77,6 +78,7 @@ function build(){
     if (k === "cau" || k === "nhom") { view = k; spot = -1; render(true); }
     else if (k === "prev") step(-1); else if (k === "next") step(1);
     else if (k === "pick") pick();
+    else if (k === "goiten" && window.GoiTen) window.GoiTen.open();
     else if (k === "anon") { anon = !anon; store("trungbay-an", anon ? "1" : "0"); render(true); }
     else if (k === "minus") size(-2); else if (k === "plus") size(2);
     else if (k === "full") { try { if (document.fullscreenElement) document.exitFullscreen(); else box.requestFullscreen(); } catch(err) {} }
@@ -286,7 +288,7 @@ function close(){
   if (document.fullscreenElement) { try { document.exitFullscreen(); } catch(e) {} }
   clearInterval(timer);
   box.hidden = true;
-  document.documentElement.classList.remove("chieu-on");
+  if (!document.querySelector(".chieu:not([hidden])")) document.documentElement.classList.remove("chieu-on");
   if (lastFocus && lastFocus.focus) lastFocus.focus();
 }
 window.TrungBay = {open, close, refresh: () => render(false)};

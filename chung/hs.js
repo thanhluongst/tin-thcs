@@ -389,6 +389,7 @@ function updateModeUI(){
   $("reveal-all").hidden = !T; $("hide-all").hidden = !T;
   if ($("chieu-all")) $("chieu-all").hidden = !T || !window.Chieu || !window.Chieu.parts.length;
   if ($("tb-all")) $("tb-all").hidden = !(T && groupsOn());
+  if ($("gt-btn")) $("gt-btn").hidden = !T;
   $("theo-doi").hidden = !dashOn(); $("toc-dash").hidden = !dashOn();
   $("group-bar").hidden = !groupsOn();
   $("name-label").textContent = groupsOn() ? "Tên nhóm / học sinh:" : "Họ tên / Nhóm:";
@@ -447,6 +448,8 @@ if ($("chieu-all") && window.TrungBay) {
     });
   });
   $("chieu-all").after(b);
+  if (window.GoiTen) { const gtb = el("button", {class:"btn tb-btn", type:"button", id:"gt-btn"}, "🎯 Gọi tên học sinh");
+  gtb.addEventListener("click", () => window.GoiTen.open()); gtb.hidden = true; b.after(gtb); }
 }
 if ($("chieu-all")) $("chieu-all").addEventListener("click", () => window.Chieu.open(null, {onShow: k => { if (!isRev(k)) setRev(k, true); }}));
 $("hide-all").addEventListener("click", () => setAll(false));
