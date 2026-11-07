@@ -146,7 +146,7 @@ window.Chieu = {open, close, parts: PARTS};
 
   let on = false, tool = "pen", color = COLORS[0][0], width = 3, hidden = false, cur = null;
   const LAYERS = {};   /* "page" hoặc "chieu:<phần>" → mảng nét {c, w, hl, p:[[x,y],…]}, toạ độ theo nội dung */
-  function chieuBox(){ const b = document.querySelector(".chieu"); return b && !b.hidden ? b : null; }
+  function chieuBox(){ const b = document.querySelector(".chieu:not([hidden])"); return b || null; }
   function ctxInfo(){
     const b = chieuBox();
     if (b) { const body = b.querySelector(".chieu-body"), part = (b.querySelector(".chieu-part") || {}).textContent || "";
@@ -232,8 +232,8 @@ window.Chieu = {open, close, parts: PARTS};
   function re(){ mount(); draw(); }
   new MutationObserver(re).observe(document.documentElement, {attributes: true, attributeFilter: ["class"]});
   document.addEventListener("fullscreenchange", function(){ setTimeout(function(){ size(); re(); }, 60); });
-  function watchChieu(){ const b = document.querySelector(".chieu"); if (!b || b._penWatch) return; b._penWatch = true;
-    const p = b.querySelector(".chieu-part"); if (p) new MutationObserver(draw).observe(p, {childList: true, characterData: true, subtree: true}); }
+  function watchChieu(){ document.querySelectorAll(".chieu").forEach(function(b){ if (b._penWatch) return; b._penWatch = true;
+    const p = b.querySelector(".chieu-part"); if (p) new MutationObserver(draw).observe(p, {childList: true, characterData: true, subtree: true}); }); }
   function init(){ mount(); size(); sync(); new MutationObserver(watchChieu).observe(document.body, {childList: true}); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
   window.But = {on: function(){ setOn(true); }, off: function(){ setOn(false); }, layers: LAYERS};
@@ -337,7 +337,7 @@ window.Chieu = {open, close, parts: PARTS};
     if (e.key === "Escape") { pan.hidden = true; render(); fab.focus(); }
   });
   /* đặt nút vào đúng chỗ: trang học hoặc màn "Chiếu ghi bài" (kể cả toàn màn hình) */
-  function host(){ const b = document.querySelector(".chieu"); return b && !b.hidden ? b : document.body; }
+  function host(){ return document.querySelector(".chieu:not([hidden])") || document.body; }
   function mount(){ const h = host(); [pill, pan, fab].forEach(function(x){ if (x.parentNode !== h) h.appendChild(x); }); }
   function init(){
     setInputs(); mount(); render();

@@ -371,6 +371,7 @@ function updateModeUI(){
   $("t-exit").hidden = !(mode === "local" && T);
   $("reveal-all").hidden = !T; $("hide-all").hidden = !T;
   if ($("chieu-all")) $("chieu-all").hidden = !T || !window.Chieu || !window.Chieu.parts.length;
+  if ($("tb-all")) $("tb-all").hidden = !(T && groupsOn());
   $("theo-doi").hidden = !dashOn(); $("toc-dash").hidden = !dashOn();
   $("group-bar").hidden = !groupsOn();
   $("name-label").textContent = groupsOn() ? "Tên nhóm / học sinh:" : "Họ tên / Nhóm:";
@@ -413,6 +414,19 @@ function setAll(v){
   renderAll();
 }
 $("reveal-all").addEventListener("click", () => setAll(true));
+/* Trưng bày bài nhóm (giáo viên, một máy nhiều nhóm): chiếu bài các nhóm đã ghi trên máy này */
+const TB_ICON = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>';
+if ($("chieu-all") && window.TrungBay) {
+  const b = el("button", {class:"btn tb-btn", type:"button", id:"tb-all", hidden:""}, TB_ICON + "Trưng bày bài nhóm");
+  b.addEventListener("click", () => {
+    if (groupsOn()) stash();
+    window.TrungBay.open({
+      docs: () => { const out = []; for (let i = 1; i <= S.ngroups; i++) { const k = "g" + i, g = groupData(k); if (countSub(g) || Object.keys(g.ans || {}).some(x => (g.ans[x] || "").trim()) || Object.keys(g.mcq || {}).length) out.push(Object.assign({key: k}, g, {name: g.name || ("Nhóm " + i)})); } return out; },
+      rev: id => isRev(id)
+    });
+  });
+  $("chieu-all").after(b);
+}
 if ($("chieu-all")) $("chieu-all").addEventListener("click", () => window.Chieu.open(null, {onShow: k => { if (!isRev(k)) setRev(k, true); }}));
 $("hide-all").addEventListener("click", () => setAll(false));
 

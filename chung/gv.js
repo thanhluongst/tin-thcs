@@ -36,7 +36,8 @@ const nComments = d => Object.keys(d.nx || {}).filter(k => !isLikeKey(k)).length
 const nLikes = d => Object.keys(d.nx || {}).filter(isLikeKey).length;
 const THUMB = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
 const HEART = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4h2c.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
-const BAN = id => "ban." + id;   /* khoá trong phần chốt: mở cho học sinh xem, thích, nhận xét bài của nhau ở câu này */
+const BAN = id => "ban." + id;
+const TB_ICON = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>';   /* khoá trong phần chốt: mở cho học sinh xem, thích, nhận xét bài của nhau ở câu này */
 let PIN = ss("gv-pin") || "", BUOI = ls("gv-buoi") || "";
 let REV = {}, DOCS = [], pollTimer = null, lessonReady = false;
 
@@ -134,8 +135,10 @@ function buildTaskPanel(slot){
   const chot = el("button", {class:"btn keybtn", type:"button"});
   const bulk = el("button", {class:"btn", type:"button", hidden:""});
   const peer = el("button", {class:"btn peer-tog", type:"button", "aria-pressed":"false", title:"Học sinh xem bài các nhóm khác ở câu này, thả tim và nhận xét cho nhau"});
+  const show = el("button", {class:"btn tb-btn", type:"button", title:"Chiếu bài của mọi nhóm cho câu này lên màn hình lớn"}, TB_ICON + "Trưng bày");
   const stats = el("span", {class:"status"});
-  row.append(chot, peer, bulk, stats); slot.appendChild(row);
+  row.append(chot, peer, show, bulk, stats); slot.appendChild(row);
+  show.addEventListener("click", () => trungBay({task: id}));
   peer.addEventListener("click", () => toggleRev(BAN(id)));
   bulk.addEventListener("click", () => bulkSend(id));
   const list = el("div", {class:"ans-list"});
@@ -336,7 +339,7 @@ function renderTable(){
   if (!DOCS.length) { tb.appendChild(el("tr", null, '<td colspan="6" class="empty">Chưa có nhóm nào vào buổi học. Học sinh quét mã QR, nhập tên nhóm và bấm Vào buổi học.</td>')); return; }
   DOCS.forEach(d => tb.appendChild(el("tr", null, "<td>" + esc(d.name) + '</td><td class="num">' + countSub(d) + "/" + TASK_IDS.length +
     '</td><td class="num">' + nComments(d) + '</td><td class="num">' + nLikes(d) + '</td><td class="num">' + timeAgo(d.t) +
-    '</td><td><button class="btn" type="button" data-view="' + esc(d.clientId) + '">Xem bài</button></td>')));
+    '</td><td><button class="btn" type="button" data-view="' + esc(d.clientId) + '">Xem bài</button> <button class="btn tb-btn" type="button" data-show="' + esc(d.clientId) + '" title="Chiếu toàn bộ bài của nhóm này lên màn hình lớn">' + TB_ICON + 'Trưng bày</button></td>')));
 }
 /* Bảng màu: hàng = nhóm, cột = câu theo tiến trình */
 const MX_COLS = window.LESSON.STAGES.flatMap(st => st.acts.flatMap(a => a.tasks.map((t, i) => ({t, a, st, i}))));
@@ -367,6 +370,7 @@ $("mx").addEventListener("click", e => {
 });
 
 $("dash-rows").addEventListener("click", e => {
+  const t = e.target.closest("[data-show]"); if (t) { trungBay({view: "nhom", group: t.getAttribute("data-show")}); return; }
   const b = e.target.closest("[data-view]"); if (!b) return;
   $("filter").value = b.getAttribute("data-view"); renderAll();
   if (outline) outline.show({type: "stage", id: "mo-dau"});
@@ -424,6 +428,22 @@ $("rev-all").addEventListener("click", () => setAll(true));
 function chotGhi(k){ if (!REV[k]) toggleRev(k); }
 if ($("chieu-all")) $("chieu-all").addEventListener("click", () => window.Chieu.open(null, {onShow: chotGhi}));
 $("rev-none").addEventListener("click", () => setAll(false));
+
+/* ================= TRƯNG BÀY BÀI NHÓM (máy chiếu) ================= */
+function trungBay(o){
+  if (!window.TrungBay) return;
+  window.TrungBay.open(Object.assign({
+    docs: () => DOCS.map(d => Object.assign({key: d.clientId}, d)),
+    rev: id => !!REV[id],
+    hearts: (id, d) => (((d.ban || {})[id]) || {}).n || 0,
+    liked: (id, d) => !!(d.nx && d.nx[LIKE(id)])
+  }, o));
+}
+if ($("chieu-all") && window.TrungBay) {
+  const b = el("button", {class:"btn tb-btn", type:"button", id:"tb-all"}, TB_ICON + "Trưng bày bài nhóm");
+  b.addEventListener("click", () => trungBay({}));
+  $("chieu-all").after(b);
+}
 
 /* ================= CSV ================= */
 $("csv").addEventListener("click", () => {
