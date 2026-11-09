@@ -239,7 +239,7 @@ window.Chieu = {open, close, parts: PARTS};
   window.But = {on: function(){ setOn(true); }, off: function(){ setOn(false); }, layers: LAYERS};
 })();
 
-/* ĐỒNG HỒ ĐẾM NGƯỢC: nút ⏱ ở góc phải dưới (cạnh nút bút). Chọn nhanh 1–15 phút hoặc tự đặt phút:giây, bắt đầu / tạm dừng / đặt lại.
+/* ĐỒNG HỒ ĐẾM NGƯỢC: nút ⏱ ở góc phải dưới (cạnh nút bút). Chọn nhanh 30 giây, 1–15 phút hoặc tự đặt phút:giây, bắt đầu / tạm dừng / đặt lại.
    Khi chạy: ô giờ nổi ở góc, bấm vào số để phóng to giữa màn hình (cho máy chiếu). 10 giây cuối chuyển đỏ.
    Hết giờ: hiện "Hết giờ!" và đổ chuông (bật/tắt bằng nút 🔔, nhớ trên máy). Dùng được cả khi đang chiếu toàn màn hình. */
 (function(){
@@ -247,7 +247,8 @@ window.Chieu = {open, close, parts: PARTS};
     + ".tm-fab[aria-expanded=true]{background:var(--accent,#0c665e);color:#fff}"
     + ".tm-pan{position:fixed;right:14px;bottom:70px;z-index:311;width:min(300px,calc(100vw - 28px));box-sizing:border-box;display:grid;gap:10px;padding:12px;border-radius:14px;background:var(--surface,#fff);color:var(--fg,#1d2433);border:1px solid var(--line,#ccd);box-shadow:0 4px 16px rgba(0,0,0,.25);font-size:15px}"
     + ".tm-pan[hidden]{display:none}.tm-pan .h{display:flex;justify-content:space-between;align-items:center;font-weight:700}"
-    + ".tm-pan .pre{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}"
+    + ".tm-pan .pre{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.tm-pan .pre button{padding:6px 2px;white-space:nowrap}"
+    + ".tm-pan .pre button.nhanh{font-weight:700;border-color:var(--accent,#0c665e);color:var(--accent,#0c665e)}"
     + ".tm-pan button{font:inherit;font-size:14px;border:1px solid var(--line,#ccd);background:var(--bg,#fff);color:inherit;border-radius:9px;padding:6px 8px;cursor:pointer}"
     + ".tm-pan button:hover{border-color:var(--accent,#0c665e)}.tm-pan button.main{background:var(--accent,#0c665e);color:#fff;border-color:var(--accent,#0c665e);font-weight:700}"
     + ".tm-pan .set{display:flex;align-items:center;justify-content:center;gap:6px}"
@@ -271,7 +272,7 @@ window.Chieu = {open, close, parts: PARTS};
   fab.title = "Đồng hồ đếm ngược"; fab.setAttribute("aria-label", "Đồng hồ đếm ngược"); fab.setAttribute("aria-expanded", "false");
   const pan = document.createElement("div"); pan.className = "tm-pan"; pan.hidden = true; pan.setAttribute("role", "dialog"); pan.setAttribute("aria-label", "Đặt thời gian đếm ngược");
   pan.innerHTML = '<div class="h"><span>⏱ Đếm ngược</span><button type="button" data-a="x" aria-label="Đóng" title="Đóng">✕</button></div>'
-    + '<div class="pre">' + [1, 2, 3, 5, 10, 15].map(function(m){ return '<button type="button" data-m="' + m + '">' + m + ' phút</button>'; }).join("") + '</div>'
+    + '<div class="pre">' + [30, 60, 120, 180, 300, 600, 900].map(function(s){ return '<button type="button" data-sec="' + s + '"' + (s < 60 ? ' class="nhanh"' : '') + '>' + (s < 60 ? s + ' giây' : s / 60 + ' phút') + '</button>'; }).join("") + '</div>'
     + '<div class="set"><button type="button" data-d="-60" aria-label="Bớt 1 phút" title="Bớt 1 phút">−</button><input type="number" min="0" max="99" value="5" aria-label="Phút" data-f="m"><b>:</b><input type="number" min="0" max="59" step="5" value="0" aria-label="Giây" data-f="s"><button type="button" data-d="60" aria-label="Thêm 1 phút" title="Thêm 1 phút">+</button></div>'
     + '<div class="row"><button type="button" class="main" data-a="go">▶ Bắt đầu</button><button type="button" data-a="reset">↺ Đặt lại</button></div>'
     + '<div class="snd"><span>Chuông khi hết giờ</span><span><button type="button" data-a="snd" aria-pressed="true">🔔 Bật</button> <button type="button" data-a="test" title="Nghe thử chuông">▷ Thử</button></span></div>';
@@ -320,7 +321,7 @@ window.Chieu = {open, close, parts: PARTS};
   fab.addEventListener("click", function(){ pan.hidden = !pan.hidden; if (!pan.hidden && state === "idle") setInputs(); mount(); render(); });
   pill.addEventListener("click", function(){ if (state === "end") { reset(); return; } pill.classList.toggle("big"); });
   pan.addEventListener("click", function(e){ const b = e.target.closest("button"); if (!b) return;
-    if (b.dataset.m) preset(Number(b.dataset.m) * 60);
+    if (b.dataset.sec) preset(Number(b.dataset.sec));
     else if (b.dataset.d) {
       const d = Number(b.dataset.d);
       if (state === "run" || state === "pause") { left = Math.max(1, left + d); endAt = Date.now() + left * 1000; }
