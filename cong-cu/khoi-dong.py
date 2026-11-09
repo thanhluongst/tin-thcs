@@ -536,9 +536,243 @@ D = {
   None, "Sở trường của em là gì? Em thấy mình hợp với nghề nào?"),
 }
 
+# Đoạn trò chuyện gợi mở (tự soạn, không có trong SGK) cho các bài SGK không có hội thoại.
+# Mỗi dòng: (tên, lời nói) — hoặc (lời dẫn,) cho câu dẫn chuyện. hoithoai.js tự đổi thành khung chat.
+CHAT = {
+# ---------------- LỚP 6 ----------------
+"tin6-thong-tin-va-du-lieu": [
+  ("Trên đường đến trường, Minh dừng lại ở ngã tư.",),
+  ("Minh", "Đèn chuyển sang màu xanh rồi, xe cũng dừng hết. Mình qua đường thôi!"),
+  ("An", "Sao bạn biết lúc nào qua đường được thế?"),
+  ("Minh", "Thì mắt tớ <b>nhìn thấy</b> đèn xanh, tai <b>nghe</b> tiếng xe đã ngừng, rồi bộ não tớ nghĩ: an toàn!"),
+  ("Khoa", "Vậy những gì mắt thấy, tai nghe ấy gọi là gì nhỉ? Hôm nay mình tìm hiểu nhé!")],
+"tin6-xu-li-thong-tin": [
+  ("Minh", "Tối qua tớ xem bóng đá, cầu thủ sút phạt đền đẹp lắm!"),
+  ("Khoa", "Sút vào góc nào thế?"),
+  ("Minh", "Anh ấy <b>quan sát</b> thủ môn rất kĩ, <b>đoán</b> góc sơ hở rồi mới sút vào góc cao."),
+  ("An", "Vậy là anh ấy thu nhận thông tin, suy nghĩ rồi hành động. Máy tính có làm được như vậy không nhỉ?")],
+"tin6-thong-tin-trong-may-tinh": [
+  ("An", "Tớ gõ chữ “Xin chào” vào máy tính, máy hiện ra ngay. Máy tính hiểu tiếng Việt à?"),
+  ("Khoa", "Không đâu! Máy tính chỉ làm việc với hai kí hiệu thôi: <b>0 và 1</b>."),
+  ("Minh", "Chỉ hai kí hiệu mà lưu được cả chữ, ảnh, bài hát sao?"),
+  ("Khoa", "Đúng thế! Bí mật nằm ở cách máy tính <b>mã hoá</b> thông tin. Cùng tìm hiểu nhé!")],
+"tin6-mang-thong-tin-toan-cau": [
+  ("An", "Tớ vào một trang web về khủng long, bấm vào một dòng chữ thì nhảy sang trang về hoá thạch."),
+  ("Minh", "Rồi từ trang hoá thạch lại sang trang bảo tàng ở nước ngoài, đúng không?"),
+  ("An", "Đúng! Cứ bấm mãi mà không hết."),
+  ("Khoa", "Vì các trang được <b>liên kết</b> với nhau như một <b>mạng nhện</b> khổng lồ phủ khắp thế giới đấy!")],
+"tin6-tim-kiem-thong-tin-tren-internet": [
+  ("Minh", "Tớ chỉ nhớ mỗi câu “Em yêu trường em…” mà muốn nghe cả bài hát."),
+  ("An", "Gõ câu đó vào <b>máy tìm kiếm</b> là ra ngay thôi!"),
+  ("Minh", "Thật à? Trên Internet có hàng tỉ trang mà tìm nhanh thế được sao?"),
+  ("Khoa", "Được chứ, chỉ cần chọn đúng <b>từ khoá</b>. Mình học cách tìm cho nhanh nhé!")],
+"tin6-thu-dien-tu": [
+  ("An", "Ngày xưa ông bà mình gửi thư phải chờ cả tuần mới đến."),
+  ("Minh", "Còn xưa hơn nữa người ta nhờ <b>chim bồ câu</b> đưa thư cơ!"),
+  ("Khoa", "Bây giờ tớ gửi thư cho anh họ ở nước ngoài, chỉ vài giây là anh ấy nhận được."),
+  ("An", "Bạn gửi bằng cách nào thế? Chỉ cho tớ với!")],
+"tin6-thuat-toan": [
+  ("An", "Tớ có tờ hướng dẫn gấp trò chơi Đông – Tây – Nam – Bắc nhưng các bước bị xáo trộn hết rồi."),
+  ("Minh", "Thử gấp theo thứ tự lung tung xem sao?"),
+  ("An", "Không được đâu, gấp sai một bước là hỏng cả hình."),
+  ("Khoa", "Vậy phải sắp các bước theo <b>đúng thứ tự</b>. Một dãy bước như thế gọi là gì nhỉ?")],
+"tin6-cac-cau-truc-dieu-khien": [
+  ("Minh", "Lớp mình chơi trò “Đúng hay Sai” vui ghê! Trả lời đúng là được cộng điểm."),
+  ("An", "<b>Nếu</b> trả lời đúng <b>thì</b> cộng một điểm, còn sai thì không."),
+  ("Khoa", "Và cứ đọc câu – trả lời – tính điểm, <b>lặp đi lặp lại</b> cho đến khi hết một phút."),
+  ("Minh", "Trò chơi mà cũng có “nếu… thì…” với “lặp lại”, giống thuật toán quá!")],
+"tin6-chuong-trinh-may-tinh": [
+  ("Khoa", "An ơi, nhắm mắt lại nhé. Tớ đọc chỉ dẫn, bạn vẽ lại bức tranh của tớ."),
+  ("An", "Được! Bạn nói rõ từng bước nhé."),
+  ("Khoa", "Vẽ một hình vuông… rồi vẽ một hình tam giác ở trên."),
+  ("An", "Tam giác to hay nhỏ, đặt ở đâu? Chỉ dẫn chưa rõ thì tớ vẽ sai mất!"),
+  ("Minh", "Máy tính cũng thế: phải ra lệnh thật rõ ràng nó mới làm đúng.")],
+"tin6-tim-kiem-va-thay-the": [
+  ("Minh", "An ơi, cho tớ công thức kem sữa chua dưa hấu, tớ muốn làm kem <b>xoài</b>."),
+  ("An", "Công thức dài lắm, chữ “dưa hấu” xuất hiện ở rất nhiều chỗ."),
+  ("Minh", "Vậy phải sửa từng chữ một à? Lâu lắm!"),
+  ("Khoa", "Phần mềm soạn thảo có công cụ <b>Tìm và Thay thế</b>, chỉ vài cú nhấp là xong!")],
+"tin6-hoan-thien-so-luu-niem": [
+  ("An", "Tớ có bài viết cảm nghĩ, Minh có danh sách lớp dạng bảng, còn Khoa có sơ đồ tư duy."),
+  ("Minh", "Giờ ghép tất cả thành một cuốn <b>sổ lưu niệm</b> hoàn chỉnh thôi!"),
+  ("Khoa", "Nhóm mình phân công nhé: ai trình bày bìa, ai thêm ảnh, ai kiểm tra lỗi chính tả?")],
+# ---------------- LỚP 7 ----------------
+"tin7-thiet-bi-vao-ra": [
+  ("An", "Tớ gõ bàn phím, chữ hiện lên màn hình; bấm in, giấy chạy ra từ máy in."),
+  ("Minh", "Bàn phím đưa thông tin <b>vào</b> máy tính, còn máy in đưa kết quả <b>ra</b>."),
+  ("Khoa", "Thế còn micro, loa, máy quét… thì sao nhỉ? Mình cùng xếp loại nhé!")],
+"tin7-phan-mem-may-tinh": [
+  ("Minh", "Tớ đã cắm đủ bàn phím, chuột, màn hình vào thân máy rồi mà vẫn chưa dùng được."),
+  ("Khoa", "Máy đã cài <b>hệ điều hành</b> chưa?"),
+  ("Minh", "Hệ điều hành là gì? Phần cứng chưa đủ sao?"),
+  ("An", "Chưa đủ đâu! Máy tính cần cả <b>phần mềm</b> mới hoạt động được.")],
+"tin7-quan-li-du-lieu": [
+  ("An", "Chuyến đi Đà Lạt tớ chụp hơn 300 ảnh, giờ tìm ảnh ở hồ Xuân Hương mãi không thấy."),
+  ("Minh", "Bạn để tất cả ảnh chung một chỗ à?"),
+  ("An", "Ừ, lẫn lộn hết cả."),
+  ("Khoa", "Hãy chia ra các <b>thư mục</b> theo ngày, theo địa điểm, đặt tên dễ hiểu là tìm ngay!")],
+"tin7-mang-xa-hoi": [
+  ("Minh", "Ông tớ kể ngày xưa liên lạc với người ở xa phải gửi thư, chờ cả tháng."),
+  ("An", "Bây giờ thì chỉ cần nhắn tin, gọi video là thấy nhau ngay."),
+  ("Khoa", "Nhờ <b>mạng xã hội</b> đấy. Nhưng dùng thế nào cho đúng thì không phải ai cũng biết.")],
+"tin7-ung-xu-tren-mang": [
+  ("An", "Hôm qua có người lạ vào bình luận chê bai ảnh của tớ, tớ buồn lắm."),
+  ("Minh", "Tớ cũng thấy có bạn chơi điện tử đến khuya, sáng ngủ gật trong lớp."),
+  ("Khoa", "Internet có rất nhiều lợi ích, nhưng cũng có <b>mặt trái</b>. Mình cần biết <b>ứng xử</b> cho đúng.")],
+"tin7-phan-mem-bang-tinh": [
+  ("An", "Nhóm mình nhận dự án <b>Trường học xanh</b>: trồng thêm cây trong trường."),
+  ("Minh", "Phải ghi lại vị trí, loại cây, số cây của mỗi lớp… nhiều số liệu quá!"),
+  ("Khoa", "Ghi vào vở thì dễ nhầm. Thử dùng <b>phần mềm bảng tính</b> xem!")],
+"tin7-tinh-toan-tu-dong": [
+  ("Minh", "Tớ đã nhập xong số cây của từng lớp vào bảng tính rồi."),
+  ("An", "Giờ tính tổng số cây, tớ lấy máy tính bỏ túi bấm nhé?"),
+  ("Khoa", "Không cần đâu! Gõ <b>công thức</b> vào ô là bảng tính <b>tự tính</b>, sửa số là kết quả tự đổi.")],
+"tin7-cong-cu-ho-tro-tinh-toan": [
+  ("An", "Bảng có 40 lớp, gõ công thức =B2+B3+B4+… dài quá!"),
+  ("Minh", "Lại còn phải tính trung bình, tìm lớp trồng nhiều cây nhất nữa."),
+  ("Khoa", "Bảng tính có sẵn <b>hàm</b> như SUM, AVERAGE, MAX… chỉ một dòng ngắn là xong!")],
+"tin7-trinh-bay-bang-tinh": [
+  ("Minh", "Các bạn xem bảng tính dự án của tớ này."),
+  ("An", "Chữ bị che mất một nửa, số thì dài khó đọc quá."),
+  ("Khoa", "Mình <b>định dạng</b> lại cho đẹp: chỉnh độ rộng cột, căn lề, kẻ khung, tô màu tiêu đề.")],
+"tin7-hoan-thien-bang-tinh": [
+  ("An", "Thứ Hai này nhóm mình trình bày dự án trước lớp rồi!"),
+  ("Minh", "Bảng tính có mấy trang tính tên là Sheet1, Sheet2… khó hiểu quá."),
+  ("Khoa", "Đổi tên trang tính, kiểm tra lại dữ liệu rồi <b>in</b> ra cho cả lớp xem nhé!")],
+"tin7-tao-bai-trinh-chieu": None,
+"tin7-dinh-dang-trang-chieu": None,
+"tin7-hoan-thien-bai-trinh-chieu": [
+  ("Minh", "Bài trình chiếu đủ nội dung rồi, nhưng chiếu lên thấy hơi đơn điệu."),
+  ("An", "Hay thêm hiệu ứng cho chữ và hình xuất hiện lần lượt?"),
+  ("Khoa", "Ý hay! Nhưng đừng dùng quá nhiều hiệu ứng, kẻo người xem bị rối mắt.")],
+"tin7-thuat-toan-tim-kiem-tuan-tu": [
+  ("An", "Có khách gọi mua cây giống, mẹ nhờ tớ tìm địa chỉ trong sổ khách hàng."),
+  ("Minh", "Sổ có nhiều khách không?"),
+  ("An", "Mấy chục người, tên lại không xếp theo thứ tự gì cả."),
+  ("Khoa", "Vậy thì dò <b>lần lượt từng dòng</b> từ đầu sổ cho đến khi thấy tên thôi!")],
+"tin7-thuat-toan-tim-kiem-nhi-phan": [
+  ("An", "Cửa hàng nhà tớ giờ có hàng trăm khách, dò từng dòng mỏi mắt luôn."),
+  ("Minh", "Lúc tra từ điển, tớ có đọc từ trang đầu đâu, tớ mở khoảng giữa rồi lật tới lật lui."),
+  ("Khoa", "Đúng rồi! Nếu danh sách đã <b>sắp xếp</b>, ta có thể <b>chia đôi</b> để tìm nhanh hơn nhiều.")],
+"tin7-thuat-toan-sap-xep": [
+  ("Minh", "Cốc A đựng nước xanh, cốc B đựng nước đỏ. Làm sao đổi chỗ hai thứ nước này?"),
+  ("An", "Đổ thẳng sang nhau thì trộn lẫn mất!"),
+  ("Khoa", "Dùng thêm một <b>cốc C rỗng</b> làm trung gian. Bạn nào thử nghĩ ra các bước xem?")],
+# ---------------- LỚP 8 ----------------
+"tin8-luoc-su-cong-cu-tinh-toan": [
+  ("Minh", "Hồi nhỏ tớ toàn đếm bằng ngón tay. Đó là “máy tính” đầu tiên của tớ đấy!"),
+  ("An", "Người xưa cũng vậy! Trong tiếng Anh, “digit” (chữ số) bắt nguồn từ chữ Latin nghĩa là <b>ngón tay</b>."),
+  ("Khoa", "Ông tớ còn giữ một chiếc <b>bàn tính</b> gảy hạt, nghe nói có từ hơn 2000 năm trước Công nguyên."),
+  ("Minh", "Từ ngón tay, bàn tính đến máy tính bây giờ, con người đã đi qua những bước nào nhỉ?")],
+"tin8-thong-tin-trong-moi-truong-so": [
+  ("Khoa", "Tớ tìm thấy bức ảnh ruộng bậc thang rất đẹp trong tập ảnh cũ của bố."),
+  ("An", "Cho tớ xem với! Nhưng nhà bạn xa quá…"),
+  ("Khoa", "Để tớ chụp lại bằng điện thoại rồi <b>gửi qua thư điện tử</b> cho bạn."),
+  ("Minh", "Ảnh in thành <b>ảnh số</b> rồi! Ảnh số khác ảnh in ở điểm nào nhỉ?")],
+"tin8-khai-thac-thong-tin-so": None,
+"tin8-dao-duc-van-hoa-so": [
+  ("Khoa", "An ơi, tớ gửi bạn bức ảnh ruộng bậc thang tớ tự chụp đấy."),
+  ("An", "Đẹp quá! Tớ muốn chỉnh màu rồi đăng lên trang cá nhân."),
+  ("Minh", "Ảnh của Khoa mà, bạn đã <b>xin phép</b> chưa? Có ghi tên người chụp không?"),
+  ("An", "À… tớ chưa nghĩ đến chuyện đó.")],
+"tin8-bang-tinh-bai-toan-thuc-te": [
+  ("Khoa", "Bố tớ giao cho tớ tính doanh thu các phần mềm công ti bán trên chợ ứng dụng."),
+  ("Minh", "Có phần mềm trả phí, có phần mềm miễn phí, tính sao đây?"),
+  ("An", "Dùng bảng tính với công thức, nhưng nhớ chú ý <b>địa chỉ ô</b> khi sao chép công thức nhé!")],
+"tin8-sap-xep-va-loc-du-lieu": [
+  ("An", "Phiếu khảo sát CLB Tin học đã thu về đủ cả lớp rồi!"),
+  ("Minh", "Danh sách dài quá, tớ muốn biết những bạn nào cùng thích lập trình."),
+  ("Khoa", "Bảng tính có công cụ <b>sắp xếp</b> và <b>lọc dữ liệu</b>, vài cú nhấp là có ngay danh sách.")],
+"tin8-bieu-do": [
+  ("Minh", "Kết quả khảo sát là một bảng toàn số, nhìn hoa cả mắt."),
+  ("An", "Nội dung nào được nhiều bạn chọn nhất nhỉ? Phải dò từng ô mới biết."),
+  ("Khoa", "Vẽ thành <b>biểu đồ</b> đi, cột nào cao nhất là thấy ngay!")],
+"tin8-danh-sach-hinh-anh": [
+  ("An", "Tớ đang làm phiếu khảo sát, phải gõ số thứ tự 1, 2, 3… cho từng mục."),
+  ("Minh", "Lỡ xoá một mục ở giữa thì phải sửa lại hết số à?"),
+  ("Khoa", "Phần mềm soạn thảo có <b>danh sách liệt kê</b> tự đánh số, lại còn chèn được hình ảnh nữa.")],
+"tin8-dau-trang-chan-trang": [
+  ("Minh", "Sách giáo khoa trang nào cũng có số trang ở dưới, tên bài ở trên."),
+  ("An", "Văn bản tớ soạn thì không có, in ra nhiều trang dễ bị lẫn."),
+  ("Khoa", "Đó là <b>đầu trang</b> và <b>chân trang</b>. Tạo một lần là xuất hiện ở mọi trang!")],
+"tin8-trang-chieu-nang-cao": [
+  ("An", "Tớ được giao làm bài trình chiếu cho lễ ra mắt CLB Tin học!"),
+  ("Minh", "Phải thật <b>ngắn gọn, ấn tượng</b> mới thu hút được các bạn."),
+  ("Khoa", "Chọn màu, phông chữ, sắp xếp hình ảnh cho hợp lí. Mình cùng tìm cách nhé!")],
+"tin8-ban-mau-trinh-chieu": [
+  ("Minh", "Trang chiếu của tớ nền trắng trơn, nhìn hơi buồn."),
+  ("An", "Trang của tớ thì mỗi trang một màu, không đồng bộ."),
+  ("Khoa", "Thử dùng <b>bản mẫu</b> có sẵn: màu sắc, phông chữ đã được phối đẹp cho mọi trang.")],
+"tin8-tu-thuat-toan-den-chuong-trinh": [
+  ("Khoa", "Tớ muốn lập trình cho chú mèo trong Scratch đi thành hình tam giác đều."),
+  ("Minh", "Kéo khối lệnh vào thử luôn đi!"),
+  ("An", "Khoan đã! Phải nghĩ <b>thuật toán</b> trước: đi bao nhiêu bước, quay bao nhiêu độ?")],
+"tin8-bieu-dien-du-lieu": [
+  ("An", "Lớp 7 mình đã học các kiểu dữ liệu trong bảng tính: số, văn bản, ngày tháng…"),
+  ("Minh", "Trong Scratch cũng cần lưu dữ liệu như điểm số, tên người chơi chứ?"),
+  ("Khoa", "Đúng vậy, ngôn ngữ lập trình cũng có <b>kiểu dữ liệu</b>, <b>biến</b> và <b>hằng</b> đấy!")],
+"tin8-cau-truc-dieu-khien": None,
+"tin8-go-loi": None,
+"tin8-tin-hoc-nghe-nghiep": None,
+# ---------------- LỚP 9 ----------------
+"tin9-the-gioi-ki-thuat-so": None,
+"tin9-thong-tin-giai-quyet-van-de": None,
+"tin9-danh-gia-chat-luong-thong-tin": [
+  ("An", "Tớ tìm điểm chuẩn vào lớp 10, mỗi trang web ghi một kiểu."),
+  ("Minh", "Có trang còn là thông tin từ mấy năm trước nữa."),
+  ("Khoa", "Phải <b>đánh giá</b> thông tin: có mới không, đầy đủ không, nguồn có đáng tin không?")],
+"tin9-phap-li-dich-vu-internet": [
+  ("Minh", "Mẹ tớ vừa nhận tin nhắn “trúng thưởng”, bảo bấm vào đường link để nhận quà."),
+  ("An", "Đừng bấm! Có thể là <b>lừa đảo</b> đấy."),
+  ("Khoa", "Công nghệ giúp ích nhiều, nhưng cũng có mặt trái. Pháp luật có quy định gì về việc này nhỉ?")],
+"tin9-trao-doi-hop-tac": [
+  ("An", "Lớp mình sắp tổ chức <b>Triển lãm tin học</b>, nhóm mình làm chủ đề Lược sử công cụ tính toán."),
+  ("Minh", "Nhưng mỗi bạn bận một giờ, khó gặp nhau để làm chung."),
+  ("Khoa", "Mình có thể <b>trao đổi, hợp tác</b> qua mạng: chia sẻ tệp, cùng sửa một bài trình chiếu.")],
+"tin9-cong-cu-truc-quan": [
+  ("Minh", "Bài trình bày của nhóm mình toàn chữ, các bạn nghe dễ buồn ngủ."),
+  ("An", "Thêm <b>sơ đồ tư duy</b>, biểu đồ, hình ảnh và một đoạn video ngắn đi!"),
+  ("Khoa", "Nhưng dùng sao cho hợp lí, đúng chỗ thì mới hiệu quả.")],
+"tin9-khai-thac-phan-mem-mo-phong": [
+  ("Minh", "Tớ muốn xem các hành tinh quay quanh Mặt Trời mà không có kính thiên văn."),
+  ("An", "Tớ thì muốn làm thí nghiệm điện nhưng sợ nguy hiểm."),
+  ("Khoa", "Dùng <b>phần mềm mô phỏng</b> – phòng thí nghiệm ảo ngay trên máy tính!")],
+"tin9-tim-hieu-phan-mem-mo-phong": None,
+"tin9-giai-quyet-van-de": None,
+"tin9-bai-toan-tin-hoc": [
+  ("An", "Mẹ tớ làm kế toán, cuối tháng nào cũng tính lương cho hàng trăm nhân viên."),
+  ("Minh", "Tính tay thì mệt lắm, lại dễ nhầm."),
+  ("Khoa", "Có thể giao cho máy tính! Nhưng trước hết phải biến việc đó thành một <b>bài toán tin học</b>.")],
+"tin9-lap-chuong-trinh-may-tinh": [
+  ("Khoa", "Viết chương trình nào cũng chỉ cần ba cấu trúc: <b>tuần tự, rẽ nhánh, lặp</b>."),
+  ("An", "Chỉ ba thôi sao? Kể cả trò chơi phức tạp?"),
+  ("Minh", "Thử mô tả thuật toán bằng ba cấu trúc đó rồi chuyển thành chương trình xem!")],
+"tin9-xac-thuc-du-lieu": [
+  ("An", "Tớ giúp mẹ ghi chi tiêu vào bảng tính, nhưng hay gõ nhầm tên khoản chi."),
+  ("Minh", "Có lần tớ còn gõ nhầm số tiền thành số âm."),
+  ("Khoa", "Dùng công cụ <b>xác thực dữ liệu</b>, bảng tính sẽ chặn ngay những dữ liệu sai!")],
+"tin9-ham-countif": [
+  ("Minh", "Tháng này nhà tớ chi cho ăn uống bao nhiêu lần nhỉ?"),
+  ("An", "Ngồi đếm từng dòng trong bảng thì lâu lắm."),
+  ("Khoa", "Hàm <b>COUNTIF</b> đếm theo điều kiện, chỉ một công thức là ra!")],
+"tin9-ham-sumif": [
+  ("An", "Đếm được số lần chi rồi, giờ tớ muốn biết <b>tổng tiền</b> chi cho từng khoản."),
+  ("Minh", "Lọc từng khoản rồi cộng lại à?"),
+  ("Khoa", "Hàm <b>SUMIF</b> cộng theo điều kiện giúp mình ngay!")],
+"tin9-ham-if": [
+  ("Minh", "Mẹ tớ bảo nên chi tiêu theo <b>quy tắc 50 – 30 – 20</b>."),
+  ("An", "Làm sao biết nhà mình đã chi đúng tỉ lệ chưa?"),
+  ("Khoa", "Dùng hàm <b>IF</b>: nếu vượt mức thì bảng tính tự hiện cảnh báo!")],
+"tin9-tai-chinh-gia-dinh": [
+  ("An", "Bảng tính có trang Thu nhập và Chi tiêu rồi."),
+  ("Minh", "Nhưng nhìn vào vẫn chưa biết tháng này nhà mình dư hay thiếu."),
+  ("Khoa", "Cần thêm phần <b>tổng hợp, cân đối thu – chi</b>. Theo các bạn nên bổ sung gì?")],
+}
+CHAT = {k: v for k, v in CHAT.items() if v}
+
 PRE = "<!--KD-->"; POST = "<!--/KD-->"
 JS = ('<script src="../chung/khoidong.js?v=2"></script>'
-      '<script src="../chung/hoithoai.js?v=1"></script>')
+      '<script src="../chung/hoithoai.js?v=2"></script>')
 n = 0; miss = []
 for d in sorted(os.listdir(ROOT)):
     f = os.path.join(ROOT, d, "index.html")
@@ -549,7 +783,15 @@ for d in sorted(os.listdir(ROOT)):
     m = re.search(r'(<section class="part" id="mo-dau">\s*<div class="part-head">[^\n]*?</h2></div>)', s, re.S)
     if not m: miss.append(d + " (không thấy mo-dau)"); continue
     block = (f'\n      {PRE}<div class="act act-kd">\n        <div class="act-tag"><b>Khám phá</b> Hình ảnh khởi động</div>\n'
-             f'        <div data-kd></div>\n      </div>{POST}')
+             f'        <div data-kd></div>\n      </div>')
+    if d in CHAT:
+        lines = []
+        for x in CHAT[d]:
+            lines.append(f"<b>{x[0]}:</b> {x[1]}" if len(x) == 2 else x[0])
+        block += ('\n      <div class="act act-chat">\n        <div class="act-tag"><b>Trò chuyện</b> Cùng An, Minh và Khoa</div>\n'
+                  '        <div class="ht-note">Đoạn trò chuyện gợi mở (không có trong SGK)</div>\n'
+                  f'        <div class="reading">{"<br>".join(lines)}</div>\n      </div>')
+    block += POST
     cfg = json.dumps(D[d], ensure_ascii=False)
     sc = (f'{PRE}{JS}\n<script>(function(){{ var B = document.querySelector("[data-kd]"); if (B) KhoiDong(B, {cfg}); }})();</script>{POST}\n')
     NL = "\r\n" if "\r\n" in s else "\n"

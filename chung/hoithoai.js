@@ -11,7 +11,8 @@ var NV = {
   "Minh": {e: "👦", c: "#2f7fd8"},
   "Khoa": {e: "🧑", c: "#1f9d6b"}
 };
-var CSS = ".hthc{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface,#fff);margin:6px 0}"
+var CSS = ".ht-note{font-size:12.5px;font-style:italic;opacity:.7;margin:0 0 4px}"
+ + ".hthc{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface,#fff);margin:6px 0}"
  + ".hthc .ht-head{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--accent,#00877d);color:var(--accent-ink,#fff);font-weight:700;font-size:14.5px}"
  + ".hthc .ht-av3{display:flex}.hthc .ht-av3 span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:17px;background:#fff;border:2px solid var(--accent,#00877d);margin-left:-6px}.hthc .ht-av3 span:first-child{margin-left:0}"
  + ".hthc .ht-on{margin-left:auto;font-size:12px;font-weight:600;opacity:.9}.hthc .ht-on::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:#7CFC9A;margin-right:5px}"
