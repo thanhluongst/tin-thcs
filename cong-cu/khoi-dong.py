@@ -537,7 +537,8 @@ D = {
 }
 
 PRE = "<!--KD-->"; POST = "<!--/KD-->"
-JS = '<script src="../chung/khoidong.js?v=2"></script>'
+JS = ('<script src="../chung/khoidong.js?v=2"></script>'
+      '<script src="../chung/hoithoai.js?v=1"></script>')
 n = 0; miss = []
 for d in sorted(os.listdir(ROOT)):
     f = os.path.join(ROOT, d, "index.html")
