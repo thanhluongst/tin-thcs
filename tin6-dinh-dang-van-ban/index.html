@@ -126,6 +126,10 @@
     </style>
     <section class="part" id="mo-dau">
       <div class="part-head"><div class="eyebrow">Bước 1</div><h2><span class="sn">1</span> Khởi động</h2></div>
+      <!--KD--><div class="act act-kd">
+        <div class="act-tag"><b>Khám phá</b> Hình ảnh khởi động</div>
+        <div data-kd></div>
+      </div><!--/KD-->
       <div class="act">
         <div class="act-tag"><b>Khởi động</b> Làm sổ lưu niệm trên máy tính</div>
         <div class="reading">Ba bạn An, Minh và Khoa đã bàn về nội dung cuốn sổ lưu niệm của lớp, nhưng còn một câu hỏi phải trả lời là dùng công cụ gì để làm cuốn sổ này.<br><b>An:</b> Nội dung cuốn sổ gồm những bài viết cảm nghĩ, ảnh chụp, danh sách các bạn trong lớp,… Tớ nghĩ mình mua một cuốn sổ để viết và dán ảnh vào đó.<br><b>Minh:</b> Thử cân nhắc làm trên máy tính xem sao. Những năm ở Tiểu học, chúng mình đã học sử dụng nhiều phần mềm trên máy tính.<br><b>Khoa:</b> Nếu làm trên máy tính, mình có thể gửi cho thầy cô và các bạn xem trước để góp ý, khi cần sửa lại cũng thuận tiện. Hơn nữa, ngoài cuốn sổ lưu niệm in ra cho mỗi bạn, mình vẫn còn tệp lưu trữ trong máy tính để phòng khi cuốn sổ đã in bị hỏng hoặc thất lạc.</div>
@@ -304,6 +308,8 @@
         ["Trang đứng (Portrait)", x.orient === "portrait" && x.ev.orient > 0], ["Lưu tệp (Save As) với tên tuỳ chọn", !!x.ev.saved]]; }});
 })();
 </script>
+<!--KD--><script src="../chung/khoidong.js?v=2"></script>
+<script>(function(){ var B = document.querySelector("[data-kd]"); if (B) KhoiDong(B, {"nen": "cam", "canh": ["👧", "📔", "🤔", "💻"], "trang": "✏️📸", "title": "Làm sổ lưu niệm bằng gì?", "the": [["✏️", "Viết tay", "Mua sổ, viết và dán ảnh – <b>khó sửa</b> khi viết sai."], ["💻", "Máy tính", "Soạn trên máy tính – <b>sửa dễ</b>, trình bày đẹp."], ["📤", "Chia sẻ", "Gửi cho cả lớp, <b>in nhiều bản</b>."], ["💾", "Lưu lâu", "Lưu trữ <b>lâu dài</b>, không sợ rách, phai."]], "doan": {"q": "Phần mềm nào dùng để soạn sổ lưu niệm?", "o": ["Phần mềm soạn thảo văn bản", "Phần mềm chơi nhạc", "Trò chơi"], "d": 0, "g": "Ví dụ: Microsoft Word."}, "hoi": "Làm sổ lưu niệm trên máy tính có những thuận lợi gì so với viết tay?"}); })();</script><!--/KD-->
 <script src="../chung/config.js?v=23"></script>
 <script src="content.js?v=22"></script>
 <script src="../chung/outline.js?v=22"></script>
