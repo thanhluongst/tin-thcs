@@ -46,17 +46,54 @@ const css = ".chieu-hd .chieu-body{scroll-behavior:smooth}"
   + ".chieu-hd .chieu-bar select{font:inherit;font-size:16px;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}"
   + ".chieu-hd .chieu-dots{flex-wrap:wrap;justify-content:center}"
   + ".chieu-hd .chieu-dot.hd-dc{opacity:.75}"
-  + ".hd-step{font-weight:600;opacity:.9}";
+  + ".hd-step{font-weight:600;opacity:.9}"
+  /* Lớp trả lời (trang giáo viên) */
+  + ".chieu-hd .tq>.ans-list,.chieu-hd .tq>.empty{display:none}"
+  + ".hd-lop{margin-top:12px;border:2px solid var(--accent);border-radius:14px;padding:10px 14px;background:var(--surface)}"
+  + ".hd-lop-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}"
+  + ".hd-lop-h .hd-n{font-family:var(--font-display);font-weight:700;font-size:1.05em}"
+  + ".hd-lop-h .sp{flex:1}"
+  + ".hd-lop .btn{font-size:14px;padding:5px 12px}"
+  + ".hd-live{display:inline-block;width:9px;height:9px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 0 rgba(22,163,74,.5);animation:hdLive 1.6s infinite}"
+  + "@keyframes hdLive{70%{box-shadow:0 0 0 8px rgba(22,163,74,0)}100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}"
+  + ".hd-stat{display:grid;gap:6px;margin:10px 0}"
+  + ".hd-bar{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) auto;gap:10px;align-items:center}"
+  + ".hd-bar .lb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}"
+  + ".hd-bar .tr{height:18px;border-radius:99px;background:var(--sunk);overflow:hidden}"
+  + ".hd-bar .tr i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}"
+  + ".hd-bar.ok .tr i{background:#16a34a}.hd-bar.ok .lb{font-weight:700;color:#15803d}"
+  + ".hd-bar .ct{font-variant-numeric:tabular-nums;font-weight:600;min-width:5.5em;text-align:right}"
+  + ".hd-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:8px}"
+  + ".hd-card{all:unset;box-sizing:border-box;cursor:pointer;display:block;border:2px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--bg);font-size:.95em;line-height:1.4;min-width:0}"
+  + ".hd-card:hover,.hd-card:focus-visible{border-color:var(--accent)}"
+  + ".hd-card[aria-pressed=true]{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-soft,#fde8f1)}"
+  + ".hd-card .nm{font-weight:700;display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px}"
+  + ".hd-card .an{white-space:pre-wrap;overflow-wrap:anywhere;max-height:8.5em;overflow:hidden}"
+  + ".hd-card.ok{border-color:#86efac}.hd-card.bad{border-color:#fca5a5}"
+  + ".hd-chip{font-size:12px;font-weight:700;border-radius:99px;padding:1px 8px;background:var(--sunk)}"
+  + ".hd-chip.ok{background:#dcfce7;color:#15803d}.hd-chip.bad{background:#fee2e2;color:#b42318}.hd-chip.kh{background:#fef3c7;color:#b45309}"
+  + ".hd-spot{margin:10px 0;border:3px solid var(--pink);border-radius:14px;padding:12px 14px;background:var(--surface)}"
+  + ".hd-spot .nm{font-family:var(--font-display);font-weight:700;font-size:1.15em;display:flex;gap:8px;align-items:center;flex-wrap:wrap}"
+  + ".hd-spot .an{white-space:pre-wrap;overflow-wrap:anywhere;font-size:1.15em;margin:8px 0;padding:10px 12px;border-radius:10px;background:var(--bg)}"
+  + ".hd-spot textarea{width:100%;font:inherit;font-size:16px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical}"
+  + ".hd-spot .mau{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}"
+  + ".hd-spot .mau button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:99px;padding:3px 10px;cursor:pointer}"
+  + ".hd-spot .mau button.ok{border-color:#86efac}.hd-spot .mau button.fix{border-color:#fcd34d}"
+  + ".hd-spot .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}"
+  + ".hd-chua{color:var(--muted);font-size:.85em;margin-top:8px}";
 const stEl = document.createElement("style"); stEl.textContent = css; document.head.appendChild(stEl);
 
 /* ---------- Hoạt động trên trang ---------- */
 let ACTS = null;
 function txt(n){ return n ? n.textContent.replace(/\s+/g, " ").trim() : ""; }
+const SKIP = ["theo-doi", "tien-do", "chia-se", "dang-nhap"];
 function collect(){
-  if (ACTS) return ACTS;
+  if (ACTS && ACTS.length && ACTS.every(a => a.act.isConnected || a.act === cur)) return ACTS;
   ACTS = [];
-  document.querySelectorAll("main section.part").forEach(sec => {
-    if (sec.id === "theo-doi" || sec.id === "tien-do" || sec.closest("[hidden]")) return;
+  const root = document.getElementById("lesson") || document.querySelector("main");
+  if (!root) return ACTS;
+  root.querySelectorAll("section.part").forEach(sec => {
+    if (SKIP.includes(sec.id) || (sec.closest("[hidden]") && sec.closest("[hidden]") !== box)) return;
     const head = sec.querySelector(".part-head"), code = txt(head && head.querySelector(".sn")), h2 = head && head.querySelector("h2");
     const part = (h2 ? txt(h2).replace(code, "").trim() : "") || txt(head);
     const eyebrow = txt(head && head.querySelector(".eyebrow"));
@@ -162,6 +199,7 @@ function full(){ try { if (document.fullscreenElement) document.exitFullscreen()
 
 /* Đưa hoạt động lên màn chiếu (di chuyển chính phần tử trên trang để giữ nguyên tương tác), rồi trả về chỗ cũ */
 function putBack(){
+  if (cur) cur.querySelectorAll(".hd-lop").forEach(x => x.remove());
   if (cur && home && home.parentNode) home.parentNode.replaceChild(cur, home);
   if (cur) cur.querySelectorAll(".hd-an,.hd-moi").forEach(x => x.classList.remove("hd-an", "hd-moi"));
   cur = null; home = null;
@@ -225,6 +263,7 @@ function render(){
     home = document.createComment("chieu-hd"); x.act.parentNode.replaceChild(home, x.act); cur = x.act;
     slide.appendChild(cur);
     box.querySelector(".chieu-part").textContent = (x.code ? x.code + " · " : "") + x.label;
+    mountLop();
     applySteps(false);
   }
   body.scrollTop = 0;
@@ -261,6 +300,112 @@ function prev(){
 }
 function showAll(){ const s = slides[si]; if (s && s.type === "act" && cur) { steps[s.i] = stepEls(cur).length; applySteps(false); } }
 function setTiet(t){ putBack(); tiet = Math.max(1, Math.min(CFG.n, t)); store("chieu-hd-tiet|" + BAI, String(tiet)); buildSlides(); goSlide(0); }
+
+/* ---------- Lớp trả lời: thống kê, câu trả lời các nhóm, chọn một bài để nhận xét / khen ----------
+   Chỉ có trên trang giáo viên đã vào buổi học (window.GV do gv.js cung cấp). Tự cập nhật mỗi lần trang giáo viên tải bài mới (8 giây). */
+const LOP = {show: {}, sel: {}, anon: store("trungbay-an") === "1", msg: {}};
+const lopOn = () => !!(window.GV && window.GV.ready && window.GV.ready());
+const LET = L.L || ["A", "B", "C", "D", "E", "F", "G", "H"];
+function ansHtml(id, d){
+  const t = (L.TASKS || {})[id]; if (!t) return "";
+  if (t.type === "open") { const s = ((d.ans || {})[id] || "").trim(); return s ? esc(s) : ""; }
+  if (t.type === "mcq") { const i = (d.mcq || {})[id]; return i == null ? "" : "<b>" + LET[i] + ".</b> " + esc(t.o[i]); }
+  const g = L.grade ? L.grade(id, d) : null; return g && g.text ? esc(g.text) : "";
+}
+function mountLop(){
+  if (!cur || !lopOn()) return;
+  cur.querySelectorAll("[data-task]").forEach(slot => { const p = el("div", {class: "hd-lop", "data-lop": slot.dataset.task}); slot.appendChild(p); drawLop(p); });
+}
+function refreshLop(){
+  if (!box || box.hidden || !cur) return;
+  const a = document.activeElement;
+  cur.querySelectorAll(".hd-lop").forEach(p => { if (a && p.contains(a) && a.tagName === "TEXTAREA") { drawHead(p); return; } drawLop(p); });
+}
+document.addEventListener("gv-update", refreshLop);
+function lopData(id){
+  const D = window.GV.docs() || [];
+  const list = D.map((d, i) => ({d, i, name: LOP.anon ? "Bài " + (i + 1) : (d.name || "(chưa có tên)"), sub: !!(d.sub && d.sub[id]), a: ansHtml(id, d)}));
+  const sub = list.filter(x => x.sub && x.a);
+  const g = x => (L.grade ? L.grade(id, x.d) : null);
+  sub.forEach(x => { x.g = (L.TASKS[id].type === "open") ? null : g(x); });
+  return {list, sub, ok: sub.filter(x => x.g && x.g.ok).length, graded: L.TASKS[id].type !== "open"};
+}
+function drawHead(p){
+  const id = p.dataset.lop, R = lopData(id), rev = window.GV.rev(id), show = !!LOP.show[id];
+  const h = p.querySelector(".hd-lop-h"); if (!h) return;
+  h.querySelector(".hd-n").innerHTML = '<span class="hd-live" title="Tự cập nhật"></span> Đã nộp ' + R.sub.length + "/" + R.list.length
+    + (R.graded && R.sub.length && (show || rev) ? " · Đúng " + R.ok + "/" + R.sub.length : "");
+}
+function drawLop(p){
+  const id = p.dataset.lop, t = L.TASKS[id]; if (!t) return;
+  const R = lopData(id), rev = window.GV.rev(id), show = !!LOP.show[id];
+  let h = '<div class="hd-lop-h"><b>Lớp trả lời</b><span class="hd-n"></span><span class="sp"></span>'
+    + '<button class="btn primary" type="button" data-l="show">' + (show ? "Ẩn kết quả" : "📊 Xem kết quả lớp") + "</button>"
+    + '<button class="btn" type="button" data-l="anon" aria-pressed="' + LOP.anon + '">' + (LOP.anon ? "Hiện tên nhóm" : "Ẩn tên nhóm") + "</button>"
+    + '<button class="btn" type="button" data-l="rev">' + (rev ? "Ẩn đáp án" : "✓ Chốt đáp án") + "</button>"
+    + '<button class="btn" type="button" data-l="reload" title="Tải lại bài của lớp ngay">↻</button></div>';
+  if (show) {
+    /* thống kê */
+    if (t.type === "mcq" && R.sub.length) {
+      const c = t.o.map(() => 0); R.sub.forEach(x => { const v = (x.d.mcq || {})[id]; if (v != null) c[v]++; });
+      h += '<div class="hd-stat">' + t.o.map((o, i) => { const pc = Math.round(100 * c[i] / R.sub.length);
+        return '<div class="hd-bar' + (rev && i === t.a ? " ok" : "") + '"><span class="lb"><b>' + LET[i] + ".</b> " + esc(o) + (rev && i === t.a ? " ✓" : "") + '</span><span class="tr"><i style="width:' + pc + '%"></i></span><span class="ct">' + c[i] + " · " + pc + "%</span></div>"; }).join("") + "</div>";
+    } else if (R.graded && R.sub.length) {
+      const by = {}; let tot = 0;
+      R.sub.forEach(x => { if (!x.g) return; tot = Math.max(tot, x.g.total); by[x.g.right] = (by[x.g.right] || 0) + 1; });
+      const ks = Object.keys(by).map(Number).sort((a, b) => b - a);
+      h += '<div class="hd-stat">' + ks.map(k => { const pc = Math.round(100 * by[k] / R.sub.length);
+        return '<div class="hd-bar' + (rev && k === tot ? " ok" : "") + '"><span class="lb">Đúng ' + k + "/" + tot + (k === tot ? " (hoàn toàn)" : "") + '</span><span class="tr"><i style="width:' + pc + '%"></i></span><span class="ct">' + by[k] + " · " + pc + "%</span></div>"; }).join("") + "</div>";
+    }
+    /* bài được chọn */
+    const sel = R.sub.find(x => x.d.clientId === LOP.sel[id]);
+    if (sel) {
+      const liked = window.GV.liked(id, sel.d), cm = window.GV.getComment(id, sel.d), mau = window.GV.mau(id);
+      const okc = rev && sel.g ? (sel.g.ok ? '<span class="hd-chip ok">Đúng</span>' : '<span class="hd-chip bad">Chưa đúng</span>') : "";
+      h += '<div class="hd-spot" data-cid="' + esc(sel.d.clientId) + '"><div class="nm">' + esc(sel.name) + okc + (liked ? '<span class="hd-chip kh">★ Thầy cô khen</span>' : "") + "</div>"
+        + '<div class="an">' + sel.a + "</div>"
+        + (mau.ok.length + mau.fix.length ? '<div class="mau">' + mau.ok.map(s => '<button type="button" class="ok" data-mau="' + esc(s) + '">' + esc(s) + "</button>").join("")
+          + mau.fix.map(s => '<button type="button" class="fix" data-mau="' + esc(s) + '">' + esc(s) + "</button>").join("") + "</div>" : "")
+        + '<label class="sr-only" for="hd-nx-' + esc(id) + '">Nhận xét cho ' + esc(sel.name) + '</label><textarea id="hd-nx-' + esc(id) + '" rows="2" placeholder="Nhận xét gửi cho nhóm (nhóm thấy ngay trên máy)…">' + esc(cm) + "</textarea>"
+        + '<div class="row"><button class="btn primary" type="button" data-l="send">Gửi nhận xét</button>'
+        + '<button class="btn like-btn" type="button" data-l="like" aria-pressed="' + liked + '">★ ' + (liked ? "Bỏ khen" : "Khen") + "</button>"
+        + '<button class="btn" type="button" data-l="unsel">Đóng</button><span class="status">' + esc(LOP.msg[id] || "") + "</span></div></div>";
+    }
+    h += R.sub.length ? '<div class="hd-cards">' + R.sub.map(x => {
+      const okc = rev && x.g ? (x.g.ok ? " ok" : " bad") : "";
+      const liked = window.GV.liked(id, x.d), hasNx = !!window.GV.getComment(id, x.d);
+      return '<button type="button" class="hd-card' + okc + '" data-sel="' + esc(x.d.clientId) + '" aria-pressed="' + (LOP.sel[id] === x.d.clientId) + '"><span class="nm">' + esc(x.name)
+        + (liked ? '<span class="hd-chip kh">★</span>' : "") + (hasNx ? '<span class="hd-chip">Đã nhận xét</span>' : "") + '</span><span class="an">' + x.a + "</span></button>"; }).join("") + "</div>"
+      : '<p class="hd-chua">Chưa có nhóm nào nộp câu này.</p>';
+    const chua = R.list.filter(x => !x.sub);
+    if (chua.length) h += '<p class="hd-chua">Chưa nộp (' + chua.length + "): " + (LOP.anon ? "" : chua.map(x => esc(x.name)).join(", ")) + "</p>";
+  }
+  p.innerHTML = h;
+  drawHead(p);
+}
+document.addEventListener("click", async e => {
+  const p = e.target.closest && e.target.closest(".hd-lop"); if (!p || !box || !box.contains(p)) return;
+  const id = p.dataset.lop, b = e.target.closest("[data-l],[data-sel],[data-mau]"); if (!b) return;
+  if (b.dataset.sel != null) { LOP.sel[id] = LOP.sel[id] === b.dataset.sel ? "" : b.dataset.sel; LOP.msg[id] = ""; drawLop(p);
+    const s = p.querySelector(".hd-spot"); if (s) s.scrollIntoView({block: "nearest", behavior: "smooth"}); return; }
+  if (b.dataset.mau != null) { const ta = p.querySelector(".hd-spot textarea"); if (ta) { const v = ta.value.trim(); ta.value = v ? v + " " + b.dataset.mau : b.dataset.mau; ta.focus(); } return; }
+  const k = b.dataset.l;
+  if (k === "show") { LOP.show[id] = !LOP.show[id]; drawLop(p); }
+  else if (k === "anon") { LOP.anon = !LOP.anon; store("trungbay-an", LOP.anon ? "1" : "0"); cur.querySelectorAll(".hd-lop").forEach(drawLop); }
+  else if (k === "rev") window.GV.toggleRev(id);
+  else if (k === "reload") { b.disabled = true; try { await window.GV.refresh(); } finally { b.disabled = false; } }
+  else if (k === "unsel") { LOP.sel[id] = ""; drawLop(p); }
+  else if (k === "send" || k === "like") {
+    const cid = LOP.sel[id], ta = p.querySelector(".hd-spot textarea"); if (!cid) return;
+    b.disabled = true; LOP.msg[id] = "Đang gửi…"; const st = p.querySelector(".hd-spot .status"); if (st) st.textContent = LOP.msg[id];
+    try {
+      if (k === "send") { await window.GV.comment(id, cid, ta ? ta.value.trim() : ""); LOP.msg[id] = "Đã gửi nhận xét lúc " + new Date().toLocaleTimeString("vi-VN", {hour: "2-digit", minute: "2-digit"}); }
+      else { await window.GV.like(id, cid); LOP.msg[id] = "Đã cập nhật lời khen"; }
+    } catch(err) { LOP.msg[id] = "Chưa gửi được: " + err.message; }
+    if (document.activeElement && p.contains(document.activeElement)) document.activeElement.blur();
+    drawLop(p);
+  }
+});
 
 /* ---------- Bảng chia tiết ---------- */
 function toggleCfg(force){
@@ -322,10 +467,12 @@ window.ChieuHD = {open, close};
 /* ---------- Nút mở trình chiếu ---------- */
 function addButton(){
   const anchor = document.getElementById("chieu-all");
-  const hasActs = !!document.querySelector("main section.part > .act [data-task], main section.part > .act .reading");
   const b = el("button", {class: "btn chieu-btn", type: "button", id: "chieu-hd", title: "Chiếu từng hoạt động, hiện từng bước khi lên lớp; chia bài thành nhiều tiết"}, ICON + "Trình chiếu hoạt động");
-  if (hasActs) b.addEventListener("click", () => open());
-  else b.addEventListener("click", () => { const u = new URL("index.html", location.href); u.search = "?chieu=1"; window.open(u.toString(), "_blank", "noopener"); });
+  b.addEventListener("click", () => {
+    ACTS = null;
+    if (collect().length) open();
+    else { const u = new URL("index.html", location.href); u.search = "?chieu=1"; window.open(u.toString(), "_blank", "noopener"); }
+  });
   if (anchor) anchor.before(b);
   else { const t = document.querySelector("header .tools, .tools"); if (t) t.prepend(b); else return; }
 }

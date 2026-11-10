@@ -389,6 +389,7 @@ function renderAll(){
   renderTable(); renderFilter();
   TASK_IDS.forEach(renderPanel); renderConcepts();
   if (outline) outline.update();
+  gvChanged();
 }
 
 /* ================= CẬP NHẬT ĐỊNH KÌ ================= */
@@ -439,23 +440,38 @@ function trungBay(o){
     liked: (id, d) => !!(d.nx && d.nx[LIKE(id)]),
     getComment: (id, d) => (d.nx && d.nx[id]) || "",
     commentHint: "gửi cho nhóm, nhóm thấy ngay trên máy",
-    comment: async (id, d, text) => {
-      const doc = DOCS.find(x => x.clientId === d.key); if (!doc) throw new Error("Không tìm thấy bài của nhóm");
-      const nx = await API.setComment(BAI, BUOI, PIN, doc.clientId, doc.name, id, text);
-      doc.nx = (nx && typeof nx === "object") ? nx : Object.assign({}, doc.nx, {[id]: text});
-      if (!text) delete doc.nx[id];
-      renderTable(); renderPanel(id);
-    },
-    like: async (id, d) => {
-      const doc = DOCS.find(x => x.clientId === d.key); if (!doc) throw new Error("Không tìm thấy bài của nhóm");
-      const liked = !!(doc.nx && doc.nx[LIKE(id)]);
-      const nx = await API.setComment(BAI, BUOI, PIN, doc.clientId, doc.name, LIKE(id), liked ? "" : "Thích");
-      if (nx && typeof nx === "object") doc.nx = nx;
-      else { doc.nx = Object.assign({}, doc.nx); if (liked) delete doc.nx[LIKE(id)]; else doc.nx[LIKE(id)] = "Thích"; }
-      renderTable(); renderPanel(id);
-    }
+    comment: (id, d, text) => gvComment(id, d.key, text),
+    like: (id, d) => gvLike(id, d.key)
   }, o));
 }
+async function gvComment(id, cid, text){
+  const doc = DOCS.find(x => x.clientId === cid); if (!doc) throw new Error("Không tìm thấy bài của nhóm");
+  const nx = await API.setComment(BAI, BUOI, PIN, doc.clientId, doc.name, id, text);
+  doc.nx = (nx && typeof nx === "object") ? nx : Object.assign({}, doc.nx, {[id]: text});
+  if (!text) delete doc.nx[id];
+  renderTable(); renderPanel(id); gvChanged();
+}
+async function gvLike(id, cid){
+  const doc = DOCS.find(x => x.clientId === cid); if (!doc) throw new Error("Không tìm thấy bài của nhóm");
+  const liked = !!(doc.nx && doc.nx[LIKE(id)]);
+  const nx = await API.setComment(BAI, BUOI, PIN, doc.clientId, doc.name, LIKE(id), liked ? "" : "Thích");
+  if (nx && typeof nx === "object") doc.nx = nx;
+  else { doc.nx = Object.assign({}, doc.nx); if (liked) delete doc.nx[LIKE(id)]; else doc.nx[LIKE(id)] = "Thích"; }
+  renderTable(); renderPanel(id); gvChanged();
+}
+function gvChanged(){ try { document.dispatchEvent(new Event("gv-update")); } catch(e) {} }
+/* Cầu nối cho "Trình chiếu hoạt động" (chieu-hd.js): câu trả lời của lớp, thống kê, nhận xét, khen ngay trên màn chiếu */
+window.GV = {
+  ready: () => lessonReady && !$("app").hidden,
+  docs: () => DOCS,
+  rev: id => !!REV[id],
+  toggleRev: id => { toggleRev(id); gvChanged(); },
+  liked: (id, d) => !!(d.nx && d.nx[LIKE(id)]),
+  getComment: (id, d) => (d.nx && d.nx[id]) || "",
+  comment: gvComment, like: gvLike,
+  mau: id => (NX_MAU || {})[id] || {ok: [], fix: []},
+  refresh: () => poll()
+};
 if ($("chieu-all") && window.TrungBay) {
   const b = el("button", {class:"btn tb-btn", type:"button", id:"tb-all"}, TB_ICON + "Trưng bày bài nhóm");
   b.addEventListener("click", () => trungBay({}));
