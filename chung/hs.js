@@ -539,6 +539,7 @@ function makeWriter(){
       await API.submit({bai: window.LESSON.id, buoi: S.session, clientId: S.clientId, group: S.name || "", sub, data, cols: window.LESSON.summary(S)});
       lastSig = sig; lastSub = sub; fails = 0;
       clearTimeout(retry); setSync("Đã gửi lúc " + stamp());
+      if (window.TucThi) window.TucThi.send(window.TucThi.path(window.LESSON.id, S.session, "nop"), Date.now());   /* báo trang giáo viên tải ngay */
     } catch(e) {
       fails++;
       const wait = Math.min(60000, 15000 * Math.pow(2, fails - 1)) + Math.random() * 5000;
@@ -558,6 +559,34 @@ function makeWriter(){
 }
 
 let pollTimer = null, hot = false;
+function applyStatus(rev, nx, ban){
+  const banNew = JSON.stringify(ban || {}) !== JSON.stringify(BAN);
+  const fresh = banNew || JSON.stringify(rev) !== JSON.stringify(REV) || JSON.stringify(nx) !== JSON.stringify(NX);
+  if (!fresh) return;
+  const changedKeys = Object.keys(nx).filter(k => nx[k] !== NX[k]);
+  const newLike = changedKeys.some(k => k.indexOf("like.") === 0), newNx = changedKeys.some(k => k.indexOf("like.") !== 0);
+  const banMore = Object.keys(ban || {}).some(k => { const a = ban[k], b = BAN[k] || {n: 0, cm: []}; return a.n > b.n || (a.cm || []).length > (b.cm || []).length; });
+  REV = rev; NX = nx; BAN = ban || {}; renderAll(); celebrateNew();
+  if (banMore && !(newNx || newLike)) setSync("Các bạn vừa bình chọn bài của em lúc " + stamp() + ".");
+  if (newNx || newLike) setSync("Thầy cô vừa " + (newNx && newLike ? "gửi nhận xét và khen" : newLike ? "khen câu trả lời của em" : "gửi nhận xét mới") + " lúc " + stamp() + ".");
+}
+/* Kênh tức thì (chung/tuc-thi.js): thầy cô khen / nhận xét / chốt là máy này nhận ngay, không đợi lượt hỏi */
+const FAST = {nx: null, nxT: 0, rev: null, revT: 0, subs: [], key: ""};
+function fastOn(){
+  const T = window.TucThi, k = S.session + "|" + S.clientId;
+  if (!T || !T.on || mode !== "online" || !S.session) return fastOff();
+  if (FAST.key === k) return;
+  fastOff(); FAST.key = k;
+  FAST.subs.push(T.listen(T.path(window.LESSON.id, S.session, "hs/" + S.clientId), v => {
+    if (!v || typeof v.nx !== "object" || mode !== "online") return;
+    if (FAST.nxT && v.t && v.t < FAST.nxT) return;
+    FAST.nx = v.nx; FAST.nxT = v.t || Date.now(); applyStatus(REV, v.nx, BAN); }));
+  FAST.subs.push(T.listen(T.path(window.LESSON.id, S.session, "rev"), v => {
+    if (!v || typeof v.rev !== "object" || mode !== "online") return;
+    if (FAST.revT && v.t && v.t < FAST.revT) return;
+    FAST.rev = v.rev; FAST.revT = v.t || Date.now(); applyStatus(v.rev, NX, BAN); }));
+}
+function fastOff(){ FAST.subs.forEach(x => x.close()); FAST.subs = []; FAST.key = ""; FAST.nx = FAST.rev = null; FAST.nxT = FAST.revT = 0; }
 /* quay lại thẻ trang học thì hỏi ngay, không đợi lượt sau */
 document.addEventListener("visibilitychange", () => { if (!document.hidden && mode === "online" && S.session) pollReveal(); });
 async function pollReveal(){
@@ -565,16 +594,10 @@ async function pollReveal(){
   try {
     const st = await API.getStatus(window.LESSON.id, S.session, S.clientId);
     hot = !!st.hot;
-    const banNew = JSON.stringify(st.ban || {}) !== JSON.stringify(BAN);
-    const fresh = banNew || JSON.stringify(st.rev) !== JSON.stringify(REV) || JSON.stringify(st.nx) !== JSON.stringify(NX);
-    if (fresh) {
-      const changedKeys = Object.keys(st.nx).filter(k => st.nx[k] !== NX[k]);
-      const newLike = changedKeys.some(k => k.indexOf("like.") === 0), newNx = changedKeys.some(k => k.indexOf("like.") !== 0);
-      const banMore = Object.keys(st.ban || {}).some(k => { const a = st.ban[k], b = BAN[k] || {n: 0, cm: []}; return a.n > b.n || (a.cm || []).length > (b.cm || []).length; });
-      REV = st.rev; NX = st.nx; BAN = st.ban || {}; renderAll(); celebrateNew();
-      if (banMore && !(newNx || newLike)) setSync("Các bạn vừa bình chọn bài của em lúc " + stamp() + ".");
-      if (newNx || newLike) setSync("Thầy cô vừa " + (newNx && newLike ? "gửi nhận xét và khen" : newLike ? "khen câu trả lời của em" : "gửi nhận xét mới") + " lúc " + stamp() + ".");
-    }
+    /* tin đẩy tức thì mới hơn máy chủ (thầy cô vừa bấm, Sheet chưa ghi xong): giữ tin đẩy 20 giây để không nháy đi nháy lại */
+    if (FAST.nx && Date.now() - FAST.nxT < 20000) st.nx = FAST.nx;
+    if (FAST.rev && Date.now() - FAST.revT < 20000) st.rev = FAST.rev;
+    applyStatus(st.rev, st.nx, st.ban || {});
   } catch(e) { setSync("Chưa nhận được phần chốt (" + e.message + ")."); }
   clearTimeout(pollTimer);
   /* thầy cô đang khen / nhận xét / chốt (máy chủ báo "hot" trong 3 phút): hỏi mỗi 2–3 giây; còn lại 6–9 giây */
@@ -585,7 +608,7 @@ function goOnline(){
   mode = "online"; S.teacher = false;
   myWriter = makeWriter();
   saveLocal(); renderAll();
-  myWriter.now(); pollReveal();
+  myWriter.now(); pollReveal(); fastOn();
 }
 function joinSession(){
   const code = API.normSession($("buoi").value);
@@ -609,7 +632,7 @@ function joinSession(){
 function leaveSession(){
   stash();
   clearTimeout(pollTimer);
-  myWriter = null; mode = "local"; REV = {}; NX = {}; BAN = {};
+  myWriter = null; mode = "local"; REV = {}; NX = {}; BAN = {}; fastOff();
   const k = S.localActive && S.localActive[0] === "g" ? S.localActive : "g1";
   const g = groupData(k);
   S.active = k; S.session = "";

@@ -1,0 +1,30 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "tin": {
+      "$bai": {
+        "$buoi": {
+          ".read": true,
+          "nop": {
+            ".write": true,
+            ".validate": "newData.isNumber()"
+          },
+          "rev": {
+            ".write": true,
+            ".validate": "newData.hasChildren(['t', 'rev']) && newData.child('t').isNumber()"
+          },
+          "hs": {
+            "$may": {
+              ".write": true,
+              ".validate": "$may.length < 40 && newData.hasChildren(['t', 'nx']) && newData.child('t').isNumber()"
+            }
+          },
+          "$khac": {
+            ".validate": false
+          }
+        }
+      }
+    }
+  }
+}

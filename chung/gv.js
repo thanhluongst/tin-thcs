@@ -88,9 +88,9 @@ async function start(){
   });
   try { REV = await API.getReveal(BAI, BUOI); } catch(e) { setSync("Chưa tải được phần chốt: " + e.message); }
   renderAll();
-  poll();
+  poll(); fastOn();
 }
-function stop(){ clearTimeout(pollTimer); $("outline").hidden = true; $("app").hidden = true; $("gv-nav").hidden = true; $("dang-nhap").hidden = false; }
+function stop(){ clearTimeout(pollTimer); if (typeof fastOff === "function") fastOff(); $("outline").hidden = true; $("app").hidden = true; $("gv-nav").hidden = true; $("dang-nhap").hidden = false; }
 $("switch").addEventListener("click", () => { stop(); $("buoi").value = ""; $("buoi").focus(); });
 $("logout").addEventListener("click", () => { stop(); PIN = ""; ss("gv-pin", null); });
 $("copy").addEventListener("click", async () => {
@@ -416,6 +416,31 @@ async function poll(){
    chỉ tải lại bài của lớp khi số đó đổi (có nhóm vừa nộp / sửa bài); cứ 30 giây vẫn tải đầy đủ một lần.
    Code.gs cũ chưa có "ver" thì quay về tải lại mỗi 8 giây. */
 let VER = null, verOK = true, lastFull = 0;
+/* Kênh tức thì (chung/tuc-thi.js): học sinh vừa nộp → tải bài của lớp ngay; khen / nhận xét / chốt → đẩy tới máy học sinh trước, ghi Sheet sau */
+const TT = window.TucThi && window.TucThi.on ? window.TucThi : null;
+let nopSub = null, nopKey = "", nopTimer = null;
+function fastOn(){
+  if (!TT || !BUOI) return;
+  if (nopKey === BUOI) return;
+  if (nopSub) nopSub.close();
+  nopKey = BUOI; let first = true;
+  nopSub = TT.listen(TT.path(BAI, BUOI, "nop"), () => {
+    if (first) { first = false; return; }   /* giá trị cũ lúc mới nối */
+    clearTimeout(nopTimer); nopTimer = setTimeout(() => { if (!$("app").hidden) poll(); }, 250);
+  });
+}
+function fastOff(){ if (nopSub) nopSub.close(); nopSub = null; nopKey = ""; }
+if (TT) {
+  const setC = API.setComment;
+  API.setComment = (bai, buoi, pin, cid, group, task, text) => {
+    const d = DOCS.find(x => x.clientId === cid), nx = Object.assign({}, (d && d.nx) || {});
+    if (text) nx[task] = text; else delete nx[task];
+    TT.send(TT.path(bai, buoi, "hs/" + cid), {t: Date.now(), nx});
+    return setC(bai, buoi, pin, cid, group, task, text);
+  };
+  const setR = API.setReveal;
+  API.setReveal = (bai, buoi, pin, rev) => { TT.send(TT.path(bai, buoi, "rev"), {t: Date.now(), rev}); return setR(bai, buoi, pin, rev); };
+}
 function schedule(){
   clearTimeout(pollTimer);
   if ($("app").hidden) return;
