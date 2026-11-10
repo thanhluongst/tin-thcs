@@ -76,6 +76,7 @@ async function demoCall(action, p){
       b.nhom++; b.tong += n; b.dau = Math.min(b.dau, x.t); b.cuoi = Math.max(b.cuoi, x.t);
       s.nop++; s.tong += n; s.last = Math.max(s.last, x.t || 0); });
     return {ok: true, bai: Object.values(by).map(s => { s.buoi = Object.values(s.m).sort((a, b) => b.cuoi - a.cuoi); delete s.m; return s; })}; }
+  if (action === "ver") { let v = 0; Object.values(d.bai).forEach(x => { if (x.bai === p.bai && x.buoi === p.buoi) v = Math.max(v, x.t || 0); }); return {ok: true, v: String(v)}; }
   if (action === "hocsinh") { dPin(p.pin);
     return {ok: true, hs: Object.values(d.bai).map(x => { const cols = x.cols || [], nx = d.nx[x.bai + "|" + x.buoi + "|" + x.clientId] || {};
       let dung = 0, sai = 0; cols.forEach(c => { const s = String(c[1] || ""); if (/^\(nháp\)/.test(s)) return; if (/✓\s*$/.test(s)) dung++; else if (/✗\s*$/.test(s)) sai++; });
@@ -105,6 +106,8 @@ window.API = {
     .then(j => j.nx || null)
     .catch(e => { if (/Hành động không hợp lệ/i.test(e.message)) throw new Error("Cần cập nhật Code.gs trong Apps Script để lưu nhận xét (xem README)"); throw e; }),
   checkPin: pin => call("GET", "checkpin", {pin}),
+  /* Số phiên bản của buổi học: đổi khi có bài nộp mới (Code.gs cũ chưa có thì báo lỗi "không hợp lệ") */
+  ver: (bai, buoi) => call("GET", "ver", {bai, buoi}).then(j => String(j.v || "0")),
   /* Bạn bè xem, thích, nhận xét bài của nhau (giáo viên mở từng câu bằng khoá "ban.<câu>" trong phần chốt) */
   getPeers: (bai, buoi, task, clientId) => call("GET", "peers", {bai, buoi, task, clientId}).then(j => j.list || []).catch(newGs),
   react: p => call("POST", "react", p).then(j => j.mine || {}).catch(newGs),

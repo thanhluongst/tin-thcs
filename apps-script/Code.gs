@@ -40,6 +40,7 @@ function doGet(e) {
       case "reveal": return { rev: getReveal_(id_(p.bai), id_(p.buoi)) };
       case "status": return { rev: getReveal_(id_(p.bai), id_(p.buoi)), nx: getNx_(id_(p.bai), id_(p.buoi), id_(p.clientId)), ban: banFor_(id_(p.bai), id_(p.buoi), id_(p.clientId)) };
       case "peers": return { list: getPeers_(id_(p.bai), id_(p.buoi), id_(p.task), id_(p.clientId)) };
+      case "ver": return { v: getVer_(id_(p.bai), id_(p.buoi)) };
       case "checkpin": checkPin_(p.pin); return {};
       case "class": checkPin_(p.pin); return { docs: getClass_(id_(p.bai), id_(p.buoi)) };
       default: throw new Error("Hành động không hợp lệ");
@@ -163,7 +164,13 @@ function saveSubmission_(b) {
   } finally {
     lock.releaseLock();
   }
+  bumpVer_(bai, buoi);
 }
+
+/* Số phiên bản của buổi học (bộ nhớ đệm, không đọc Sheet): đổi mỗi khi có bài nộp hoặc bạn bè bình chọn.
+   Trang giáo viên hỏi số này vài giây một lần, chỉ tải lại bài của lớp khi số thay đổi → cập nhật gần như tức thì. */
+function getVer_(bai, buoi) { return CacheService.getScriptCache().get("ver|" + bai + "|" + buoi) || "0"; }
+function bumpVer_(bai, buoi) { try { CacheService.getScriptCache().put("ver|" + bai + "|" + buoi, String(Date.now()), CACHE_S); } catch (err) {} }
 
 function getClass_(bai, buoi) {
   const ss = SpreadsheetApp.getActive();
@@ -434,6 +441,7 @@ function react_(b) {
     if (r) sh.getRange(r, 1, 1, row.length).setValues([row]);
     else sh.appendRow(row);
     CacheService.getScriptCache().remove("ban|" + bai + "|" + buoi);
+    bumpVer_(bai, buoi);
     return { like: !!row[8], text: unq_(row[9]) };
   } finally {
     lock.releaseLock();

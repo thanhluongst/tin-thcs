@@ -522,7 +522,7 @@ function renderDash(){
 /* ================= BUỔI HỌC TRỰC TUYẾN (Google Sheets) ================= */
 function stamp(){ return new Date().toLocaleTimeString("vi-VN", {hour:"2-digit", minute:"2-digit"}); }
 /* Gửi bài lên Google Sheets. Lớp tới 50 máy dùng chung một Apps Script nên gửi tiết kiệm:
-   bấm Nộp / Sửa → gửi sau 1,5 giây; đang gõ nháp → gửi tối đa mỗi 8 giây; không đổi gì thì không gửi;
+   bấm Nộp / Sửa → gửi ngay (0,3 giây); đang gõ nháp → gửi tối đa mỗi 8 giây; không đổi gì thì không gửi;
    lỗi mạng hoặc máy chủ bận → thử lại sau 15, 30, 60 giây (cộng thêm vài giây ngẫu nhiên để các máy không dồn cùng lúc). */
 function makeWriter(){
   let timer = null, due = 0, busy = false, again = false, retry = null, fails = 0, lastSig = "", lastSub = -1;
@@ -549,7 +549,7 @@ function makeWriter(){
   }
   return {
     queue(){
-      const urgent = countSub(S) !== lastSub, at = Date.now() + (urgent ? 1500 : 8000);
+      const urgent = countSub(S) !== lastSub, at = Date.now() + (urgent ? 300 : 8000);
       if (timer && due <= at) return;            // đã hẹn gửi sớm hơn: giữ lịch cũ
       clearTimeout(timer); due = at; timer = setTimeout(flush, at - Date.now());
     },
@@ -574,7 +574,7 @@ async function pollReveal(){
     }
   } catch(e) { setSync("Chưa nhận được phần chốt (" + e.message + ")."); }
   clearTimeout(pollTimer);
-  pollTimer = setTimeout(pollReveal, 10000 + Math.random() * 5000);
+  pollTimer = setTimeout(pollReveal, 6000 + Math.random() * 3000);
 }
 
 function goOnline(){

@@ -80,7 +80,10 @@ const css = ".chieu-hd .chieu-body{scroll-behavior:smooth}"
   + ".hd-spot .mau button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:99px;padding:3px 10px;cursor:pointer}"
   + ".hd-spot .mau button.ok{border-color:#86efac}.hd-spot .mau button.fix{border-color:#fcd34d}"
   + ".hd-spot .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}"
-  + ".hd-chua{color:var(--muted);font-size:.85em;margin-top:8px}";
+  + ".hd-chua{color:var(--muted);font-size:.85em;margin-top:8px}"
+  + ".hd-vua{color:#b45309;background:#fef3c7;border-radius:99px;padding:1px 10px;font-size:.8em;animation:hdIn .4s ease}"
+  + ".hd-card.hd-new{animation:hdNew 1.6s ease 2;border-color:#f59e0b}"
+  + "@keyframes hdNew{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}40%{box-shadow:0 0 0 6px rgba(245,158,11,.45)}}";
 const stEl = document.createElement("style"); stEl.textContent = css; document.head.appendChild(stEl);
 
 /* ---------- Hoạt động trên trang ---------- */
@@ -322,6 +325,7 @@ function refreshLop(){
   cur.querySelectorAll(".hd-lop").forEach(p => { if (a && p.contains(a) && a.tagName === "TEXTAREA") { drawHead(p); return; } drawLop(p); });
 }
 document.addEventListener("gv-update", refreshLop);
+setInterval(() => { if (box && !box.hidden && cur && lopOn()) cur.querySelectorAll(".hd-lop").forEach(drawHead); }, 2000);   /* tắt dòng "vừa nộp" sau 8 giây */
 function lopData(id){
   const D = window.GV.docs() || [];
   const list = D.map((d, i) => ({d, i, name: LOP.anon ? "Bài " + (i + 1) : (d.name || "(chưa có tên)"), sub: !!(d.sub && d.sub[id]), a: ansHtml(id, d)}));
@@ -330,15 +334,27 @@ function lopData(id){
   sub.forEach(x => { x.g = (L.TASKS[id].type === "open") ? null : g(x); });
   return {list, sub, ok: sub.filter(x => x.g && x.g.ok).length, graded: L.TASKS[id].type !== "open"};
 }
+/* Nhóm vừa nộp: so với lần vẽ trước, đánh dấu thẻ và báo ở đầu khung trong 8 giây */
+LOP.seen = {}; LOP.fresh = {};
+function trackNew(id, R){
+  const now = Date.now(), ids = R.sub.map(x => x.d.clientId), prev = LOP.seen[id];
+  const f = LOP.fresh[id] = (LOP.fresh[id] || []).filter(x => now - x.t < 8000);
+  if (prev) R.sub.forEach(x => { if (!prev.has(x.d.clientId) && !f.some(y => y.cid === x.d.clientId)) f.push({cid: x.d.clientId, name: x.name, t: now}); });
+  LOP.seen[id] = new Set(ids);
+  return f;
+}
 function drawHead(p){
   const id = p.dataset.lop, R = lopData(id), rev = window.GV.rev(id), show = !!LOP.show[id];
   const h = p.querySelector(".hd-lop-h"); if (!h) return;
+  const f = (LOP.fresh[id] || []).filter(x => Date.now() - x.t < 8000);
   h.querySelector(".hd-n").innerHTML = '<span class="hd-live" title="Tự cập nhật"></span> Đã nộp ' + R.sub.length + "/" + R.list.length
-    + (R.graded && R.sub.length && (show || rev) ? " · Đúng " + R.ok + "/" + R.sub.length : "");
+    + (R.graded && R.sub.length && (show || rev) ? " · Đúng " + R.ok + "/" + R.sub.length : "")
+    + (f.length ? ' <span class="hd-vua">✨ ' + esc(f.map(x => x.name).join(", ")) + " vừa nộp</span>" : "");
 }
 function drawLop(p){
   const id = p.dataset.lop, t = L.TASKS[id]; if (!t) return;
   const R = lopData(id), rev = window.GV.rev(id), show = !!LOP.show[id];
+  const fresh = trackNew(id, R);
   let h = '<div class="hd-lop-h"><b>Lớp trả lời</b><span class="hd-n"></span><span class="sp"></span>'
     + '<button class="btn primary" type="button" data-l="show">' + (show ? "Ẩn kết quả" : "📊 Xem kết quả lớp") + "</button>"
     + '<button class="btn" type="button" data-l="anon" aria-pressed="' + LOP.anon + '">' + (LOP.anon ? "Hiện tên nhóm" : "Ẩn tên nhóm") + "</button>"
@@ -374,7 +390,7 @@ function drawLop(p){
     h += R.sub.length ? '<div class="hd-cards">' + R.sub.map(x => {
       const okc = rev && x.g ? (x.g.ok ? " ok" : " bad") : "";
       const liked = window.GV.liked(id, x.d), hasNx = !!window.GV.getComment(id, x.d);
-      return '<button type="button" class="hd-card' + okc + '" data-sel="' + esc(x.d.clientId) + '" aria-pressed="' + (LOP.sel[id] === x.d.clientId) + '"><span class="nm">' + esc(x.name)
+      return '<button type="button" class="hd-card' + okc + (fresh.some(f => f.cid === x.d.clientId) ? " hd-new" : "") + '" data-sel="' + esc(x.d.clientId) + '" aria-pressed="' + (LOP.sel[id] === x.d.clientId) + '"><span class="nm">' + esc(x.name)
         + (liked ? '<span class="hd-chip kh">★</span>' : "") + (hasNx ? '<span class="hd-chip">Đã nhận xét</span>' : "") + '</span><span class="an">' + x.a + "</span></button>"; }).join("") + "</div>"
       : '<p class="hd-chua">Chưa có nhóm nào nộp câu này.</p>';
     const chua = R.list.filter(x => !x.sub);

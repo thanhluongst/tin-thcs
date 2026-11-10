@@ -409,8 +409,27 @@ async function poll(){
     setSync("Chưa tải được bài làm: " + e.message);
     if (/mã giáo viên/i.test(e.message)) { stop(); $("login-msg").textContent = e.message; return; }
   }
-  pollTimer = setTimeout(poll, 8000);
+  lastFull = Date.now();
+  schedule();
 }
+/* Gần như tức thì: hỏi máy chủ "số phiên bản" của buổi học (rất nhẹ, không đọc Sheet) mỗi 2 giây khi trang đang hiện,
+   chỉ tải lại bài của lớp khi số đó đổi (có nhóm vừa nộp / sửa bài); cứ 30 giây vẫn tải đầy đủ một lần.
+   Code.gs cũ chưa có "ver" thì quay về tải lại mỗi 8 giây. */
+let VER = null, verOK = true, lastFull = 0;
+function schedule(){
+  clearTimeout(pollTimer);
+  if ($("app").hidden) return;
+  pollTimer = verOK ? setTimeout(tick, document.hidden ? 8000 : 2000) : setTimeout(poll, 8000);
+}
+async function tick(){
+  clearTimeout(pollTimer);
+  try {
+    const v = await API.ver(BAI, BUOI);
+    if (v !== VER || Date.now() - lastFull > 30000) { VER = v; return poll(); }
+  } catch(e) { if (/không hợp lệ|Code\.gs/i.test(e.message)) { verOK = false; return poll(); } }
+  schedule();
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden && !$("app").hidden && verOK) tick(); });
 $("refresh").addEventListener("click", poll);
 
 /* ================= CHỐT KIẾN THỨC ================= */
