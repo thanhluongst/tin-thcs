@@ -48,7 +48,7 @@ function dBanOf(d, bai, buoi, cid, withHidden){
 async function demoCall(action, p){
   await new Promise(r => setTimeout(r, 150));
   const d = dLoad();
-  if (action === "submit") { d.bai[p.bai + "|" + p.buoi + "|" + p.clientId] = {bai: p.bai, buoi: p.buoi, clientId: p.clientId, group: p.group, t: Date.now(), data: p.data}; dSave(d); return {ok: true}; }
+  if (action === "submit") { d.bai[p.bai + "|" + p.buoi + "|" + p.clientId] = {bai: p.bai, buoi: p.buoi, clientId: p.clientId, group: p.group, t: Date.now(), data: p.data, cols: p.cols}; dSave(d); return {ok: true}; }
   if (action === "reveal") return {ok: true, rev: d.chot[p.bai + "|" + p.buoi] || {}};
   if (action === "setReveal") { dPin(p.pin); d.chot[p.bai + "|" + p.buoi] = p.rev || {}; dSave(d); return {ok: true}; }
   if (action === "class") { dPin(p.pin); return {ok: true, docs: Object.values(d.bai).filter(x => x.bai === p.bai && x.buoi === p.buoi)
@@ -76,6 +76,11 @@ async function demoCall(action, p){
       b.nhom++; b.tong += n; b.dau = Math.min(b.dau, x.t); b.cuoi = Math.max(b.cuoi, x.t);
       s.nop++; s.tong += n; s.last = Math.max(s.last, x.t || 0); });
     return {ok: true, bai: Object.values(by).map(s => { s.buoi = Object.values(s.m).sort((a, b) => b.cuoi - a.cuoi); delete s.m; return s; })}; }
+  if (action === "hocsinh") { dPin(p.pin);
+    return {ok: true, hs: Object.values(d.bai).map(x => { const cols = x.cols || [], nx = d.nx[x.bai + "|" + x.buoi + "|" + x.clientId] || {};
+      let dung = 0, sai = 0; cols.forEach(c => { const s = String(c[1] || ""); if (/^\(nháp\)/.test(s)) return; if (/✓\s*$/.test(s)) dung++; else if (/✗\s*$/.test(s)) sai++; });
+      return [x.bai, x.buoi, x.group || "", x.clientId, x.t || 0, Object.keys((x.data && x.data.sub) || {}).filter(k => x.data.sub[k]).length,
+        dung, sai, Object.keys(nx).filter(k => k.indexOf("like.") === 0 && nx[k]).length, cols.length]; })}; }
   throw new Error("Hành động không hợp lệ");
 }
 
@@ -105,6 +110,8 @@ window.API = {
   react: p => call("POST", "react", p).then(j => j.mine || {}).catch(newGs),
   banHide: (bai, buoi, pin, task, from, to, hide) => call("POST", "banHide", {bai, buoi, pin, task, from, to, hide}).catch(newGs),
   /* Thống kê theo bài cho trang mục lục. Gửi bằng POST để mã giáo viên không nằm trên đường link. */
+  /* Tiến độ từng nhóm / học sinh qua mọi bài (trang mục lục) */
+  hocSinh: pin => call("POST", "hocsinh", {pin}).then(j => j.hs || []).catch(newGs),
   stats: pin => call("POST", "stats", {pin}).then(j => j.bai || [])
     .catch(e => { if (/Hành động không hợp lệ/i.test(e.message)) throw new Error("Cần dán Code.gs mới vào Apps Script và triển khai phiên bản mới (xem README)"); throw e; })
 };

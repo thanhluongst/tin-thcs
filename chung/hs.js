@@ -420,9 +420,16 @@ nm.value = S.name || "";
 nm.addEventListener("input", () => { S.name = nm.value; changed(); });
 
 /* PIN giáo viên (chế độ một máy) */
-$("pin-go").addEventListener("click", () => {
-  if ($("pin").value.trim().toLowerCase() === TEACHER_PIN) { S.teacher = true; $("pin").value = ""; $("pin-msg").textContent = ""; saveLocal(); renderAll(); }
-  else $("pin-msg").textContent = "Mã chưa đúng.";
+/* Nhận mã giáo viên thật (MA_GIAO_VIEN trong Apps Script, kiểm tra qua máy chủ) và mã dự phòng TEACHER_PIN */
+$("pin-go").addEventListener("click", async () => {
+  const v = $("pin").value.trim(), msg = $("pin-msg"), go = $("pin-go");
+  if (!v) { msg.textContent = "Nhập mã giáo viên."; $("pin").focus(); return; }
+  const ok = () => { S.teacher = true; $("pin").value = ""; msg.textContent = ""; saveLocal(); renderAll(); };
+  if (v.toLowerCase() === TEACHER_PIN) return ok();
+  msg.textContent = "Đang kiểm tra mã…"; go.disabled = true;
+  try { await API.checkPin(v); ok(); }
+  catch (e) { msg.textContent = /Sai mã/i.test(e.message) ? "Mã chưa đúng." : "Không kiểm tra được mã: " + e.message; }
+  finally { go.disabled = false; }
 });
 $("pin").addEventListener("keydown", e => { if (e.key === "Enter") $("pin-go").click(); });
 $("t-exit").addEventListener("click", () => { S.teacher = false; saveLocal(); renderAll(); });

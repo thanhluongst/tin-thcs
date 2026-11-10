@@ -56,6 +56,7 @@ function doPost(e) {
       case "setReveal": checkPin_(b.pin); setReveal_(id_(b.bai), id_(b.buoi), b.rev); return {};
       case "comment": checkPin_(b.pin); return { nx: setComment_(b) };
       case "stats": checkPin_(b.pin); return { bai: getStats_() };
+      case "hocsinh": checkPin_(b.pin); return { hs: getHocSinh_() };
       case "react": return { mine: react_(b) };
       case "banHide": checkPin_(b.pin); banHide_(b); return {};
       default: throw new Error("Hành động không hợp lệ");
@@ -266,6 +267,41 @@ function getStats_() {
     });
     out.push({ bai: bai, cau: cau, nop: nop, tong: tong, du: du, last: last,
       buoi: Object.keys(buoi).map(k => buoi[k]).sort((a, b) => b.cuoi - a.cuoi) });
+  });
+  return out;
+}
+
+/* ---------- Tiến độ học sinh (trang mục lục tin-thcs) ----------
+   Mỗi lượt nộp một dòng gọn: [bài, buổi, tên nhóm/HS, mã máy, thời điểm, số câu đã nộp,
+   số câu đúng ✓, số câu sai ✗ (chỉ câu tự chấm đã nộp), số lời khen, số câu của bài].
+   Trang mục lục tự gộp theo tên + lớp và xếp hạng. */
+function getHocSinh_() {
+  const khen = {};
+  const nx = SpreadsheetApp.getActive().getSheetByName(SHEET_NX);
+  if (nx && nx.getLastRow() >= 2) {
+    nx.getRange(2, 1, nx.getLastRow() - 1, 6).getValues().forEach(v => {
+      let o = {};
+      try { o = JSON.parse(v[5] || "{}"); } catch (err) {}
+      const n = Object.keys(o).filter(k => k.indexOf("like.") === 0 && o[k]).length;
+      if (n) khen[String(v[1]) + "|" + String(v[2]) + "|" + String(v[4])] = n;
+    });
+  }
+  const out = [];
+  SpreadsheetApp.getActive().getSheets().forEach(sh => {
+    const bai = sh.getName();
+    if (!BAI_RE.test(bai) || sh.getLastRow() < 2) return;
+    const w = sh.getLastColumn(), cau = Math.max(0, w - BASE_HEADERS.length);
+    sh.getRange(2, 1, sh.getLastRow() - 1, w).getValues().forEach(v => {
+      if (String(v[1]) !== bai) return;
+      let dung = 0, sai = 0;
+      for (let i = BASE_HEADERS.length; i < w; i++) {
+        const s = String(v[i] || "");
+        if (/^\(nháp\)/.test(s)) continue;
+        if (/✓\s*$/.test(s)) dung++; else if (/✗\s*$/.test(s)) sai++;
+      }
+      const buoi = String(v[2]), cid = String(v[4]);
+      out.push([bai, buoi, unq_(v[3]), cid, v[5] instanceof Date ? v[5].getTime() : 0, Number(v[6]) || 0, dung, sai, khen[bai + "|" + buoi + "|" + cid] || 0, cau]);
+    });
   });
   return out;
 }

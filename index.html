@@ -118,6 +118,22 @@ header{border-bottom:6px solid var(--accent)}
 .tk .pc i b{display:block;height:100%;background:var(--s-dang)}
 .tk .sm{color:var(--muted);font-size:12.5px}
 .tk-meta{color:var(--s-dang);font-weight:600}
+/* Tiến độ và xếp hạng học sinh */
+.hs-tools{display:flex;gap:8px 12px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.hs-tools select,.hs-tools input{font:inherit;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);min-width:0}
+.hs-tools input{width:220px;max-width:100%}
+.tk th.so{cursor:pointer;user-select:none}
+.tk th.so:hover{color:var(--fg)}
+.tk th.so[aria-sort]{color:var(--accent)}
+.tk th.hang,.tk td.hang{text-align:center;width:52px;min-width:0}
+.tk td.hang{font-family:var(--font-display);font-weight:700}
+.tk tr.top1>td{background:rgba(245,197,66,.18)}
+.tk tr.top2>td{background:rgba(160,174,188,.18)}
+.tk tr.top3>td{background:rgba(208,138,76,.15)}
+.tk td.ten{font-weight:600;text-align:left;white-space:normal;min-width:180px}
+.tk th.ten{text-align:left}
+.tk .khen{color:#b7791f;font-weight:600}
+.tk .diem{font-family:var(--font-display);font-weight:700;color:var(--accent)}
 </style>
 </head>
 <body>
@@ -143,8 +159,19 @@ header{border-bottom:6px solid var(--accent)}
       <button class="btn" id="tk-go" type="button">Xem thống kê</button>
       <button class="btn ghost" id="tk-csv" type="button" hidden>Tải CSV</button>
     </div>
-    <p class="tk-msg" id="tk-msg">Nhập mã giáo viên để xem số buổi đã dạy, số lượt nộp và mức hoàn thành của từng bài (lấy từ Google Sheet dùng chung).</p>
+    <p class="tk-msg" id="tk-msg">Nhập mã giáo viên để xem số buổi đã dạy, số lượt nộp, mức hoàn thành của từng bài và bảng xếp hạng tiến độ học sinh (lấy từ Google Sheet dùng chung).</p>
     <div id="tk-body"></div>
+  </section>
+  <section class="tk" id="hs" aria-labelledby="hs-h" hidden>
+    <div class="tk-head">
+      <h2 id="hs-h">Tiến độ và xếp hạng học sinh</h2>
+      <button class="btn ghost" id="hs-csv" type="button">Tải CSV</button>
+    </div>
+    <div class="hs-tools">
+      <label class="sm" for="hs-lop">Lớp</label><select id="hs-lop"></select>
+      <label class="sm" for="hs-q">Tìm</label><input id="hs-q" type="search" placeholder="Tên nhóm / học sinh…">
+    </div>
+    <div id="hs-body"></div>
   </section>
   <div id="list"></div>
 </div></main>
@@ -154,7 +181,7 @@ header{border-bottom:6px solid var(--accent)}
 <script src="chung/config.js"></script>
 <script src="chung/mo-trinh-duyet.js?v=1"></script>
 <script src="chung/giao-dien.js?v=1"></script>
-<script src="chung/api.js"></script>
+<script src="chung/api.js?v=25"></script>
 <script>
 (function(){
 "use strict";
@@ -259,6 +286,111 @@ function csv(){
   a.href = URL.createObjectURL(new Blob(["\ufeff" + lines.join("\r\n")], {type: "text/csv;charset=utf-8"}));
   a.download = "thong-ke-theo-bai-" + new Date().toISOString().slice(0, 10) + ".csv"; a.click();
 }
+/* ---------- Tiến độ và xếp hạng học sinh ----------
+   Gộp mọi lượt nộp của cùng một tên nhóm / học sinh trong cùng một lớp, qua mọi bài.
+   Lớp lấy từ mã buổi học (vd 9A1-T1) hoặc từ tên (vd "Nhóm 3 – 9A1"); không có thì xếp theo khối. */
+let HS = [], hsSort = {k: "hang", d: 1};
+const LOP_RE = /(?:^|[^0-9A-Z])([6-9])\s*([A-Z])\s*(\d{0,2})(?![0-9A-Z])/;
+function lopOf(buoi, ten, bai){
+  for (const s of [buoi, ten]) { const m = LOP_RE.exec(fold(String(s || "")).toUpperCase()); if (m) return m[1] + m[2] + m[3]; }
+  const b = BY_ID[bai]; return b ? "Khối " + b.lop : "Chưa rõ lớp";
+}
+function hsKey(ten){ return fold(String(ten || "")).replace(/[–—-]/g, " ").replace(/\s+/g, " ").trim(); }
+function buildHS(rows){
+  const m = {};
+  rows.forEach(([bai, buoi, ten, cid, t, sub, dung, sai, khen, cau]) => {
+    const lop = lopOf(buoi, ten, bai), name = String(ten || "").trim() || "(chưa ghi tên)", k = lop + "|" + hsKey(name);
+    const h = m[k] = m[k] || {lop, ten: name, tt: -1, bai: {}, last: 0};
+    if ((t || 0) >= h.tt) { h.tt = t || 0; h.ten = name; }
+    const x = h.bai[bai] = h.bai[bai] || {bai, cau: 0, sub: 0, dung: 0, sai: 0, khen: 0, buoi: {}, last: 0};
+    /* cùng bài nộp nhiều lần (nhiều buổi / máy): giữ lượt tốt nhất, cộng lời khen */
+    if (sub > x.sub || (sub === x.sub && dung > x.dung)) { x.sub = sub; x.dung = dung; x.sai = sai; }
+    x.cau = Math.max(x.cau, cau || 0); x.khen += khen || 0; x.buoi[buoi] = 1; x.last = Math.max(x.last, t || 0);
+    h.last = Math.max(h.last, t || 0);
+  });
+  return Object.values(m).map(h => {
+    const L = Object.values(h.bai).sort((a, b) => sortKey(a.bai) - sortKey(b.bai));
+    const r = {lop: h.lop, ten: h.ten, last: h.last, list: L, nbai: L.length, sub: 0, cau: 0, dung: 0, cham: 0, khen: 0};
+    L.forEach(x => { const c = x.cau || x.sub; r.sub += Math.min(x.sub, c); r.cau += c; r.dung += x.dung; r.cham += x.dung + x.sai; r.khen += x.khen; });
+    r.ht = r.cau ? Math.round(100 * r.sub / r.cau) : 0;
+    r.dd = r.cham ? Math.round(100 * r.dung / r.cham) : null;
+    r.diem = r.sub + r.dung + 2 * r.khen;
+    return r;
+  });
+}
+const HS_COLS = [["hang", "Hạng"], ["ten", "Nhóm / Học sinh"], ["lop", "Lớp"], ["nbai", "Số bài"], ["sub", "Câu đã nộp"], ["ht", "Hoàn thành"],
+  ["dd", "Đúng (câu tự chấm)"], ["khen", "⭐ Khen"], ["diem", "Điểm tiến độ"], ["last", "Gần nhất"]];
+/* Hạng theo điểm tiến độ trong lớp đang chọn; bằng điểm thì xét hoàn thành, tỉ lệ đúng, lời khen; vẫn bằng thì cùng hạng */
+function rankList(list){
+  const cmp = (a, b) => b.diem - a.diem || b.ht - a.ht || (b.dd ?? -1) - (a.dd ?? -1) || b.khen - a.khen;
+  const s = list.slice().sort(cmp);
+  s.forEach((r, i) => { r.hang = i && !cmp(r, s[i - 1]) ? s[i - 1].hang : i + 1; });
+  return s;
+}
+function hsInLop(){ const lop = document.getElementById("hs-lop").value; return HS.filter(r => !lop || r.lop === lop); }
+function renderHS(){
+  const host = document.getElementById("hs-body");
+  const all = rankList(hsInLop());
+  if (!all.length) { host.innerHTML = '<p class="tk-msg">Chưa có nhóm / học sinh nào nộp bài.</p>'; return; }
+  const nq = fold(document.getElementById("hs-q").value.trim());
+  const {k, d} = hsSort;
+  const list = all.filter(r => !nq || fold(r.ten).includes(nq)).sort((a, b) => {
+    if (k === "ten" || k === "lop") return d * String(a[k]).localeCompare(String(b[k]), "vi", {numeric: true}) || a.hang - b.hang;
+    return d * ((a[k] ?? -1) - (b[k] ?? -1)) || a.hang - b.hang; });
+  const n = all.length, withDd = all.filter(r => r.dd != null);
+  let h = '<div class="tk-sum"><div><b>' + n + '</b><span>Nhóm / học sinh</span></div><div><b>' + (Math.round(10 * all.reduce((s, r) => s + r.nbai, 0) / n) / 10).toLocaleString("vi-VN")
+    + '</b><span>Số bài TB mỗi em</span></div><div><b>' + Math.round(all.reduce((s, r) => s + r.ht, 0) / n) + '%</b><span>Hoàn thành TB</span></div><div><b>'
+    + (withDd.length ? Math.round(withDd.reduce((s, r) => s + r.dd, 0) / withDd.length) + "%" : "–") + '</b><span>Đúng TB (câu tự chấm)</span></div></div>';
+  h += '<div class="tk-wrap"><table><thead><tr>' + HS_COLS.map(([c, lab]) => '<th class="so ' + c + '" data-k="' + c + '" tabindex="0"'
+    + (k === c ? ' aria-sort="' + (d > 0 ? "ascending" : "descending") + '"' : "") + ">" + lab + (k === c ? (d > 0 ? " ▲" : " ▼") : "") + "</th>").join("") + "</tr></thead><tbody>";
+  const medal = ["", "🥇", "🥈", "🥉"];
+  list.forEach((r, i) => {
+    h += '<tr class="bai' + (r.hang <= 3 ? " top" + r.hang : "") + '" data-i="' + i + '" tabindex="0" aria-expanded="false"><td class="hang" title="Hạng ' + r.hang + '">' + (medal[r.hang] || r.hang)
+      + '</td><td class="ten">' + esc(r.ten) + "</td><td>" + esc(r.lop) + "</td><td>" + r.nbai + "</td><td>" + r.sub + "/" + r.cau + "</td><td>" + pcHtml(r.ht)
+      + "</td><td>" + (r.dd == null ? '<span class="sm">–</span>' : r.dd + '% <span class="sm">(' + r.dung + "/" + r.cham + ")</span>") + '</td><td class="khen">' + (r.khen ? "⭐ " + r.khen : "")
+      + '</td><td class="diem">' + r.diem + "</td><td>" + fmtD(r.last) + "</td></tr>";
+    r.list.forEach(x => {
+      h += '<tr class="ct" data-p="' + i + '" hidden><td></td><td colspan="3">' + esc(tenBai(x.bai)) + ' <span class="sm">· buổi ' + esc(Object.keys(x.buoi).join(", ")) + "</span></td><td>"
+        + x.sub + "/" + (x.cau || "?") + "</td><td>" + pcHtml(x.cau ? Math.round(100 * Math.min(x.sub, x.cau) / x.cau) : null) + "</td><td>"
+        + (x.dung + x.sai ? x.dung + "/" + (x.dung + x.sai) : '<span class="sm">–</span>') + '</td><td class="khen">' + (x.khen ? "⭐ " + x.khen : "") + "</td><td></td><td>" + fmtD(x.last) + "</td></tr>";
+    });
+  });
+  if (!list.length) h += '<tr><td colspan="10" class="sm">Không có tên nào khớp.</td></tr>';
+  host.innerHTML = h + '</tbody></table></div><p class="tk-msg">Bấm vào một dòng để xem từng bài; bấm tiêu đề cột để sắp xếp. <b>Điểm tiến độ</b> = số câu đã nộp + số câu đúng + 2 × số lời khen; hạng tính trong lớp đang chọn. '
+    + "Cùng một tên trong cùng lớp được gộp qua mọi bài; một bài nộp nhiều lần thì lấy lượt tốt nhất. “Đúng” chỉ tính các câu trang tự chấm (trắc nghiệm, phân loại, ghép nối, sắp xếp).</p>";
+  host.querySelectorAll("th.so").forEach(th => {
+    const go = () => { const c = th.dataset.k; hsSort = hsSort.k === c ? {k: c, d: -hsSort.d} : {k: c, d: (c === "ten" || c === "lop" || c === "hang") ? 1 : -1}; renderHS(); };
+    th.onclick = go; th.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } };
+  });
+  host.querySelectorAll("tr.bai").forEach(tr => {
+    const tg = () => { const open = tr.getAttribute("aria-expanded") !== "true"; tr.setAttribute("aria-expanded", String(open));
+      host.querySelectorAll('tr.ct[data-p="' + tr.dataset.i + '"]').forEach(x => x.hidden = !open); };
+    tr.onclick = tg; tr.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tg(); } };
+  });
+}
+function hsLopOptions(){
+  const sel = document.getElementById("hs-lop"), cur = sel.value || store("hub-hs-lop") || "";
+  const lops = [...new Set(HS.map(r => r.lop))].sort((a, b) => a.localeCompare(b, "vi", {numeric: true}));
+  sel.innerHTML = '<option value="">Tất cả lớp (' + HS.length + ")</option>" + lops.map(l => '<option value="' + esc(l) + '">' + esc(l) + " (" + HS.filter(r => r.lop === l).length + ")</option>").join("");
+  sel.value = lops.includes(cur) ? cur : "";
+}
+function hsCsv(){
+  const q = v => '"' + String(v ?? "").replace(/"/g, '""') + '"', lop = document.getElementById("hs-lop").value;
+  const lines = [["Hạng", "Nhóm / Học sinh", "Lớp", "Số bài", "Câu đã nộp", "Tổng câu", "Hoàn thành (%)", "Câu đúng", "Câu tự chấm", "Đúng (%)", "Lời khen", "Điểm tiến độ", "Nộp gần nhất"].map(q).join(",")];
+  rankList(hsInLop()).forEach(r => lines.push([r.hang, r.ten, r.lop, r.nbai, r.sub, r.cau, r.ht, r.dung, r.cham, r.dd ?? "", r.khen, r.diem, fmtD(r.last)].map(q).join(",")));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿" + lines.join("\r\n")], {type: "text/csv;charset=utf-8"}));
+  a.download = "xep-hang-hoc-sinh" + (lop ? "-" + fold(lop).replace(/\s+/g, "-") : "") + "-" + new Date().toISOString().slice(0, 10) + ".csv"; a.click();
+}
+async function loadHS(pin){
+  const host = document.getElementById("hs-body");
+  document.getElementById("hs").hidden = false; host.innerHTML = '<p class="tk-msg">Đang tải tiến độ học sinh…</p>';
+  try { HS = buildHS(await window.API.hocSinh(pin)); hsLopOptions(); renderHS(); }
+  catch (e) { host.innerHTML = '<p class="tk-msg bad">' + esc(e.message) + "</p>"; }
+}
+document.getElementById("hs-lop").onchange = e => { store("hub-hs-lop", e.target.value); renderHS(); };
+document.getElementById("hs-q").addEventListener("input", renderHS);
+document.getElementById("hs-csv").onclick = hsCsv;
 async function loadTK(pin){
   const msg = document.getElementById("tk-msg"), go = document.getElementById("tk-go");
   msg.className = "tk-msg"; msg.textContent = "Đang tải thống kê…"; go.disabled = true;
@@ -270,7 +402,7 @@ async function loadTK(pin){
     msg.textContent = "Cập nhật lúc " + new Date().toLocaleTimeString("vi-VN") + (window.API.demo ? " (chế độ thử: dữ liệu trong trình duyệt này)" : "") + ".";
     document.getElementById("tk-csv").hidden = !tkRows.length;
     go.textContent = "Tải lại";
-    renderTK(); render();
+    renderTK(); render(); loadHS(pin);
   } catch (e) {
     msg.className = "tk-msg bad"; msg.textContent = e.message;
     if (/Sai mã/i.test(e.message)) ss("hub-pin", null);

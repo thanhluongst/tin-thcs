@@ -19,6 +19,7 @@ tin-thcs/
 
 - `index.html`: trang mục lục. Lọc theo lớp, theo trạng thái, có ô tìm bài, thanh tiến độ từng lớp. Bài đã đăng có link tới trang học sinh và trang giáo viên.
 - **Thống kê theo bài** (đầu trang mục lục): nhập mã giáo viên → bảng mỗi bài: số câu, số buổi đã dạy, số lượt nộp (nhóm / học sinh), mức hoàn thành trung bình, số lượt nộp đủ câu, ngày nộp gần nhất. Bấm vào một bài để xem từng buổi. Nút **Tải CSV** xuất bảng theo buổi để làm báo cáo. Dữ liệu đọc trực tiếp từ Google Sheet dùng chung.
+- **Tiến độ và xếp hạng học sinh** (ngay dưới, cùng mã giáo viên): gộp mọi lượt nộp của cùng một tên nhóm / học sinh trong cùng lớp qua mọi bài. Lớp lấy từ mã buổi học (vd `9A1-T1`) hoặc từ tên (vd `Nhóm 3 – 9A1`), không có thì xếp theo khối. Mỗi dòng: số bài, câu đã nộp, % hoàn thành, % đúng (câu tự chấm, đọc dấu ✓/✗ trong cột câu hỏi), số lời khen, **Điểm tiến độ** = câu đã nộp + câu đúng + 2 × lời khen. Lọc theo lớp, tìm tên, bấm tiêu đề cột để sắp xếp, bấm dòng để xem từng bài, **Tải CSV**. Cần Code.gs có hành động `hocsinh`.
 - `danh-muc.js`: **tệp duy nhất cần sửa** khi làm xong một bài.
 - Sửa giao diện hay chức năng: sửa một lần trong `chung/`, mọi bài đổi theo. Khi sửa tệp trong `chung/`, tăng số `?v=` trong các tệp HTML của bài để trình duyệt tải bản mới.
 
