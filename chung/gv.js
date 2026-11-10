@@ -424,7 +424,7 @@ function schedule(){
 async function tick(){
   clearTimeout(pollTimer);
   try {
-    const v = await API.ver(BAI, BUOI);
+    const v = await API.ver(BAI, BUOI, !!(window.ChieuHD && window.ChieuHD.isOpen && window.ChieuHD.isOpen()));
     if (v !== VER || Date.now() - lastFull > 30000) { VER = v; return poll(); }
   } catch(e) { if (/không hợp lệ|Code\.gs/i.test(e.message)) { verOK = false; return poll(); } }
   schedule();

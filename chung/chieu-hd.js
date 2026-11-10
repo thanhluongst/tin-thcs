@@ -478,7 +478,7 @@ function close(){
   if (back) back.scrollIntoView({block: "start"});
   else if (lastFocus && lastFocus.focus) lastFocus.focus();
 }
-window.ChieuHD = {open, close};
+window.ChieuHD = {open, close, isOpen: () => !!(box && !box.hidden)};
 
 /* ---------- Nút mở trình chiếu ---------- */
 function addButton(){

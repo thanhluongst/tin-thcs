@@ -50,10 +50,10 @@ async function demoCall(action, p){
   const d = dLoad();
   if (action === "submit") { d.bai[p.bai + "|" + p.buoi + "|" + p.clientId] = {bai: p.bai, buoi: p.buoi, clientId: p.clientId, group: p.group, t: Date.now(), data: p.data, cols: p.cols}; dSave(d); return {ok: true}; }
   if (action === "reveal") return {ok: true, rev: d.chot[p.bai + "|" + p.buoi] || {}};
-  if (action === "setReveal") { dPin(p.pin); d.chot[p.bai + "|" + p.buoi] = p.rev || {}; dSave(d); return {ok: true}; }
+  if (action === "setReveal") { dPin(p.pin); d.chot[p.bai + "|" + p.buoi] = p.rev || {}; d.hot = d.hot || {}; d.hot[p.bai + "|" + p.buoi] = Date.now(); dSave(d); return {ok: true}; }
   if (action === "class") { dPin(p.pin); return {ok: true, docs: Object.values(d.bai).filter(x => x.bai === p.bai && x.buoi === p.buoi)
     .map(x => Object.assign({}, x, {nx: d.nx[p.bai + "|" + p.buoi + "|" + x.clientId] || {}, ban: dBanOf(d, p.bai, p.buoi, x.clientId, true)}))}; }
-  if (action === "status") return {ok: true, rev: d.chot[p.bai + "|" + p.buoi] || {}, nx: d.nx[p.bai + "|" + p.buoi + "|" + p.clientId] || {}, ban: dBanOf(d, p.bai, p.buoi, p.clientId, false)};
+  if (action === "status") return {ok: true, rev: d.chot[p.bai + "|" + p.buoi] || {}, nx: d.nx[p.bai + "|" + p.buoi + "|" + p.clientId] || {}, ban: dBanOf(d, p.bai, p.buoi, p.clientId, false), hot: Date.now() - ((d.hot || {})[p.bai + "|" + p.buoi] || 0) < 180000};
   if (action === "peers") { dOpen(d, p);
     return {ok: true, list: Object.values(d.bai).filter(x => x.bai === p.bai && x.buoi === p.buoi && x.data && x.data.sub && x.data.sub[p.task]).map(x => {
       const r = dBan(d, p, x.clientId), part = {};
@@ -67,7 +67,7 @@ async function demoCall(action, p){
     dSave(d); return {ok: true, mine: {like: !!r.like[p.clientId], text: (r.cm[p.clientId] || [])[1] || ""}}; }
   if (action === "banHide") { dPin(p.pin); const r = dBan(d, p, p.to); if (r.cm[p.from]) r.cm[p.from][2] = p.hide ? 1 : 0; dSave(d); return {ok: true}; }
   if (action === "comment") { dPin(p.pin); const k = p.bai + "|" + p.buoi + "|" + p.clientId; const nx = d.nx[k] || {};
-    const t = String(p.text || "").trim(); if (t) nx[p.task] = t; else delete nx[p.task]; d.nx[k] = nx; dSave(d); return {ok: true, nx}; }
+    const t = String(p.text || "").trim(); if (t) nx[p.task] = t; else delete nx[p.task]; d.nx[k] = nx; d.hot = d.hot || {}; d.hot[p.bai + "|" + p.buoi] = Date.now(); dSave(d); return {ok: true, nx}; }
   if (action === "checkpin") { dPin(p.pin); return {ok: true}; }
   if (action === "stats") { dPin(p.pin); const by = {};
     Object.values(d.bai).forEach(x => { const s = by[x.bai] = by[x.bai] || {bai: x.bai, cau: 0, nop: 0, tong: 0, du: 0, last: 0, m: {}};
@@ -76,7 +76,7 @@ async function demoCall(action, p){
       b.nhom++; b.tong += n; b.dau = Math.min(b.dau, x.t); b.cuoi = Math.max(b.cuoi, x.t);
       s.nop++; s.tong += n; s.last = Math.max(s.last, x.t || 0); });
     return {ok: true, bai: Object.values(by).map(s => { s.buoi = Object.values(s.m).sort((a, b) => b.cuoi - a.cuoi); delete s.m; return s; })}; }
-  if (action === "ver") { let v = 0; Object.values(d.bai).forEach(x => { if (x.bai === p.bai && x.buoi === p.buoi) v = Math.max(v, x.t || 0); }); return {ok: true, v: String(v)}; }
+  if (action === "ver") { if (p.hot) { d.hot = d.hot || {}; d.hot[p.bai + "|" + p.buoi] = Date.now(); dSave(d); } let v = 0; Object.values(d.bai).forEach(x => { if (x.bai === p.bai && x.buoi === p.buoi) v = Math.max(v, x.t || 0); }); return {ok: true, v: String(v)}; }
   if (action === "hocsinh") { dPin(p.pin);
     return {ok: true, hs: Object.values(d.bai).map(x => { const cols = x.cols || [], nx = d.nx[x.bai + "|" + x.buoi + "|" + x.clientId] || {};
       let dung = 0, sai = 0; cols.forEach(c => { const s = String(c[1] || ""); if (/^\(nháp\)/.test(s)) return; if (/✓\s*$/.test(s)) dung++; else if (/✗\s*$/.test(s)) sai++; });
@@ -100,14 +100,15 @@ window.API = {
   getClass: (bai, buoi, pin) => call("GET", "class", {bai, buoi, pin}).then(j => j.docs || []),
   /* Phần chốt + nhận xét của giáo viên cho máy này. Code.gs cũ chưa có "status" thì chỉ lấy phần chốt. */
   getStatus: (bai, buoi, clientId) => call("GET", "status", {bai, buoi, clientId})
-    .then(j => ({rev: j.rev || {}, nx: j.nx || {}, ban: j.ban || {}}))
+    .then(j => ({rev: j.rev || {}, nx: j.nx || {}, ban: j.ban || {}, hot: !!j.hot}))
     .catch(e => { if (/không hợp lệ/i.test(e.message)) return call("GET", "reveal", {bai, buoi}).then(j => ({rev: j.rev || {}, nx: {}, ban: {}})); throw e; }),
   setComment: (bai, buoi, pin, clientId, group, task, text) => call("POST", "comment", {bai, buoi, pin, clientId, group, task, text})
     .then(j => j.nx || null)
     .catch(e => { if (/Hành động không hợp lệ/i.test(e.message)) throw new Error("Cần cập nhật Code.gs trong Apps Script để lưu nhận xét (xem README)"); throw e; }),
   checkPin: pin => call("GET", "checkpin", {pin}),
   /* Số phiên bản của buổi học: đổi khi có bài nộp mới (Code.gs cũ chưa có thì báo lỗi "không hợp lệ") */
-  ver: (bai, buoi) => call("GET", "ver", {bai, buoi}).then(j => String(j.v || "0")),
+  /* hot = thầy cô đang trình chiếu: máy học sinh hỏi nhanh (2–3 giây) để nhận chốt / khen gần như ngay */
+  ver: (bai, buoi, hot) => call("GET", "ver", hot ? {bai, buoi, hot: "1"} : {bai, buoi}).then(j => String(j.v || "0")),
   /* Bạn bè xem, thích, nhận xét bài của nhau (giáo viên mở từng câu bằng khoá "ban.<câu>" trong phần chốt) */
   getPeers: (bai, buoi, task, clientId) => call("GET", "peers", {bai, buoi, task, clientId}).then(j => j.list || []).catch(newGs),
   react: p => call("POST", "react", p).then(j => j.mine || {}).catch(newGs),

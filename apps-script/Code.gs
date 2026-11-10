@@ -38,9 +38,9 @@ function doGet(e) {
     switch (p.action) {
       case "ping": return {};
       case "reveal": return { rev: getReveal_(id_(p.bai), id_(p.buoi)) };
-      case "status": return { rev: getReveal_(id_(p.bai), id_(p.buoi)), nx: getNx_(id_(p.bai), id_(p.buoi), id_(p.clientId)), ban: banFor_(id_(p.bai), id_(p.buoi), id_(p.clientId)) };
+      case "status": return { rev: getReveal_(id_(p.bai), id_(p.buoi)), nx: getNx_(id_(p.bai), id_(p.buoi), id_(p.clientId)), ban: banFor_(id_(p.bai), id_(p.buoi), id_(p.clientId)), hot: isHot_(id_(p.bai), id_(p.buoi)) };
       case "peers": return { list: getPeers_(id_(p.bai), id_(p.buoi), id_(p.task), id_(p.clientId)) };
-      case "ver": return { v: getVer_(id_(p.bai), id_(p.buoi)) };
+      case "ver": if (p.hot === "1") hot_(id_(p.bai), id_(p.buoi)); return { v: getVer_(id_(p.bai), id_(p.buoi)) };
       case "checkpin": checkPin_(p.pin); return {};
       case "class": checkPin_(p.pin); return { docs: getClass_(id_(p.bai), id_(p.buoi)) };
       default: throw new Error("Hành động không hợp lệ");
@@ -169,6 +169,9 @@ function saveSubmission_(b) {
 
 /* Số phiên bản của buổi học (bộ nhớ đệm, không đọc Sheet): đổi mỗi khi có bài nộp hoặc bạn bè bình chọn.
    Trang giáo viên hỏi số này vài giây một lần, chỉ tải lại bài của lớp khi số thay đổi → cập nhật gần như tức thì. */
+/* Thầy cô vừa khen / nhận xét / chốt: bật cờ "đang hoạt động" 3 phút để máy học sinh hỏi nhanh (2–3 giây) */
+function hot_(bai, buoi) { try { CacheService.getScriptCache().put("hot|" + bai + "|" + buoi, "1", 180); } catch (err) {} }
+function isHot_(bai, buoi) { return !!CacheService.getScriptCache().get("hot|" + bai + "|" + buoi); }
 function getVer_(bai, buoi) { return CacheService.getScriptCache().get("ver|" + bai + "|" + buoi) || "0"; }
 function bumpVer_(bai, buoi) { try { CacheService.getScriptCache().put("ver|" + bai + "|" + buoi, String(Date.now()), CACHE_S); } catch (err) {} }
 
@@ -246,6 +249,7 @@ function setComment_(b) {
     const cache = CacheService.getScriptCache();
     cache.put("nx|" + key, JSON.stringify(nx), CACHE_S);
     cache.remove("nxall|" + bai + "|" + buoi);
+    hot_(bai, buoi);
     return nx;
   } finally {
     lock.releaseLock();
@@ -342,6 +346,7 @@ function setReveal_(bai, buoi, rev) {
     if (r) sh.getRange(r, 1, 1, 5).setValues([row]);
     else sh.appendRow(row);
     CacheService.getScriptCache().put("rev|" + key, JSON.stringify(clean), CACHE_S);
+    hot_(bai, buoi);
   } finally {
     lock.releaseLock();
   }

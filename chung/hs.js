@@ -557,11 +557,14 @@ function makeWriter(){
   };
 }
 
-let pollTimer = null;
+let pollTimer = null, hot = false;
+/* quay lại thẻ trang học thì hỏi ngay, không đợi lượt sau */
+document.addEventListener("visibilitychange", () => { if (!document.hidden && mode === "online" && S.session) pollReveal(); });
 async function pollReveal(){
   if (mode !== "online") return;
   try {
     const st = await API.getStatus(window.LESSON.id, S.session, S.clientId);
+    hot = !!st.hot;
     const banNew = JSON.stringify(st.ban || {}) !== JSON.stringify(BAN);
     const fresh = banNew || JSON.stringify(st.rev) !== JSON.stringify(REV) || JSON.stringify(st.nx) !== JSON.stringify(NX);
     if (fresh) {
@@ -574,7 +577,8 @@ async function pollReveal(){
     }
   } catch(e) { setSync("Chưa nhận được phần chốt (" + e.message + ")."); }
   clearTimeout(pollTimer);
-  pollTimer = setTimeout(pollReveal, 6000 + Math.random() * 3000);
+  /* thầy cô đang khen / nhận xét / chốt (máy chủ báo "hot" trong 3 phút): hỏi mỗi 2–3 giây; còn lại 6–9 giây */
+  pollTimer = setTimeout(pollReveal, hot ? 2000 + Math.random() * 1000 : 6000 + Math.random() * 3000);
 }
 
 function goOnline(){
