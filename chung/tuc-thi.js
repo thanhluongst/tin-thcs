@@ -14,6 +14,13 @@ const DEMO = RAW === "demo:";
 const ON = DEMO || /^https:\/\/[^/]+$/.test(RAW);
 const key = s => String(s).replace(/[.#$\[\]\/]/g, "_");
 const path = (bai, buoi, rest) => "tin/" + key(bai) + "/" + key(buoi) + (rest ? "/" + rest : "");
+/* Firebase cấm . $ # [ ] / trong tên khoá (vd "like.hd1a"): mã hoá kiểu %2E khi gửi, giải mã khi nhận */
+const encK = k => String(k).replace(/[%.#$\[\]\/]/g, c => "%" + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, "0"));
+const decK = k => String(k).replace(/%([0-9A-F]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
+function mapKeys(v, f){
+  if (!v || typeof v !== "object" || Array.isArray(v)) return v;
+  const o = {}; Object.keys(v).forEach(k => { o[f(k)] = mapKeys(v[k], f); }); return o;
+}
 
 /* ---------- kênh giả (thử trên máy) ---------- */
 const subs = {};
@@ -42,8 +49,8 @@ function listen(p, cb){
   function open(){
     if (dead) return;
     try { es = new EventSource(RAW + "/" + p + ".json"); } catch(e) { return; }
-    es.addEventListener("put", e => { try { const m = JSON.parse(e.data); val = setAt(val, m.path, m.data); if (first) { first = false; if (val == null) return; } cb(val); } catch(err) {} });
-    es.addEventListener("patch", e => { try { const m = JSON.parse(e.data); Object.keys(m.data || {}).forEach(k => { val = setAt(val, (m.path === "/" ? "" : m.path) + "/" + k, m.data[k]); }); cb(val); } catch(err) {} });
+    es.addEventListener("put", e => { try { const m = JSON.parse(e.data); val = setAt(val, m.path, m.data); if (first) { first = false; if (val == null) return; } cb(mapKeys(val, decK)); } catch(err) {} });
+    es.addEventListener("patch", e => { try { const m = JSON.parse(e.data); Object.keys(m.data || {}).forEach(k => { val = setAt(val, (m.path === "/" ? "" : m.path) + "/" + k, m.data[k]); }); cb(mapKeys(val, decK)); } catch(err) {} });
     es.addEventListener("cancel", () => { close(); });
     es.onerror = () => { if (es && es.readyState === 2) { es = null; clearTimeout(retry); retry = setTimeout(open, 5000); } };   /* trình duyệt tự nối lại; đóng hẳn thì thử lại sau 5 giây */
   }
@@ -57,7 +64,7 @@ function send(p, v){
   if (!ON) return Promise.resolve();
   if (DEMO) { try { localStorage.setItem("tt-demo|" + p, JSON.stringify(v)); } catch(e) {}
     demoFire(p, v); if (bc) bc.postMessage({p, v}); return Promise.resolve(); }
-  return fetch(RAW + "/" + p + ".json", {method: "PUT", body: JSON.stringify(v), keepalive: true}).catch(() => {});
+  return fetch(RAW + "/" + p + ".json", {method: "PUT", body: JSON.stringify(mapKeys(v, encK)), keepalive: true}).catch(() => {});
 }
 
 window.TucThi = {on: ON, demo: DEMO, path, listen, send};
