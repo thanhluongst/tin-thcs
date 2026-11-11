@@ -149,6 +149,48 @@ button { cursor: pointer; }
 .tieu-chi li.tc-nhom input[type=text] { width: 100%; margin: 4px 0; border: 1px solid var(--vien); border-radius: 8px; padding: 7px 10px; }
 .tcn-chk input { width: 22px; height: 22px; accent-color: var(--dat); margin: 1px 0 0; }
 
+/* nộp sản phẩm và đánh giá chéo (truc-tuyen.js) */
+.tt-hang { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.tt-hang label { font-weight: 700; }
+.tt-hang input { border: 1px solid var(--vien); border-radius: 10px; padding: 8px 12px; font-weight: 700; text-transform: uppercase; width: 180px; }
+.tt-trang { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--lam-nhat); }
+.tt-cho { margin-top: 12px; padding: 12px; border-radius: 12px; background: #f8fafc; border: 1px dashed var(--vien); }
+.tt-gv { margin-top: 12px; padding: 12px; border-radius: 12px; background: var(--vang-nhat); border: 1px solid #fcd9a0; }
+.tt-dau { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin: 18px 0 8px; }
+.tt-dau h4 { margin: 0; font-size: 17px; }
+.tt-dem { color: var(--nhat); }
+.tt-so { color: var(--chinh); font-size: 18px; }
+.tt-ban { border: 1px solid var(--vien); border-left: 5px solid var(--vang); border-radius: 12px; margin: 10px 0; background: #fff; }
+.tt-ban.xong { border-left-color: var(--dat); }
+.tt-ban summary { cursor: pointer; padding: 10px 12px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.tt-ban .tt-nhan { margin-left: auto; font-size: 14px; font-weight: 700; color: var(--nhat); }
+.tt-ban.xong .tt-nhan { color: var(--dat); }
+.tt-ban > :not(summary) { margin-left: 12px; margin-right: 12px; }
+.tt-sp { padding: 8px 10px; border-radius: 10px; background: #f8fafc; }
+.tt-sp-dau { font-size: 14px; margin-bottom: 6px; }
+.tt-khung iframe { width: 100%; height: 360px; border: 1px solid var(--vien); border-radius: 8px; background: #fff; margin-top: 8px; }
+.tt-rub { width: 100%; border-collapse: collapse; margin: 10px 0 0; font-size: 13px; }
+.tt-rub th { text-align: left; padding: 6px; width: 22%; vertical-align: top; font-size: 14px; }
+.tt-rub td { padding: 3px; vertical-align: top; width: 26%; }
+.tt-rub button { width: 100%; height: 100%; text-align: left; border: 1px solid var(--vien); border-radius: 8px; background: #fff; padding: 6px 8px; font-size: 13px; line-height: 1.35; }
+.tt-rub button b { font-weight: 800; }
+.tt-rub button span { display: block; font-weight: 400; color: var(--nhat); }
+.tt-rub button:hover { border-color: var(--lam); }
+.tt-rub button.chon { background: var(--dat-nhat); border-color: var(--dat); box-shadow: inset 0 0 0 1px var(--dat); }
+.tt-rub button.chon b::after { content: " ✓"; color: var(--dat); }
+@media (max-width: 640px) { .tt-rub, .tt-rub tbody, .tt-rub tr { display: block; } .tt-rub th { display: block; width: auto; } .tt-rub td { display: inline-block; width: 33%; } .tt-rub button span { display: none; } }
+.tt-nx { display: block; margin-top: 10px; font-weight: 600; font-size: 14px; }
+.tt-nx textarea { width: 100%; min-height: 64px; margin-top: 4px; border: 1px solid var(--vien); border-radius: 10px; padding: 8px 10px; font-weight: 400; }
+.tt-ban .tt-hang { justify-content: flex-end; margin-bottom: 12px; }
+.tt-diem { font-weight: 800; color: var(--chinh); }
+.tt-tk { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tt-tk th, .tt-tk td { border: 1px solid var(--vien); padding: 5px 8px; text-align: left; }
+.tt-tk th { background: #f1f5f9; }
+.tt-thanh { display: inline-block; width: 90px; height: 8px; border-radius: 99px; background: #e2e8f0; overflow: hidden; vertical-align: middle; }
+.tt-thanh i { display: block; height: 100%; background: var(--dat); }
+.tt-ds { padding-left: 20px; margin: 8px 0 0; }
+.tt-ds li { margin: 4px 0; }
+
 /* đánh giá */
 .rubric { width: 100%; border-collapse: collapse; font-size: 15px; }
 .rubric th, .rubric td { border: 1px solid var(--vien); padding: 8px; vertical-align: top; }

@@ -129,6 +129,7 @@
     D.rubric.map(function (r, i) { return "<tr><th>" + r[0] + "</th>" + [1, 2, 3].map(function (m) { return '<td class="muc" data-rub="' + i + '" data-muc="' + m + '" tabindex="0">' + r[m] + "</td>"; }).join("") + "</tr>"; }).join("") +
     '</tbody></table></div><p style="display:flex;align-items:center;gap:12px;margin:12px 0 0"><span class="diem-to" id="diem-rub">–</span><span class="goi-y" id="diem-rub-t">Tổng điểm quy về thang 10</span></p></div>');
   h.push('<div class="the" data-loai="lam"><h3>Chia sẻ và điều chỉnh</h3>' + b5.hoi.map(function (q, j) { return hoi("b5-" + j, q[0], q[1]); }).join("") + "</div>");
+  h.push('<div id="truc-tuyen"></div>');
   h.push('<div class="the" data-loai="nop"><h3>Báo cáo dự án</h3><p style="margin-top:0">Bấm <b>In báo cáo</b> để in hoặc lưu thành PDF (chọn “Lưu dưới dạng PDF” trong hộp in) và nộp cho giáo viên. Báo cáo gồm thông tin nhóm, câu trả lời ở mọi bước, sản phẩm và điểm tự đánh giá.</p><button class="btn chinh" data-in>🖨 In báo cáo dự án</button> <button class="btn" id="xoa-het">Làm lại từ đầu</button></div>');
   h.push(chanBuoc(4) + "</section>");
 
@@ -282,6 +283,8 @@
     datHet: function () { return D.tieuChi.every(function (t) { return S.tc[t.k]; }); }
   };
   var X = D.xuong($("#xuong"), api) || {};
+  /* cho phần trực tuyến (truc-tuyen.js): nộp sản phẩm, đánh giá chéo */
+  window.STEM = { D: D, S: S, luu: luu, bao: bao, esc: esc, baoCao: function () { return X.baoCao ? X.baoCao() : ""; } };
 
   // báo cáo
   function inBaoCao() {
