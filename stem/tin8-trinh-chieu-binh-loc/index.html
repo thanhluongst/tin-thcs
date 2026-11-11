@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giới thiệu bình lọc nước – Dự án STEM Tin học 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Lexend:wght@500;700&family=Merriweather:wght@700&display=swap">
+<link rel="stylesheet" href="../khung.css?v=1">
+<style>
+.mau-ds { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.mau-the { border: 2px solid var(--vien); border-radius: 12px; padding: 6px; background: #fff; text-align: left; }
+.mau-the.chon { border-color: var(--chinh); box-shadow: 0 0 0 3px var(--chinh-nhat); }
+.mau-the b { display: block; font-size: 14px; margin: 6px 2px 0; }
+.mau-the span.goi-y { display: block; margin: 0 2px 2px; font-size: 12px; }
+.soan { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; }
+@media (max-width: 720px) { .soan { grid-template-columns: 1fr; } .ds-trang { flex-direction: row !important; overflow-x: auto; max-height: none !important; } .ds-trang .nho-tr { flex: 0 0 120px; } }
+.ds-trang { display: flex; flex-direction: column; gap: 8px; max-height: 520px; overflow-y: auto; padding: 2px; }
+.nho-tr { border: 2px solid transparent; border-radius: 8px; padding: 0; background: none; text-align: left; position: relative; }
+.nho-tr.chon { border-color: var(--chinh); }
+.nho-tr .so-tr { position: absolute; left: -2px; top: -2px; background: #0f172a; color: #fff; font-size: 11px; border-radius: 6px 0 6px 0; padding: 0 5px; z-index: 2; }
+.thanh-tr { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.form-tr { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; margin-top: 10px; }
+.form-tr label { font-size: 13px; font-weight: 700; color: var(--nhat); display: block; }
+.form-tr input, .form-tr select, .form-tr textarea { width: 100%; border: 1px solid var(--vien); border-radius: 8px; padding: 6px 9px; background: #fff; }
+.form-tr textarea { min-height: 96px; resize: vertical; }
+.form-tr .rong { grid-column: 1 / -1; }
+@media (max-width: 560px) { .form-tr { grid-template-columns: 1fr; } }
+.canh-bao { font-size: 13px; color: var(--loi); }
+
+/* trang chiếu */
+.tc { container-type: inline-size; aspect-ratio: 16 / 9; width: 100%; border-radius: 6px; overflow: hidden; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,.18); }
+.tc .nen { position: absolute; inset: 0; }
+.tc .nd { position: absolute; inset: 7% 6% 7% 6%; display: flex; flex-direction: column; }
+.tc h2 { margin: 0 0 3cqw; font-size: 5.2cqw; line-height: 1.15; }
+.tc ul { margin: 0; padding-left: 4.5cqw; font-size: 3cqw; line-height: 1.45; }
+.tc .ph { opacity: .45; font-style: italic; }
+.tc .than { display: flex; gap: 4cqw; flex: 1; min-height: 0; }
+.tc .than > * { flex: 1; min-width: 0; }
+.tc .anh { display: grid; place-items: center; font-size: 13cqw; border-radius: 2cqw; }
+.tc.lo-tieu-de .nd, .tc.lo-ket .nd { justify-content: center; align-items: center; text-align: center; }
+.tc.lo-tieu-de h2, .tc.lo-ket h2 { font-size: 7.4cqw; }
+.tc .phu { font-size: 3.4cqw; margin-top: 1cqw; }
+.tc.lo-anh .anh { font-size: 22cqw; }
+.tc .chu-thich { text-align: center; font-size: 2.8cqw; margin-top: 1.5cqw; }
+.chieu { position: fixed; inset: 0; background: #000; z-index: 200; display: grid; place-items: center; }
+.chieu .tc { width: min(100vw, 177.7vh); border-radius: 0; box-shadow: none; }
+.chieu .thoat { position: absolute; top: 10px; right: 10px; z-index: 3; }
+.chieu .dem { position: absolute; bottom: 10px; right: 14px; color: #fff8; font-size: 14px; }
+</style>
+</head>
+<body>
+<script>
+window.DU_AN = {
+  id: "tin8-trinh-chieu-binh-loc",
+  lop: 8, bai: "11a", tenBai: "Sử dụng bản mẫu tạo bài trình chiếu", tiet: "Dự án 2 tiết",
+  thuMucBai: "tin8-ban-mau-trinh-chieu",
+  ten: "Giới thiệu bình lọc nước tái chế", bieuTuong: "💧🖥️",
+  mau1: "#0c4a6e", mau2: "#0284c7",
+  moTa: "Nhóm em dùng bản mẫu để nhanh chóng tạo một bài trình chiếu đẹp, thống nhất, giới thiệu sản phẩm “Bình lọc nước từ chai nhựa tái chế” tại Ngày hội STEM của trường.",
+
+  buoc1: {
+    tinhHuong: "Câu lạc bộ STEM đã làm xong <b>bình lọc nước từ chai nhựa</b> với các lớp sỏi, cát, than hoạt tính và bông. Sáng thứ Hai, nhóm có <b>5 phút</b> giới thiệu sản phẩm trước toàn trường. Tự thiết kế từng trang chiếu (màu nền, phông chữ, bố cục) sẽ mất rất nhiều thời gian, và các trang dễ “mỗi trang một kiểu”.",
+    nhiemVu: "Chọn một <b>bản mẫu (template)</b> phù hợp, dùng gợi ý nội dung của bản mẫu để tạo bài trình chiếu <b>ít nhất 6 trang</b> giới thiệu bình lọc nước: vấn đề, vật liệu, cách hoạt động, kết quả thử nghiệm, kết luận.",
+    hoi: [
+      ["Vấn đề nhóm em cần giải quyết là gì?", ""],
+      ["Bản mẫu khác mẫu định dạng (Themes) ở điểm nào?", "Gợi ý: ngoài màu sắc, phông chữ, hiệu ứng, bản mẫu còn có gì?"],
+      ["Người xem là ai? Bài trình chiếu cần như thế nào để họ dễ theo dõi?", ""]
+    ]
+  },
+
+  tieuChi: [
+    { k: "bm", t: "Dùng một <b>bản mẫu</b> thống nhất cho cả bài." },
+    { k: "du", t: "Có <b>ít nhất 6 trang chiếu</b>, không trang nào để trống tiêu đề." },
+    { k: "dau", t: "Trang đầu là <b>trang tiêu đề</b> có tên sản phẩm và tên nhóm." },
+    { k: "gon", t: "Chữ <b>ngắn gọn</b>: mỗi trang không quá 6 dòng, mỗi dòng không quá 12 tiếng." },
+    { k: "hinh", t: "Ít nhất <b>3 trang có hình minh hoạ</b>." },
+    { k: "ket", t: "Trang cuối là <b>trang kết</b> (cảm ơn, câu hỏi hoặc nguồn tham khảo)." }
+  ],
+
+  buoc2: {
+    kienThuc: [
+      { mon: "S", ten: "Bình lọc nước hoạt động thế nào?", nd: "<p>Nước bẩn chảy qua các lớp từ trên xuống: <b>sỏi</b> giữ rác to, <b>cát</b> giữ cặn nhỏ, <b>than hoạt tính</b> hấp phụ mùi và màu, <b>bông</b> giữ lại hạt mịn. Nước lọc trong hơn nhưng <b>chưa uống được</b>, phải đun sôi.</p>" },
+      { mon: "T", ten: "Bản mẫu (Template)", nd: "<ul><li>Bản mẫu có sẵn <b>màu sắc, phông chữ, hiệu ứng</b> như mẫu định dạng, và thêm <b>bố cục các trang</b>, <b>gợi ý nội dung</b>, có khi cả hình ảnh.</li><li>Tạo bài từ bản mẫu: <b>File → New</b>, chọn bản mẫu.</li><li>Lưu thành bản mẫu: <b>Save As</b> kiểu <b>.potx</b>.</li></ul>" },
+      { mon: "E", ten: "Thiết kế trang chiếu", nd: "<p>Trang chiếu là “bảng quảng cáo”, không phải trang sách: <b>ít chữ, chữ to</b>, mỗi ý một dòng, có hình minh hoạ. Các trang cùng một kiểu giúp người xem tập trung vào nội dung.</p>" },
+      { mon: "M", ten: "Tỉ lệ và con số", nd: "<p>Trang chiếu thường có tỉ lệ <b>16 : 9</b>. Quy tắc gợi ý: mỗi trang <b>không quá 6 dòng</b>. Kết quả thử nghiệm nên có số liệu, ví dụ: lọc 1 lít nước mất 6 phút, độ đục giảm khoảng 80%.</p>" }
+    ],
+    quiz: [
+      { q: "Thành phần nào <b>chỉ bản mẫu mới có</b>, mẫu định dạng (Themes) không có?", o: ["Màu sắc", "Phông chữ", "Gợi ý nội dung cho bài trình chiếu", "Hiệu ứng hình ảnh"], d: 2, g: "Cả hai đều có màu sắc, phông chữ, hiệu ứng. Bản mẫu có thêm <b>bố cục các trang</b> và <b>gợi ý nội dung</b>." },
+      { q: "Tệp bản mẫu PowerPoint có phần mở rộng là:", o: [".pptx", ".potx", ".docx", ".xlsx"], d: 1, g: "Bản mẫu PowerPoint lưu với đuôi <b>.potx</b>; bài trình chiếu thông thường là .pptx." },
+      { q: "Ưu điểm lớn nhất của việc dùng bản mẫu là:", o: ["Không cần nhập nội dung.", "Tạo nhanh bài trình chiếu đẹp, các trang thống nhất.", "Bài trình chiếu không cần hình ảnh.", "Tự động trình bày thay người nói."], d: 1, g: "Bản mẫu giúp <b>tiết kiệm thời gian</b>, các trang <b>thống nhất, chuyên nghiệp</b>; nhưng nội dung vẫn do nhóm viết." },
+      { q: "Trong bình lọc, lớp nào giúp khử mùi và màu của nước?", o: ["Sỏi", "Cát", "Than hoạt tính", "Chai nhựa"], d: 2, g: "<b>Than hoạt tính</b> có rất nhiều lỗ nhỏ, hấp phụ các chất gây mùi, màu." }
+    ]
+  },
+
+  buoc3: {
+    phuongAn: {
+      tieuDe: "Nhóm em tạo bài trình chiếu theo cách nào?",
+      o: [
+        ["Tự thiết kế từng trang", "Mỗi bạn làm vài trang, tự chọn màu nền, phông chữ riêng rồi ghép lại."],
+        ["Dùng bản mẫu", "Chọn một bản mẫu hợp chủ đề, dùng bố cục và gợi ý nội dung có sẵn, mỗi bạn điền nội dung vài trang."],
+        ["Chỉ gõ chữ trên nền trắng", "Không cần định dạng, chỉ cần đủ nội dung."]
+      ],
+      d: 1,
+      g: [
+        "Mất nhiều thời gian và khi ghép lại các trang thường mỗi trang một kiểu, thiếu thống nhất.",
+        "✅ Bản mẫu giúp làm nhanh, đẹp và <b>thống nhất</b>; cả nhóm cùng làm song song mà vẫn đồng bộ.",
+        "Nhanh nhưng khó thu hút người xem; chưa vận dụng bài học về bản mẫu."
+      ]
+    },
+    hoi: [
+      ["Nhóm em chọn bản mẫu nào? Vì sao hợp với chủ đề nước sạch?", ""],
+      ["Dàn ý bài trình chiếu (tiêu đề từng trang).", "Ví dụ: 1. Tên sản phẩm · 2. Vấn đề · 3. Vật liệu · 4. Cách hoạt động · 5. Kết quả · 6. Cảm ơn"]
+    ],
+    viec: [
+      "Chọn bản mẫu, làm trang tiêu đề và trang kết",
+      "Trang Vấn đề và Vật liệu",
+      "Trang Cách hoạt động và Kết quả thử nghiệm",
+      "Kiểm tra tiêu chí, tập trình bày 5 phút"
+    ]
+  },
+
+  buoc5: {
+    hoi: [
+      ["Các nhóm bạn góp ý gì cho bài trình chiếu của nhóm em?", ""],
+      ["Nhóm em sẽ chỉnh sửa gì sau góp ý?", ""],
+      ["Muốn dùng lại kiểu trình bày này cho dự án sau, nhóm em làm thế nào?", "Gợi ý: lưu thành tệp bản mẫu."]
+    ]
+  },
+
+  rubric: [
+    ["Sử dụng bản mẫu", "Có dùng bản mẫu nhưng các trang không thống nhất.", "Dùng bản mẫu thống nhất, bố cục chưa hợp nội dung.", "Bản mẫu hợp chủ đề, chọn bố cục phù hợp từng trang."],
+    ["Nội dung khoa học", "Thiếu phần cách hoạt động hoặc kết quả.", "Đủ phần nhưng còn sai hoặc chung chung.", "Đúng, đủ: vấn đề, vật liệu, cách hoạt động, kết quả có số liệu."],
+    ["Trình bày trang chiếu", "Nhiều chữ, ít hình.", "Chữ khá gọn, có hình ở một số trang.", "Ngắn gọn, mỗi ý một dòng, hình minh hoạ hợp lí."],
+    ["Thuyết trình", "Đọc nguyên văn trang chiếu.", "Nói rõ nhưng quá giờ hoặc ngập ngừng.", "Nói lưu loát, đúng 5 phút, trả lời được câu hỏi."]
+  ],
+
+  gv: {
+    yccd: "Sử dụng được các bản mẫu (template) có sẵn để tạo bài trình chiếu; biết thay đổi nội dung, bố cục, định dạng để bài trình chiếu phù hợp với mục đích; lưu được bản mẫu để tái sử dụng.",
+    chuanBi: "Phòng máy có PowerPoint (để nhóm làm bản thật sau khi phác thảo ở trang này); một bình lọc nước mẫu hoặc ảnh chụp; máy chiếu.",
+    tiet: [
+      [["5 phút", "<b>Bước 1.</b> Đặt tình huống Ngày hội STEM; so sánh hai trang chiếu tự làm và làm từ bản mẫu."],
+       ["15 phút", "<b>Bước 2.</b> Nhóm đọc 4 thẻ STEM, làm Kiểm tra nhanh. GV chốt: bản mẫu khác mẫu định dạng ở bố cục và gợi ý nội dung."],
+       ["20 phút", "<b>Bước 3.</b> Nhóm chọn phương án, viết dàn ý, phân công trang."],
+       ["5 phút", "Nhóm nêu nhanh bản mẫu đã chọn."]],
+      [["25 phút", "<b>Bước 4.</b> Nhóm chọn bản mẫu, tạo bài từ gợi ý, điền nội dung; đổi thử bản mẫu khác để thấy cả bài đổi đồng loạt; đạt 6 tiêu chí. Nhóm khá làm lại trên PowerPoint và Save As .potx."],
+       ["15 phút", "<b>Bước 5.</b> 2–3 nhóm bấm <i>Trình chiếu</i> và thuyết trình; các nhóm góp ý, chấm bảng tự đánh giá."],
+       ["5 phút", "GV chốt; nhóm in/lưu PDF báo cáo."]]
+    ],
+    luuY: "Ở chế độ trình chiếu: phím → / Space để sang trang, ← để quay lại, Esc để thoát."
+  },
+
+  xuong: function (hop, api) {
+    var W = api.w;
+    if (!W.ds) W.ds = [];
+    if (W.chon == null) W.chon = 0;
+    var MAU = [
+      { id: "song", ten: "Sóng nước", mo: "Xanh biển, hiện đại",
+        nen: "linear-gradient(160deg,#e0f2fe 0%,#fff 55%)", nenDau: "linear-gradient(135deg,#0369a1,#0ea5e9)", chuDau: "#fff", tieu: "#075985", chu: "#0f172a", nhan: "#bae6fd", font: "Lexend, sans-serif",
+        trangTri: "radial-gradient(circle at 105% 110%, #7dd3fc 0 18%, transparent 18.5%), radial-gradient(circle at 92% 118%, #38bdf8 0 14%, transparent 14.5%)" },
+      { id: "la", ten: "Lá xanh", mo: "Thiên nhiên, thân thiện",
+        nen: "linear-gradient(180deg,#f0fdf4,#fff)", nenDau: "linear-gradient(135deg,#166534,#22c55e)", chuDau: "#fff", tieu: "#166534", chu: "#14532d", nhan: "#bbf7d0", font: "'Be Vietnam Pro', sans-serif",
+        trangTri: "linear-gradient(90deg,#22c55e 0 1.6%, transparent 1.6%)" },
+      { id: "giay", ten: "Sổ tay khoa học", mo: "Trang nhã, cổ điển",
+        nen: "repeating-linear-gradient(0deg,#fffbeb 0 23px,#fde68a55 23px 24px)", nenDau: "linear-gradient(135deg,#78350f,#b45309)", chuDau: "#fffbeb", tieu: "#92400e", chu: "#292524", nhan: "#fde68a", font: "Merriweather, Georgia, serif",
+        trangTri: "linear-gradient(180deg,#b45309 0 2.2%, transparent 2.2%)" }
+    ];
+    var BO_CUC = { "tieu-de": "Trang tiêu đề", "noi-dung": "Tiêu đề và nội dung", "hai-cot": "Hai cột", "anh": "Hình ảnh và chú thích", "ket": "Trang kết" };
+    var HINH = { "": "(không có hình)", "💧": "Giọt nước", "🧴": "Chai nhựa", "🪨": "Sỏi", "🏖️": "Cát", "⚫": "Than hoạt tính", "☁️": "Bông", "🧪": "Thí nghiệm", "📊": "Biểu đồ", "♻️": "Tái chế", "🌍": "Trái Đất", "👥": "Nhóm", "❓": "Câu hỏi" };
+    var GOI_Y = [
+      { lo: "tieu-de", p: ["Tên sản phẩm", "Tên nhóm – lớp"] },
+      { lo: "noi-dung", p: ["Vấn đề", "Vì sao cần làm sản phẩm? (2–3 ý)"] },
+      { lo: "hai-cot", p: ["Vật liệu", "Vật liệu tái chế", "Vật liệu lọc"] },
+      { lo: "anh", p: ["Cách hoạt động", "Chú thích cho hình"] },
+      { lo: "noi-dung", p: ["Kết quả thử nghiệm", "Số liệu đo được"] },
+      { lo: "ket", p: ["Cảm ơn!", "Câu hỏi / Nguồn tham khảo"] }
+    ];
+    function mau() { return MAU.filter(function (m) { return m.id === W.mau; })[0]; }
+    function esc(s) { return String(s || "").replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function dong(s) { return String(s || "").split("\n").map(function (x) { return x.trim(); }).filter(Boolean); }
+    function ul(s, ph) { var d = dong(s); return d.length ? "<ul>" + d.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : '<ul class="ph"><li>' + esc(ph || "Bấm để thêm nội dung") + "</li></ul>"; }
+
+    function veTrang(s) {
+      var M = mau() || MAU[0], dau_ = s.lo === "tieu-de" || s.lo === "ket";
+      var ph = s.ph || [];
+      var tieu = s.t ? esc(s.t) : '<span class="ph">' + esc(ph[0] || "Bấm để thêm tiêu đề") + "</span>";
+      var hinh = s.h ? '<div class="anh" style="background:' + M.nhan + '">' + s.h + "</div>" : "";
+      var than = "";
+      if (s.lo === "tieu-de" || s.lo === "ket") than = '<div class="phu">' + (s.nd ? esc(dong(s.nd).join(" · ")) : '<span class="ph">' + esc(ph[1] || "Phụ đề") + "</span>") + "</div>" + (s.h ? '<div style="font-size:9cqw;margin-top:2cqw">' + s.h + "</div>" : "");
+      else if (s.lo === "noi-dung") than = '<div class="than">' + ul(s.nd, ph[1]) + hinh + "</div>";
+      else if (s.lo === "hai-cot") than = '<div class="than">' + ul(s.nd, ph[1]) + ul(s.nd2, ph[2]) + "</div>";
+      else if (s.lo === "anh") than = '<div class="than" style="flex-direction:column;gap:0">' + (hinh || '<div class="anh ph" style="background:' + M.nhan + '">🖼️</div>') + '<div class="chu-thich">' + (s.nd ? esc(dong(s.nd).join(" · ")) : '<span class="ph">' + esc(ph[1] || "Chú thích") + "</span>") + "</div></div>";
+      return '<div class="tc lo-' + s.lo + '" style="font-family:' + M.font + ";color:" + (dau_ ? M.chuDau : M.chu) + '">' +
+        '<div class="nen" style="background:' + (dau_ ? M.nenDau : M.trangTri + "," + M.nen) + '"></div>' +
+        '<div class="nd"><h2 style="color:' + (dau_ ? M.chuDau : M.tieu) + '">' + tieu + "</h2>" + than + "</div></div>";
+    }
+
+    hop.innerHTML =
+      '<div class="the"><h3>① Chọn bản mẫu</h3><div class="mau-ds" id="mau-ds"></div>' +
+      '<p class="goi-y" id="mau-gy">Đổi bản mẫu bất cứ lúc nào: mọi trang đổi theo cùng lúc.</p></div>' +
+      '<div class="the"><h3>② Soạn trang chiếu</h3><div class="thanh-tr">' +
+      '<button class="btn nho" id="tao-gy">✨ Tạo bài từ gợi ý của bản mẫu</button><button class="btn nho" id="them">＋ Trang mới</button><button class="btn nho" id="nhan">⧉ Nhân đôi</button><button class="btn nho" id="len">↑</button><button class="btn nho" id="xuong-tr">↓</button><button class="btn nho" id="xoa">🗑 Xoá trang</button><button class="btn nho chinh" id="chieu">▶ Trình chiếu</button></div>' +
+      '<div class="soan"><div class="ds-trang" id="ds"></div><div><div id="lon"></div><div class="form-tr" id="form"></div></div></div></div>';
+    var $ = function (s) { return hop.querySelector(s); };
+
+    function veMau() {
+      $("#mau-ds").innerHTML = MAU.map(function (m) {
+        var mo = { lo: "tieu-de", t: "Bình lọc nước", nd: "Nhóm 1 – 8A" };
+        var keep = W.mau; W.mau = m.id; var h = veTrang(mo); W.mau = keep;
+        return '<button class="mau-the' + (W.mau === m.id ? " chon" : "") + '" data-mau="' + m.id + '">' + h + "<b>" + m.ten + '</b><span class="goi-y">' + m.mo + "</span></button>";
+      }).join("");
+    }
+    function veDs() {
+      var ds = $("#ds");
+      if (!W.ds.length) { ds.innerHTML = '<p class="goi-y">Chưa có trang nào.</p>'; }
+      else ds.innerHTML = W.ds.map(function (s, i) { return '<button class="nho-tr' + (i === W.chon ? " chon" : "") + '" data-tr="' + i + '" aria-label="Trang ' + (i + 1) + '"><span class="so-tr">' + (i + 1) + "</span>" + veTrang(s) + "</button>"; }).join("");
+    }
+    function veLon() {
+      var s = W.ds[W.chon];
+      if (!s) { $("#lon").innerHTML = '<div class="tc" style="display:grid;place-items:center;background:#f1f5f9;color:#64748b;font-size:15px;text-align:center;padding:10px">' + (W.mau ? "Bấm “✨ Tạo bài từ gợi ý của bản mẫu” hoặc “＋ Trang mới”." : "Hãy chọn một bản mẫu ở trên trước.") + "</div>"; $("#form").innerHTML = ""; return; }
+      $("#lon").innerHTML = veTrang(s);
+      var ph = s.ph || [];
+      var f = '<div><label for="f-lo">Bố cục (Layout)</label><select id="f-lo" data-f="lo">' + Object.keys(BO_CUC).map(function (k) { return '<option value="' + k + '"' + (s.lo === k ? " selected" : "") + ">" + BO_CUC[k] + "</option>"; }).join("") + "</select></div>" +
+        '<div><label for="f-h">Hình minh hoạ</label><select id="f-h" data-f="h">' + Object.keys(HINH).map(function (k) { return '<option value="' + k + '"' + ((s.h || "") === k ? " selected" : "") + ">" + (k ? k + " " : "") + HINH[k] + "</option>"; }).join("") + "</select></div>" +
+        '<div class="rong"><label for="f-t">Tiêu đề</label><input id="f-t" data-f="t" placeholder="' + esc(ph[0] || "") + '"></div>' +
+        '<div class="' + (s.lo === "hai-cot" ? "" : "rong") + '"><label for="f-nd">' + (s.lo === "tieu-de" || s.lo === "ket" ? "Phụ đề" : s.lo === "anh" ? "Chú thích" : s.lo === "hai-cot" ? "Cột trái (mỗi ý một dòng)" : "Nội dung (mỗi ý một dòng)") + '</label><textarea id="f-nd" data-f="nd" placeholder="' + esc(ph[1] || "") + '"></textarea></div>' +
+        (s.lo === "hai-cot" ? '<div><label for="f-nd2">Cột phải (mỗi ý một dòng)</label><textarea id="f-nd2" data-f="nd2" placeholder="' + esc(ph[2] || "") + '"></textarea></div>' : "") +
+        '<div class="rong canh-bao" id="cb"></div>';
+      $("#form").innerHTML = f;
+      $("#f-t").value = s.t || ""; $("#f-nd").value = s.nd || ""; if ($("#f-nd2")) $("#f-nd2").value = s.nd2 || "";
+      canhBao();
+    }
+    function loiGon(s) {
+      var d = dong(s.nd).concat(dong(s.nd2)), loi = [];
+      if (s.lo !== "tieu-de" && s.lo !== "ket" && s.lo !== "anh" && d.length > 6) loi.push("quá 6 dòng (" + d.length + ")");
+      d.forEach(function (x, i) { var n = x.split(/\s+/).length; if (n > 12) loi.push("dòng “" + x.slice(0, 24) + "…” có " + n + " tiếng"); });
+      return loi;
+    }
+    function canhBao() { var s = W.ds[W.chon], cb = $("#cb"); if (!s || !cb) return; var l = loiGon(s); cb.textContent = l.length ? "⚠ Trang này chưa ngắn gọn: " + l.join("; ") + "." : ""; }
+
+    function kiemTra() {
+      var ds = W.ds;
+      api.dat("bm", !!W.mau && ds.length > 0);
+      api.dat("du", ds.length >= 6 && ds.every(function (s) { return (s.t || "").trim(); }));
+      api.dat("dau", !!ds[0] && ds[0].lo === "tieu-de" && !!(ds[0].t || "").trim() && /nhóm/i.test(ds[0].nd || ""));
+      api.dat("gon", ds.length > 0 && ds.every(function (s) { return !loiGon(s).length; }));
+      api.dat("hinh", ds.filter(function (s) { return s.h; }).length >= 3);
+      api.dat("ket", ds.length > 1 && ds[ds.length - 1].lo === "ket" && !!(ds[ds.length - 1].t || "").trim());
+      api.luu();
+    }
+    function veHet() { veMau(); veDs(); veLon(); kiemTra(); }
+
+    hop.addEventListener("click", function (e) {
+      var m = e.target.closest("[data-mau]");
+      if (m) { W.mau = m.dataset.mau; api.luu(); veHet(); api.bao("Đã áp dụng bản mẫu “" + mau().ten + "” cho mọi trang."); return; }
+      var t = e.target.closest("[data-tr]");
+      if (t) { W.chon = +t.dataset.tr; api.luu(); veDs(); veLon(); return; }
+      var id = e.target.closest("button") && e.target.closest("button").id;
+      if (!id) return;
+      if (id !== "chieu" && !W.mau) { api.bao("Hãy chọn bản mẫu trước."); return; }
+      if (id === "tao-gy") {
+        if (W.ds.length && !confirm("Thay toàn bộ trang hiện có bằng các trang gợi ý của bản mẫu?")) return;
+        W.ds = GOI_Y.map(function (g) { return { lo: g.lo, ph: g.p.slice(), t: "", nd: "", nd2: "", h: "" }; }); W.chon = 0;
+      } else if (id === "them") { W.ds.splice(W.chon + 1, 0, { lo: "noi-dung", t: "", nd: "", nd2: "", h: "" }); W.chon = Math.min(W.chon + 1, W.ds.length - 1); }
+      else if (id === "nhan" && W.ds[W.chon]) { W.ds.splice(W.chon + 1, 0, JSON.parse(JSON.stringify(W.ds[W.chon]))); W.chon++; }
+      else if (id === "len" && W.chon > 0) { var a = W.ds.splice(W.chon, 1)[0]; W.ds.splice(--W.chon, 0, a); }
+      else if (id === "xuong-tr" && W.chon < W.ds.length - 1) { var b = W.ds.splice(W.chon, 1)[0]; W.ds.splice(++W.chon, 0, b); }
+      else if (id === "xoa" && W.ds[W.chon]) { if (!confirm("Xoá trang " + (W.chon + 1) + "?")) return; W.ds.splice(W.chon, 1); W.chon = Math.max(0, Math.min(W.chon, W.ds.length - 1)); }
+      else if (id === "chieu") { trinhChieu(); return; }
+      else return;
+      api.luu(); veHet();
+    });
+    hop.addEventListener("input", function (e) {
+      var k = e.target.dataset && e.target.dataset.f; if (!k) return;
+      var s = W.ds[W.chon]; if (!s) return;
+      s[k] = e.target.value;
+      if (k === "lo") { veLon(); }
+      else { $("#lon").innerHTML = veTrang(s); canhBao(); }
+      var nho = hop.querySelector('[data-tr="' + W.chon + '"]'); if (nho) nho.innerHTML = '<span class="so-tr">' + (W.chon + 1) + "</span>" + veTrang(s);
+      kiemTra();
+    });
+
+    function trinhChieu() {
+      if (!W.ds.length) { api.bao("Chưa có trang chiếu nào."); return; }
+      var i = 0, o = document.createElement("div");
+      o.className = "chieu"; o.tabIndex = -1;
+      function ve() { o.innerHTML = '<button class="btn nho thoat">✕ Thoát (Esc)</button>' + veTrang(W.ds[i]) + '<span class="dem">' + (i + 1) + " / " + W.ds.length + "</span>"; }
+      function thoat() { document.removeEventListener("keydown", phim); o.remove(); if (document.fullscreenElement) document.exitFullscreen().catch(function () {}); }
+      function phim(e) {
+        if (e.key === "Escape") thoat();
+        else if (["ArrowRight", "PageDown", " ", "Enter"].indexOf(e.key) >= 0) { e.preventDefault(); if (i < W.ds.length - 1) { i++; ve(); } else thoat(); }
+        else if (["ArrowLeft", "PageUp"].indexOf(e.key) >= 0) { e.preventDefault(); if (i > 0) { i--; ve(); } }
+      }
+      o.addEventListener("click", function (e) { if (e.target.closest(".thoat")) { thoat(); return; } if (i < W.ds.length - 1) { i++; ve(); } else thoat(); });
+      document.addEventListener("keydown", phim);
+      ve(); document.body.appendChild(o); o.focus();
+      if (o.requestFullscreen) o.requestFullscreen().catch(function () {});
+    }
+
+    veHet();
+    return {
+      baoCao: function () {
+        var M = mau();
+        return "<p><b>Bản mẫu:</b> " + (M ? M.ten : "(chưa chọn)") + " · <b>Số trang:</b> " + W.ds.length + "</p><ol>" +
+          W.ds.map(function (s) {
+            var nd = dong(s.nd).concat(dong(s.nd2));
+            return "<li><b>" + esc(s.t || "(chưa có tiêu đề)") + "</b> <i>(" + BO_CUC[s.lo] + (s.h ? ", hình " + s.h : "") + ")</i>" + (nd.length ? "<br>" + nd.map(esc).join("; ") : "") + "</li>";
+          }).join("") + "</ol>";
+      }
+    };
+  }
+};
+</script>
+<script src="../khung.js?v=1"></script>
+</body>
+</html>

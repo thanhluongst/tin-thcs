@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Robot tưới cây – Dự án STEM Tin học 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="../khung.css?v=1">
+<style>
+.vuon-wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+@media (max-width: 800px) { .vuon-wrap { grid-template-columns: 1fr; } }
+.vuon { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; background: #a3d977; padding: 8px; border-radius: 14px; border: 3px solid #65a30d; }
+.o-vuon { aspect-ratio: 1; background: #d9f99d; border-radius: 8px; display: grid; place-items: center; font-size: clamp(18px, 4.6vw, 30px); position: relative; }
+.o-vuon.tram { background: #fde68a; }
+.o-vuon.loi { background: #fecaca; box-shadow: inset 0 0 0 3px var(--loi); }
+.o-vuon .rb { position: absolute; inset: 0; display: grid; place-items: center; transition: transform .25s; }
+.o-vuon .rb .mui { position: absolute; top: -2px; left: 50%; margin-left: -7px; width: 0; height: 0; border: 7px solid transparent; border-bottom: 11px solid #1d4ed8; border-top: 0; }
+.o-vuon .giot { position: absolute; right: 2px; top: 0; font-size: 14px; }
+.chu-giai { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 14px; color: var(--nhat); margin-top: 8px; }
+.bang-lenh { display: flex; flex-wrap: wrap; gap: 6px; }
+.bang-lenh .btn { font-size: 15px; }
+.chuong-trinh { list-style: none; counter-reset: l; padding: 8px; margin: 10px 0; min-height: 64px; border: 2px dashed var(--vien); border-radius: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; background: #f8fafc; }
+.chuong-trinh li { counter-increment: l; display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px 3px 6px; border-radius: 8px; background: #fff; border: 1px solid var(--vien); cursor: pointer; font-size: 14px; font-weight: 600; }
+.chuong-trinh li::before { content: counter(l); font-size: 11px; color: var(--nhat); min-width: 14px; }
+.chuong-trinh li.chon { border-color: var(--chinh); box-shadow: 0 0 0 2px var(--chinh-nhat); }
+.chuong-trinh li.dang { background: #fef3c7; border-color: var(--vang); }
+.chuong-trinh li.hong { background: var(--loi-nhat); border-color: var(--loi); }
+.chuong-trinh .rong { color: var(--nhat); font-size: 14px; padding: 6px; }
+.dieu-khien { display: flex; flex-wrap: wrap; gap: 6px; }
+.trang-thai { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--chinh-nhat); font-size: 15px; }
+.trang-thai.tot { background: var(--dat-nhat); }
+.trang-thai.xau { background: var(--loi-nhat); }
+.so-lieu { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.so-lieu span { background: #f1f5f9; border-radius: 99px; padding: 2px 10px; font-size: 14px; font-weight: 600; }
+</style>
+</head>
+<body>
+<script>
+window.DU_AN = {
+  id: "tin6-robot-tuoi-cay",
+  lop: 6, bai: "15", tenBai: "Thuật toán", tiet: "Dự án 2 tiết",
+  thuMucBai: "tin6-thuat-toan",
+  ten: "Robot tưới cây cho vườn trường", bieuTuong: "🤖🌱",
+  mau1: "#14532d", mau2: "#16a34a",
+  moTa: "Nhóm em viết thuật toán điều khiển một robot nhỏ đi tưới đủ ba bồn cây trong vườn trường, không đâm vào đá, không tưới phí nước và trở về trạm sạc.",
+
+  buoc1: {
+    tinhHuong: "Hè này vườn trường không có ai tưới cây. Câu lạc bộ Tin học được tặng một <b>robot tưới cây</b>, nhưng robot chỉ hiểu bốn lệnh: <b>Đi thẳng 1 ô</b>, <b>Quay trái</b>, <b>Quay phải</b> và <b>Tưới cây</b> (tưới vào ô ngay trước mặt). Robot không tự nghĩ được: con người phải viết cho nó một <b>thuật toán</b>, tức là một dãy chỉ dẫn rõ ràng, đúng thứ tự.",
+    nhiemVu: "Viết thuật toán để robot xuất phát từ <b>trạm sạc 🔌</b> (đang quay mặt lên trên), tưới đủ <b>3 bồn cây 🌱</b>, tránh <b>đá 🪨</b>, không tưới vào ô trống, rồi <b>quay về trạm sạc</b>. Thuật toán càng ngắn thì robot càng tiết kiệm pin.",
+    hoi: [
+      ["Vấn đề nhóm em cần giải quyết là gì?", "Gợi ý: Ai/cái gì cần làm việc gì? Khó khăn ở đâu?"],
+      ["Đầu vào và đầu ra của thuật toán là gì?", "Gợi ý: Đầu vào là những gì robot có lúc bắt đầu (vị trí, hướng, bản đồ vườn…). Đầu ra là kết quả sau khi chạy xong."],
+      ["Vì sao robot cần thuật toán do con người viết?", ""]
+    ]
+  },
+
+  tieuChi: [
+    { k: "tuoi", t: "Tưới đủ <b>3 bồn cây</b>." },
+    { k: "an", t: "Robot <b>an toàn</b>: không đâm vào đá, không giẫm lên cây, không đi ra ngoài vườn." },
+    { k: "nuoc", t: "<b>Tiết kiệm nước</b>: không tưới vào ô trống, không tưới một cây hai lần." },
+    { k: "ve", t: "Robot <b>quay về trạm sạc</b> sau khi tưới xong." },
+    { k: "gon", t: "Thuật toán <b>ngắn gọn</b>: không quá 32 lệnh." }
+  ],
+
+  buoc2: {
+    kienThuc: [
+      { mon: "S", ten: "Cây cần nước vừa đủ", nd: "<p>Rễ cây hút nước để vận chuyển chất dinh dưỡng và quang hợp. Tưới <b>quá nhiều</b> làm úng rễ và lãng phí nước sạch; tưới <b>quá ít</b> cây héo. Vì vậy mỗi bồn cây chỉ tưới <b>một lần</b>.</p>" },
+      { mon: "T", ten: "Thuật toán", nd: "<p><b>Thuật toán</b> là một dãy các chỉ dẫn <b>rõ ràng, có trình tự</b> sao cho khi thực hiện, ta giải quyết được nhiệm vụ.</p><ul><li><b>Đầu vào</b> (Input): thông tin ban đầu.</li><li><b>Đầu ra</b> (Output): kết quả nhận được.</li><li>Mô tả bằng <b>ngôn ngữ tự nhiên</b> hoặc <b>sơ đồ khối</b>.</li></ul>" },
+      { mon: "E", ten: "Thiết kế – thử – sửa", nd: "<p>Kĩ sư không viết đúng ngay lần đầu. Họ <b>chia nhỏ</b> nhiệm vụ (tưới từng cây một), <b>chạy thử</b>, tìm chỗ sai và <b>sửa</b>. Nút <b>Chạy từng bước</b> giúp em thấy robot sai ở lệnh thứ mấy.</p>" },
+      { mon: "M", ten: "Toạ độ và đếm bước", nd: "<p>Vườn là lưới 7 cột × 5 hàng. Muốn đi từ ô này đến ô kia, em <b>đếm số ô</b> theo chiều ngang và chiều dọc. Hai thuật toán cùng làm đúng việc thì thuật toán <b>ít lệnh hơn</b> tốt hơn.</p>" }
+    ],
+    quiz: [
+      { q: "Thuật toán là gì?", o: ["Một dãy các kết quả nhận được.", "Một dãy các chỉ dẫn rõ ràng, có trình tự để giải quyết một nhiệm vụ.", "Một chiếc máy tính.", "Một bản đồ vườn trường."], d: 1, g: "Thuật toán là dãy chỉ dẫn <b>rõ ràng, có trình tự</b> để giải quyết nhiệm vụ." },
+      { q: "Với robot tưới cây, đâu là <b>đầu ra</b> của thuật toán?", o: ["Bản đồ vườn và vị trí trạm sạc.", "Bốn lệnh robot hiểu được.", "Ba bồn cây đã được tưới và robot đứng ở trạm sạc.", "Hướng ban đầu của robot."], d: 2, g: "Đầu ra là <b>kết quả</b> sau khi thực hiện: cây đã được tưới, robot đã về trạm. Bản đồ, vị trí, hướng ban đầu là <b>đầu vào</b>." },
+      { q: "Robot đang quay mặt lên trên. Sau lệnh <b>Quay phải</b> rồi <b>Quay phải</b>, robot quay mặt về hướng nào?", o: ["Lên trên", "Sang phải", "Xuống dưới", "Sang trái"], d: 2, g: "Mỗi lần quay phải là 90°. Hai lần là 180°, robot quay <b>xuống dưới</b>." },
+      { q: "Đổi chỗ hai lệnh trong một thuật toán đang đúng thì sao?", o: ["Kết quả luôn giữ nguyên.", "Kết quả có thể khác đi, vì thuật toán phải đúng trình tự.", "Robot chạy nhanh hơn.", "Robot tự sửa lại thứ tự."], d: 1, g: "Các chỉ dẫn phải <b>đúng trình tự</b>. Đổi thứ tự có thể làm robot đâm vào đá hoặc tưới nhầm ô." }
+    ]
+  },
+
+  buoc3: {
+    phuongAn: {
+      tieuDe: "Nhóm em sẽ viết thuật toán theo cách nào?",
+      o: [
+        ["Viết hết một lần rồi mới chạy", "Ghi liền tất cả lệnh cho cả vườn, sau đó bấm Chạy."],
+        ["Chia nhỏ: từng cây một", "Viết đoạn lệnh đến cây 1, chạy thử; đúng rồi mới viết tiếp đến cây 2, cây 3, rồi về trạm."],
+        ["Bấm thử ngẫu nhiên", "Bấm các lệnh bất kì, chạy đến khi nào may mắn đúng thì thôi."]
+      ],
+      d: 1,
+      g: [
+        "Có thể làm được, nhưng nếu sai thì rất khó biết sai ở đâu vì thuật toán dài. Hãy thử cách chia nhỏ.",
+        "✅ Đây là cách của kĩ sư: <b>chia bài toán lớn thành bài toán nhỏ</b>, làm xong phần nào kiểm tra phần đó.",
+        "Bấm ngẫu nhiên thì không phải là thuật toán: các chỉ dẫn phải <b>rõ ràng, có trình tự</b>, được nghĩ ra có chủ đích."
+      ]
+    },
+    hoi: [
+      ["Nhóm em tưới ba cây theo thứ tự nào? Vì sao?", "Gợi ý: cây nào gần trạm sạc nhất? Đi đường nào để tránh đá?"],
+      ["Viết phác thảo thuật toán bằng ngôn ngữ tự nhiên (vài câu).", "Ví dụ: Bước 1: Tưới cây ngay phía trên trạm. Bước 2: Quay phải, đi thẳng 2 ô…"]
+    ],
+    viec: [
+      "Đọc bản đồ, đếm ô, vẽ đường đi trên giấy",
+      "Nhập lệnh vào máy",
+      "Chạy từng bước, tìm và ghi lại lỗi",
+      "Viết mô tả thuật toán, chuẩn bị trình bày"
+    ]
+  },
+
+  buoc5: {
+    hoi: [
+      ["Lần chạy đầu tiên nhóm em gặp lỗi gì? Nhóm đã sửa thế nào?", ""],
+      ["Thuật toán cuối cùng có bao nhiêu lệnh? Có cách nào rút ngắn nữa không?", ""],
+      ["Nếu robot có thêm lệnh “Lặp lại n lần”, thuật toán của nhóm sẽ ngắn hơn ở chỗ nào?", "Gợi ý: những đoạn “Đi thẳng” liên tiếp. Em sẽ học điều này ở Bài 16: Các cấu trúc điều khiển."]
+    ]
+  },
+
+  rubric: [
+    ["Thuật toán đúng", "Robot tưới được 1–2 cây hoặc bị lỗi giữa đường.", "Tưới đủ 3 cây nhưng tưới phí nước hoặc chưa về trạm.", "Đạt cả 4 tiêu chí: đủ cây, an toàn, tiết kiệm nước, về trạm."],
+    ["Thuật toán ngắn gọn", "Trên 40 lệnh.", "Từ 33 đến 40 lệnh.", "Không quá 32 lệnh."],
+    ["Mô tả thuật toán", "Chưa nêu được đầu vào, đầu ra.", "Nêu đúng đầu vào, đầu ra; mô tả còn thiếu bước.", "Nêu đúng đầu vào, đầu ra; mô tả rõ ràng, đúng trình tự bằng ngôn ngữ tự nhiên."],
+    ["Hợp tác và trình bày", "Một bạn làm là chính.", "Có phân công nhưng chưa đều.", "Mọi thành viên đều có việc; trình bày rõ lỗi đã gặp và cách sửa."]
+  ],
+
+  gv: {
+    yccd: "Nêu được khái niệm thuật toán; biết chương trình là mô tả một thuật toán để máy tính “hiểu” và thực hiện; nêu được đầu vào, đầu ra; mô tả được thuật toán đơn giản có cấu trúc tuần tự bằng ngôn ngữ tự nhiên.",
+    chuanBi: "Phòng máy (mỗi nhóm 3–4 HS một máy) mở trang này; giấy kẻ ô hoặc bản đồ vườn in sẵn để nhóm vẽ đường đi; máy chiếu.",
+    tiet: [
+      [["5 phút", "<b>Bước 1.</b> Chiếu tình huống robot tưới cây; cả lớp “làm robot”: một HS bịt mắt, HS khác đọc lệnh để đi tới bàn GV. Rút ra: robot cần chỉ dẫn rõ ràng, đúng thứ tự."],
+       ["15 phút", "<b>Bước 2.</b> Nhóm đọc 4 thẻ STEM, làm Kiểm tra nhanh. GV chốt: thuật toán, đầu vào, đầu ra."],
+       ["20 phút", "<b>Bước 3.</b> Nhóm chọn cách làm (chia nhỏ), vẽ đường đi trên giấy kẻ ô, viết phác thảo bằng ngôn ngữ tự nhiên, phân công."],
+       ["5 phút", "Nhóm báo cáo nhanh thứ tự tưới cây đã chọn."]],
+      [["25 phút", "<b>Bước 4.</b> Nhóm nhập lệnh, chạy thử, dùng <i>Chạy từng bước</i> để tìm lỗi; cố gắng đạt cả 5 tiêu chí."],
+       ["15 phút", "<b>Bước 5.</b> 2–3 nhóm chiếu sản phẩm, so sánh số lệnh; các nhóm chấm bảng tự đánh giá."],
+       ["5 phút", "GV chốt và gợi mở Bài 16: dùng lặp để rút gọn thuật toán. Nhóm in/lưu PDF báo cáo."]]
+    ],
+    luuY: "Lời giải mẫu (30 lệnh): Tưới · Quay phải · Đi thẳng ×2 · Quay trái · Đi thẳng ×3 · Quay phải · Đi thẳng · Quay trái · Tưới · Quay phải · Đi thẳng · Quay phải · Đi thẳng · Quay trái · Đi thẳng · Tưới · Quay phải · Đi thẳng · Quay phải · Đi thẳng ×4 · Quay trái · Đi thẳng · Quay phải · Đi thẳng. Không đưa sớm cho HS; có thể gợi ý thứ tự tưới: cây trên trạm → cây hàng trên cùng → cây bên phải."
+  },
+
+  xuong: function (hop, api) {
+    var W = api.w;
+    if (!W.lenh) W.lenh = [];
+    var BAN_DO = ["...P...", ".R...R.", "...R..P", "P......", "S..R..."];
+    var COT = 7, HANG = 5, GIOI_HAN = 32, MAX = 80;
+    var DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0], HUONG = ["lên trên", "sang phải", "xuống dưới", "sang trái"];
+    var LENH = { F: ["⬆️", "Đi thẳng"], L: ["↰", "Quay trái"], R: ["↱", "Quay phải"], T: ["💧", "Tưới cây"] };
+    var CAY = [];
+    BAN_DO.forEach(function (d, y) { d.split("").forEach(function (c, x) { if (c === "P") CAY.push(x + "," + y); }); });
+    var chon = null, hen = null, dangChay = false;
+
+    hop.innerHTML =
+      '<div class="vuon-wrap">' +
+      '<div class="the"><h3>Bản đồ vườn trường</h3><div class="vuon" id="vuon" role="img" aria-label="Bản đồ vườn 7 cột, 5 hàng"></div>' +
+      '<div class="chu-giai"><span>🤖 robot (tam giác xanh chỉ hướng)</span><span>🔌 trạm sạc</span><span>🌱 cây chưa tưới</span><span>🌿💧 cây đã tưới</span><span>🪨 đá</span></div></div>' +
+      '<div class="the"><h3>Thuật toán của nhóm</h3>' +
+      '<div class="bang-lenh">' + Object.keys(LENH).map(function (k) { return '<button class="btn" data-them="' + k + '">' + LENH[k][0] + " " + LENH[k][1] + "</button>"; }).join("") + "</div>" +
+      '<ol class="chuong-trinh" id="ct" aria-label="Danh sách lệnh"></ol>' +
+      '<p class="goi-y" style="margin:-4px 0 8px">Bấm vào một lệnh để chọn: lệnh mới sẽ chèn ngay sau lệnh đó; nút ⌫ sẽ xoá lệnh đang chọn.</p>' +
+      '<div class="dieu-khien"><button class="btn chinh" id="chay">▶ Chạy</button><button class="btn" id="buoc">⏭ Chạy từng bước</button><button class="btn" id="ve-dau">⟲ Về đầu</button><button class="btn" id="xoa">⌫ Xoá lệnh</button><button class="btn" id="xoa-het-l">🗑 Xoá hết</button></div>' +
+      '<div class="so-lieu" id="so-lieu"></div><div class="trang-thai" id="tt">Thêm lệnh rồi bấm <b>Chạy</b>.</div></div></div>';
+
+    var $ = function (s) { return hop.querySelector(s); };
+
+    function batDau() { return { x: 0, y: 4, h: 0, i: 0, tuoi: {}, phi: 0, loi: null, oLoi: null }; }
+    function oTai(x, y) { return (x < 0 || y < 0 || x >= COT || y >= HANG) ? "X" : BAN_DO[y][x]; }
+    function buocMot(s) {
+      var c = W.lenh[s.i];
+      if (c === "L") s.h = (s.h + 3) % 4;
+      else if (c === "R") s.h = (s.h + 1) % 4;
+      else {
+        var nx = s.x + DX[s.h], ny = s.y + DY[s.h], o = oTai(nx, ny);
+        if (c === "F") {
+          if (o === "X") { s.loi = "Robot đi ra ngoài vườn!"; }
+          else if (o === "R") { s.loi = "Robot đâm vào đá!"; s.oLoi = nx + "," + ny; }
+          else if (o === "P") { s.loi = "Robot giẫm lên bồn cây!"; s.oLoi = nx + "," + ny; }
+          else { s.x = nx; s.y = ny; }
+        } else if (c === "T") {
+          var k = nx + "," + ny;
+          if (o === "P" && !s.tuoi[k]) s.tuoi[k] = 1;
+          else s.phi++;
+        }
+      }
+      s.i++;
+      return s;
+    }
+
+    function ve(s, dang) {
+      var h = "";
+      for (var y = 0; y < HANG; y++) for (var x = 0; x < COT; x++) {
+        var o = BAN_DO[y][x], k = x + "," + y, nd = "";
+        if (o === "P") nd = s.tuoi[k] ? "🌿<span class='giot'>💧</span>" : "🌱";
+        else if (o === "R") nd = "🪨";
+        else if (o === "S") nd = "🔌";
+        if (s.x === x && s.y === y) nd += '<span class="rb" style="transform:rotate(' + (s.h * 90) + 'deg)"><span class="mui"></span><span style="transform:rotate(' + (-s.h * 90) + 'deg)">🤖</span></span>';
+        h += '<div class="o-vuon' + (o === "S" ? " tram" : "") + (s.oLoi === k ? " loi" : "") + '">' + nd + "</div>";
+      }
+      $("#vuon").innerHTML = h;
+      veCt(dang, s.loi ? s.i - 1 : -1);
+      $("#so-lieu").innerHTML = "<span>Số lệnh: " + W.lenh.length + "</span><span>Đã tưới: " + Object.keys(s.tuoi).length + "/3</span><span>Tưới phí: " + s.phi + "</span><span>Hướng: " + HUONG[s.h] + "</span>";
+    }
+    function veCt(dang, hong) {
+      var ct = $("#ct");
+      if (!W.lenh.length) { ct.innerHTML = '<li class="rong" style="cursor:default;border:0;background:none">Chưa có lệnh nào.</li>'; return; }
+      ct.innerHTML = W.lenh.map(function (c, i) {
+        return '<li data-i="' + i + '" class="' + (i === chon ? "chon " : "") + (i === dang ? "dang " : "") + (i === hong ? "hong" : "") + '" title="' + LENH[c][1] + '">' + LENH[c][0] + " " + LENH[c][1] + "</li>";
+      }).join("");
+    }
+
+    function ketThuc(s) {
+      var du = Object.keys(s.tuoi).length === CAY.length;
+      var ve_ = !s.loi && s.x === 0 && s.y === 4;
+      api.dat("tuoi", du);
+      api.dat("an", !s.loi && W.lenh.length > 0);
+      api.dat("nuoc", du && s.phi === 0);
+      api.dat("ve", du && ve_);
+      api.dat("gon", du && ve_ && !s.loi && s.phi === 0 && W.lenh.length <= GIOI_HAN);
+      W.kq = { n: W.lenh.length, tuoi: Object.keys(s.tuoi).length, phi: s.phi, ve: ve_, loi: s.loi };
+      api.luu();
+      var tt = $("#tt");
+      if (s.loi) { tt.className = "trang-thai xau"; tt.innerHTML = "❌ " + s.loi + " (ở lệnh số " + s.i + "). Sửa lệnh đó rồi chạy lại."; }
+      else if (api.datHet()) { tt.className = "trang-thai tot"; tt.innerHTML = "🎉 Tuyệt vời! Thuật toán đạt cả 5 tiêu chí với " + W.lenh.length + " lệnh."; }
+      else {
+        var thieu = [];
+        if (!du) thieu.push("còn " + (CAY.length - Object.keys(s.tuoi).length) + " cây chưa tưới");
+        if (s.phi) thieu.push("tưới phí nước " + s.phi + " lần");
+        if (du && !ve_) thieu.push("robot chưa về trạm sạc");
+        if (du && ve_ && !s.phi && W.lenh.length > GIOI_HAN) thieu.push("thuật toán dài " + W.lenh.length + " lệnh, cần không quá " + GIOI_HAN);
+        tt.className = "trang-thai"; tt.innerHTML = "Robot chạy xong nhưng " + thieu.join("; ") + ".";
+      }
+    }
+
+    var S = batDau();
+    function dung() { clearTimeout(hen); dangChay = false; $("#chay").textContent = "▶ Chạy"; }
+    function veDau() { dung(); S = batDau(); ve(S, -1); $("#tt").className = "trang-thai"; $("#tt").innerHTML = "Robot ở trạm sạc, quay mặt lên trên."; }
+
+    $("#chay").addEventListener("click", function () {
+      if (dangChay) { dung(); return; }
+      if (!W.lenh.length) { api.bao("Hãy thêm lệnh trước."); return; }
+      S = batDau(); dangChay = true; $("#chay").textContent = "⏸ Dừng";
+      (function tiep() {
+        if (S.i >= W.lenh.length || S.loi) { dung(); ve(S, -1); ketThuc(S); return; }
+        buocMot(S); ve(S, S.loi ? -1 : S.i - 1);
+        hen = setTimeout(tiep, 330);
+      })();
+    });
+    $("#buoc").addEventListener("click", function () {
+      dung();
+      if (!W.lenh.length) { api.bao("Hãy thêm lệnh trước."); return; }
+      if (S.i >= W.lenh.length || S.loi) S = batDau();
+      buocMot(S); ve(S, S.loi ? -1 : S.i - 1);
+      if (S.i >= W.lenh.length || S.loi) ketThuc(S);
+      else { $("#tt").className = "trang-thai"; $("#tt").innerHTML = "Đã làm lệnh " + S.i + "/" + W.lenh.length + ": <b>" + LENH[W.lenh[S.i - 1]][1] + "</b>."; }
+    });
+    $("#ve-dau").addEventListener("click", veDau);
+    $("#xoa").addEventListener("click", function () {
+      if (!W.lenh.length) return;
+      var i = chon != null ? chon : W.lenh.length - 1;
+      W.lenh.splice(i, 1); chon = chon != null ? (i > 0 ? i - 1 : (W.lenh.length ? 0 : null)) : null;
+      api.luu(); veDau();
+    });
+    $("#xoa-het-l").addEventListener("click", function () {
+      if (!W.lenh.length || !confirm("Xoá toàn bộ thuật toán?")) return;
+      W.lenh = []; chon = null; api.luu(); veDau();
+    });
+    hop.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-them]");
+      if (b) {
+        if (W.lenh.length >= MAX) { api.bao("Tối đa " + MAX + " lệnh."); return; }
+        if (chon != null) { W.lenh.splice(chon + 1, 0, b.dataset.them); chon++; } else W.lenh.push(b.dataset.them);
+        api.luu(); veDau(); return;
+      }
+      var li = e.target.closest("#ct li[data-i]");
+      if (li) { var i = +li.dataset.i; chon = chon === i ? null : i; veCt(-1, -1); }
+    });
+    veDau();
+
+    return {
+      baoCao: function () {
+        var k = W.kq;
+        return "<p><b>Thuật toán (" + W.lenh.length + " lệnh):</b></p><ol>" + W.lenh.map(function (c) { return "<li>" + LENH[c][1] + "</li>"; }).join("") + "</ol>" +
+          (k ? "<p><b>Lần chạy gần nhất:</b> tưới " + k.tuoi + "/3 cây; tưới phí " + k.phi + " lần; " + (k.loi ? "lỗi: " + k.loi : (k.ve ? "đã về trạm sạc" : "chưa về trạm sạc")) + ".</p>" : "<p><i>Chưa chạy thử.</i></p>");
+      }
+    };
+  }
+};
+</script>
+<script src="../khung.js?v=1"></script>
+</body>
+</html>

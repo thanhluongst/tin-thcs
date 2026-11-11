@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bài dạy STEM – Tin học THCS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="khung.css?v=1">
+<style>
+.ds-da { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 16px 0; }
+.da { display: flex; flex-direction: column; background: var(--mat); border: 1px solid var(--vien); border-radius: var(--bo); box-shadow: var(--bong); overflow: hidden; text-decoration: none; color: inherit; transition: transform .15s, box-shadow .15s; }
+.da:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(15,23,42,.12); }
+.da .bia { padding: 16px; color: #fff; background: linear-gradient(135deg, var(--a), var(--b)); }
+.da .bia .bt { font-size: 34px; line-height: 1; }
+.da .bia .lop { display: inline-block; margin-top: 8px; background: rgba(255,255,255,.2); border-radius: 99px; padding: 1px 10px; font-size: 13px; font-weight: 700; }
+.da .bia h2 { margin: 6px 0 0; font-size: 19px; line-height: 1.3; }
+.da .than { padding: 12px 16px 16px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.da .bai { font-size: 14px; color: var(--nhat); font-weight: 600; }
+.da p { margin: 0; font-size: 15px; }
+.da .sp { font-size: 14px; background: #f8fafc; border: 1px solid var(--vien); border-radius: 10px; padding: 6px 10px; }
+.da .mo { margin-top: auto; font-weight: 700; color: var(--chinh); }
+.quy-trinh { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; counter-reset: b; }
+.quy-trinh div { background: var(--mat); border: 1px solid var(--vien); border-radius: 12px; padding: 10px; font-size: 14px; }
+.quy-trinh div b { display: block; font-size: 15px; }
+.quy-trinh div::before { counter-increment: b; content: counter(b); display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--chinh); color: #fff; font-weight: 800; font-size: 13px; margin-bottom: 4px; }
+@media (max-width: 720px) { .quy-trinh { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<header class="dau" style="--mau1:#1e3a8a;--mau2:#7c3aed">
+  <div class="wrap">
+    <a class="ve" href="../">← Mục lục bài học Tin học THCS</a>
+    <div class="nhan"><span>Kết nối tri thức với cuộc sống</span><span class="stem-chu" aria-label="STEM"><b>S</b><b>T</b><b>E</b><b>M</b></span></div>
+    <h1>Bài dạy STEM – Tin học THCS</h1>
+    <p>Mỗi bài là một dự án nhóm 2 tiết theo quy trình 5 bước: học sinh giải quyết một vấn đề thực tế, dùng kiến thức Khoa học, Công nghệ, Kĩ thuật, Toán và làm ra sản phẩm ngay trên máy.</p>
+  </div>
+</header>
+<main class="wrap">
+  <div class="ds-da">
+    <a class="da" href="tin6-robot-tuoi-cay/" style="--a:#14532d;--b:#16a34a">
+      <div class="bia"><div class="bt">🤖🌱</div><span class="lop">Tin học 6</span><h2>Robot tưới cây cho vườn trường</h2></div>
+      <div class="than"><div class="bai">Bài 15. Thuật toán</div><p>Viết thuật toán tuần tự để robot tưới đủ 3 bồn cây, tránh đá, không tưới phí nước và về trạm sạc.</p><div class="sp"><b>Sản phẩm:</b> thuật toán chạy được trên mô phỏng, có chạy từng bước để tìm lỗi.</div><span class="mo">Mở dự án →</span></div>
+    </a>
+    <a class="da" href="tin7-bang-vuon-rau/" style="--a:#14532d;--b:#059669">
+      <div class="bia"><div class="bt">🥬📊</div><span class="lop">Tin học 7</span><h2>Báo cáo vườn rau sạch lớp 7A</h2></div>
+      <div class="than"><div class="bai">Bài 9. Trình bày bảng tính</div><p>Định dạng số, phần trăm, tiền, ngày; gộp ô, tô nền, kẻ viền để bảng số liệu gieo trồng đọc là hiểu.</p><div class="sp"><b>Sản phẩm:</b> bảng tính báo cáo trình bày đẹp, in được.</div><span class="mo">Mở dự án →</span></div>
+    </a>
+    <a class="da" href="tin8-trinh-chieu-binh-loc/" style="--a:#0c4a6e;--b:#0284c7">
+      <div class="bia"><div class="bt">💧🖥️</div><span class="lop">Tin học 8</span><h2>Giới thiệu bình lọc nước tái chế</h2></div>
+      <div class="than"><div class="bai">Bài 11a. Sử dụng bản mẫu tạo bài trình chiếu</div><p>Chọn bản mẫu, dùng gợi ý nội dung để tạo nhanh bài trình chiếu thống nhất cho Ngày hội STEM.</p><div class="sp"><b>Sản phẩm:</b> bài trình chiếu ít nhất 6 trang, trình chiếu toàn màn hình.</div><span class="mo">Mở dự án →</span></div>
+    </a>
+    <a class="da" href="tin9-trien-lam-luoc-su/" style="--a:#312e81;--b:#7c3aed">
+      <div class="bia"><div class="bt">🧮🖥️</div><span class="lop">Tin học 9</span><h2>Gian triển lãm: Lược sử công cụ tính toán</h2></div>
+      <div class="than"><div class="bai">Bài 8. Thực hành: Sử dụng công cụ trực quan trình bày thông tin</div><p>Sắp xếp dòng thời gian, dựng sơ đồ tư duy có tệp đính kèm, siêu liên kết và lập dự toán kinh phí.</p><div class="sp"><b>Sản phẩm:</b> dòng thời gian, sơ đồ tư duy, dự toán không vượt 200 000 đồng.</div><span class="mo">Mở dự án →</span></div>
+    </a>
+  </div>
+
+  <div class="the">
+    <h3>Quy trình 5 bước của mỗi dự án</h3>
+    <div class="quy-trinh">
+      <div><b>Xác định vấn đề</b>Tình huống thực tế, nhiệm vụ, tiêu chí sản phẩm.</div>
+      <div><b>Kiến thức nền</b>4 thẻ S – T – E – M và câu hỏi kiểm tra nhanh.</div>
+      <div><b>Chọn giải pháp</b>So sánh phương án, ý tưởng nhóm, phân công.</div>
+      <div><b>Chế tạo, thử nghiệm</b>Làm sản phẩm trên máy; tiêu chí tự đánh dấu khi đạt.</div>
+      <div><b>Chia sẻ, điều chỉnh</b>Tự đánh giá theo bảng tiêu chí, in báo cáo PDF.</div>
+    </div>
+    <p class="goi-y">Bài làm của nhóm được lưu trên trình duyệt của máy đang dùng. Nhóm nên làm trên cùng một máy trong cả 2 tiết, cuối giờ in hoặc lưu PDF báo cáo để nộp. Kế hoạch dạy học 2 tiết nằm ở mục “Dành cho giáo viên” cuối mỗi trang dự án.</p>
+  </div>
+  <p class="chan-trang">Bài dạy STEM – Tin học THCS · Trường THCS Nhơn Mỹ</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Báo cáo vườn rau – Dự án STEM Tin học 7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="../khung.css?v=1">
+<style>
+.ribbon { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px; background: #f1f5f9; border: 1px solid var(--vien); border-radius: 12px 12px 0 0; }
+.ribbon .nhom-l { display: flex; gap: 4px; align-items: center; padding-right: 8px; border-right: 1px solid var(--vien); }
+.ribbon .nhom-l:last-child { border-right: 0; }
+.ribbon button { min-width: 36px; height: 36px; border: 1px solid var(--vien); background: #fff; border-radius: 8px; font-weight: 700; padding: 0 8px; font-size: 14px; }
+.ribbon button:hover { border-color: var(--dat); }
+.ribbon select { height: 36px; border: 1px solid var(--vien); border-radius: 8px; padding: 0 6px; background: #fff; }
+.ribbon .mau { width: 26px; min-width: 26px; height: 26px; padding: 0; border-radius: 50%; }
+.thanh-ct { display: flex; gap: 6px; align-items: center; border: 1px solid var(--vien); border-top: 0; padding: 6px 8px; background: #fff; }
+.thanh-ct input { width: 92px; border: 1px solid var(--vien); border-radius: 6px; padding: 3px 6px; font-weight: 700; text-transform: uppercase; }
+.thanh-ct .fx { color: var(--nhat); font-style: italic; font-weight: 700; }
+.thanh-ct .gt-ct { flex: 1; font-family: Consolas, monospace; font-size: 14px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.bang-cuon { overflow-x: auto; border: 1px solid var(--vien); border-top: 0; border-radius: 0 0 12px 12px; background: #fff; }
+table.ss { border-collapse: collapse; font-size: 14px; user-select: none; -webkit-user-select: none; min-width: 760px; width: 100%; font-family: Calibri, "Be Vietnam Pro", sans-serif; }
+table.ss th { background: #eef2f6; color: #475569; font-weight: 600; font-size: 12px; border: 1px solid #d4dbe4; padding: 2px 4px; cursor: pointer; }
+table.ss th.rh { width: 30px; }
+table.ss th.sel { background: #cfe8d6; color: #14532d; }
+table.ss td { border: 1px solid #e3e8ee; padding: 3px 6px; height: 26px; white-space: nowrap; cursor: cell; }
+table.ss.an-luoi td { border-color: transparent; }
+table.ss td.bd { border: 1px solid #111 !important; }
+table.ss td.in { box-shadow: inset 0 0 0 9999px rgba(22,163,74,.13); }
+table.ss td.hoat { outline: 2px solid #16a34a; outline-offset: -2px; }
+table.ss td.vg { font-weight: 700; }
+.ghi-chu-in { font-size: 14px; color: var(--nhat); display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
+.ghi-chu-in label { display: inline-flex; gap: 6px; align-items: center; }
+</style>
+</head>
+<body>
+<script>
+window.DU_AN = {
+  id: "tin7-bang-vuon-rau",
+  lop: 7, bai: "9", tenBai: "Trình bày bảng tính", tiet: "Dự án 2 tiết",
+  thuMucBai: "tin7-trinh-bay-bang-tinh",
+  ten: "Báo cáo vườn rau sạch lớp 7A", bieuTuong: "🥬📊",
+  mau1: "#14532d", mau2: "#059669",
+  moTa: "Nhóm em trình bày bảng số liệu gieo trồng của vườn rau lớp 7A sao cho Ban giám hiệu đọc là hiểu ngay: tỉ lệ nảy mầm, chiều cao cây, chi phí và ngày gieo.",
+
+  buoc1: {
+    tinhHuong: "Lớp 7A trồng năm luống rau trong dự án <b>Trường học xanh</b>. Bạn lớp trưởng đã nhập số liệu vào bảng tính, nhưng bảng rất khó đọc: tỉ lệ nảy mầm hiện <b>0.933333333</b>, chiều cao hiện <b>11.66666667</b>, chi phí <b>161500</b> không có dấu phân tách, ngày gieo lại hiện thành <b>46270</b>. Tuần sau lớp phải nộp báo cáo cho Ban giám hiệu để xin thêm kinh phí.",
+    nhiemVu: "Dùng các lệnh <b>định dạng dữ liệu số</b> và <b>trình bày bảng tính</b> (gộp ô, căn lề, tô màu nền, kẻ đường viền) để biến bảng số liệu thô thành một bảng báo cáo rõ ràng, đẹp, in ra được.",
+    hoi: [
+      ["Bảng hiện tại khó đọc ở những chỗ nào?", "Gợi ý: nhìn từng cột E, F, G, H và dòng tiêu đề."],
+      ["Ai sẽ đọc bảng này? Họ cần nhìn thấy nhanh điều gì?", ""],
+      ["Theo em, vì sao ngày gieo lại hiện thành số 46270?", "Gợi ý: bảng tính lưu ngày tháng dưới dạng số."]
+    ]
+  },
+
+  tieuChi: [
+    { k: "td", t: "Tiêu đề bảng <b>gộp ô A1:H1</b>, căn giữa và in đậm." },
+    { k: "dc", t: "Dòng tên cột (A2:H2) <b>in đậm, căn giữa, có màu nền</b>." },
+    { k: "pt", t: "Cột Tỉ lệ nảy mầm (E3:E7) ở dạng <b>phần trăm</b>, không quá 1 chữ số thập phân." },
+    { k: "cc", t: "Cột Chiều cao (F3:F7) ở dạng <b>Number</b>, cùng 1 chữ số thập phân." },
+    { k: "tien", t: "Cột Chi phí (G3:G8) có <b>dấu phân tách hàng nghìn</b>, không có phần thập phân." },
+    { k: "ngay", t: "Cột Ngày gieo (H3:H7) hiển thị dạng <b>ngày/tháng/năm</b>." },
+    { k: "vien", t: "Toàn bộ bảng A2:H8 có <b>đường viền</b> (để in ra vẫn thấy)." }
+  ],
+
+  buoc2: {
+    kienThuc: [
+      { mon: "S", ten: "Theo dõi cây trồng", nd: "<p><b>Tỉ lệ nảy mầm</b> = số hạt nảy mầm ÷ số hạt gieo. Tỉ lệ cao cho thấy hạt giống tốt, đất đủ ẩm. <b>Chiều cao trung bình</b> cho biết cây lớn nhanh hay chậm, giúp chọn loại rau phù hợp với vườn trường.</p>" },
+      { mon: "T", ten: "Lệnh trình bày bảng tính", nd: "<ul><li><b>Format Cells / Number</b>: chọn kiểu Number, Percentage, Date; số chữ số thập phân; <i>Use 1000 Separator</i>.</li><li><b>Merge &amp; Center</b>: gộp ô và căn giữa.</li><li><b>Borders</b>: kẻ đường viền; <b>Fill Color</b>: tô màu nền.</li></ul><p>Định dạng chỉ thay đổi <b>cách hiển thị</b>, không thay đổi giá trị trong ô.</p>" },
+      { mon: "E", ten: "Thiết kế bảng để in", nd: "<p>Đường lưới mờ trên màn hình <b>không được in ra</b>. Muốn bảng in có khung, phải <b>kẻ đường viền</b>. Tiêu đề nổi bật, tên cột tô nền giúp người đọc định hướng nhanh.</p>" },
+      { mon: "M", ten: "Số thập phân và phần trăm", nd: "<p>0,9333… = <b>93,3%</b> (nhân 100). Làm tròn đến 1 chữ số thập phân giúp so sánh dễ hơn: 11,7 cm và 15,3 cm. Số tiền lớn nên có <b>dấu phân tách hàng nghìn</b>: 161,500.</p>" }
+    ],
+    quiz: [
+      { q: "Ô E3 chứa 0.933333333. Định dạng Percentage với 1 chữ số thập phân thì ô hiển thị:", o: ["0.9%", "93.3%", "9333%", "0.93"], d: 1, g: "Kiểu Percentage nhân giá trị với 100 và thêm dấu %: <b>93.3%</b>. Giá trị trong ô vẫn là 0.933333333." },
+      { q: "Sau khi định dạng ô F3 (11.66666667) thành Number, 1 chữ số thập phân, ô hiện 11.7. Giá trị dùng để tính toán là:", o: ["11.7", "11.66666667", "12", "11"], d: 1, g: "Định dạng chỉ đổi <b>cách hiển thị</b>; khi tính toán, bảng tính vẫn dùng giá trị đầy đủ <b>11.66666667</b>." },
+      { q: "Muốn tiêu đề nằm giữa bảng, trải dài từ cột A đến cột H, em dùng lệnh:", o: ["Wrap Text", "Merge & Center", "Fill Color", "Borders"], d: 1, g: "<b>Merge &amp; Center</b> gộp các ô A1:H1 thành một ô và căn giữa nội dung." },
+      { q: "Vì sao cần kẻ đường viền cho bảng dù trên màn hình đã có đường lưới?", o: ["Đường lưới không được in ra giấy.", "Đường viền làm số liệu chính xác hơn.", "Không kẻ thì không lưu được tệp.", "Đường viền giúp tính tổng nhanh hơn."], d: 0, g: "Đường lưới chỉ để nhìn trên màn hình, <b>mặc định không được in</b>. Đường viền thì có." }
+    ]
+  },
+
+  buoc3: {
+    phuongAn: {
+      tieuDe: "Nhóm em chọn cách trình bày nào cho bảng báo cáo?",
+      o: [
+        ["Nhiều màu càng đẹp", "Mỗi cột một màu nền khác nhau, chữ nhiều màu, nhiều kiểu chữ."],
+        ["Gọn gàng, nhất quán", "Tiêu đề nổi bật; tên cột một màu nền; số liệu cùng kiểu, cùng số chữ số thập phân; kẻ viền toàn bảng."],
+        ["Giữ nguyên, chỉ in đậm", "Chỉ in đậm tiêu đề, còn lại để như cũ cho nhanh."]
+      ],
+      d: 1,
+      g: [
+        "Quá nhiều màu làm rối mắt, người đọc khó tìm thông tin chính. Bảng báo cáo cần <b>rõ ràng, nhất quán</b>.",
+        "✅ Đúng tinh thần thiết kế: <b>ít mà rõ</b>. Màu sắc chỉ để làm nổi bật những chỗ cần chú ý.",
+        "Chưa giải quyết được vấn đề: số liệu vẫn khó đọc (0.933333333, 46270…)."
+      ]
+    },
+    hoi: [
+      ["Nhóm em chọn màu nền nào cho dòng tên cột? Vì sao?", ""],
+      ["Mỗi cột E, F, G, H nhóm em định dạng thế nào?", "Ví dụ: Cột E – Percentage, 1 chữ số thập phân."]
+    ],
+    viec: [
+      "Định dạng tiêu đề và dòng tên cột",
+      "Định dạng các cột số (E, F, G)",
+      "Định dạng cột ngày (H) và kẻ viền",
+      "Kiểm tra tiêu chí, viết nhận xét số liệu"
+    ]
+  },
+
+  buoc5: {
+    hoi: [
+      ["Đọc bảng đã trình bày: loại rau nào có tỉ lệ nảy mầm cao nhất? Loại nào lớn nhanh nhất?", ""],
+      ["Nhóm em đề xuất gì với Ban giám hiệu cho vụ rau sau?", "Gợi ý: dựa vào số liệu, nên trồng thêm loại nào, bớt loại nào?"],
+      ["Nếu làm lại, nhóm sẽ trình bày bảng khác đi ở điểm nào?", ""]
+    ]
+  },
+
+  rubric: [
+    ["Định dạng dữ liệu số", "Mới định dạng 1 cột số.", "Định dạng đúng 2–3 cột số.", "Đúng cả 4 cột: phần trăm, số thập phân, tiền, ngày."],
+    ["Trình bày bảng", "Chỉ in đậm hoặc tô màu rời rạc.", "Có gộp ô tiêu đề, tô nền tên cột nhưng thiếu viền.", "Tiêu đề gộp ô căn giữa, tên cột nổi bật, kẻ viền toàn bảng, màu sắc hài hoà."],
+    ["Đọc và dùng số liệu", "Chưa rút ra nhận xét.", "Có nhận xét nhưng chưa dựa vào số liệu cụ thể.", "Nhận xét và đề xuất dựa trên số liệu cụ thể trong bảng."],
+    ["Hợp tác và trình bày", "Một bạn làm là chính.", "Có phân công nhưng chưa đều.", "Mọi thành viên đều có việc; trình bày lưu loát."]
+  ],
+
+  gv: {
+    yccd: "Thực hiện được một số thao tác định dạng dữ liệu số (số chữ số thập phân, phân tách hàng nghìn, phần trăm, ngày tháng); trình bày được bảng tính: gộp ô, căn lề, tô màu nền, kẻ đường viền.",
+    chuanBi: "Phòng máy mở trang này (hoặc tệp Excel có cùng số liệu nếu muốn HS làm trên phần mềm thật); máy chiếu; một bản in bảng chưa kẻ viền để HS thấy đường lưới không được in.",
+    tiet: [
+      [["5 phút", "<b>Bước 1.</b> Chiếu bảng số liệu thô; hỏi: Ban giám hiệu đọc bảng này có hiểu không? Nêu vấn đề, tiêu chí."],
+       ["15 phút", "<b>Bước 2.</b> Nhóm đọc 4 thẻ STEM, làm Kiểm tra nhanh. GV chốt: định dạng chỉ đổi cách hiển thị, không đổi giá trị."],
+       ["20 phút", "<b>Bước 3.</b> Nhóm chọn cách trình bày, phân công từng cột, ghi cách định dạng mỗi cột."],
+       ["5 phút", "Hai nhóm nêu nhanh phương án."]],
+      [["25 phút", "<b>Bước 4.</b> Nhóm định dạng trên bảng mô phỏng (hoặc Excel); bật “Ẩn đường lưới” để xem bản in; đạt 7 tiêu chí."],
+       ["15 phút", "<b>Bước 5.</b> Nhóm chiếu bảng, đọc số liệu, nêu đề xuất; chấm bảng tự đánh giá."],
+       ["5 phút", "GV chốt kiến thức; nhóm in/lưu PDF báo cáo dự án."]]
+    ],
+    luuY: "Chọn vùng: kéo chuột, Shift + bấm, bấm tên cột/hàng, hoặc gõ địa chỉ (VD: A2:H2) vào ô bên trái thanh công thức rồi Enter (tiện trên máy tính bảng)."
+  },
+
+  xuong: function (hop, api) {
+    var W = api.w;
+    if (!W.f) W.f = {};
+    if (!W.m) W.m = [];
+    var COT = "ABCDEFGH".split(""), NH = 8, NC = 8;
+    function serial(y, m, d) { return Math.round((Date.UTC(y, m - 1, d) - Date.UTC(1899, 11, 30)) / 864e5); }
+    var DL = [
+      ["Rau cải ngọt", 60, 56, 11.66666667, 35000, serial(2026, 9, 5)],
+      ["Rau muống", 80, 72, 15.33333333, 42000, serial(2026, 9, 6)],
+      ["Xà lách", 50, 41, 8.25, 28500, serial(2026, 9, 8)],
+      ["Cải bẹ xanh", 70, 63, 12.4, 31000, serial(2026, 9, 10)],
+      ["Mồng tơi", 40, 37, 18.16666667, 25000, serial(2026, 9, 12)]
+    ];
+    // Ô: {v: giá trị, ct: công thức hiển thị}
+    var O = {};
+    function dat(r, c, v, ct) { O[r + "," + c] = { v: v, ct: ct }; }
+    dat(0, 0, "BẢNG THEO DÕI VƯỜN RAU SẠCH LỚP 7A");
+    ["STT", "Loại rau", "Số hạt gieo", "Số hạt nảy mầm", "Tỉ lệ nảy mầm", "Chiều cao TB (cm)", "Chi phí (đồng)", "Ngày gieo"].forEach(function (t, c) { dat(1, c, t); });
+    var tong = 0;
+    DL.forEach(function (d, i) {
+      var r = i + 2, n = r + 1;
+      dat(r, 0, i + 1); dat(r, 1, d[0]); dat(r, 2, d[1]); dat(r, 3, d[2]);
+      dat(r, 4, d[2] / d[1], "=D" + n + "/C" + n); dat(r, 5, d[3], "=AVERAGE(…)"); dat(r, 6, d[4]); dat(r, 7, d[5]);
+      tong += d[4];
+    });
+    dat(7, 1, "Tổng chi phí"); dat(7, 6, tong, "=SUM(G3:G7)");
+    var ten = function (r, c) { return COT[c] + (r + 1); };
+    var f = function (r, c) { return W.f[r + "," + c] || {}; };
+    var setF = function (r, c, k, v) { var o = W.f[r + "," + c] || (W.f[r + "," + c] = {}); if (v == null) delete o[k]; else o[k] = v; };
+
+    function hienThi(r, c) {
+      var o = O[r + "," + c]; if (!o) return "";
+      var v = o.v, F = f(r, c);
+      if (typeof v !== "number") return v;
+      var dec = F.dec != null ? F.dec : 2;
+      if (F.nf === "num") return so(v, dec, true);
+      if (F.nf === "pct") return so(v * 100, dec, false) + "%";
+      if (F.nf === "date") { var d = new Date(Date.UTC(1899, 11, 30) + v * 864e5); return pad(d.getUTCDate()) + "/" + pad(d.getUTCMonth() + 1) + "/" + d.getUTCFullYear(); }
+      return Number.isInteger(v) ? String(v) : String(+v.toPrecision(10));
+    }
+    function pad(n) { return n < 10 ? "0" + n : "" + n; }
+    function so(v, dec, tach) {
+      var s = v.toFixed(dec), p = s.split(".");
+      if (tach) p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return p.join(".");
+    }
+
+    var neo = { r: 2, c: 4 }, dau = { r: 2, c: 4 }, hoat = { r: 2, c: 4 }, keo = false;
+    function vung() { return { r1: Math.min(neo.r, dau.r), r2: Math.max(neo.r, dau.r), c1: Math.min(neo.c, dau.c), c2: Math.max(neo.c, dau.c) }; }
+    function moiO(fn) { var v = vung(); for (var r = v.r1; r <= v.r2; r++) for (var c = v.c1; c <= v.c2; c++) fn(r, c); }
+    function gopTai(r, c) { for (var i = 0; i < W.m.length; i++) { var g = W.m[i]; if (r >= g.r1 && r <= g.r2 && c >= g.c1 && c <= g.c2) return i; } return -1; }
+
+    hop.innerHTML =
+      '<div class="the"><h3>Bảng tính: VuonRau7A.xlsx</h3>' +
+      '<div class="ribbon" role="toolbar" aria-label="Lệnh định dạng">' +
+      '<div class="nhom-l"><button data-l="b" title="In đậm (Bold)">B</button><button data-l="al-l" title="Căn trái">⇤</button><button data-l="al-c" title="Căn giữa">≡</button><button data-l="al-r" title="Căn phải">⇥</button><button data-l="gop" title="Merge & Center: gộp ô và căn giữa">⊞ Merge &amp; Center</button></div>' +
+      '<div class="nhom-l"><span class="goi-y" style="margin:0">Nền</span><button class="mau" data-nen="#bbf7d0" style="background:#bbf7d0" title="Tô nền xanh lá" aria-label="Tô nền xanh lá"></button><button class="mau" data-nen="#bfdbfe" style="background:#bfdbfe" title="Tô nền xanh dương" aria-label="Tô nền xanh dương"></button><button class="mau" data-nen="#fde68a" style="background:#fde68a" title="Tô nền vàng" aria-label="Tô nền vàng"></button><button class="mau" data-nen="" style="background:#fff" title="Không tô nền" aria-label="Không tô nền">∅</button></div>' +
+      '<div class="nhom-l"><button data-l="vien" title="All Borders: kẻ viền mọi ô">▦ Viền</button><button data-l="bo-vien" title="No Border: bỏ viền">□ Bỏ viền</button></div>' +
+      '<div class="nhom-l"><select id="kieu-so" aria-label="Kiểu dữ liệu số"><option value="">General</option><option value="num">Number</option><option value="pct">Percentage</option><option value="date">Date</option></select><button data-l="dec+" title="Increase Decimal: thêm chữ số thập phân">.0→.00</button><button data-l="dec-" title="Decrease Decimal: bớt chữ số thập phân">.00→.0</button></div>' +
+      "</div>" +
+      '<div class="thanh-ct"><input id="hop-ten" aria-label="Ô hoặc vùng đang chọn" value="E3"><span class="fx">fx</span><span class="gt-ct" id="gt-ct"></span></div>' +
+      '<div class="bang-cuon"><table class="ss" id="ss"></table></div>' +
+      '<div class="ghi-chu-in"><label><input type="checkbox" id="an-luoi"> Ẩn đường lưới (xem như khi in ra giấy)</label><button class="btn nho" id="lam-lai">↺ Trả về bảng thô</button></div>' +
+      '<p class="goi-y">Chọn ô: bấm chuột, kéo chuột hoặc Shift + bấm để chọn vùng; bấm chữ cột/số hàng để chọn cả cột/hàng; hoặc gõ địa chỉ như <b>A2:H2</b> vào ô bên trái rồi Enter.</p></div>';
+
+    var bang = hop.querySelector("#ss");
+    function ve() {
+      var v = vung(), h = '<tr><th class="rh"></th>' + COT.map(function (L, c) { return '<th data-cot="' + c + '" class="' + (c >= v.c1 && c <= v.c2 ? "sel" : "") + '">' + L + "</th>"; }).join("") + "</tr>";
+      for (var r = 0; r < NH; r++) {
+        h += '<tr><th class="rh' + (r >= v.r1 && r <= v.r2 ? " sel" : "") + '" data-hang="' + r + '">' + (r + 1) + "</th>";
+        for (var c = 0; c < NC; c++) {
+          var gi = gopTai(r, c), span = "";
+          if (gi >= 0) { var g = W.m[gi]; if (r !== g.r1 || c !== g.c1) continue; span = ' colspan="' + (g.c2 - g.c1 + 1) + '" rowspan="' + (g.r2 - g.r1 + 1) + '"'; }
+          var F = f(r, c), o = O[r + "," + c], so_ = o && typeof o.v === "number";
+          var al = F.al || (gi >= 0 ? "c" : (so_ ? "r" : "l"));
+          var st = "text-align:" + { l: "left", c: "center", r: "right" }[al] + ";" + (F.nen ? "background:" + F.nen + ";" : "");
+          var cls = (F.b ? "vg " : "") + (F.bd ? "bd " : "") + (r >= v.r1 && r <= v.r2 && c >= v.c1 && c <= v.c2 ? "in " : "") + (r === hoat.r && c === hoat.c ? "hoat" : "");
+          h += '<td data-r="' + r + '" data-c="' + c + '"' + span + ' class="' + cls + '" style="' + st + '">' + hienThi(r, c) + "</td>";
+        }
+        h += "</tr>";
+      }
+      bang.innerHTML = h;
+      hop.querySelector("#hop-ten").value = ten(v.r1, v.c1) + (v.r1 !== v.r2 || v.c1 !== v.c2 ? ":" + ten(v.r2, v.c2) : "");
+      var o = O[hoat.r + "," + hoat.c];
+      hop.querySelector("#gt-ct").textContent = o ? (o.ct || String(o.v)) : "";
+      hop.querySelector("#kieu-so").value = f(hoat.r, hoat.c).nf || "";
+    }
+
+    function kiemTra() {
+      var tat = function (r1, r2, c1, c2, fn) { for (var r = r1; r <= r2; r++) for (var c = c1; c <= c2; c++) if (!fn(f(r, c), r, c)) return false; return true; };
+      var g0 = W.m.some(function (g) { return g.r1 === 0 && g.r2 === 0 && g.c1 === 0 && g.c2 === 7; });
+      api.dat("td", g0 && !!f(0, 0).b && (f(0, 0).al || "c") === "c");
+      api.dat("dc", tat(1, 1, 0, 7, function (F) { return F.b && F.nen && F.al === "c"; }));
+      api.dat("pt", tat(2, 6, 4, 4, function (F) { return F.nf === "pct" && (F.dec != null ? F.dec : 2) <= 1; }));
+      api.dat("cc", tat(2, 6, 5, 5, function (F) { return F.nf === "num" && F.dec === 1; }));
+      api.dat("tien", tat(2, 7, 6, 6, function (F) { return F.nf === "num" && F.dec === 0; }));
+      api.dat("ngay", tat(2, 6, 7, 7, function (F) { return F.nf === "date"; }));
+      api.dat("vien", tat(1, 7, 0, 7, function (F) { return F.bd; }));
+      api.luu();
+    }
+
+    function chonVung(a, b, h) { neo = a; dau = b; hoat = h || a; ve(); }
+    bang.addEventListener("pointerdown", function (e) {
+      var td = e.target.closest("td[data-r]"), th = e.target.closest("th");
+      if (td) {
+        var r = +td.dataset.r, c = +td.dataset.c, gi = gopTai(r, c);
+        if (e.shiftKey) { dau = { r: r, c: c }; ve(); return; }
+        keo = e.pointerType === "mouse";
+        if (gi >= 0) { var g = W.m[gi]; chonVung({ r: g.r1, c: g.c1 }, { r: g.r2, c: g.c2 }); return; }
+        chonVung({ r: r, c: c }, { r: r, c: c }); return;
+      }
+      if (th && th.dataset.cot != null) { var cc = +th.dataset.cot; chonVung({ r: 0, c: cc }, { r: NH - 1, c: cc }); }
+      if (th && th.dataset.hang != null) { var rr = +th.dataset.hang; chonVung({ r: rr, c: 0 }, { r: rr, c: NC - 1 }); }
+    });
+    bang.addEventListener("pointerover", function (e) {
+      if (!keo) return; var td = e.target.closest("td[data-r]"); if (!td) return;
+      var r = +td.dataset.r, c = +td.dataset.c;
+      if (r !== dau.r || c !== dau.c) { dau = { r: r, c: c }; ve(); }
+    });
+    document.addEventListener("pointerup", function () { keo = false; });
+
+    hop.querySelector("#hop-ten").addEventListener("keydown", function (e) {
+      if (e.key !== "Enter") return;
+      var m = this.value.trim().toUpperCase().match(/^([A-H])([1-8])(?::([A-H])([1-8]))?$/);
+      if (!m) { api.bao("Địa chỉ không hợp lệ. Ví dụ: A2:H2"); return; }
+      neo = { r: +m[2] - 1, c: COT.indexOf(m[1]) };
+      dau = m[3] ? { r: +m[4] - 1, c: COT.indexOf(m[3]) } : { r: neo.r, c: neo.c };
+      hoat = neo; ve();
+    });
+
+    function xong() { api.luu(); ve(); kiemTra(); }
+    hop.querySelector(".ribbon").addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      if (b.dataset.nen != null) { moiO(function (r, c) { setF(r, c, "nen", b.dataset.nen || null); }); xong(); return; }
+      var l = b.dataset.l;
+      if (l === "b") { var bat = !f(hoat.r, hoat.c).b; moiO(function (r, c) { setF(r, c, "b", bat || null); }); }
+      else if (l && l.indexOf("al-") === 0) moiO(function (r, c) { setF(r, c, "al", l.slice(3)); });
+      else if (l === "vien") moiO(function (r, c) { setF(r, c, "bd", true); });
+      else if (l === "bo-vien") moiO(function (r, c) { setF(r, c, "bd", null); });
+      else if (l === "dec+" || l === "dec-") {
+        moiO(function (r, c) { var F = f(r, c); if (!F.nf) setF(r, c, "nf", "num"); var d = F.dec != null ? F.dec : 2; setF(r, c, "dec", Math.max(0, Math.min(6, d + (l === "dec+" ? 1 : -1)))); });
+      } else if (l === "gop") {
+        var v = vung(), gi = gopTai(v.r1, v.c1);
+        if (gi >= 0 && W.m[gi].r1 === v.r1 && W.m[gi].c1 === v.c1 && W.m[gi].r2 === v.r2 && W.m[gi].c2 === v.c2) { W.m.splice(gi, 1); api.bao("Đã bỏ gộp ô."); }
+        else if (v.r1 === v.r2 && v.c1 === v.c2) { api.bao("Hãy chọn từ hai ô trở lên để gộp."); return; }
+        else {
+          var coDL = false;
+          moiO(function (r, c) { if ((r !== v.r1 || c !== v.c1) && O[r + "," + c]) coDL = true; });
+          if (coDL) { api.bao("Vùng này có nhiều ô chứa dữ liệu: gộp sẽ mất dữ liệu. Chỉ gộp vùng chỉ có ô đầu tiên chứa dữ liệu."); return; }
+          W.m = W.m.filter(function (g) { return g.r2 < v.r1 || g.r1 > v.r2 || g.c2 < v.c1 || g.c1 > v.c2; });
+          W.m.push(v); setF(v.r1, v.c1, "al", "c");
+        }
+      } else return;
+      xong();
+    });
+    hop.querySelector("#kieu-so").addEventListener("change", function () {
+      var nf = this.value;
+      moiO(function (r, c) { setF(r, c, "nf", nf || null); if (nf === "date" || !nf) setF(r, c, "dec", null); else if (nf === "pct") setF(r, c, "dec", 0); });
+      xong();
+    });
+    hop.querySelector("#an-luoi").addEventListener("change", function () { bang.classList.toggle("an-luoi", this.checked); });
+    hop.querySelector("#lam-lai").addEventListener("click", function () {
+      if (!confirm("Xoá mọi định dạng, trả bảng về dạng thô ban đầu?")) return;
+      for (var k in W.f) delete W.f[k]; W.m.length = 0; xong();
+    });
+    ve(); kiemTra();
+
+    return {
+      baoCao: function () {
+        var h = '<table style="font-size:11pt">';
+        for (var r = 0; r < NH; r++) {
+          h += "<tr>";
+          for (var c = 0; c < NC; c++) {
+            var gi = gopTai(r, c), span = "";
+            if (gi >= 0) { var g = W.m[gi]; if (r !== g.r1 || c !== g.c1) continue; span = ' colspan="' + (g.c2 - g.c1 + 1) + '"'; }
+            var F = f(r, c), o = O[r + "," + c], so_ = o && typeof o.v === "number";
+            var al = F.al || (gi >= 0 ? "c" : (so_ ? "r" : "l"));
+            h += "<td" + span + ' style="text-align:' + { l: "left", c: "center", r: "right" }[al] + ";" + (F.b ? "font-weight:700;" : "") + (F.nen ? "background:" + F.nen + ";" : "") + (F.bd ? "" : "border-color:#eee;") + '">' + hienThi(r, c) + "</td>";
+          }
+          h += "</tr>";
+        }
+        return h + "</table>";
+      }
+    };
+  }
+};
+</script>
+<script src="../khung.js?v=1"></script>
+</body>
+</html>

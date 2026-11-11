@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gian triển lãm lược sử – Dự án STEM Tin học 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="../khung.css?v=1">
+<style>
+.tg-ds { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 6px; }
+.tg-ds li { display: flex; gap: 8px; align-items: center; border: 1px solid var(--vien); border-radius: 10px; padding: 6px 8px; background: #fff; }
+.tg-ds li .nam { flex: none; width: 58px; text-align: center; font-weight: 800; border-radius: 8px; background: #f1f5f9; padding: 2px 0; color: var(--nhat); }
+.tg-ds li.dung { border-color: var(--dat); background: var(--dat-nhat); }
+.tg-ds li.dung .nam { background: var(--dat); color: #fff; }
+.tg-ds li.sai { border-color: var(--loi); background: var(--loi-nhat); }
+.tg-ds li .mo { flex: 1; font-size: 15px; }
+.tg-ds li .mo small { display: block; color: var(--nhat); }
+.tg-ds li .nut { display: flex; gap: 4px; }
+.tg-ds li .nut button { width: 34px; height: 34px; border: 1px solid var(--vien); border-radius: 8px; background: #fff; }
+.mm-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 12px; align-items: start; }
+.mm-wrap > div:last-child { position: sticky; top: 110px; }
+@media (max-width: 860px) { .mm-wrap { grid-template-columns: 1fr; } .mm-wrap > div:last-child { position: static; } }
+.cay { list-style: none; padding: 0; margin: 0; }
+.cay ul { list-style: none; padding-left: 22px; margin: 4px 0; border-left: 2px dashed var(--vien); }
+.nut-cay { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; padding: 4px 0; }
+.nut-cay input { flex: 1; min-width: 120px; border: 1px solid var(--vien); border-radius: 8px; padding: 5px 8px; }
+.nut-cay.goc input { font-weight: 800; border-color: var(--chinh); }
+.nut-cay button { border: 1px solid var(--vien); background: #fff; border-radius: 8px; height: 32px; min-width: 32px; padding: 0 6px; font-size: 13px; }
+.dk-ds { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 4px 0; }
+.dk-ds span { font-size: 12px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 99px; padding: 1px 8px; cursor: pointer; }
+.dk-ds span:hover { text-decoration: line-through; }
+.hop-dk { border: 1px solid var(--chinh); border-radius: 10px; padding: 8px; margin: 4px 0 6px; background: var(--chinh-nhat); font-size: 14px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.hop-dk select { border: 1px solid var(--vien); border-radius: 8px; padding: 4px; max-width: 100%; }
+.so-do { width: 100%; height: auto; background: #fff; border: 1px solid var(--vien); border-radius: 12px; }
+.so-do text { font-family: "Be Vietnam Pro", sans-serif; }
+.kp { width: 100%; border-collapse: collapse; font-size: 15px; }
+.kp th, .kp td { border: 1px solid var(--vien); padding: 6px 8px; text-align: left; }
+.kp th { background: #f1f5f9; }
+.kp td.so { text-align: right; white-space: nowrap; }
+.kp input { width: 100%; max-width: 120px; border: 1px solid var(--vien); border-radius: 6px; padding: 4px 6px; text-align: right; }
+.kp input.dung { border-color: var(--dat); background: var(--dat-nhat); }
+.kp input.sai { border-color: var(--loi); background: var(--loi-nhat); }
+.kp-cuon { overflow-x: auto; }
+</style>
+</head>
+<body>
+<script>
+window.DU_AN = {
+  id: "tin9-trien-lam-luoc-su",
+  lop: 9, bai: "8", tenBai: "Thực hành: Sử dụng công cụ trực quan trình bày thông tin", tiet: "Dự án 2 tiết",
+  thuMucBai: "tin9-cong-cu-truc-quan",
+  ten: "Gian triển lãm: Lược sử công cụ tính toán", bieuTuong: "🧮🖥️",
+  mau1: "#312e81", mau2: "#7c3aed",
+  moTa: "Nhóm em chuẩn bị một gian Triển lãm tin học: sắp xếp dòng thời gian, xây dựng sơ đồ tư duy có đính kèm dữ liệu và lập dự toán kinh phí trong giới hạn cho phép.",
+
+  buoc1: {
+    tinhHuong: "Trường tổ chức <b>Triển lãm tin học</b>. Lớp 9 được giao gian “<b>Lược sử công cụ tính toán</b>”: từ máy tính cơ học Pascaline đến điện thoại thông minh. Nhà trường cấp <b>200 000 đồng</b>. Thông tin nhóm thu thập được rất nhiều và rời rạc: tệp ảnh, văn bản, video, bảng tính… Làm sao để khách tham quan nắm được toàn cảnh chỉ trong vài phút?",
+    nhiemVu: "Dùng <b>công cụ trực quan</b> để tổ chức và trình bày thông tin: (1) <b>dòng thời gian</b> các mốc phát triển; (2) <b>sơ đồ tư duy</b> có đính kèm tệp và siêu liên kết; (3) <b>bảng dự toán kinh phí</b> tính đúng, không vượt 200 000 đồng.",
+    hoi: [
+      ["Vấn đề nhóm em cần giải quyết là gì?", ""],
+      ["Vì sao nên dùng sơ đồ tư duy, dòng thời gian thay vì chỉ dán các trang văn bản?", ""],
+      ["Kể tên các loại dữ liệu nhóm có thể đính kèm vào sơ đồ tư duy.", "Gợi ý: Bài 8, Nhiệm vụ 1."]
+    ]
+  },
+
+  tieuChi: [
+    { k: "tg", t: "<b>Dòng thời gian</b> sắp xếp đúng thứ tự các mốc." },
+    { k: "st", t: "Sơ đồ tư duy có <b>chủ đề trung tâm</b> và <b>ít nhất 4 nhánh chính</b>." },
+    { k: "con", t: "Mỗi nhánh chính có <b>ít nhất 1 nhánh con</b>." },
+    { k: "dk", t: "Sơ đồ có <b>ít nhất 3 tệp đính kèm</b> và <b>1 siêu liên kết</b>." },
+    { k: "kp", t: "<b>Dự toán kinh phí</b> đủ hạng mục, tính đúng, tổng không vượt 200 000 đồng." }
+  ],
+
+  buoc2: {
+    kienThuc: [
+      { mon: "S", ten: "Lịch sử khoa học máy tính", nd: "<ul><li><b>1642</b> Blaise Pascal: máy tính cơ học Pascaline.</li><li><b>1833</b> Charles Babbage: thiết kế máy phân tích.</li><li><b>1945</b> ENIAC: dùng đèn điện tử chân không.</li><li><b>1959</b> IBM 7090: dùng bóng bán dẫn.</li><li><b>1964</b> IBM System/360: mạch tích hợp.</li><li><b>1973</b> Micral: máy tính cá nhân dùng bộ vi xử lí.</li><li><b>2007</b> iPhone: điện thoại thông minh.</li></ul>" },
+      { mon: "T", ten: "Công cụ trực quan", nd: "<ul><li><b>Sơ đồ tư duy</b> (MindMaple Lite): chèn tệp bằng <b>Insert/Attachment</b>, chèn đường liên kết bằng <b>Insert/Hyperlink</b>.</li><li><b>Bài trình chiếu</b>: hình ảnh, sơ đồ (SmartArt), video.</li><li><b>Bảng tính</b>: dự toán kinh phí bằng công thức.</li></ul>" },
+      { mon: "E", ten: "Thiết kế gian trưng bày", nd: "<p>Khách tham quan chỉ dừng vài phút: thông tin cần <b>có cấu trúc</b> (chủ đề → nhánh → chi tiết), đi theo <b>trình tự thời gian</b>, có ảnh và video đính kèm để ai muốn tìm hiểu sâu thì mở ra xem.</p>" },
+      { mon: "M", ten: "Dự toán kinh phí", nd: "<p><b>Thành tiền = Số lượng × Đơn giá</b>; <b>Tổng = cộng các thành tiền</b>. Ví dụ: 8 ảnh màu × 8 000 đ = 64 000 đ. Trong bảng tính: <code>=C3*D3</code>, <code>=SUM(E3:E6)</code>. Tổng phải ≤ kinh phí được cấp.</p>" }
+    ],
+    quiz: [
+      { q: "Muốn đưa đường liên kết đến một video trên Internet vào nhánh của sơ đồ tư duy, em dùng lệnh:", o: ["Insert/Attachment", "Insert/Hyperlink", "File/Save As", "Insert/Picture"], d: 1, g: "Đường liên kết dùng <b>Insert/Hyperlink</b>; tệp có trên máy (ảnh, văn bản, bảng tính) dùng <b>Insert/Attachment</b>." },
+      { q: "Máy tính nào ra đời sớm nhất?", o: ["ENIAC", "IBM 7090", "Pascaline", "Micral"], d: 2, g: "<b>Pascaline</b> của Blaise Pascal (1642), sớm hơn rất nhiều so với ENIAC (1945)." },
+      { q: "In 8 ảnh màu, đơn giá 8 000 đồng/ảnh. Thành tiền là:", o: ["16 000 đồng", "64 000 đồng", "80 000 đồng", "8 008 đồng"], d: 1, g: "8 × 8 000 = <b>64 000 đồng</b>." },
+      { q: "Công cụ nào phù hợp nhất để thể hiện các mốc phát triển theo năm?", o: ["Dòng thời gian", "Bảng chữ dài", "Biểu đồ tròn", "Thư điện tử"], d: 0, g: "<b>Dòng thời gian</b> cho thấy trình tự và khoảng cách giữa các mốc một cách trực quan." }
+    ]
+  },
+
+  buoc3: {
+    phuongAn: {
+      tieuDe: "Nhóm em tổ chức nội dung sơ đồ tư duy theo cách nào?",
+      o: [
+        ["Theo các thế hệ / giai đoạn", "Mỗi nhánh chính là một giai đoạn (cơ học, đèn điện tử, bán dẫn, mạch tích hợp, máy tính cá nhân…), nhánh con là các máy tiêu biểu kèm tệp ảnh, văn bản."],
+        ["Liệt kê tên máy theo thứ tự chữ cái", "Mỗi nhánh là một máy, xếp theo A, B, C."],
+        ["Chỉ một nhánh chứa tất cả", "Đặt hết các máy vào một nhánh cho gọn."]
+      ],
+      d: 0,
+      g: [
+        "✅ Chia theo <b>giai đoạn</b> cho thấy sự phát triển, dễ đọc, và khớp với dòng thời gian.",
+        "Thứ tự chữ cái không cho thấy sự phát triển theo thời gian, khó hiểu với người xem.",
+        "Không phân cấp thì mất ưu điểm của sơ đồ tư duy: thông tin vẫn rời rạc."
+      ]
+    },
+    hoi: [
+      ["Các nhánh chính của sơ đồ tư duy là gì?", ""],
+      ["Nhóm em sẽ đính kèm những tệp, đường liên kết nào vào nhánh nào?", ""]
+    ],
+    viec: [
+      "Sắp xếp dòng thời gian, kiểm tra năm",
+      "Dựng sơ đồ tư duy: nhánh chính, nhánh con",
+      "Đính kèm tệp, chèn siêu liên kết",
+      "Lập dự toán kinh phí, kiểm tra phép tính"
+    ]
+  },
+
+  buoc5: {
+    hoi: [
+      ["Khách tham quan (nhóm bạn) nhận xét gì về gian triển lãm của nhóm em?", ""],
+      ["Còn dư bao nhiêu kinh phí? Nhóm đề xuất dùng phần dư vào việc gì?", ""],
+      ["Nếu chia sẻ sơ đồ tư duy để cả nhóm cùng cập nhật, nhóm em dùng cách nào?", "Gợi ý: Bài 7 – chia sẻ để xem, để cập nhật, cộng tác theo thời gian thực."]
+    ]
+  },
+
+  rubric: [
+    ["Dòng thời gian", "Sai nhiều mốc.", "Đúng thứ tự nhưng chưa nêu được đặc điểm từng mốc.", "Đúng thứ tự, nêu được đặc điểm công nghệ của từng mốc."],
+    ["Sơ đồ tư duy", "Ít nhánh, chưa phân cấp.", "Đủ nhánh chính, nhánh con; đính kèm còn thiếu.", "Phân cấp rõ, đính kèm tệp và siêu liên kết đúng chỗ."],
+    ["Dự toán kinh phí", "Tính sai hoặc vượt kinh phí.", "Tính đúng nhưng thiếu hạng mục.", "Đủ hạng mục, tính đúng, không vượt; có đề xuất dùng phần dư."],
+    ["Hợp tác và trình bày", "Một bạn làm là chính.", "Có phân công nhưng chưa đều.", "Mọi thành viên đều có việc; giới thiệu gian triển lãm hấp dẫn."]
+  ],
+
+  gv: {
+    yccd: "Sử dụng được công cụ trực quan (sơ đồ tư duy, bài trình chiếu, dòng thời gian) để tổ chức và trình bày thông tin; đính kèm được tệp, siêu liên kết vào sơ đồ tư duy; hợp tác nhóm để tạo sản phẩm số.",
+    chuanBi: "Phòng máy có MindMaple Lite (hoặc phần mềm sơ đồ tư duy khác) và bảng tính; thư mục tệp mẫu: KinhPhi.xlsx, Pascaline.png, CharlesBabbage.docx…; máy chiếu.",
+    tiet: [
+      [["5 phút", "<b>Bước 1.</b> Giới thiệu Triển lãm tin học, kinh phí 200 000 đồng; nhóm nêu vấn đề, tiêu chí."],
+       ["15 phút", "<b>Bước 2.</b> Nhóm đọc 4 thẻ STEM, làm Kiểm tra nhanh. GV chốt lệnh Attachment/Hyperlink, công thức Thành tiền."],
+       ["20 phút", "<b>Bước 3.</b> Nhóm chọn cách tổ chức sơ đồ, liệt kê nhánh chính và tệp đính kèm, phân công."],
+       ["5 phút", "Nhóm báo cáo nhanh dàn ý sơ đồ."]],
+      [["25 phút", "<b>Bước 4.</b> Nhóm sắp xếp dòng thời gian, dựng sơ đồ tư duy, đính kèm, lập dự toán; đạt 5 tiêu chí. Nhóm khá làm thêm trên MindMaple Lite thật."],
+       ["15 phút", "<b>Bước 5.</b> “Đi tham quan” gian của nhóm bạn (xem màn hình), góp ý; chấm bảng tự đánh giá."],
+       ["5 phút", "GV chốt; nhóm in/lưu PDF báo cáo."]]
+    ],
+    luuY: "Dự toán mẫu: 8 ảnh màu (64 000) + 8 tờ chú thích (8 000) + 1 bộ văn phòng phẩm (50 000) = 122 000 đồng, giống bảng KinhPhi.xlsx trong SGK; nhóm có thể thêm giấy A0 nhưng không vượt 200 000."
+  },
+
+  xuong: function (hop, api) {
+    var W = api.w;
+    var MOC = [
+      { n: 1642, t: "Pascaline", m: "Máy tính cơ học của Blaise Pascal, làm phép cộng, trừ." },
+      { n: 1833, t: "Máy phân tích", m: "Charles Babbage thiết kế, có ý tưởng bộ nhớ và chương trình." },
+      { n: 1945, t: "ENIAC", m: "Máy tính điện tử dùng đèn điện tử chân không, nặng khoảng 27 tấn." },
+      { n: 1959, t: "IBM 7090", m: "Dùng bóng bán dẫn thay đèn điện tử." },
+      { n: 1964, t: "IBM System/360", m: "Dùng mạch tích hợp (IC)." },
+      { n: 1973, t: "Micral", m: "Một trong những máy tính cá nhân đầu tiên dùng bộ vi xử lí." },
+      { n: 2007, t: "iPhone", m: "Điện thoại thông minh màn hình cảm ứng." }
+    ];
+    var TEP = [
+      ["tep", "Pascaline.png"], ["tep", "CharlesBabbage.docx"], ["tep", "ENIAC.jpg"], ["tep", "IBM7090.png"], ["tep", "Micral.jpg"], ["tep", "iPhone.png"], ["tep", "KinhPhi.xlsx"],
+      ["link", "Video: Charles Babbage và máy phân tích (YouTube)"], ["link", "Bảo tàng Lịch sử Máy tính (computerhistory.org)"]
+    ];
+    var HANG = [
+      { k: "anh", t: "In ảnh màu (khổ A4)", dg: 8000, dv: "ảnh" },
+      { k: "cu", t: "In nội dung chú thích", dg: 1000, dv: "tờ" },
+      { k: "vpp", t: "Văn phòng phẩm (keo, ghim, bút)", dg: 50000, dv: "bộ" },
+      { k: "a0", t: "Giấy A0 làm áp phích", dg: 15000, dv: "tờ" }
+    ];
+    var NGAN_SACH = 200000;
+    if (!W.tg) { W.tg = [3, 0, 5, 1, 6, 2, 4]; }
+    if (!W.mm) W.mm = { ten: "Lược sử công cụ tính toán", nhanh: [] };
+    if (!W.kp) W.kp = { sl: {}, tt: {}, tong: "" };
+    var moDk = null; // đường dẫn nút đang mở hộp đính kèm
+    function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function tien(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+
+    hop.innerHTML =
+      '<div class="the"><h3>① Dòng thời gian</h3><p class="goi-y" style="margin-top:0">Dùng ↑ ↓ sắp xếp các mốc từ cũ nhất đến mới nhất, rồi bấm Kiểm tra. Năm sẽ hiện khi mốc đúng vị trí.</p><ol class="tg-ds" id="tg"></ol><button class="btn chinh" id="tg-kt">✓ Kiểm tra</button> <span class="goi-y" id="tg-kq"></span></div>' +
+      '<div class="the"><h3>② Sơ đồ tư duy</h3><div class="mm-wrap"><div><p class="goi-y" style="margin-top:0">＋ thêm nhánh · 📎 đính kèm tệp / chèn liên kết · 🗑 xoá nhánh. Bấm vào nhãn đính kèm để gỡ.</p><div id="cay"></div></div><div><svg class="so-do" id="so-do" viewBox="0 0 960 540" role="img" aria-label="Sơ đồ tư duy của nhóm"></svg><p class="goi-y" id="mm-tk"></p></div></div></div>' +
+      '<div class="the"><h3>③ Dự toán kinh phí (được cấp ' + tien(NGAN_SACH) + ' đồng)</h3><p class="goi-y" style="margin-top:0">Nhập số lượng, <b>tự tính</b> thành tiền và tổng rồi nhập vào ô (không dùng máy tính bỏ túi nhé!). Yêu cầu tối thiểu: 8 ảnh màu, mỗi ảnh 1 tờ chú thích, 1 bộ văn phòng phẩm.</p>' +
+      '<div class="kp-cuon"><table class="kp"><thead><tr><th>Hạng mục</th><th>Đơn giá (đồng)</th><th>Số lượng</th><th>Thành tiền (đồng)</th></tr></thead><tbody>' +
+      HANG.map(function (h) { return '<tr><td>' + h.t + '</td><td class="so">' + tien(h.dg) + " / " + h.dv + '</td><td><input inputmode="numeric" data-sl="' + h.k + '" aria-label="Số lượng ' + h.t + '"></td><td><input inputmode="numeric" data-tt="' + h.k + '" aria-label="Thành tiền ' + h.t + '"></td></tr>'; }).join("") +
+      '<tr><th colspan="3" style="text-align:right">Tổng cộng</th><td><input inputmode="numeric" id="kp-tong" aria-label="Tổng cộng"></td></tr></tbody></table></div><p class="goi-y" id="kp-kq"></p></div>';
+    var $ = function (s) { return hop.querySelector(s); };
+
+    /* ---- dòng thời gian ---- */
+    function veTg(kt) {
+      $("#tg").innerHTML = W.tg.map(function (m, i) {
+        var M = MOC[m], dung = W.tgKt && m === i;
+        return '<li class="' + (W.tgKt ? (dung ? "dung" : "sai") : "") + '"><span class="nam">' + (dung ? M.n : "?") + '</span><span class="mo"><b>' + M.t + "</b><small>" + M.m + '</small></span><span class="nut"><button data-tg="' + i + '" data-d="-1" aria-label="Đưa ' + M.t + ' lên">↑</button><button data-tg="' + i + '" data-d="1" aria-label="Đưa ' + M.t + ' xuống">↓</button></span></li>';
+      }).join("");
+    }
+    hop.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-tg]"); if (!b) return;
+      var i = +b.dataset.tg, j = i + +b.dataset.d; if (j < 0 || j >= W.tg.length) return;
+      var t = W.tg[i]; W.tg[i] = W.tg[j]; W.tg[j] = t; W.tgKt = false; api.luu(); veTg(); $("#tg-kq").textContent = "";
+    });
+    $("#tg-kt").addEventListener("click", function () {
+      W.tgKt = true; var d = W.tg.filter(function (m, i) { return m === i; }).length;
+      $("#tg-kq").textContent = d === MOC.length ? "🎉 Đúng hết " + d + " mốc!" : "Đúng " + d + "/" + MOC.length + " mốc. Đọc lại thẻ Khoa học ở Bước 2.";
+      api.dat("tg", d === MOC.length); api.luu(); veTg();
+    });
+
+    /* ---- sơ đồ tư duy ---- */
+    function nutTai(p) { var n = W.mm; p.forEach(function (i, k) { n = (k === 0 ? n.nhanh : n.con)[i]; }); return n; }
+    function veCay() {
+      function dong(n, p, cap) {
+        var key = p.join("-");
+        var h = '<li><div class="nut-cay' + (cap === 0 ? " goc" : "") + '"><input data-ten="' + key + '" value="' + esc(n.ten) + '" aria-label="' + (cap === 0 ? "Chủ đề trung tâm" : "Tên nhánh") + '" placeholder="' + (cap === 1 ? "Nhánh chính" : "Nhánh con") + '">' +
+          (cap < 2 ? '<button data-them="' + key + '" title="Thêm ' + (cap === 0 ? "nhánh chính" : "nhánh con") + '">＋</button>' : "") +
+          (cap > 0 ? '<button data-dk="' + key + '" title="Đính kèm tệp / chèn liên kết">📎</button><button data-xoa="' + key + '" title="Xoá nhánh">🗑</button>' : "") + "</div>";
+        if (n.dk && n.dk.length) h += '<div class="dk-ds">' + n.dk.map(function (d, i) { return '<span data-go="' + key + '" data-i="' + i + '" title="Bấm để gỡ">' + (d[0] === "tep" ? "📎 " : "🔗 ") + esc(d[1]) + "</span>"; }).join("") + "</div>";
+        if (moDk === key) h += '<div class="hop-dk"><select id="dk-chon">' + TEP.map(function (t, i) { return '<option value="' + i + '">' + (t[0] === "tep" ? "📎 Insert/Attachment: " : "🔗 Insert/Hyperlink: ") + esc(t[1]) + "</option>"; }).join("") + '</select><button class="btn nho chinh" id="dk-ok">Chèn</button><button class="btn nho" id="dk-huy">Huỷ</button></div>';
+        var con = cap === 0 ? n.nhanh : n.con;
+        if (con && con.length) h += "<ul>" + con.map(function (c, i) { return dong(c, p.concat(i), cap + 1); }).join("") + "</ul>";
+        return h + "</li>";
+      }
+      $("#cay").innerHTML = '<ul class="cay">' + dong(W.mm, [], 0) + "</ul>";
+    }
+    function veSoDo() {
+      var VW = 960, VH = 540, cx = VW / 2, cy = VH / 2, s = "", lop = "", nh = W.mm.nhanh, N = nh.length;
+      var MAU = ["#2563eb", "#16a34a", "#ea580c", "#9333ea", "#db2777", "#0891b2", "#ca8a04", "#4f46e5"];
+      function nhan(x, y, t, mau, dk, to) {
+        var tt = (t || "…").slice(0, 26), w = Math.max(60, tt.length * (to ? 8.4 : 7) + 22 + (dk ? 22 : 0));
+        x = Math.max(w / 2 + 4, Math.min(VW - w / 2 - 4, x));
+        return '<g><rect x="' + (x - w / 2) + '" y="' + (y - (to ? 17 : 13)) + '" width="' + w + '" height="' + (to ? 34 : 26) + '" rx="' + (to ? 17 : 13) + '" fill="' + (to ? mau : "#fff") + '" stroke="' + mau + '" stroke-width="2"/>' +
+          '<text x="' + (x + (dk ? -10 : 0)) + '" y="' + (y + 5) + '" text-anchor="middle" font-size="' + (to ? 14 : 12.5) + '" font-weight="' + (to ? 700 : 600) + '" fill="' + (to ? "#fff" : "#0f172a") + '">' + esc(tt) + "</text>" +
+          (dk ? '<text x="' + (x + w / 2 - 16) + '" y="' + (y + 5) + '" text-anchor="middle" font-size="12">' + dk + "</text>" : "") + "</g>";
+      }
+      function bieu(n) { if (!n.dk || !n.dk.length) return ""; var t = n.dk.some(function (d) { return d[0] === "tep"; }), l = n.dk.some(function (d) { return d[0] === "link"; }); return (t ? "📎" : "") + (l ? "🔗" : ""); }
+      nh.forEach(function (b, i) {
+        var g = -Math.PI / 2 + i * 2 * Math.PI / N, mau = MAU[i % MAU.length];
+        var cg = Math.cos(g), sg = Math.sin(g), doc = Math.abs(sg) > Math.abs(cg) + 0.01;
+        var bx = cx + cg * 255, by = cy + sg * 150;
+        s += '<path d="M' + cx + " " + cy + " Q" + (cx + cg * 130) + " " + (cy + sg * 40) + " " + bx + " " + by + '" stroke="' + mau + '" stroke-width="5" fill="none" stroke-linecap="round" opacity=".75"/>';
+        var con = b.con || [], M = con.length;
+        con.forEach(function (c, j) {
+          var lech = j - (M - 1) / 2, x, y;
+          if (doc) { x = bx + lech * 165 + cg * 60; y = by + (sg > 0 ? 72 : -72); }
+          else { x = bx + (cg > 0 ? 175 : -175); y = by + lech * 38 + sg * 30; }
+          y = Math.max(16, Math.min(VH - 16, y));
+          s += '<line x1="' + bx + '" y1="' + by + '" x2="' + x + '" y2="' + y + '" stroke="' + mau + '" stroke-width="2"/>';
+          lop += nhan(x, y, c.ten, mau, bieu(c), false);
+        });
+        lop += nhan(bx, by, b.ten, mau, bieu(b), true);
+      });
+      s += lop + '<g><ellipse cx="' + cx + '" cy="' + cy + '" rx="122" ry="36" fill="#1e1b4b"/><text x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">' + esc((W.mm.ten || "Chủ đề").slice(0, 30)) + "</text></g>";
+      $("#so-do").innerHTML = s;
+    }
+    function demDk() {
+      var t = 0, l = 0;
+      function di(n) { (n.dk || []).forEach(function (d) { if (d[0] === "tep") t++; else l++; }); (n.con || n.nhanh || []).forEach(di); }
+      di(W.mm); return { t: t, l: l };
+    }
+    function ktMm() {
+      var nh = W.mm.nhanh.filter(function (b) { return (b.ten || "").trim(); });
+      api.dat("st", !!(W.mm.ten || "").trim() && nh.length >= 4);
+      api.dat("con", W.mm.nhanh.length >= 4 && W.mm.nhanh.every(function (b) { return (b.con || []).some(function (c) { return (c.ten || "").trim(); }); }));
+      var d = demDk(); api.dat("dk", d.t >= 3 && d.l >= 1);
+      $("#mm-tk").textContent = "Nhánh chính: " + W.mm.nhanh.length + " · Tệp đính kèm: " + d.t + " · Siêu liên kết: " + d.l;
+      api.luu();
+    }
+    function veMm() { veCay(); veSoDo(); ktMm(); }
+    var tach = function (k) { return k === "" ? [] : k.split("-").map(Number); };
+    hop.addEventListener("click", function (e) {
+      var b;
+      if ((b = e.target.closest("[data-them]"))) {
+        var p = tach(b.dataset.them), n = p.length ? nutTai(p) : W.mm;
+        if (p.length === 0) { if (n.nhanh.length >= 8) { api.bao("Tối đa 8 nhánh chính."); return; } n.nhanh.push({ ten: "", con: [], dk: [] }); }
+        else { n.con = n.con || []; if (n.con.length >= 4) { api.bao("Tối đa 4 nhánh con mỗi nhánh."); return; } n.con.push({ ten: "", dk: [] }); }
+        api.luu(); veMm();
+        var o = hop.querySelectorAll("#cay input"); var cuoi = p.length === 0 ? hop.querySelector('[data-ten="' + (n.nhanh.length - 1) + '"]') : hop.querySelector('[data-ten="' + p.concat(n.con.length - 1).join("-") + '"]'); if (cuoi) cuoi.focus();
+      } else if ((b = e.target.closest("[data-xoa]"))) {
+        var q = tach(b.dataset.xoa), cha = q.length === 1 ? W.mm.nhanh : nutTai(q.slice(0, -1)).con;
+        var nn = cha[q[q.length - 1]];
+        if ((nn.ten || (nn.con && nn.con.length)) && !confirm("Xoá nhánh “" + (nn.ten || "…") + "” và các nhánh con?")) return;
+        cha.splice(q[q.length - 1], 1); moDk = null; api.luu(); veMm();
+      } else if ((b = e.target.closest("[data-dk]"))) { moDk = moDk === b.dataset.dk ? null : b.dataset.dk; veCay(); }
+      else if (e.target.id === "dk-huy") { moDk = null; veCay(); }
+      else if (e.target.id === "dk-ok") {
+        var nd = nutTai(tach(moDk)), t = TEP[+$("#dk-chon").value];
+        nd.dk = nd.dk || [];
+        if (nd.dk.some(function (d) { return d[1] === t[1]; })) { api.bao("Nhánh này đã có “" + t[1] + "”."); return; }
+        nd.dk.push(t.slice()); moDk = null; api.luu(); veMm(); api.bao(t[0] === "tep" ? "Đã đính kèm tệp." : "Đã chèn siêu liên kết.");
+      } else if ((b = e.target.closest("[data-go]"))) {
+        var ng = nutTai(tach(b.dataset.go)); ng.dk.splice(+b.dataset.i, 1); api.luu(); veMm();
+      }
+    });
+    hop.addEventListener("input", function (e) {
+      var k = e.target.dataset.ten;
+      if (k != null) { var p = tach(k); (p.length ? nutTai(p) : W.mm).ten = e.target.value; api.luu(); veSoDo(); ktMm(); return; }
+      if (e.target.dataset.sl || e.target.dataset.tt || e.target.id === "kp-tong") {
+        if (e.target.dataset.sl) W.kp.sl[e.target.dataset.sl] = e.target.value;
+        else if (e.target.dataset.tt) W.kp.tt[e.target.dataset.tt] = e.target.value;
+        else W.kp.tong = e.target.value;
+        api.luu(); ktKp();
+      }
+    });
+
+    /* ---- kinh phí ---- */
+    function so(v) { var s = String(v == null ? "" : v).replace(/[\s.,]/g, ""); return s === "" || isNaN(s) ? null : +s; }
+    function ktKp() {
+      var dungHet = true, tong = 0, du = true;
+      HANG.forEach(function (h) {
+        var sl = so(W.kp.sl[h.k]) || 0, tt = so(W.kp.tt[h.k]), o = hop.querySelector('[data-tt="' + h.k + '"]');
+        var dung = tt == null ? sl === 0 : tt === sl * h.dg;
+        o.classList.toggle("dung", tt != null && dung); o.classList.toggle("sai", tt != null && !dung);
+        if (!dung) dungHet = false;
+        tong += sl * h.dg;
+      });
+      var sl = function (k) { return so(W.kp.sl[k]) || 0; };
+      if (sl("anh") < 8 || sl("cu") < sl("anh") || sl("vpp") < 1) du = false;
+      var tg = so(W.kp.tong), ot = $("#kp-tong");
+      var tongDung = tg === tong && tg != null;
+      ot.classList.toggle("dung", tg != null && tongDung); ot.classList.toggle("sai", tg != null && !tongDung);
+      var dat = du && dungHet && tongDung && tong <= NGAN_SACH;
+      api.dat("kp", dat);
+      var kq = [];
+      if (!du) kq.push("chưa đủ hạng mục tối thiểu (≥ 8 ảnh màu, chú thích ≥ số ảnh, 1 bộ văn phòng phẩm)");
+      if (!dungHet) kq.push("còn ô thành tiền chưa nhập hoặc tính sai (ô đỏ)");
+      if (tg != null && !tongDung) kq.push("tổng cộng chưa đúng");
+      if (tongDung && tong > NGAN_SACH) kq.push("vượt kinh phí " + tien(tong - NGAN_SACH) + " đồng");
+      $("#kp-kq").innerHTML = dat ? "✅ Dự toán hợp lệ. Còn dư <b>" + tien(NGAN_SACH - tong) + " đồng</b>." : (kq.length ? "Cần sửa: " + kq.join("; ") + "." : "");
+      W.kp.kq = { tong: tong, dat: dat };
+    }
+    HANG.forEach(function (h) { hop.querySelector('[data-sl="' + h.k + '"]').value = W.kp.sl[h.k] || ""; hop.querySelector('[data-tt="' + h.k + '"]').value = W.kp.tt[h.k] || ""; });
+    $("#kp-tong").value = W.kp.tong || "";
+
+    veTg(); veMm(); ktKp(); api.luu();
+
+    return {
+      baoCao: function () {
+        function ds(n, cap) {
+          var con = cap === 0 ? n.nhanh : n.con || [];
+          return "<li>" + esc(n.ten || "…") + (n.dk && n.dk.length ? " <i>(" + n.dk.map(function (d) { return (d[0] === "tep" ? "tệp " : "liên kết ") + esc(d[1]); }).join("; ") + ")</i>" : "") + (con.length ? "<ul>" + con.map(function (c) { return ds(c, cap + 1); }).join("") + "</ul>" : "") + "</li>";
+        }
+        var k = W.kp;
+        return "<p><b>Dòng thời gian:</b> " + W.tg.map(function (m) { return MOC[m].t; }).join(" → ") + (W.tgKt ? "" : " <i>(chưa kiểm tra)</i>") + "</p>" +
+          "<p><b>Sơ đồ tư duy:</b></p><ul>" + ds(W.mm, 0) + "</ul>" +
+          "<p><b>Dự toán kinh phí:</b></p><table><tr><th>Hạng mục</th><th>Số lượng</th><th>Thành tiền</th></tr>" +
+          HANG.map(function (h) { return "<tr><td>" + h.t + "</td><td>" + esc(k.sl[h.k] || "0") + "</td><td>" + esc(k.tt[h.k] || "") + "</td></tr>"; }).join("") +
+          "<tr><th colspan='2'>Tổng</th><td>" + esc(k.tong || "") + "</td></tr></table>";
+      }
+    };
+  }
+};
+</script>
+<script src="../khung.js?v=1"></script>
+</body>
+</html>
