@@ -65,27 +65,28 @@
     '<div><label for="n-ten">Tên nhóm</label><input id="n-ten" data-nhom="ten" placeholder="VD: Nhóm 3"></div>' +
     '<div><label for="n-lop">Lớp</label><input id="n-lop" data-nhom="lop" placeholder="' + D.lop + 'A1"></div>' +
     '<div><label for="n-tv">Thành viên</label><input id="n-tv" data-nhom="tv" placeholder="An, Minh, Khoa, Lan"></div></div></div>');
+  h.push('<div class="wrap"><p class="chu-giai-loai" aria-label="Chú giải màu"><span class="cg doc">Đọc, tìm hiểu</span><span class="cg lam">Nhóm làm, viết</span><span class="cg kt">Kiểm tra, đánh giá</span></p></div>');
   h.push('<nav class="buoc-nav" aria-label="Các bước dự án"><div class="wrap"><ol>' + TEN_BUOC.map(function (t, i) {
     return '<li><button data-di="' + i + '" aria-label="Bước ' + (i + 1) + ": " + t + '"><span class="so">' + (i + 1) + '</span><span class="ten">' + t + "</span></button></li>";
   }).join("") + '</ol><div class="tien-do" aria-hidden="true"><i></i></div></div></nav>');
-  h.push('<main class="wrap">');
+  h.push('<main class="wrap" style="--mau1:' + (D.mau1 || "#1e3a8a") + ";--mau2:" + (D.mau2 || "#2563eb") + '">');
 
-  function dau(i) { return '<div class="buoc-dau"><h2>Bước ' + (i + 1) + ". " + TEN_BUOC[i] + '</h2><span class="muc-tieu">' + MUC_TIEU[i] + "</span></div>"; }
+  function dau(i) { return '<div class="buoc-dau"><span class="so-buoc" aria-hidden="true">' + (i + 1) + '</span><div><h2>Bước ' + (i + 1) + ". " + TEN_BUOC[i] + '</h2><span class="muc-tieu">' + MUC_TIEU[i] + "</span></div></div>"; }
 
   // Bước 1
   h.push('<section class="buoc" data-buoc="0">' + dau(0));
-  h.push('<div class="the tinh-huong"><span class="nhan-the">Tình huống</span>' + b1.tinhHuong + "</div>");
-  h.push('<div class="the nhiem-vu"><span class="nhan-the">Nhiệm vụ của nhóm</span>' + b1.nhiemVu + "</div>");
-  h.push('<div class="the"><h3>Tiêu chí sản phẩm</h3><p class="goi-y" style="margin:0">Ô vuông tự đánh dấu ✓ khi sản phẩm ở Bước 4 đạt tiêu chí.</p>' + tieuChiHtml(1) + "</div>");
-  h.push('<div class="the"><h3>Nhóm em trả lời</h3>' + b1.hoi.map(function (q, j) { return hoi("b1-" + j, q[0], q[1]); }).join("") + "</div>");
+  h.push('<div class="the tinh-huong" data-loai="doc"><span class="nhan-the">Tình huống</span>' + b1.tinhHuong + "</div>");
+  h.push('<div class="the nhiem-vu" data-loai="doc"><span class="nhan-the">Nhiệm vụ của nhóm</span>' + b1.nhiemVu + "</div>");
+  h.push('<div class="the" data-loai="kt"><h3>Tiêu chí sản phẩm</h3><p class="goi-y" style="margin:0">Ô vuông tự đánh dấu ✓ khi sản phẩm ở Bước 4 đạt tiêu chí.</p>' + tieuChiHtml(1) + "</div>");
+  h.push('<div class="the" data-loai="lam"><h3>Nhóm em trả lời</h3>' + b1.hoi.map(function (q, j) { return hoi("b1-" + j, q[0], q[1]); }).join("") + "</div>");
   h.push(chanBuoc(0) + "</section>");
 
   // Bước 2
-  h.push('<section class="buoc" data-buoc="1">' + dau(1) + '<div class="luoi-stem">');
+  h.push('<section class="buoc" data-buoc="1">' + dau(1) + '<p class="nhan-loai doc">Kiến thức nền: đọc 4 thẻ S – T – E – M</p><div class="luoi-stem">');
   b2.kienThuc.forEach(function (m) {
     h.push('<div class="mon" style="--m:' + MON[m.mon][1] + '"><h4><span class="chu-to">' + m.mon + "</span>" + MON[m.mon][0] + (m.ten ? ": " + m.ten : "") + "</h4>" + m.nd + "</div>");
   });
-  h.push('</div><div class="the"><h3>Kiểm tra nhanh</h3>');
+  h.push('</div><div class="the" data-loai="kt"><h3>Kiểm tra nhanh</h3>');
   b2.quiz.forEach(function (c, i) {
     h.push('<div class="cau" data-cau="' + i + '"><div class="q">Câu ' + (i + 1) + ". " + c.q + '</div><div class="lc">' +
       c.o.map(function (o, j) { return '<button data-chon="' + j + '">' + String.fromCharCode(65 + j) + ". " + o + "</button>"; }).join("") +
@@ -97,7 +98,7 @@
   h.push('<section class="buoc" data-buoc="2">' + dau(2));
   var ss = b3.soSanh, nPa = ss ? ss.phuongAn.length + 1 : 0;
   if (ss) {
-    h.push('<div class="the"><h3>' + ss.tieuDe + '</h3><p class="goi-y" style="margin-top:0">' + (ss.goiY || "Không có đáp án đúng duy nhất. Nhóm bấm vào từng ô để chấm mỗi phương án theo từng tiêu chí (bấm nhiều lần để đổi mức), có thể tự thêm phương án ở dòng cuối, rồi chọn phương án tốt nhất và giải thích.") + "</p>" +
+    h.push('<div class="the" data-loai="lam"><h3>' + ss.tieuDe + '</h3><p class="goi-y" style="margin-top:0">' + (ss.goiY || "Không có đáp án đúng duy nhất. Nhóm bấm vào từng ô để chấm mỗi phương án theo từng tiêu chí (bấm nhiều lần để đổi mức), có thể tự thêm phương án ở dòng cuối, rồi chọn phương án tốt nhất và giải thích.") + "</p>" +
       '<div class="rubric-wrap"><table class="so-sanh"><thead><tr><th>Phương án</th>' + ss.tieuChi.map(function (t) { return "<th>" + t + "</th>"; }).join("") + '<th>Tổng</th><th>Chọn</th></tr></thead><tbody>' +
       ss.phuongAn.concat([null]).map(function (p, i) {
         var ten = p ? "<b>" + p[0] + "</b><br><span class='goi-y'>" + p[1] + "</span>" :
@@ -107,28 +108,28 @@
         }).join("") + '<td class="ss-tong" data-ss-tong="' + i + '">–</td><td><input type="radio" name="ss-chon" data-ss-chon="' + i + '" aria-label="Chọn phương án ' + (i + 1) + '"></td></tr>';
       }).join("") + "</tbody></table></div>" + hoi("b3-lydo", "Vì sao nhóm em chọn phương án này? Nó còn điểm yếu nào và nhóm khắc phục thế nào?", "") + "</div>");
   } else if (b3.phuongAn) {
-    h.push('<div class="the"><h3>' + b3.phuongAn.tieuDe + '</h3><div class="cau" data-pa><div class="lc">' +
+    h.push('<div class="the" data-loai="lam"><h3>' + b3.phuongAn.tieuDe + '</h3><div class="cau" data-pa><div class="lc">' +
       b3.phuongAn.o.map(function (o, j) { return '<button data-pa="' + j + '"><b>' + o[0] + "</b><br><span class='goi-y'>" + o[1] + "</span></button>"; }).join("") +
       '</div><div class="gt" hidden></div></div></div>');
   }
-  h.push('<div class="the"><h3>Ý tưởng của nhóm</h3>' + b3.hoi.map(function (q, j) { return hoi("b3-" + j, q[0], q[1]); }).join("") + "</div>");
-  h.push('<div class="the"><h3>Phân công công việc</h3><table class="phan-cong"><thead><tr><th style="width:30%">Thành viên</th><th>Nhiệm vụ</th></tr></thead><tbody>' +
+  h.push('<div class="the" data-loai="lam"><h3>Ý tưởng của nhóm</h3>' + b3.hoi.map(function (q, j) { return hoi("b3-" + j, q[0], q[1]); }).join("") + "</div>");
+  h.push('<div class="the" data-loai="lam"><h3>Phân công công việc</h3><table class="phan-cong"><thead><tr><th style="width:30%">Thành viên</th><th>Nhiệm vụ</th></tr></thead><tbody>' +
     b3.viec.map(function (v, j) { return '<tr><td><input data-pc="' + j + '" placeholder="Tên bạn phụ trách" aria-label="Người phụ trách: ' + esc(v) + '"></td><td>' + v + "</td></tr>"; }).join("") +
     "</tbody></table></div>");
   h.push(chanBuoc(2) + "</section>");
 
   // Bước 4
   h.push('<section class="buoc" data-buoc="3">' + dau(3));
-  h.push('<div class="the"><h3>Tiêu chí cần đạt</h3>' + tieuChiHtml(4) + "</div>");
+  h.push('<div class="the" data-loai="kt"><h3>Tiêu chí cần đạt</h3>' + tieuChiHtml(4) + "</div>");
   h.push('<div id="xuong"></div>' + chanBuoc(3) + "</section>");
 
   // Bước 5
   h.push('<section class="buoc" data-buoc="4">' + dau(4));
-  h.push('<div class="the"><h3>Tự đánh giá sản phẩm</h3><p class="goi-y" style="margin-top:0">Bấm vào ô mức độ phù hợp với nhóm em (giáo viên và nhóm bạn có thể cùng chấm).</p><div class="rubric-wrap"><table class="rubric"><thead><tr><th>Tiêu chí</th><th>Mức 1 (1 điểm)</th><th>Mức 2 (2 điểm)</th><th>Mức 3 (3 điểm)</th></tr></thead><tbody>' +
+  h.push('<div class="the" data-loai="kt"><h3>Tự đánh giá sản phẩm</h3><p class="goi-y" style="margin-top:0">Bấm vào ô mức độ phù hợp với nhóm em (giáo viên và nhóm bạn có thể cùng chấm).</p><div class="rubric-wrap"><table class="rubric"><thead><tr><th>Tiêu chí</th><th>Mức 1 (1 điểm)</th><th>Mức 2 (2 điểm)</th><th>Mức 3 (3 điểm)</th></tr></thead><tbody>' +
     D.rubric.map(function (r, i) { return "<tr><th>" + r[0] + "</th>" + [1, 2, 3].map(function (m) { return '<td class="muc" data-rub="' + i + '" data-muc="' + m + '" tabindex="0">' + r[m] + "</td>"; }).join("") + "</tr>"; }).join("") +
     '</tbody></table></div><p style="display:flex;align-items:center;gap:12px;margin:12px 0 0"><span class="diem-to" id="diem-rub">–</span><span class="goi-y" id="diem-rub-t">Tổng điểm quy về thang 10</span></p></div>');
-  h.push('<div class="the"><h3>Chia sẻ và điều chỉnh</h3>' + b5.hoi.map(function (q, j) { return hoi("b5-" + j, q[0], q[1]); }).join("") + "</div>");
-  h.push('<div class="the"><h3>Báo cáo dự án</h3><p style="margin-top:0">Bấm <b>In báo cáo</b> để in hoặc lưu thành PDF (chọn “Lưu dưới dạng PDF” trong hộp in) và nộp cho giáo viên. Báo cáo gồm thông tin nhóm, câu trả lời ở mọi bước, sản phẩm và điểm tự đánh giá.</p><button class="btn chinh" data-in>🖨 In báo cáo dự án</button> <button class="btn" id="xoa-het">Làm lại từ đầu</button></div>');
+  h.push('<div class="the" data-loai="lam"><h3>Chia sẻ và điều chỉnh</h3>' + b5.hoi.map(function (q, j) { return hoi("b5-" + j, q[0], q[1]); }).join("") + "</div>");
+  h.push('<div class="the" data-loai="nop"><h3>Báo cáo dự án</h3><p style="margin-top:0">Bấm <b>In báo cáo</b> để in hoặc lưu thành PDF (chọn “Lưu dưới dạng PDF” trong hộp in) và nộp cho giáo viên. Báo cáo gồm thông tin nhóm, câu trả lời ở mọi bước, sản phẩm và điểm tự đánh giá.</p><button class="btn chinh" data-in>🖨 In báo cáo dự án</button> <button class="btn" id="xoa-het">Làm lại từ đầu</button></div>');
   h.push(chanBuoc(4) + "</section>");
 
   // Giáo viên

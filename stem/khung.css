@@ -55,22 +55,49 @@ button { cursor: pointer; }
 .buoc { display: none; padding: 10px 0 40px; animation: hien .3s ease both; }
 .buoc.dang { display: block; }
 @keyframes hien { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.buoc-dau { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 6px 0 12px; }
-.buoc-dau h2 { margin: 0; font-size: 24px; }
-.buoc-dau .muc-tieu { color: var(--nhat); font-size: 15px; }
-.the { background: var(--mat); border: 1px solid var(--vien); border-radius: var(--bo); padding: 16px; margin: 12px 0; box-shadow: var(--bong); }
-.the h3 { margin: 0 0 8px; font-size: 18px; }
-.the.tinh-huong { border-left: 5px solid var(--vang); background: linear-gradient(90deg, var(--vang-nhat), #fff 60%); }
-.the.nhiem-vu { border-left: 5px solid var(--chinh); }
-.nhan-the { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--nhat); margin-bottom: 4px; }
+/* Cấp 1 – Bước: dải màu của dự án */
+.buoc-dau { display: flex; align-items: center; gap: 14px; margin: 6px 0 14px; padding: 14px 16px; border-radius: var(--bo); color: #fff;
+  background: linear-gradient(135deg, var(--mau1, #1e3a8a), var(--mau2, #2563eb)); box-shadow: var(--bong); }
+.buoc-dau .so-buoc { flex: none; width: 46px; height: 46px; border-radius: 12px; background: #fff; color: var(--mau1, #1e3a8a); display: grid; place-items: center; font-size: 24px; font-weight: 800; }
+.buoc-dau h2 { margin: 0; font-size: 22px; line-height: 1.25; }
+.buoc-dau .muc-tieu { display: block; font-size: 15px; opacity: .92; }
+
+/* Cấp 2 – Thẻ theo vai trò: đọc (vàng), nhóm làm (xanh dương), kiểm tra (xanh lá) */
+:root { --doc: #d97706; --doc-nhat: #fff8eb; --lam: #2563eb; --lam-nhat: #f1f6ff; --kt: #16a34a; --kt-nhat: #effbf3; --nop: #64748b; }
+.the { --l: var(--vien); background: var(--mat); border: 1px solid var(--vien); border-left: 6px solid var(--l); border-radius: var(--bo); padding: 16px; margin: 12px 0; box-shadow: var(--bong); }
+.the[data-loai=doc] { --l: var(--doc); background: linear-gradient(90deg, var(--doc-nhat), #fff 70%); }
+.the[data-loai=lam] { --l: var(--lam); }
+.the[data-loai=kt] { --l: var(--kt); }
+.the[data-loai=nop] { --l: var(--nop); }
+#xuong .the { --l: var(--lam); }
+.the h3 { margin: 0 0 10px; font-size: 18px; color: var(--chu); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.the[data-loai] > h3::before, #xuong .the > h3::before { content: ""; font-size: 12px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; color: #fff; background: var(--l); border-radius: 99px; padding: 2px 10px; }
+.the[data-loai=doc] > h3::before { content: "📖 Đọc"; }
+.the[data-loai=lam] > h3::before, #xuong .the > h3::before { content: "✏️ Nhóm làm"; }
+.the[data-loai=kt] > h3::before { content: "🎯 Kiểm tra"; }
+.the[data-loai=nop] > h3::before { content: "📤 Nộp bài"; }
+.the.tinh-huong { --l: var(--vang); }
+.nhan-the { display: table; font-size: 12px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; color: #fff; background: var(--l); border-radius: 99px; padding: 2px 10px; margin-bottom: 8px; }
+.the.nhiem-vu { --l: #b45309; background: linear-gradient(90deg, #fef3c7, #fff 70%); font-weight: 500; }
+.nhan-loai { margin: 0 0 10px; font-weight: 800; color: var(--doc); }
+.nhan-loai.doc::before { content: "📖 "; }
+.chu-giai-loai { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 10px 0 0; font-size: 13px; color: var(--nhat); }
+.chu-giai-loai .cg::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.cg.doc::before { background: var(--doc); } .cg.lam::before { background: var(--lam); } .cg.kt::before { background: var(--kt); }
+
+/* Cấp 3 – Câu hỏi trong thẻ: đánh số, khối nền nhạt */
+.the { counter-reset: hoi; }
 .tieu-chi { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 6px; }
 .tieu-chi li { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: #f8fafc; border: 1px solid var(--vien); }
 .tieu-chi li .o { flex: none; width: 22px; height: 22px; border-radius: 6px; border: 2px solid #94a3b8; display: grid; place-items: center; font-size: 14px; color: #fff; margin-top: 2px; transition: .25s; }
 .tieu-chi li.dat { background: var(--dat-nhat); border-color: #bbe5c8; }
 .tieu-chi li.dat .o { background: var(--dat); border-color: var(--dat); }
 .tieu-chi li.dat .o::after { content: "✓"; }
-.hoi { margin: 12px 0 0; }
-.hoi label { display: block; font-weight: 600; margin-bottom: 4px; }
+.hoi { margin: 12px 0 0; padding: 10px 12px; border-radius: 12px; background: var(--lam-nhat); border: 1px solid #dbe6fb; }
+.hoi label { display: block; font-weight: 600; margin-bottom: 6px; }
+.the > .hoi { counter-increment: hoi; }
+.the > .hoi > label::before { content: counter(hoi); display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--lam); color: #fff; font-size: 13px; font-weight: 800; margin-right: 8px; vertical-align: 1px; }
+.hoi .goi-y::before { content: "💡 "; }
 .hoi textarea, .hoi input[type=text] { width: 100%; border: 1px solid var(--vien); border-radius: 10px; padding: 9px 11px; background: #fff; min-height: 70px; resize: vertical; }
 .hoi input[type=text] { min-height: 0; }
 .hoi textarea:focus, .hoi input:focus, .nhom input:focus { outline: 2px solid var(--chinh); outline-offset: 0; border-color: var(--chinh); }
