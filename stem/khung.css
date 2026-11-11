@@ -149,6 +149,28 @@ button { cursor: pointer; }
 .tieu-chi li.tc-nhom input[type=text] { width: 100%; margin: 4px 0; border: 1px solid var(--vien); border-radius: 8px; padding: 7px 10px; }
 .tcn-chk input { width: 22px; height: 22px; accent-color: var(--dat); margin: 1px 0 0; }
 
+/* lưu bài lên lớp (đầu trang) */
+#lop-nhom { grid-column: 1 / -1; }
+.lop-nhom { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 12px; border-radius: 12px; font-size: 15px; }
+.lop-nhom.chua { background: var(--vang-nhat); border: 1px dashed #f3c26b; }
+.lop-nhom.vao { background: var(--lam-nhat); border: 1px solid #cfe0fb; }
+.ln-chu { flex: 1 1 320px; }
+.ln-chu .goi-y { display: block; }
+.ln-vao { display: flex; gap: 6px; align-items: center; }
+.ln-vao input { width: 150px; border: 1px solid var(--vien); border-radius: 10px; padding: 8px 10px; font-weight: 700; text-transform: uppercase; background: #fff; }
+.ln-hoi { flex-basis: 100%; padding: 10px 12px; border-radius: 10px; background: #fff; border: 1px solid var(--vien); }
+.ln-hoi p { margin: 0 0 8px; }
+.ln-tt { display: inline-block; margin-left: 4px; font-size: 14px; font-weight: 700; }
+.ln-tt.ok { color: var(--dat); } .ln-tt.sua { color: #b45309; } .ln-tt.loi { color: var(--loi); } .ln-tt.dang { color: var(--nhat); }
+.nhom input[readonly] { background: #f1f5f9; color: var(--nhat); }
+.ln-man { position: fixed; inset: 0; z-index: 200; background: rgba(15,23,42,.6); display: grid; place-items: center; padding: 16px; }
+.ln-hop { background: #fff; border-radius: 18px; padding: 22px; max-width: 480px; width: 100%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.3); }
+.ln-hop h2 { margin: 4px 0 8px; font-size: 24px; }
+.ln-hop p { margin: 6px 0; }
+.ln-icon { font-size: 44px; }
+.ln-nut { display: grid; gap: 8px; margin-top: 16px; }
+.ln-nut .btn { justify-content: center; min-height: 48px; font-size: 16px; }
+
 /* nộp sản phẩm và đánh giá chéo (truc-tuyen.js) */
 .tt-hang { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
 .tt-hang label { font-weight: 700; }

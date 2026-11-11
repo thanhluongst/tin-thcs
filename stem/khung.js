@@ -64,7 +64,7 @@
   h.push('<div class="wrap"><div class="nhom" role="group" aria-label="Thông tin nhóm">' +
     '<div><label for="n-ten">Tên nhóm</label><input id="n-ten" data-nhom="ten" placeholder="VD: Nhóm 3"></div>' +
     '<div><label for="n-lop">Lớp</label><input id="n-lop" data-nhom="lop" placeholder="' + D.lop + 'A1"></div>' +
-    '<div><label for="n-tv">Thành viên</label><input id="n-tv" data-nhom="tv" placeholder="An, Minh, Khoa, Lan"></div></div></div>');
+    '<div><label for="n-tv">Thành viên</label><input id="n-tv" data-nhom="tv" placeholder="An, Minh, Khoa, Lan"></div></div><div id="lop-nhom"></div></div>');
   h.push('<div class="wrap"><p class="chu-giai-loai" aria-label="Chú giải màu"><span class="cg doc">Đọc, tìm hiểu</span><span class="cg lam">Nhóm làm, viết</span><span class="cg kt">Kiểm tra, đánh giá</span></p></div>');
   h.push('<nav class="buoc-nav" aria-label="Các bước dự án"><div class="wrap"><ol>' + TEN_BUOC.map(function (t, i) {
     return '<li><button data-di="' + i + '" aria-label="Bước ' + (i + 1) + ": " + t + '"><span class="so">' + (i + 1) + '</span><span class="ten">' + t + "</span></button></li>";
@@ -284,7 +284,7 @@
   };
   var X = D.xuong($("#xuong"), api) || {};
   /* cho phần trực tuyến (truc-tuyen.js): nộp sản phẩm, đánh giá chéo */
-  window.STEM = { D: D, S: S, luu: luu, bao: bao, esc: esc, baoCao: function () { return X.baoCao ? X.baoCao() : ""; } };
+  window.STEM = { D: D, S: S, KHOA: KHOA, luu: luu, bao: bao, esc: esc, baoCao: function () { return X.baoCao ? X.baoCao() : ""; } };
 
   // báo cáo
   function inBaoCao() {

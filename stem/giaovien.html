@@ -6,7 +6,7 @@
 <title>Giáo viên – Đánh giá chéo STEM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="khung.css?v=5">
+<link rel="stylesheet" href="khung.css?v=6">
 <style>
 .vao { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end; }
 .vao label { font-size: 13px; font-weight: 700; color: var(--nhat); display: block; margin-bottom: 3px; }
@@ -82,7 +82,7 @@ table.xh tr.chon td { background: var(--lam-nhat); }
   <div id="trong" hidden>
     <div class="the" data-loai="doc"><h3 id="tieu-de">Buổi</h3>
       <p class="lk" style="margin:0">Đường link cho học sinh (đã điền sẵn mã buổi): <a id="lk-hs" target="_blank" rel="noopener"></a> <button class="btn nho" id="chep">📋 Chép</button></p>
-      <p class="goi-y" style="margin:6px 0 0">Học sinh làm dự án, ghi Tên nhóm, rồi ở Bước 5 bấm <b>“Vào buổi và nộp sản phẩm”</b>.</p>
+      <p class="goi-y" style="margin:6px 0 0">Đầu tiết, mỗi nhóm ghi <b>Tên nhóm</b> và <b>Mã buổi</b> ở đầu trang rồi bấm <b>Vào lớp</b>; bài tự lưu lên lớp mỗi phút. <b>Dự án học nhiều tuần: giữ nguyên mã buổi này cho cả dự án</b> (mỗi lớp một mã); tuần sau nhóm nhập lại đúng mã buổi và tên nhóm là mở được bài cũ trên máy bất kì. Nhắc nhóm bấm “💾 Lưu ngay” trước khi hết tiết.</p>
     </div>
 
     <div class="the" data-loai="kt"><h3>Điều khiển đánh giá chéo</h3>
@@ -105,7 +105,7 @@ table.xh tr.chon td { background: var(--lam-nhat); }
 
     <div class="the" data-loai="kt"><h3>Thống kê và xếp hạng <span class="goi-y" id="cap-nhat" style="font-weight:400;text-transform:none"></span></h3>
       <div class="bang-wrap"><table class="xh"><thead><tr>
-        <th>Hạng</th><th>Nhóm</th><th>Nộp lúc</th><th>Tiêu chí đạt<span class="it">máy kiểm tra</span></th><th>Tự đánh giá</th>
+        <th>Hạng</th><th>Nhóm</th><th>Lưu lần cuối<span class="it">bước đã xong</span></th><th>Tiêu chí đạt<span class="it">máy kiểm tra</span></th><th>Tự đánh giá</th>
         <th>Nhóm bạn chấm<span class="it">trung bình · số lượt</span></th><th>Đã chấm bạn</th><th>Giáo viên chấm</th><th>Tổng</th>
       </tr></thead><tbody id="bang"></tbody></table></div>
       <p class="goi-y" id="ghi-chu"></p>
@@ -119,7 +119,7 @@ table.xh tr.chon td { background: var(--lam-nhat); }
 <div class="chieu" id="man-chieu" hidden></div>
 
 <script src="../chung/config.js?v=23"></script>
-<script src="../chung/api.js?v=28"></script>
+<script src="../chung/api.js?v=29"></script>
 <script src="../chung/tuc-thi.js?v=2"></script>
 <script>
 (function () {
@@ -256,7 +256,7 @@ table.xh tr.chon td { background: var(--lam-nhat); }
     return hs;
   }
 
-  function gio(t) { if (!t) return "–"; var d = new Date(t); return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
+  function gio(t) { if (!t) return "–"; var d = new Date(t), h = ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); return new Date().toDateString() === d.toDateString() ? h : h + " " + d.getDate() + "/" + (d.getMonth() + 1); }
   function ve() {
     if (!DU) return;
     var hs = tinh(), n = hs.length;
@@ -264,14 +264,14 @@ table.xh tr.chon td { background: var(--lam-nhat); }
       return '<tr data-cid="' + esc(x.d.clientId) + '"' + (CHON === x.d.clientId ? ' class="chon"' : "") + ">" +
         "<td>" + (x.hang ? '<span class="hang' + (x.hang <= 3 ? " h" + x.hang : "") + '">' + x.hang + "</span>" : "–") + "</td>" +
         '<td class="ten">' + esc(x.d.group || "?") + (x.a.lop ? '<span class="it">' + esc(x.a.lop) + "</span>" : "") + "</td>" +
-        "<td>" + gio(x.d.t) + "</td>" +
+        "<td>" + gio(x.d.t) + (x.a.buoc != null ? '<span class="it">' + x.a.buoc + "/5 bước</span>" : "") + "</td>" +
         "<td>" + (x.a.ntc ? (x.a.tc || []).length + "/" + x.a.ntc : "–") + (x.a.tcn != null ? '<span class="it">riêng: ' + (x.a.tcn ? "✓" : "✗") + "</span>" : "") + "</td>" +
         "<td>" + so(x.a.tdg) + "</td>" +
         "<td><b>" + so(x.tb) + '</b><span class="it">' + x.diem.length + " lượt</span></td>" +
         "<td>" + x.da + "/" + Math.max(0, n - 1) + (n > 1 && x.da < n - 1 && MO ? '<span class="it canh">còn thiếu</span>' : "") + "</td>" +
         '<td><div class="gv-o"><input type="number" min="0" max="10" step="0.5" data-gv value="' + (x.gv == null ? "" : x.gv) + '" aria-label="Điểm giáo viên cho ' + esc(x.d.group) + '"></div></td>' +
         '<td class="tong">' + so(x.tong) + "</td></tr>";
-    }).join("") : '<tr><td colspan="9">Chưa có nhóm nào nộp sản phẩm. Đưa đường link ở trên cho học sinh.</td></tr>';
+    }).join("") : '<tr><td colspan="9">Chưa có nhóm nào vào lớp. Đưa đường link ở trên cho học sinh.</td></tr>';
     var lech = hs.filter(function (x) { return x.tb != null && x.a.tdg != null && x.a.tdg - x.tb >= 2; });
     $("#ghi-chu").innerHTML = n ? "Bấm tên nhóm để xem sản phẩm, đọc nhận xét của nhóm bạn, ẩn nhận xét không phù hợp và ghi nhận xét của thầy cô." +
       (lech.length ? '<br><span class="canh">Tự đánh giá cao hơn điểm nhóm bạn chấm từ 2 điểm trở lên: ' + lech.map(function (x) { return esc(x.d.group); }).join(", ") + ".</span>" : "") : "";

@@ -43,9 +43,24 @@ function doGet(e) {
       case "ver": if (p.hot === "1") hot_(id_(p.bai), id_(p.buoi)); return { v: getVer_(id_(p.bai), id_(p.buoi)) };
       case "checkpin": checkPin_(p.pin); return {};
       case "class": checkPin_(p.pin); return { docs: getClass_(id_(p.bai), id_(p.buoi)) };
+      case "load": return loadGroup_(id_(p.bai), id_(p.buoi), id_(p.clientId));
       default: throw new Error("Hành động không hợp lệ");
     }
   });
+}
+
+/* Dự án STEM nhiều tiết: nhóm mở lại bài đã lưu ở tiết trước, trên bất kì máy nào.
+   Mã máy của nhóm STEM là "g-<tên nhóm không dấu>", nên cùng mã buổi + cùng tên nhóm = cùng một hàng.
+   Chỉ mở cho các bài "stem-…" (bài học thường không cho đọc lại bài của nhóm khác). */
+function loadGroup_(bai, buoi, cid) {
+  if (bai.indexOf("stem-") !== 0) throw new Error("Bài này không hỗ trợ mở lại trên máy khác");
+  const sh = SpreadsheetApp.getActive().getSheetByName(bai);
+  const r = sh ? findRow_(sh, bai + "|" + buoi + "|" + cid) : 0;
+  if (!r) return { found: false };
+  const v = sh.getRange(r, 1, 1, COL_JSON).getValues()[0];
+  let data = {};
+  try { data = JSON.parse(v[COL_JSON - 1] || "{}"); } catch (err) {}
+  return { found: true, group: unq_(v[3]), t: v[5] instanceof Date ? v[5].getTime() : 0, data: data };
 }
 
 function doPost(e) {

@@ -69,6 +69,8 @@ async function demoCall(action, p){
   if (action === "comment") { dPin(p.pin); const k = p.bai + "|" + p.buoi + "|" + p.clientId; const nx = d.nx[k] || {};
     const t = String(p.text || "").trim(); if (t) nx[p.task] = t; else delete nx[p.task]; d.nx[k] = nx; d.hot = d.hot || {}; d.hot[p.bai + "|" + p.buoi] = Date.now(); dSave(d); return {ok: true, nx}; }
   if (action === "checkpin") { dPin(p.pin); return {ok: true}; }
+  if (action === "load") { if (String(p.bai).indexOf("stem-") !== 0) throw new Error("Bài này không hỗ trợ mở lại trên máy khác");
+    const x = d.bai[p.bai + "|" + p.buoi + "|" + p.clientId]; return x ? {ok: true, found: true, group: x.group, t: x.t, data: x.data} : {ok: true, found: false}; }
   if (action === "stats") { dPin(p.pin); const by = {};
     Object.values(d.bai).forEach(x => { const s = by[x.bai] = by[x.bai] || {bai: x.bai, cau: 0, nop: 0, tong: 0, du: 0, last: 0, m: {}};
       const n = Object.keys((x.data && x.data.sub) || {}).filter(k => x.data.sub[k]).length;
@@ -106,6 +108,8 @@ window.API = {
     .then(j => j.nx || null)
     .catch(e => { if (/Hành động không hợp lệ/i.test(e.message)) throw new Error("Cần cập nhật Code.gs trong Apps Script để lưu nhận xét (xem README)"); throw e; }),
   checkPin: pin => call("GET", "checkpin", {pin}),
+  /* Dự án STEM nhiều tiết: đọc lại bài nhóm đã lưu (Code.gs cũ chưa có thì báo cần cập nhật) */
+  load: (bai, buoi, clientId) => call("GET", "load", {bai, buoi, clientId}).catch(newGs),
   /* Số phiên bản của buổi học: đổi khi có bài nộp mới (Code.gs cũ chưa có thì báo lỗi "không hợp lệ") */
   /* hot = thầy cô đang trình chiếu: máy học sinh hỏi nhanh (2–3 giây) để nhận chốt / khen gần như ngay */
   ver: (bai, buoi, hot) => call("GET", "ver", hot ? {bai, buoi, hot: "1"} : {bai, buoi}).then(j => String(j.v || "0")),
