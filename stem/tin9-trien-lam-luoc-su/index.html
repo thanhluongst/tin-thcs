@@ -6,7 +6,7 @@
 <title>Gian triển lãm lược sử – Dự án STEM Tin học 9</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="../khung.css?v=1">
+<link rel="stylesheet" href="../khung.css?v=2">
 <style>
 .tg-ds { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 6px; }
 .tg-ds li { display: flex; gap: 8px; align-items: center; border: 1px solid var(--vien); border-radius: 10px; padding: 6px 8px; background: #fff; }
@@ -64,6 +64,10 @@ window.DU_AN = {
     ]
   },
 
+  tieuChiNhom: {
+    viDu: "VD: Khách xem 3 phút trả lời đúng ít nhất 2/3 câu hỏi của nhóm.",
+    goiY: "Tiêu chí phải kiểm tra được: đo thời gian, đếm số câu trả lời đúng của khách, đếm số tệp…"
+  },
   tieuChi: [
     { k: "tg", t: "<b>Dòng thời gian</b> sắp xếp đúng thứ tự các mốc." },
     { k: "st", t: "Sơ đồ tư duy có <b>chủ đề trung tâm</b> và <b>ít nhất 4 nhánh chính</b>." },
@@ -74,7 +78,7 @@ window.DU_AN = {
 
   buoc2: {
     kienThuc: [
-      { mon: "S", ten: "Lịch sử khoa học máy tính", nd: "<ul><li><b>1642</b> Blaise Pascal: máy tính cơ học Pascaline.</li><li><b>1833</b> Charles Babbage: thiết kế máy phân tích.</li><li><b>1945</b> ENIAC: dùng đèn điện tử chân không.</li><li><b>1959</b> IBM 7090: dùng bóng bán dẫn.</li><li><b>1964</b> IBM System/360: mạch tích hợp.</li><li><b>1973</b> Micral: máy tính cá nhân dùng bộ vi xử lí.</li><li><b>2007</b> iPhone: điện thoại thông minh.</li></ul>" },
+      { mon: "S", ten: "Từ bánh răng đến bóng bán dẫn", nd: "<p>Máy tính làm việc nhờ những <b>công tắc</b> bật/tắt. Mỗi thế hệ dùng một hiện tượng vật lí khác:</p><ul><li><b>Bánh răng</b> (Pascaline 1642, Babbage 1833): quay đủ 10 nấc thì đẩy bánh bên cạnh 1 nấc, giống phép “nhớ 1”. Chuyển động <b>cơ học</b>, chậm, dễ kẹt.</li><li><b>Đèn điện tử chân không</b> (ENIAC 1945): sợi đốt nung nóng phát ra electron, dòng điện qua đèn được bật/tắt rất nhanh. Nhưng đèn <b>nóng, tốn điện, hay cháy</b>: ENIAC có khoảng 18 000 đèn, tiêu thụ khoảng 150 kW.</li><li><b>Bóng bán dẫn</b> (IBM 7090, 1959): công tắc làm bằng <b>chất bán dẫn</b> (silic), không cần nung nóng, nhỏ, mát, bền, ít tốn điện.</li><li><b>Mạch tích hợp</b> (IBM System/360, 1964) và <b>bộ vi xử lí</b> (Micral 1973, iPhone 2007): hàng nghìn rồi hàng tỉ bóng bán dẫn tí hon trên một chip.</li></ul>" },
       { mon: "T", ten: "Công cụ trực quan", nd: "<ul><li><b>Sơ đồ tư duy</b> (MindMaple Lite): chèn tệp bằng <b>Insert/Attachment</b>, chèn đường liên kết bằng <b>Insert/Hyperlink</b>.</li><li><b>Bài trình chiếu</b>: hình ảnh, sơ đồ (SmartArt), video.</li><li><b>Bảng tính</b>: dự toán kinh phí bằng công thức.</li></ul>" },
       { mon: "E", ten: "Thiết kế gian trưng bày", nd: "<p>Khách tham quan chỉ dừng vài phút: thông tin cần <b>có cấu trúc</b> (chủ đề → nhánh → chi tiết), đi theo <b>trình tự thời gian</b>, có ảnh và video đính kèm để ai muốn tìm hiểu sâu thì mở ra xem.</p>" },
       { mon: "M", ten: "Dự toán kinh phí", nd: "<p><b>Thành tiền = Số lượng × Đơn giá</b>; <b>Tổng = cộng các thành tiền</b>. Ví dụ: 8 ảnh màu × 8 000 đ = 64 000 đ. Trong bảng tính: <code>=C3*D3</code>, <code>=SUM(E3:E6)</code>. Tổng phải ≤ kinh phí được cấp.</p>" }
@@ -83,24 +87,20 @@ window.DU_AN = {
       { q: "Muốn đưa đường liên kết đến một video trên Internet vào nhánh của sơ đồ tư duy, em dùng lệnh:", o: ["Insert/Attachment", "Insert/Hyperlink", "File/Save As", "Insert/Picture"], d: 1, g: "Đường liên kết dùng <b>Insert/Hyperlink</b>; tệp có trên máy (ảnh, văn bản, bảng tính) dùng <b>Insert/Attachment</b>." },
       { q: "Máy tính nào ra đời sớm nhất?", o: ["ENIAC", "IBM 7090", "Pascaline", "Micral"], d: 2, g: "<b>Pascaline</b> của Blaise Pascal (1642), sớm hơn rất nhiều so với ENIAC (1945)." },
       { q: "In 8 ảnh màu, đơn giá 8 000 đồng/ảnh. Thành tiền là:", o: ["16 000 đồng", "64 000 đồng", "80 000 đồng", "8 008 đồng"], d: 1, g: "8 × 8 000 = <b>64 000 đồng</b>." },
+      { q: "Vì sao máy tính dùng bóng bán dẫn nhỏ hơn, mát hơn và ít tốn điện hơn máy dùng đèn điện tử?", o: ["Bóng bán dẫn làm bằng chất bán dẫn, không cần sợi đốt nung nóng để bật/tắt dòng điện.", "Bóng bán dẫn chạy bằng pin.", "Bóng bán dẫn không cần điện.", "Bóng bán dẫn làm bằng bánh răng nhỏ."], d: 0, g: "Đèn điện tử phải <b>nung nóng sợi đốt</b> để phát electron nên nóng, tốn điện. Bóng bán dẫn điều khiển dòng điện ngay trong <b>chất bán dẫn</b> nên nhỏ, mát, tiết kiệm điện." },
       { q: "Công cụ nào phù hợp nhất để thể hiện các mốc phát triển theo năm?", o: ["Dòng thời gian", "Bảng chữ dài", "Biểu đồ tròn", "Thư điện tử"], d: 0, g: "<b>Dòng thời gian</b> cho thấy trình tự và khoảng cách giữa các mốc một cách trực quan." }
     ]
   },
 
   buoc3: {
-    phuongAn: {
-      tieuDe: "Nhóm em tổ chức nội dung sơ đồ tư duy theo cách nào?",
-      o: [
-        ["Theo các thế hệ / giai đoạn", "Mỗi nhánh chính là một giai đoạn (cơ học, đèn điện tử, bán dẫn, mạch tích hợp, máy tính cá nhân…), nhánh con là các máy tiêu biểu kèm tệp ảnh, văn bản."],
-        ["Liệt kê tên máy theo thứ tự chữ cái", "Mỗi nhánh là một máy, xếp theo A, B, C."],
-        ["Chỉ một nhánh chứa tất cả", "Đặt hết các máy vào một nhánh cho gọn."]
+    soSanh: {
+      tieuDe: "So sánh các cách tổ chức sơ đồ tư duy cho gian triển lãm",
+      phuongAn: [
+        ["Theo thế hệ linh kiện", "Nhánh chính: bánh răng, đèn điện tử, bóng bán dẫn, mạch tích hợp/vi xử lí; nhánh con là các máy tiêu biểu."],
+        ["Theo nhà phát minh", "Nhánh chính là các nhà khoa học, công ty (Pascal, Babbage, nhóm ENIAC, IBM…); nhánh con là máy họ làm ra."],
+        ["Theo công dụng", "Nhánh chính: tính toán khoa học, quân sự, văn phòng, cá nhân, di động; nhánh con là các máy tiêu biểu."]
       ],
-      d: 0,
-      g: [
-        "✅ Chia theo <b>giai đoạn</b> cho thấy sự phát triển, dễ đọc, và khớp với dòng thời gian.",
-        "Thứ tự chữ cái không cho thấy sự phát triển theo thời gian, khó hiểu với người xem.",
-        "Không phân cấp thì mất ưu điểm của sơ đồ tư duy: thông tin vẫn rời rạc."
-      ]
+      tieuChi: ["Khớp với dòng thời gian", "Khách hiểu “vì sao máy tính nhỏ dần” trong 3 phút", "Dễ gắn tệp, liên kết đúng chỗ", "Gây tò mò, hấp dẫn khách"]
     },
     hoi: [
       ["Các nhánh chính của sơ đồ tư duy là gì?", ""],
@@ -116,16 +116,17 @@ window.DU_AN = {
 
   buoc5: {
     hoi: [
-      ["Khách tham quan (nhóm bạn) nhận xét gì về gian triển lãm của nhóm em?", ""],
+      ["<b>Thử với khách tham quan:</b> mời một nhóm bạn xem gian của nhóm em 3 phút, rồi hỏi 3 câu (VD: Máy nào ra đời sớm nhất? Linh kiện nào giúp máy tính nhỏ lại? Tổng kinh phí là bao nhiêu?). Khách trả lời đúng mấy câu? Họ góp ý gì?", "Câu nào khách trả lời sai cho thấy phần đó trình bày chưa rõ: nhóm sửa rồi mời khách khác thử lại."],
       ["Còn dư bao nhiêu kinh phí? Nhóm đề xuất dùng phần dư vào việc gì?", ""],
       ["Nếu chia sẻ sơ đồ tư duy để cả nhóm cùng cập nhật, nhóm em dùng cách nào?", "Gợi ý: Bài 7 – chia sẻ để xem, để cập nhật, cộng tác theo thời gian thực."]
     ]
   },
 
   rubric: [
-    ["Dòng thời gian", "Sai nhiều mốc.", "Đúng thứ tự nhưng chưa nêu được đặc điểm từng mốc.", "Đúng thứ tự, nêu được đặc điểm công nghệ của từng mốc."],
+    ["Dòng thời gian", "Sai nhiều mốc.", "Đúng thứ tự nhưng chưa nêu được đặc điểm từng mốc.", "Đúng thứ tự, giải thích được linh kiện của từng thế hệ (bánh răng, đèn điện tử, bán dẫn, mạch tích hợp) và vì sao máy tính nhỏ dần."],
     ["Sơ đồ tư duy", "Ít nhánh, chưa phân cấp.", "Đủ nhánh chính, nhánh con; đính kèm còn thiếu.", "Phân cấp rõ, đính kèm tệp và siêu liên kết đúng chỗ."],
     ["Dự toán kinh phí", "Tính sai hoặc vượt kinh phí.", "Tính đúng nhưng thiếu hạng mục.", "Đủ hạng mục, tính đúng, không vượt; có đề xuất dùng phần dư."],
+    ["Thiết kế và thử nghiệm", "Chọn cách tổ chức nhưng không so sánh, không thử.", "Có so sánh phương án; chưa thử với khách.", "So sánh phương án có lí do; đặt và đạt tiêu chí riêng; thử với khách và sửa theo kết quả."],
     ["Hợp tác và trình bày", "Một bạn làm là chính.", "Có phân công nhưng chưa đều.", "Mọi thành viên đều có việc; giới thiệu gian triển lãm hấp dẫn."]
   ],
 
@@ -134,11 +135,11 @@ window.DU_AN = {
     chuanBi: "Phòng máy có MindMaple Lite (hoặc phần mềm sơ đồ tư duy khác) và bảng tính; thư mục tệp mẫu: KinhPhi.xlsx, Pascaline.png, CharlesBabbage.docx…; máy chiếu.",
     tiet: [
       [["5 phút", "<b>Bước 1.</b> Giới thiệu Triển lãm tin học, kinh phí 200 000 đồng; nhóm nêu vấn đề, tiêu chí."],
-       ["15 phút", "<b>Bước 2.</b> Nhóm đọc 4 thẻ STEM, làm Kiểm tra nhanh. GV chốt lệnh Attachment/Hyperlink, công thức Thành tiền."],
-       ["20 phút", "<b>Bước 3.</b> Nhóm chọn cách tổ chức sơ đồ, liệt kê nhánh chính và tệp đính kèm, phân công."],
+       ["15 phút", "<b>Bước 2.</b> Nhóm đọc 4 thẻ STEM, làm Kiểm tra nhanh. GV chốt: vì sao bóng bán dẫn thay đèn điện tử; lệnh Attachment/Hyperlink; công thức Thành tiền."],
+       ["20 phút", "<b>Bước 3.</b> Nhóm chấm 3 cách tổ chức sơ đồ theo 4 tiêu chí (có thể thêm cách riêng), chọn và giải thích; đặt tiêu chí riêng ở Bước 1; liệt kê nhánh chính, tệp đính kèm, phân công. Không có đáp án đúng duy nhất."],
        ["5 phút", "Nhóm báo cáo nhanh dàn ý sơ đồ."]],
-      [["25 phút", "<b>Bước 4.</b> Nhóm sắp xếp dòng thời gian, dựng sơ đồ tư duy, đính kèm, lập dự toán; đạt 5 tiêu chí. Nhóm khá làm thêm trên MindMaple Lite thật."],
-       ["15 phút", "<b>Bước 5.</b> “Đi tham quan” gian của nhóm bạn (xem màn hình), góp ý; chấm bảng tự đánh giá."],
+      [["25 phút", "<b>Bước 4.</b> Nhóm sắp xếp dòng thời gian, dựng sơ đồ tư duy, đính kèm, lập dự toán; đạt 5 tiêu chí và tiêu chí riêng. Nhóm khá làm thêm trên MindMaple Lite thật."],
+       ["15 phút", "<b>Bước 5.</b> “Thử với khách”: các nhóm đổi máy, xem gian của nhóm bạn 3 phút rồi trả lời 3 câu hỏi của chủ gian; chủ gian ghi kết quả, sửa chỗ khách hiểu sai; chấm bảng tự đánh giá."],
        ["5 phút", "GV chốt; nhóm in/lưu PDF báo cáo."]]
     ],
     luuY: "Dự toán mẫu: 8 ảnh màu (64 000) + 8 tờ chú thích (8 000) + 1 bộ văn phòng phẩm (50 000) = 122 000 đồng, giống bảng KinhPhi.xlsx trong SGK; nhóm có thể thêm giấy A0 nhưng không vượt 200 000."
@@ -344,6 +345,6 @@ window.DU_AN = {
   }
 };
 </script>
-<script src="../khung.js?v=1"></script>
+<script src="../khung.js?v=2"></script>
 </body>
 </html>

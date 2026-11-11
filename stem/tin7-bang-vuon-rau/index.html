@@ -6,7 +6,7 @@
 <title>Báo cáo vườn rau – Dự án STEM Tin học 7</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="../khung.css?v=1">
+<link rel="stylesheet" href="../khung.css?v=2">
 <style>
 .ribbon { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px; background: #f1f5f9; border: 1px solid var(--vien); border-radius: 12px 12px 0 0; }
 .ribbon .nhom-l { display: flex; gap: 4px; align-items: center; padding-right: 8px; border-right: 1px solid var(--vien); }
@@ -26,6 +26,8 @@ table.ss th.rh { width: 30px; }
 table.ss th.sel { background: #cfe8d6; color: #14532d; }
 table.ss td { border: 1px solid #e3e8ee; padding: 3px 6px; height: 26px; white-space: nowrap; cursor: cell; }
 table.ss.an-luoi td { border-color: transparent; }
+table.ss.den-trang td { filter: grayscale(1); }
+table.ss.den-trang td:not(.bd) { border-color: transparent; }
 table.ss td.bd { border: 1px solid #111 !important; }
 table.ss td.in { box-shadow: inset 0 0 0 9999px rgba(22,163,74,.13); }
 table.ss td.hoat { outline: 2px solid #16a34a; outline-offset: -2px; }
@@ -46,7 +48,7 @@ window.DU_AN = {
 
   buoc1: {
     tinhHuong: "Lớp 7A trồng năm luống rau trong dự án <b>Trường học xanh</b>. Bạn lớp trưởng đã nhập số liệu vào bảng tính, nhưng bảng rất khó đọc: tỉ lệ nảy mầm hiện <b>0.933333333</b>, chiều cao hiện <b>11.66666667</b>, chi phí <b>161500</b> không có dấu phân tách, ngày gieo lại hiện thành <b>46270</b>. Tuần sau lớp phải nộp báo cáo cho Ban giám hiệu để xin thêm kinh phí.",
-    nhiemVu: "Dùng các lệnh <b>định dạng dữ liệu số</b> và <b>trình bày bảng tính</b> (gộp ô, căn lề, tô màu nền, kẻ đường viền) để biến bảng số liệu thô thành một bảng báo cáo rõ ràng, đẹp, in ra được.",
+    nhiemVu: "<b>Thiết kế</b> bảng báo cáo cho người đọc là Ban giám hiệu: dùng các lệnh <b>định dạng dữ liệu số</b> và <b>trình bày bảng tính</b> (gộp ô, căn lề, tô màu nền, kẻ đường viền) để bảng rõ ràng, <b>in đen trắng vẫn đọc được</b>, và làm nổi bật số liệu giúp lớp xin thêm kinh phí. Nhóm tự so sánh các cách trình bày, chọn cách tốt nhất và <b>thử với người đọc thật</b>.",
     hoi: [
       ["Bảng hiện tại khó đọc ở những chỗ nào?", "Gợi ý: nhìn từng cột E, F, G, H và dòng tiêu đề."],
       ["Ai sẽ đọc bảng này? Họ cần nhìn thấy nhanh điều gì?", ""],
@@ -61,15 +63,20 @@ window.DU_AN = {
     { k: "cc", t: "Cột Chiều cao (F3:F7) ở dạng <b>Number</b>, cùng 1 chữ số thập phân." },
     { k: "tien", t: "Cột Chi phí (G3:G8) có <b>dấu phân tách hàng nghìn</b>, không có phần thập phân." },
     { k: "ngay", t: "Cột Ngày gieo (H3:H7) hiển thị dạng <b>ngày/tháng/năm</b>." },
-    { k: "vien", t: "Toàn bộ bảng A2:H8 có <b>đường viền</b> (để in ra vẫn thấy)." }
+    { k: "vien", t: "Toàn bộ bảng A2:H8 có <b>đường viền</b> (để in ra vẫn thấy)." },
+    { k: "nb", t: "<b>Làm nổi bật</b> ô Tỉ lệ nảy mầm của loại rau <b>nảy mầm tốt nhất</b> bằng một màu nền riêng (khác màu dòng tên cột và các ô khác trong cột)." }
   ],
+  tieuChiNhom: {
+    viDu: "VD: Bạn nhóm khác tìm ra loại rau lớn nhanh nhất trong vòng 10 giây.",
+    goiY: "Tiêu chí phải kiểm tra được bằng cách đo, đếm hoặc nhờ người khác thử. Nghĩ xem Ban giám hiệu cần gì khi đọc bảng."
+  },
 
   buoc2: {
     kienThuc: [
       { mon: "S", ten: "Theo dõi cây trồng", nd: "<p><b>Tỉ lệ nảy mầm</b> = số hạt nảy mầm ÷ số hạt gieo. Tỉ lệ cao cho thấy hạt giống tốt, đất đủ ẩm. <b>Chiều cao trung bình</b> cho biết cây lớn nhanh hay chậm, giúp chọn loại rau phù hợp với vườn trường.</p>" },
       { mon: "T", ten: "Lệnh trình bày bảng tính", nd: "<ul><li><b>Format Cells / Number</b>: chọn kiểu Number, Percentage, Date; số chữ số thập phân; <i>Use 1000 Separator</i>.</li><li><b>Merge &amp; Center</b>: gộp ô và căn giữa.</li><li><b>Borders</b>: kẻ đường viền; <b>Fill Color</b>: tô màu nền.</li></ul><p>Định dạng chỉ thay đổi <b>cách hiển thị</b>, không thay đổi giá trị trong ô.</p>" },
-      { mon: "E", ten: "Thiết kế bảng để in", nd: "<p>Đường lưới mờ trên màn hình <b>không được in ra</b>. Muốn bảng in có khung, phải <b>kẻ đường viền</b>. Tiêu đề nổi bật, tên cột tô nền giúp người đọc định hướng nhanh.</p>" },
-      { mon: "M", ten: "Số thập phân và phần trăm", nd: "<p>0,9333… = <b>93,3%</b> (nhân 100). Làm tròn đến 1 chữ số thập phân giúp so sánh dễ hơn: 11,7 cm và 15,3 cm. Số tiền lớn nên có <b>dấu phân tách hàng nghìn</b>: 161,500.</p>" }
+      { mon: "E", ten: "Thiết kế bảng để in", nd: "<p>Đường lưới mờ trên màn hình <b>không được in ra</b>. Muốn bảng in có khung, phải <b>kẻ đường viền</b>. Tiêu đề nổi bật, tên cột tô nền giúp người đọc định hướng nhanh.</p><p>Máy in của trường thường <b>in đen trắng</b>: màu nền đậm sẽ thành xám đậm, che mất chữ. Kĩ sư luôn <b>thử sản phẩm trong điều kiện thật</b>: bật <i>Xem bản in đen trắng</i> ở Bước 4 để kiểm tra.</p>" },
+      { mon: "M", ten: "Số thập phân và phần trăm", nd: "<p>0,9333… = <b>93,3%</b> (nhân 100). Làm tròn đến 1 chữ số thập phân giúp so sánh dễ hơn: 11,7 cm và 15,3 cm. Số tiền lớn nên có <b>dấu phân tách hàng nghìn</b>: 161,500.</p><p>So sánh hai tỉ lệ gần nhau phải nhìn đủ chữ số: 0,9333 = 93,3% và 0,925 = 92,5%, nên 93,3% lớn hơn. Nếu chỉ hiện 0 chữ số thập phân thì cả hai đều là 93% và người đọc không phân biệt được.</p>" }
     ],
     quiz: [
       { q: "Ô E3 chứa 0.933333333. Định dạng Percentage với 1 chữ số thập phân thì ô hiển thị:", o: ["0.9%", "93.3%", "9333%", "0.93"], d: 1, g: "Kiểu Percentage nhân giá trị với 100 và thêm dấu %: <b>93.3%</b>. Giá trị trong ô vẫn là 0.933333333." },
@@ -80,22 +87,17 @@ window.DU_AN = {
   },
 
   buoc3: {
-    phuongAn: {
-      tieuDe: "Nhóm em chọn cách trình bày nào cho bảng báo cáo?",
-      o: [
-        ["Nhiều màu càng đẹp", "Mỗi cột một màu nền khác nhau, chữ nhiều màu, nhiều kiểu chữ."],
+    soSanh: {
+      tieuDe: "So sánh các cách trình bày bảng báo cáo",
+      phuongAn: [
+        ["Nhiều màu, nhiều kiểu", "Mỗi cột một màu nền, chữ nhiều màu, nhiều kiểu chữ."],
         ["Gọn gàng, nhất quán", "Tiêu đề nổi bật; tên cột một màu nền; số liệu cùng kiểu, cùng số chữ số thập phân; kẻ viền toàn bảng."],
-        ["Giữ nguyên, chỉ in đậm", "Chỉ in đậm tiêu đề, còn lại để như cũ cho nhanh."]
+        ["Gọn gàng + nhấn thông điệp", "Như cách 2, thêm một màu riêng cho số liệu quan trọng nhất mà Ban giám hiệu cần thấy."]
       ],
-      d: 1,
-      g: [
-        "Quá nhiều màu làm rối mắt, người đọc khó tìm thông tin chính. Bảng báo cáo cần <b>rõ ràng, nhất quán</b>.",
-        "✅ Đúng tinh thần thiết kế: <b>ít mà rõ</b>. Màu sắc chỉ để làm nổi bật những chỗ cần chú ý.",
-        "Chưa giải quyết được vấn đề: số liệu vẫn khó đọc (0.933333333, 46270…)."
-      ]
+      tieuChi: ["Đọc nhanh, dễ tìm số liệu", "In đen trắng vẫn rõ", "Nổi bật điều lớp muốn đề xuất", "Làm kịp trong 25 phút"]
     },
     hoi: [
-      ["Nhóm em chọn màu nền nào cho dòng tên cột? Vì sao?", ""],
+      ["Nhóm em chọn màu nền nào cho dòng tên cột và cho ô cần làm nổi bật? In đen trắng thì hai màu đó còn phân biệt được không?", ""],
       ["Mỗi cột E, F, G, H nhóm em định dạng thế nào?", "Ví dụ: Cột E – Percentage, 1 chữ số thập phân."]
     ],
     viec: [
@@ -108,7 +110,7 @@ window.DU_AN = {
 
   buoc5: {
     hoi: [
-      ["Đọc bảng đã trình bày: loại rau nào có tỉ lệ nảy mầm cao nhất? Loại nào lớn nhanh nhất?", ""],
+      ["<b>Thử với người đọc:</b> nhờ một bạn nhóm khác xem bảng (hoặc bản in) và hỏi “Loại rau nào nảy mầm tốt nhất? Loại nào lớn nhanh nhất?”. Bạn ấy trả lời đúng không, mất bao nhiêu giây? Có chỗ nào bạn ấy đọc nhầm?", "Đây là cách kiểm tra tiêu chí “đọc là hiểu ngay”. Nếu bạn đọc nhầm, nhóm sửa bảng rồi thử lại."],
       ["Nhóm em đề xuất gì với Ban giám hiệu cho vụ rau sau?", "Gợi ý: dựa vào số liệu, nên trồng thêm loại nào, bớt loại nào?"],
       ["Nếu làm lại, nhóm sẽ trình bày bảng khác đi ở điểm nào?", ""]
     ]
@@ -116,7 +118,8 @@ window.DU_AN = {
 
   rubric: [
     ["Định dạng dữ liệu số", "Mới định dạng 1 cột số.", "Định dạng đúng 2–3 cột số.", "Đúng cả 4 cột: phần trăm, số thập phân, tiền, ngày."],
-    ["Trình bày bảng", "Chỉ in đậm hoặc tô màu rời rạc.", "Có gộp ô tiêu đề, tô nền tên cột nhưng thiếu viền.", "Tiêu đề gộp ô căn giữa, tên cột nổi bật, kẻ viền toàn bảng, màu sắc hài hoà."],
+    ["Trình bày bảng", "Chỉ in đậm hoặc tô màu rời rạc.", "Có gộp ô tiêu đề, tô nền tên cột nhưng thiếu viền.", "Tiêu đề gộp ô căn giữa, tên cột nổi bật, kẻ viền toàn bảng; làm nổi bật đúng số liệu quan trọng; in đen trắng vẫn rõ."],
+    ["Thiết kế và thử nghiệm", "Chọn cách trình bày nhưng không so sánh, không thử.", "Có so sánh phương án; chưa thử với người đọc.", "So sánh phương án có lí do; đặt và đạt tiêu chí riêng; thử với người đọc và sửa theo góp ý."],
     ["Đọc và dùng số liệu", "Chưa rút ra nhận xét.", "Có nhận xét nhưng chưa dựa vào số liệu cụ thể.", "Nhận xét và đề xuất dựa trên số liệu cụ thể trong bảng."],
     ["Hợp tác và trình bày", "Một bạn làm là chính.", "Có phân công nhưng chưa đều.", "Mọi thành viên đều có việc; trình bày lưu loát."]
   ],
@@ -127,13 +130,13 @@ window.DU_AN = {
     tiet: [
       [["5 phút", "<b>Bước 1.</b> Chiếu bảng số liệu thô; hỏi: Ban giám hiệu đọc bảng này có hiểu không? Nêu vấn đề, tiêu chí."],
        ["15 phút", "<b>Bước 2.</b> Nhóm đọc 4 thẻ STEM, làm Kiểm tra nhanh. GV chốt: định dạng chỉ đổi cách hiển thị, không đổi giá trị."],
-       ["20 phút", "<b>Bước 3.</b> Nhóm chọn cách trình bày, phân công từng cột, ghi cách định dạng mỗi cột."],
-       ["5 phút", "Hai nhóm nêu nhanh phương án."]],
-      [["25 phút", "<b>Bước 4.</b> Nhóm định dạng trên bảng mô phỏng (hoặc Excel); bật “Ẩn đường lưới” để xem bản in; đạt 7 tiêu chí."],
-       ["15 phút", "<b>Bước 5.</b> Nhóm chiếu bảng, đọc số liệu, nêu đề xuất; chấm bảng tự đánh giá."],
+       ["20 phút", "<b>Bước 3.</b> Nhóm chấm 3 cách trình bày theo 4 tiêu chí trong bảng so sánh (có thể thêm cách riêng), chọn và giải thích; đặt tiêu chí riêng ở Bước 1; phân công từng cột. Không có đáp án đúng duy nhất: GV hỏi lại lí do."],
+       ["5 phút", "Hai nhóm chọn khác nhau nêu nhanh lí do."]],
+      [["25 phút", "<b>Bước 4.</b> Nhóm định dạng trên bảng mô phỏng (hoặc Excel); bật “Xem bản in đen trắng” để thử; đạt 8 tiêu chí và tiêu chí riêng."],
+       ["15 phút", "<b>Bước 5.</b> Các nhóm đổi máy “thử với người đọc”: đọc bảng nhóm bạn, trả lời 2 câu hỏi, góp ý; nhóm sửa nếu cần, nêu đề xuất với Ban giám hiệu; chấm bảng tự đánh giá."],
        ["5 phút", "GV chốt kiến thức; nhóm in/lưu PDF báo cáo dự án."]]
     ],
-    luuY: "Chọn vùng: kéo chuột, Shift + bấm, bấm tên cột/hàng, hoặc gõ địa chỉ (VD: A2:H2) vào ô bên trái thanh công thức rồi Enter (tiện trên máy tính bảng)."
+    luuY: "Ô cần làm nổi bật là E3 (Rau cải ngọt 93,3%, cao hơn Mồng tơi 92,5% rất ít: HS phải đọc kĩ số liệu). Bảng màu có sẵn màu <b>xám đậm</b> để HS tự phát hiện qua “Xem bản in đen trắng” rằng nền đậm làm chữ đen khó đọc. Bước 3 không có đáp án đúng duy nhất; đánh giá ở lí do và việc thử nghiệm. Chọn vùng: kéo chuột, Shift + bấm, bấm tên cột/hàng, hoặc gõ địa chỉ (VD: A2:H2) vào ô bên trái thanh công thức rồi Enter (tiện trên máy tính bảng)."
   },
 
   xuong: function (hop, api) {
@@ -192,13 +195,13 @@ window.DU_AN = {
       '<div class="the"><h3>Bảng tính: VuonRau7A.xlsx</h3>' +
       '<div class="ribbon" role="toolbar" aria-label="Lệnh định dạng">' +
       '<div class="nhom-l"><button data-l="b" title="In đậm (Bold)">B</button><button data-l="al-l" title="Căn trái">⇤</button><button data-l="al-c" title="Căn giữa">≡</button><button data-l="al-r" title="Căn phải">⇥</button><button data-l="gop" title="Merge & Center: gộp ô và căn giữa">⊞ Merge &amp; Center</button></div>' +
-      '<div class="nhom-l"><span class="goi-y" style="margin:0">Nền</span><button class="mau" data-nen="#bbf7d0" style="background:#bbf7d0" title="Tô nền xanh lá" aria-label="Tô nền xanh lá"></button><button class="mau" data-nen="#bfdbfe" style="background:#bfdbfe" title="Tô nền xanh dương" aria-label="Tô nền xanh dương"></button><button class="mau" data-nen="#fde68a" style="background:#fde68a" title="Tô nền vàng" aria-label="Tô nền vàng"></button><button class="mau" data-nen="" style="background:#fff" title="Không tô nền" aria-label="Không tô nền">∅</button></div>' +
+      '<div class="nhom-l"><span class="goi-y" style="margin:0">Nền</span><button class="mau" data-nen="#bbf7d0" style="background:#bbf7d0" title="Tô nền xanh lá" aria-label="Tô nền xanh lá"></button><button class="mau" data-nen="#bfdbfe" style="background:#bfdbfe" title="Tô nền xanh dương" aria-label="Tô nền xanh dương"></button><button class="mau" data-nen="#fde68a" style="background:#fde68a" title="Tô nền vàng" aria-label="Tô nền vàng"></button><button class="mau" data-nen="#fdba74" style="background:#fdba74" title="Tô nền cam" aria-label="Tô nền cam"></button><button class="mau" data-nen="#475569" style="background:#475569" title="Tô nền xám đậm" aria-label="Tô nền xám đậm"></button><button class="mau" data-nen="" style="background:#fff" title="Không tô nền" aria-label="Không tô nền">∅</button></div>' +
       '<div class="nhom-l"><button data-l="vien" title="All Borders: kẻ viền mọi ô">▦ Viền</button><button data-l="bo-vien" title="No Border: bỏ viền">□ Bỏ viền</button></div>' +
       '<div class="nhom-l"><select id="kieu-so" aria-label="Kiểu dữ liệu số"><option value="">General</option><option value="num">Number</option><option value="pct">Percentage</option><option value="date">Date</option></select><button data-l="dec+" title="Increase Decimal: thêm chữ số thập phân">.0→.00</button><button data-l="dec-" title="Decrease Decimal: bớt chữ số thập phân">.00→.0</button></div>' +
       "</div>" +
       '<div class="thanh-ct"><input id="hop-ten" aria-label="Ô hoặc vùng đang chọn" value="E3"><span class="fx">fx</span><span class="gt-ct" id="gt-ct"></span></div>' +
       '<div class="bang-cuon"><table class="ss" id="ss"></table></div>' +
-      '<div class="ghi-chu-in"><label><input type="checkbox" id="an-luoi"> Ẩn đường lưới (xem như khi in ra giấy)</label><button class="btn nho" id="lam-lai">↺ Trả về bảng thô</button></div>' +
+      '<div class="ghi-chu-in"><label><input type="checkbox" id="an-luoi"> Ẩn đường lưới (xem như khi in ra giấy)</label><label><input type="checkbox" id="den-trang"> Xem bản in đen trắng</label><button class="btn nho" id="lam-lai">↺ Trả về bảng thô</button></div>' +
       '<p class="goi-y">Chọn ô: bấm chuột, kéo chuột hoặc Shift + bấm để chọn vùng; bấm chữ cột/số hàng để chọn cả cột/hàng; hoặc gõ địa chỉ như <b>A2:H2</b> vào ô bên trái rồi Enter.</p></div>';
 
     var bang = hop.querySelector("#ss");
@@ -234,6 +237,11 @@ window.DU_AN = {
       api.dat("tien", tat(2, 7, 6, 6, function (F) { return F.nf === "num" && F.dec === 0; }));
       api.dat("ngay", tat(2, 6, 7, 7, function (F) { return F.nf === "date"; }));
       api.dat("vien", tat(1, 7, 0, 7, function (F) { return F.bd; }));
+      // ô tỉ lệ nảy mầm cao nhất có màu nền riêng
+      var rMax = 2; for (var r = 3; r <= 6; r++) if (O[r + ",4"].v > O[rMax + ",4"].v) rMax = r;
+      var nenMax = f(rMax, 4).nen, rieng = !!nenMax && nenMax !== f(1, 4).nen;
+      for (var r2 = 2; r2 <= 6; r2++) if (r2 !== rMax && f(r2, 4).nen === nenMax) rieng = false;
+      api.dat("nb", rieng);
       api.luu();
     }
 
@@ -297,6 +305,7 @@ window.DU_AN = {
       xong();
     });
     hop.querySelector("#an-luoi").addEventListener("change", function () { bang.classList.toggle("an-luoi", this.checked); });
+    hop.querySelector("#den-trang").addEventListener("change", function () { bang.classList.toggle("den-trang", this.checked); });
     hop.querySelector("#lam-lai").addEventListener("click", function () {
       if (!confirm("Xoá mọi định dạng, trả bảng về dạng thô ban đầu?")) return;
       for (var k in W.f) delete W.f[k]; W.m.length = 0; xong();
@@ -323,6 +332,6 @@ window.DU_AN = {
   }
 };
 </script>
-<script src="../khung.js?v=1"></script>
+<script src="../khung.js?v=2"></script>
 </body>
 </html>

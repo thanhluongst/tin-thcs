@@ -36,11 +36,16 @@
       (mot ? '<input type="text" id="h-' + k + '" data-tl="' + k + '">' : '<textarea id="h-' + k + '" data-tl="' + k + '"></textarea>') +
       (goiY ? '<div class="goi-y">' + goiY + "</div>" : "") + "</div>";
   }
-  function tieuChiHtml() {
+  function tieuChiHtml(o) {
+    var tn = D.tieuChiNhom, them = "";
+    if (tn && o === 1) them = '<li class="tc-nhom"><span class="o" aria-hidden="true">★</span><span style="flex:1"><label for="h-tc-nhom"><b>Tiêu chí riêng của nhóm em</b> (tự đặt, tự kiểm tra ở Bước 4)</label>' +
+      '<input type="text" id="h-tc-nhom" data-tl="tc-nhom" placeholder="' + esc(tn.viDu || "") + '">' + (tn.goiY ? '<span class="goi-y">' + tn.goiY + "</span>" : "") + "</span></li>";
+    if (tn && o === 4) them = '<li class="tc-nhom" data-tcn><label class="tcn-chk"><input type="checkbox" data-tcn-chk aria-label="Nhóm kiểm tra: đạt tiêu chí riêng"></label><span><b>Tiêu chí riêng của nhóm:</b> <span class="tcn-text"></span> <span class="goi-y">(nhóm tự kiểm tra rồi đánh dấu)</span></span></li>';
     return '<ul class="tieu-chi">' + D.tieuChi.map(function (t) {
       return '<li data-tc="' + t.k + '"><span class="o" aria-hidden="true"></span><span>' + t.t + "</span></li>";
-    }).join("") + "</ul>";
+    }).join("") + them + "</ul>";
   }
+  var MUC_SS = ["–", "✗ Kém", "◐ Được", "✓ Tốt"];
   function chanBuoc(i) {
     return '<div class="chan-buoc"><label class="xong-buoc"><input type="checkbox" data-xong="' + i + '"> Nhóm em đã xong bước ' + (i + 1) + "</label><span>" +
       (i > 0 ? '<button class="btn" data-di="' + (i - 1) + '">← Bước ' + i + "</button> " : "") +
@@ -71,7 +76,7 @@
   h.push('<section class="buoc" data-buoc="0">' + dau(0));
   h.push('<div class="the tinh-huong"><span class="nhan-the">Tình huống</span>' + b1.tinhHuong + "</div>");
   h.push('<div class="the nhiem-vu"><span class="nhan-the">Nhiệm vụ của nhóm</span>' + b1.nhiemVu + "</div>");
-  h.push('<div class="the"><h3>Tiêu chí sản phẩm</h3><p class="goi-y" style="margin:0">Ô vuông tự đánh dấu ✓ khi sản phẩm ở Bước 4 đạt tiêu chí.</p>' + tieuChiHtml() + "</div>");
+  h.push('<div class="the"><h3>Tiêu chí sản phẩm</h3><p class="goi-y" style="margin:0">Ô vuông tự đánh dấu ✓ khi sản phẩm ở Bước 4 đạt tiêu chí.</p>' + tieuChiHtml(1) + "</div>");
   h.push('<div class="the"><h3>Nhóm em trả lời</h3>' + b1.hoi.map(function (q, j) { return hoi("b1-" + j, q[0], q[1]); }).join("") + "</div>");
   h.push(chanBuoc(0) + "</section>");
 
@@ -90,7 +95,18 @@
 
   // Bước 3
   h.push('<section class="buoc" data-buoc="2">' + dau(2));
-  if (b3.phuongAn) {
+  var ss = b3.soSanh, nPa = ss ? ss.phuongAn.length + 1 : 0;
+  if (ss) {
+    h.push('<div class="the"><h3>' + ss.tieuDe + '</h3><p class="goi-y" style="margin-top:0">' + (ss.goiY || "Không có đáp án đúng duy nhất. Nhóm bấm vào từng ô để chấm mỗi phương án theo từng tiêu chí (bấm nhiều lần để đổi mức), có thể tự thêm phương án ở dòng cuối, rồi chọn phương án tốt nhất và giải thích.") + "</p>" +
+      '<div class="rubric-wrap"><table class="so-sanh"><thead><tr><th>Phương án</th>' + ss.tieuChi.map(function (t) { return "<th>" + t + "</th>"; }).join("") + '<th>Tổng</th><th>Chọn</th></tr></thead><tbody>' +
+      ss.phuongAn.concat([null]).map(function (p, i) {
+        var ten = p ? "<b>" + p[0] + "</b><br><span class='goi-y'>" + p[1] + "</span>" :
+          '<input type="text" data-tl="b3-pa-rieng" aria-label="Phương án do nhóm tự đề xuất" placeholder="Phương án của nhóm em (nếu có)…">';
+        return "<tr><th>" + ten + "</th>" + ss.tieuChi.map(function (t, j) {
+          return '<td><button class="ss-o" data-ss="' + i + "," + j + '" aria-label="Mức của phương án ' + (i + 1) + " theo tiêu chí " + (j + 1) + '">–</button></td>';
+        }).join("") + '<td class="ss-tong" data-ss-tong="' + i + '">–</td><td><input type="radio" name="ss-chon" data-ss-chon="' + i + '" aria-label="Chọn phương án ' + (i + 1) + '"></td></tr>';
+      }).join("") + "</tbody></table></div>" + hoi("b3-lydo", "Vì sao nhóm em chọn phương án này? Nó còn điểm yếu nào và nhóm khắc phục thế nào?", "") + "</div>");
+  } else if (b3.phuongAn) {
     h.push('<div class="the"><h3>' + b3.phuongAn.tieuDe + '</h3><div class="cau" data-pa><div class="lc">' +
       b3.phuongAn.o.map(function (o, j) { return '<button data-pa="' + j + '"><b>' + o[0] + "</b><br><span class='goi-y'>" + o[1] + "</span></button>"; }).join("") +
       '</div><div class="gt" hidden></div></div></div>');
@@ -103,7 +119,7 @@
 
   // Bước 4
   h.push('<section class="buoc" data-buoc="3">' + dau(3));
-  h.push('<div class="the"><h3>Tiêu chí cần đạt</h3>' + tieuChiHtml() + "</div>");
+  h.push('<div class="the"><h3>Tiêu chí cần đạt</h3>' + tieuChiHtml(4) + "</div>");
   h.push('<div id="xuong"></div>' + chanBuoc(3) + "</section>");
 
   // Bước 5
@@ -189,7 +205,22 @@
   veQuiz();
 
   // chọn phương án
-  if (b3.phuongAn) {
+  if (ss) {
+    S.ss = S.ss || {};
+    var veSs = function () {
+      for (var i = 0; i < nPa; i++) {
+        var t = 0, co = 0;
+        for (var j = 0; j < ss.tieuChi.length; j++) { var v = S.ss[i + "," + j] || 0; if (v) { t += v - 1; co++; } }
+        $('[data-ss-tong="' + i + '"]').textContent = co ? t + "/" + ss.tieuChi.length * 2 : "–";
+        $('[data-ss-chon="' + i + '"]').checked = S.pa === i;
+        $('[data-ss-chon="' + i + '"]').closest("tr").classList.toggle("chon", S.pa === i);
+      }
+      $$("[data-ss]").forEach(function (b) { var v = S.ss[b.dataset.ss] || 0; b.textContent = MUC_SS[v]; b.className = "ss-o m" + v; });
+    };
+    $$("[data-ss]").forEach(function (b) { b.addEventListener("click", function () { S.ss[b.dataset.ss] = ((S.ss[b.dataset.ss] || 0) + 1) % 4; luu(); veSs(); }); });
+    $$("[data-ss-chon]").forEach(function (r) { r.addEventListener("change", function () { S.pa = +r.dataset.ssChon; luu(); veSs(); }); });
+    veSs();
+  } else if (b3.phuongAn) {
     var pa = $("[data-pa]");
     var vePa = function () {
       $$("[data-pa]", pa).forEach(function (b) {
@@ -208,6 +239,18 @@
   // tiêu chí
   function veTc() { $$("[data-tc]").forEach(function (li) { li.classList.toggle("dat", !!S.tc[li.dataset.tc]); }); }
   veTc();
+  if (D.tieuChiNhom) {
+    var tcn = $("[data-tcn]"), tcnChk = $("[data-tcn-chk]");
+    var veTcn = function () {
+      var t = (S.tl["tc-nhom"] || "").trim();
+      $(".tcn-text", tcn).textContent = t || "(nhóm chưa đặt – quay lại Bước 1 để viết)";
+      tcnChk.disabled = !t; tcnChk.checked = !!(t && S.tcNhom);
+      tcn.classList.toggle("dat", !!(t && S.tcNhom));
+    };
+    $("#h-tc-nhom").addEventListener("input", veTcn);
+    tcnChk.addEventListener("change", function () { S.tcNhom = tcnChk.checked; luu(); veTcn(); if (tcnChk.checked) bao("✓ Nhóm xác nhận đạt tiêu chí riêng."); });
+    veTcn();
+  }
 
   // rubric
   function veRub() {
@@ -249,11 +292,18 @@
     r.push("<h2>1. Xác định vấn đề</h2>" + b1.hoi.map(function (q, j) { return tl("b1-" + j, q[0]); }).join(""));
     var dq = b2.quiz.filter(function (c, i) { return S.quiz[i] === c.d; }).length;
     r.push("<h2>2. Kiến thức nền</h2><p>Kiểm tra nhanh: đúng " + dq + "/" + b2.quiz.length + " câu.</p>");
-    r.push("<h2>3. Giải pháp</h2>" + (b3.phuongAn && S.pa != null ? "<p><b>Phương án chọn:</b> " + b3.phuongAn.o[S.pa][0] + "</p>" : "") +
+    var tenPa = function (i) { return i < ss.phuongAn.length ? ss.phuongAn[i][0] : esc(S.tl["b3-pa-rieng"] || "Phương án của nhóm"); };
+    r.push("<h2>3. Giải pháp</h2>" + (ss ? "<table><tr><th>Phương án</th>" + ss.tieuChi.map(function (t) { return "<th>" + t + "</th>"; }).join("") + "</tr>" +
+        Array.apply(null, Array(nPa)).map(function (x, i) {
+          if (i === nPa - 1 && !(S.tl["b3-pa-rieng"] || "").trim()) return "";
+          return "<tr><td>" + (S.pa === i ? "<b>➜ " + tenPa(i) + "</b>" : tenPa(i)) + "</td>" + ss.tieuChi.map(function (t, j) { return "<td>" + MUC_SS[(S.ss || {})[i + "," + j] || 0] + "</td>"; }).join("") + "</tr>";
+        }).join("") + "</table>" + (S.pa != null ? "<p><b>Phương án chọn:</b> " + tenPa(S.pa) + "</p>" : "") + tl("b3-lydo", "Lí do chọn, điểm yếu và cách khắc phục") :
+      (b3.phuongAn && S.pa != null ? "<p><b>Phương án chọn:</b> " + b3.phuongAn.o[S.pa][0] + "</p>" : "")) +
       b3.hoi.map(function (q, j) { return tl("b3-" + j, q[0]); }).join("") +
       "<table><tr><th>Thành viên</th><th>Nhiệm vụ</th></tr>" + b3.viec.map(function (v, j) { return "<tr><td>" + esc(S.pc[j] || "") + "</td><td>" + v + "</td></tr>"; }).join("") + "</table>");
     r.push('<h2>4. Sản phẩm</h2><div class="giu">' + (X.baoCao ? X.baoCao() : "") + "</div>");
-    r.push("<p><b>Tiêu chí đạt:</b></p><ul>" + D.tieuChi.map(function (t) { return "<li>" + (S.tc[t.k] ? "☑ " : "☐ ") + t.t + "</li>"; }).join("") + "</ul>");
+    r.push("<p><b>Tiêu chí đạt:</b></p><ul>" + D.tieuChi.map(function (t) { return "<li>" + (S.tc[t.k] ? "☑ " : "☐ ") + t.t + "</li>"; }).join("") +
+      (D.tieuChiNhom ? "<li>" + (S.tcNhom && (S.tl["tc-nhom"] || "").trim() ? "☑ " : "☐ ") + "<b>Tiêu chí riêng của nhóm:</b> " + (esc(S.tl["tc-nhom"] || "") || "<i>(chưa đặt)</i>") + "</li>" : "") + "</ul>");
     var tong = 0; D.rubric.forEach(function (x, i) { tong += S.rub[i] || 0; });
     r.push("<h2>5. Đánh giá và điều chỉnh</h2><table><tr><th>Tiêu chí</th><th>Mức tự đánh giá</th></tr>" +
       D.rubric.map(function (x, i) { return "<tr><td>" + x[0] + "</td><td>" + (S.rub[i] ? "Mức " + S.rub[i] + ": " + x[S.rub[i]] : "") + "</td></tr>"; }).join("") +

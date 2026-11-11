@@ -104,6 +104,24 @@ button { cursor: pointer; }
 .phan-cong input { width: 100%; border: 0; padding: 4px; background: transparent; }
 .phan-cong input:focus { outline: 2px solid var(--chinh); border-radius: 4px; }
 
+/* so sánh phương án (bước 3) */
+.so-sanh { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px; }
+.so-sanh th, .so-sanh td { border: 1px solid var(--vien); padding: 6px; vertical-align: middle; text-align: center; }
+.so-sanh thead th { background: #f1f5f9; font-size: 13px; }
+.so-sanh tbody th { text-align: left; font-weight: 400; min-width: 170px; }
+.so-sanh tbody th input { width: 100%; border: 1px dashed var(--vien); border-radius: 8px; padding: 6px 8px; }
+.so-sanh tr.chon th, .so-sanh tr.chon td { background: var(--dat-nhat); }
+.ss-o { width: 100%; min-height: 36px; border: 1px solid var(--vien); border-radius: 8px; background: #fff; font-weight: 600; font-size: 13px; }
+.ss-o.m1 { background: var(--loi-nhat); border-color: var(--loi); }
+.ss-o.m2 { background: #fef3c7; border-color: var(--vang); }
+.ss-o.m3 { background: var(--dat-nhat); border-color: var(--dat); }
+.ss-tong { font-weight: 700; white-space: nowrap; }
+.so-sanh input[type=radio] { width: 20px; height: 20px; accent-color: var(--dat); }
+.tieu-chi li.tc-nhom { border-style: dashed; }
+.tieu-chi li.tc-nhom .o { color: #94a3b8; }
+.tieu-chi li.tc-nhom input[type=text] { width: 100%; margin: 4px 0; border: 1px solid var(--vien); border-radius: 8px; padding: 7px 10px; }
+.tcn-chk input { width: 22px; height: 22px; accent-color: var(--dat); margin: 1px 0 0; }
+
 /* đánh giá */
 .rubric { width: 100%; border-collapse: collapse; font-size: 15px; }
 .rubric th, .rubric td { border: 1px solid var(--vien); padding: 8px; vertical-align: top; }
