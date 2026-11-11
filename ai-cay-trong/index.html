@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Nguyễn Thanh Lương – Trường THCS Nhơn Mỹ, Cần Thơ">
+<title>AI Bác Sĩ Cây Trồng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  fontFamily: { sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'] },
+  colors: { khoe: { 50:'#ecfdf3', 100:'#d1fadf', 500:'#16a34a', 600:'#15803d', 700:'#166534' },
+            benh: { 50:'#fff4ed', 100:'#ffe4d0', 500:'#ea580c', 600:'#c2410c', 700:'#9a3412' } }
+} } };
+</script>
+<style>
+  body { background: #f3f8f1; }
+  .la-svg { filter: drop-shadow(0 6px 10px rgba(30,60,20,.25)); }
+  .the-dt { animation: hien .35s ease both; }
+  @keyframes hien { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform:none } }
+  @keyframes bay-trai { to { opacity:0; transform: translate(-260px,-40px) rotate(-25deg) scale(.5) } }
+  @keyframes bay-phai { to { opacity:0; transform: translate(260px,-40px) rotate(25deg) scale(.5) } }
+  .bay-A { animation: bay-trai .45s ease-in forwards; }
+  .bay-B { animation: bay-phai .45s ease-in forwards; }
+  @keyframes nay { 0%{transform:scale(.6);opacity:0} 70%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+  .nay { animation: nay .4s ease both; }
+  /* băng chuyền */
+  .bang { background: repeating-linear-gradient(90deg,#475569 0 22px,#334155 22px 44px); background-size: 44px 100%; }
+  .bang.chay { animation: chay .6s linear infinite; }
+  @keyframes chay { to { background-position: 44px 0 } }
+  .laser { opacity:0; }
+  .quet .laser { opacity:1; animation: quet 1s ease-in-out 2 alternate; }
+  @keyframes quet { from { top: 12% } to { top: 88% } }
+  .quet .cong-vien { box-shadow: 0 0 0 4px #f43f5e55, 0 0 30px #f43f5e88 inset; }
+  .vat { transition: left 1.1s cubic-bezier(.5,.1,.3,1), transform .5s ease, opacity .5s ease; }
+  @keyframes rung { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  .rung { animation: rung .3s ease 2; }
+  .thanh { transition: width .6s cubic-bezier(.3,.8,.3,1); }
+  .tab-on { background:#fff; color:#14532d; box-shadow: 0 -3px 0 #16a34a inset, 0 2px 8px rgba(0,0,0,.08); }
+  kbd { font-family: inherit; background:#fff; border:1px solid #cbd5e1; border-bottom-width:3px; border-radius:6px; padding:0 .4em; font-size:.85em; }
+  #toast { transition: opacity .3s, transform .3s; }
+  .an { opacity:0; transform: translate(-50%,20px); pointer-events:none; }
+</style>
+</head>
+<body class="font-sans text-slate-800 min-h-screen">
+
+<header class="bg-gradient-to-r from-emerald-700 via-green-600 to-lime-500 text-white">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center gap-3">
+    <div class="text-4xl" aria-hidden="true">🩺🌿</div>
+    <div class="flex-1 min-w-[220px]">
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">AI Bác Sĩ Cây Trồng</h1>
+      <p class="text-emerald-50 text-sm sm:text-base">Em hãy huấn luyện AI giúp bác nông dân phân loại <b>lá khỏe mạnh</b> và <b>lá nhiễm bệnh</b> trên băng chuyền nông trại.</p>
+    </div>
+    <div class="flex gap-2">
+      <button id="nut-am" class="bg-white/20 hover:bg-white/30 rounded-xl px-3 py-2 font-semibold" title="Bật/tắt âm thanh">🔊</button>
+      <button id="nut-toan" class="bg-white/20 hover:bg-white/30 rounded-xl px-3 py-2 font-semibold" title="Toàn màn hình (máy chiếu)">⛶ Toàn màn hình</button>
+    </div>
+  </div>
+  <nav class="max-w-6xl mx-auto px-4 flex gap-1 overflow-x-auto" role="tablist" id="tabs"></nav>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-5">
+  <section id="b1" class="buoc"></section>
+  <section id="b2" class="buoc hidden"></section>
+  <section id="b3" class="buoc hidden"></section>
+  <section id="b4" class="buoc hidden"></section>
+</main>
+
+<div id="toast" class="an fixed left-1/2 bottom-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl text-base max-w-[92vw]"></div>
+
+<footer class="text-center text-xs text-slate-500 pb-6 px-4">Mô hình học máy đơn giản (Naive Bayes – tính điểm trọng số đặc trưng) chạy ngay trên trình duyệt từ dữ liệu em dạy. · Nguyễn Thanh Lương – THCS Nhơn Mỹ</footer>
+
+<script>
+"use strict";
+/* ================== DỮ LIỆU BÀI HỌC ================== */
+const NHAN = {
+  A: { ten: 'Lá khỏe mạnh', icon: '🌿', mau: '#16a34a', nhat: '#dcfce7', phim: '←' },
+  B: { ten: 'Lá nhiễm bệnh', icon: '🦠', mau: '#ea580c', nhat: '#ffedd5', phim: '→' }
+};
+const DAC = [
+  { k: 'mau',  ten: 'Màu sắc',    icon: '🎨', v: { xanh: 'Xanh tươi', vang: 'Vàng úa', nau: 'Nâu' } },
+  { k: 'dom',  ten: 'Đốm bề mặt', icon: '🔍', v: { khong: 'Không đốm', tron: 'Đốm tròn', loang: 'Đốm loang' } },
+  { k: 'vien', ten: 'Viền lá',    icon: '✂️', v: { phang: 'Phẳng', quan: 'Quăn queo', rach: 'Rách' } }
+];
+const MAUVAT = { xanh: '#22c55e', vang: '#eab308', nau: '#92400e', khong: '#e2e8f0', tron: '#57534e', loang: '#a8a29e', phang: '#93c5fd', quan: '#c4b5fd', rach: '#fca5a5' };
+
+// Mẫu để dạy (Bước 1)
+const MAU_DAY = [
+  { id: 'cam',     ten: 'Lá cam xanh bóng',              mau: 'xanh', dom: 'khong', vien: 'phang', dang: 'oval', dung: 'A', bong: 1 },
+  { id: 'lua',     ten: 'Lá lúa xanh thẳng',             mau: 'xanh', dom: 'khong', vien: 'phang', dang: 'dai',  dung: 'A' },
+  { id: 'buoi',    ten: 'Lá bưởi non',                   mau: 'xanh', dom: 'khong', vien: 'phang', dang: 'oval', dung: 'A', la: ['#4d9a2c', '#a8e063', '#3b7a1f'] },
+  { id: 'tao',     ten: 'Lá táo đọng giọt sương',        mau: 'xanh', dom: 'khong', vien: 'phang', dang: 'oval', dung: 'A', suong: 1 },
+  { id: 'caixoan', ten: 'Lá cải xoăn tươi',              mau: 'xanh', dom: 'khong', vien: 'quan',  dang: 'tron', dung: 'A' },
+  { id: 'bang',    ten: 'Lá bàng chuyển vàng tự nhiên',  mau: 'vang', dom: 'khong', vien: 'phang', dang: 'trung', dung: 'A' },
+  { id: 'cachua',  ten: 'Lá cà chua đốm vàng',           mau: 'vang', dom: 'tron',  vien: 'phang', dang: 'oval', dung: 'B', domMau: '#4e342e' },
+  { id: 'ot',      ten: 'Lá ớt xoăn ngọn',               mau: 'vang', dom: 'khong', vien: 'quan',  dang: 'oval', dung: 'B', w: 44 },
+  { id: 'khoaitay',ten: 'Lá khoai tây cháy rìa nâu',     mau: 'nau',  dom: 'loang', vien: 'rach',  dang: 'tim',  dung: 'B', domMau: '#2b1608' },
+  { id: 'chanh',   ten: 'Lá chanh bị nấm trắng',         mau: 'xanh', dom: 'loang', vien: 'phang', dang: 'oval', dung: 'B', domMau: '#f8fafc' },
+  { id: 'hong',    ten: 'Lá hoa hồng đốm đen',           mau: 'xanh', dom: 'tron',  vien: 'phang', dang: 'oval', dung: 'B', domMau: '#111827' },
+  { id: 'ngo',     ten: 'Lá ngô bị sâu ăn rách',         mau: 'xanh', dom: 'khong', vien: 'rach',  dang: 'dai',  dung: 'B' },
+  { id: 'dualeo',  ten: 'Lá dưa leo vàng, đốm loang',    mau: 'vang', dom: 'loang', vien: 'quan',  dang: 'tron', dung: 'B', domMau: '#6b4423' }
+];
+// Mẫu mới đưa lên băng chuyền (Bước 3) – AI chưa từng thấy
+const MAU_THU = [
+  { id: 'phong',   ten: 'Lá phong mùa thu',              mau: 'vang', dom: 'khong', vien: 'phang', dang: 'phong', dung: 'A', la: ['#e8890c', '#ffc93c', '#b8650a'], batngo: 1,
+    gc: 'Lá phong chuyển vàng cam vì <b>mùa thu</b> – hoàn toàn khỏe mạnh! Màu vàng không phải lúc nào cũng là bệnh.' },
+  { id: 'chuoi',   ten: 'Lá chuối xanh mướt',            mau: 'xanh', dom: 'khong', vien: 'phang', dang: 'rong', dung: 'A', gc: 'Xanh, không đốm, viền lành → khỏe.' },
+  { id: 'oi',      ten: 'Lá ổi đốm nâu',                 mau: 'xanh', dom: 'tron',  vien: 'phang', dang: 'oval', dung: 'B', domMau: '#5d4037',
+    gc: 'Lá vẫn <b>xanh</b> nhưng có <b>đốm tròn</b> do nấm → bệnh. AI chỉ nhìn màu sẽ bỏ sót.' },
+  { id: 'mongtoi', ten: 'Lá mồng tơi tươi',              mau: 'xanh', dom: 'khong', vien: 'phang', dang: 'tim',  dung: 'A', gc: 'Lá tươi, lành lặn → khỏe.' },
+  { id: 'nho',     ten: 'Lá nho bị mốc loang',           mau: 'vang', dom: 'loang', vien: 'quan',  dang: 'tron', dung: 'B', domMau: '#7b5e3b', gc: 'Vàng, mốc loang, quăn → bệnh rõ.' },
+  { id: 'bapcai',  ten: 'Lá bắp cải bị sâu ăn',          mau: 'xanh', dom: 'khong', vien: 'rach',  dang: 'tron', dung: 'B',
+    gc: 'Màu xanh, không đốm, nhưng <b>viền rách</b> do sâu ăn → cây đang bị hại.' },
+  { id: 'xoai',    ten: 'Lá xoài non màu nâu đỏ',        mau: 'nau',  dom: 'khong', vien: 'phang', dang: 'dai',  dung: 'A', w: 34, la: ['#8a3b1e', '#c9663a', '#6b2a12'], batngo: 1,
+    gc: 'Lá xoài <b>non</b> tự nhiên có màu nâu đỏ, lớn lên mới xanh – khỏe mạnh!' },
+  { id: 'san',     ten: 'Lá sắn khô cháy',               mau: 'nau',  dom: 'loang', vien: 'rach',  dang: 'tim',  dung: 'B', domMau: '#2b1608', gc: 'Nâu, cháy loang, rách → bệnh.' },
+  { id: 'raumuong',ten: 'Lá rau muống tươi',             mau: 'xanh', dom: 'khong', vien: 'phang', dang: 'dai',  dung: 'A', w: 30, gc: 'Lá tươi → khỏe.' }
+];
+const BO_CHUAN = ['cam', 'lua', 'tao', 'caixoan', 'bang', 'cachua', 'khoaitay', 'chanh', 'hong', 'ngo'];
+// Bẫy thiên kiến: dạy theo cảm tính “cứ xanh là khỏe, cứ vàng/nâu là bệnh”
+const BO_BAY = ['cam', 'caixoan', 'chanh', 'hong', 'ngo', 'bang', 'cachua', 'ot', 'khoaitay', 'dualeo'];
+const MUC_TIEU = 10;
+
+/* ================== TRẠNG THÁI ================== */
+let day = [];            // {s, nhan, nguon}
+let hangDoi = [], viTri = 0;
+let tab = 1;
+let kq = [];             // kết quả lần kiểm thử gần nhất {s, du}
+let lichSu = [];         // {ten, acc}
+let soLanThu = 0, dangChay = false, dungLai = false;
+let amThanh = true;
+const byId = id => document.getElementById(id);
+const tim = id => MAU_DAY.concat(MAU_THU).find(s => s.id === id);
+
+/* ================== VẼ LÁ BẰNG SVG ================== */
+let uid = 0;
+function soNgauNhien(seed) { let x = seed % 2147483647; if (x <= 0) x += 2147483646; return () => (x = x * 16807 % 2147483647) / 2147483647; }
+function bam(s) { let h = 7; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 1000003; return h + 11; }
+const MAU_LA = { xanh: ['#2f8f3a', '#7ed36f', '#1f6b28'], vang: ['#d9a400', '#ffe066', '#a87d00'], nau: ['#6d3b1a', '#a8683a', '#47250f'] };
+const HINH = {
+  oval:  { w: 64, f: t => Math.pow(Math.sin(Math.PI * Math.pow(t, .85)), .8) },
+  dai:   { w: 20, f: t => Math.pow(Math.sin(Math.PI * t), .35) * (1 - .45 * t) },
+  tron:  { w: 78, f: t => Math.sqrt(Math.max(0, 1 - Math.pow(2 * t - 1, 2))) },
+  tim:   { w: 74, f: t => Math.pow(Math.sin(Math.PI * Math.pow(t, .7)), .7) },
+  trung: { w: 70, f: t => Math.pow(Math.sin(Math.PI * Math.pow(t, 1.5)), .75) },
+  rong:  { w: 50, f: t => Math.pow(Math.sin(Math.PI * t), .28) }
+};
+function veLa(s, cao = 220) {
+  const id = 'la' + (++uid), r = soNgauNhien(bam(s.id));
+  const [dam, sang, gan] = s.la || MAU_LA[s.mau];
+  const cx = 100, day0 = 210, ngon = 16, L = day0 - ngon;
+  let pts = [], rongTai = null, gan2 = '';
+  // khuyết rách
+  const khuyet = [];
+  if (s.vien === 'rach') for (let i = 0; i < 4; i++) khuyet.push({ c: .2 + r() * .6, w: .06 + r() * .05, d: .35 + r() * .35, ben: r() < .5 ? 1 : -1 });
+  const pha = r() * 6;
+  const mod = (t, ben) => {
+    let m = 1;
+    if (s.vien === 'quan') m *= 1 + .13 * Math.sin(t * Math.PI * 11 + pha + (ben > 0 ? 0 : 1.3));
+    for (const k of khuyet) if (k.ben === ben) m *= 1 - k.d * Math.max(0, 1 - Math.abs(t - k.c) / k.w);
+    return m;
+  };
+  if (s.dang === 'phong') {
+    const cy = 116, R = 100, N = 220;
+    for (let i = 0; i <= N; i++) {
+      const p = -Math.PI + 2 * Math.PI * i / N; // p=0 là ngọn
+      let rr = R * (.5 + .5 * Math.pow(Math.abs(Math.cos(2.5 * p)), 1.4)) * (1 - .3 * Math.max(0, -Math.cos(p)));
+      rr *= 1 + .05 * Math.abs(Math.sin(14 * p));
+      rr *= mod((p + Math.PI) / (2 * Math.PI), p >= 0 ? 1 : -1);
+      pts.push([cx + rr * Math.sin(p), cy - rr * Math.cos(p)]);
+    }
+    rongTai = () => 45;
+    for (const a of [0, 1.257, -1.257, 2.4, -2.4]) gan2 += `<line x1="${cx}" y1="${cy + 20}" x2="${(cx + 80 * Math.sin(a)).toFixed(1)}" y2="${(cy - 80 * Math.cos(a)).toFixed(1)}"/>`;
+    gan2 += `<line x1="${cx}" y1="${cy + 20}" x2="${cx}" y2="236"/>`;
+  } else {
+    const h = HINH[s.dang], W = s.w || h.w, N = 70, phai = [], trai = [];
+    rongTai = t => W * h.f(t);
+    for (let i = 0; i <= N; i++) {
+      const t = i / N, y = day0 - L * t, hw = W * h.f(t);
+      phai.push([cx + hw * mod(t, 1), y]); trai.push([cx - hw * mod(t, -1), y]);
+    }
+    pts = phai.concat(trai.reverse());
+    gan2 = `<path d="M${cx},236 L${cx},${day0} Q${cx + 3},${(day0 + ngon) / 2} ${cx},${ngon + 6}"/>`;
+    for (let k = 1; k <= 6; k++) {
+      const t = k / 7.2, y = day0 - L * t, hw = rongTai(t) * .82;
+      gan2 += `<path d="M${cx},${y} Q${cx + hw * .5},${y - 6} ${(cx + hw).toFixed(1)},${(y - 16).toFixed(1)}"/><path d="M${cx},${y} Q${cx - hw * .5},${y - 6} ${(cx - hw).toFixed(1)},${(y - 16).toFixed(1)}"/>`;
+    }
+  }
+  const d = 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('L') + 'Z';
+  // vị trí ngẫu nhiên bên trong lá
+  const diem = () => {
+    if (s.dang === 'phong') { const a = r() * 6.28, rr = r() * 50; return [cx + rr * Math.sin(a), 105 - rr * Math.cos(a)]; }
+    const t = .18 + r() * .64; return [cx + (r() * 2 - 1) * rongTai(t) * .65, day0 - L * t];
+  };
+  let dom = '';
+  if (s.dom === 'tron') for (let i = 0; i < 9; i++) {
+    const [x, y] = diem(), rr = 4 + r() * 7;
+    dom += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(rr + 3).toFixed(1)}" fill="#facc15" opacity=".55"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(1)}" fill="${s.domMau || '#3e2723'}"/>`;
+  }
+  if (s.dom === 'loang') for (let i = 0; i < 4; i++) {
+    const [x, y] = diem(), R0 = 14 + r() * 16; let p = '';
+    for (let j = 0; j < 9; j++) { const a = j / 9 * 6.283, rr = R0 * (.55 + r() * .6); p += (j ? 'L' : 'M') + (x + rr * Math.cos(a)).toFixed(1) + ',' + (y + rr * Math.sin(a)).toFixed(1); }
+    dom += `<path d="${p}Z" fill="${s.domMau || '#5d4037'}" opacity=".78" stroke="${s.domMau || '#5d4037'}" stroke-width="6" stroke-linejoin="round"/>`;
+  }
+  let them = '';
+  if (s.suong) for (let i = 0; i < 5; i++) { const [x, y] = diem(); them += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="5" ry="6.5" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1.2" opacity=".95"/><circle cx="${(x - 1.6).toFixed(1)}" cy="${(y - 2.4).toFixed(1)}" r="1.6" fill="#fff"/>`; }
+  if (s.bong || s.dung === 'A') them += `<ellipse cx="78" cy="90" rx="16" ry="44" fill="#fff" opacity=".16" transform="rotate(-18 78 90)"/>`;
+  return `<svg class="la-svg" viewBox="0 0 200 240" width="${cao * 200 / 240}" height="${cao}" role="img" aria-label="${s.ten}">
+    <defs><linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${sang}"/><stop offset="1" stop-color="${dam}"/></linearGradient>
+    <clipPath id="${id}c"><path d="${d}"/></clipPath></defs>
+    <line x1="100" y1="${s.dang === 'phong' ? 140 : 200}" x2="100" y2="238" stroke="${gan}" stroke-width="5" stroke-linecap="round"/>
+    <path d="${d}" fill="url(#${id}g)" stroke="${gan}" stroke-width="2.5" stroke-linejoin="round"/>
+    <g clip-path="url(#${id}c)"><g fill="none" stroke="${gan}" stroke-width="2.2" stroke-linecap="round" opacity=".55">${gan2}</g>${dom}${them}</g>
+  </svg>`;
+}
+
+/* ================== MÔ HÌNH AI (Naive Bayes) ================== */
+function moHinh() {
+  const n = { A: 0, B: 0 }, dem = { A: {}, B: {} };
+  for (const t of day) { n[t.nhan]++; for (const f of DAC) { const k = f.k + ':' + t.s[f.k]; dem[t.nhan][k] = (dem[t.nhan][k] || 0) + 1; } }
+  const w = {}, tamAnh = {};
+  for (const f of DAC) {
+    const ds = Object.keys(f.v); w[f.k] = {};
+    for (const v of ds) {
+      const k = f.k + ':' + v;
+      const pa = ((dem.A[k] || 0) + 1) / (n.A + ds.length), pb = ((dem.B[k] || 0) + 1) / (n.B + ds.length);
+      w[f.k][v] = Math.log(pa / pb);
+    }
+    const ws = Object.values(w[f.k]); tamAnh[f.k] = Math.max(...ws) - Math.min(...ws);
+  }
+  const tong = Object.values(tamAnh).reduce((a, b) => a + b, 0) || 1;
+  const tiLe = {}; for (const f of DAC) tiLe[f.k] = tamAnh[f.k] / tong;
+  return { n, dem, w, tiLe, tien: Math.log((n.A + 1) / (n.B + 1)) };
+}
+function duDoan(m, s) {
+  let z = m.tien;
+  const phan = DAC.map(f => ({ f, v: s[f.k], w: m.w[f.k][s[f.k]] }));
+  for (const p of phan) z += p.w;
+  const pA = 1 / (1 + Math.exp(-z));
+  return { nhan: pA >= .5 ? 'A' : 'B', pA, tin: Math.max(pA, 1 - pA), phan: phan.slice().sort((a, b) => Math.abs(b.w) - Math.abs(a.w)) };
+}
+function mucDo(w) { const a = Math.abs(w); return a < .08 ? 'gần như không' : a < .5 ? 'nhẹ' : a < 1.1 ? 'vừa' : 'mạnh'; }
+function giaiThich(d) {
+  return d.phan.slice(0, 2).map(p => {
+    const huong = p.w >= 0 ? 'A' : 'B';
+    return `<li><b>${p.f.icon} ${p.f.ten}: ${p.f.v[p.v]}</b> → kéo <b>${mucDo(p.w)}</b> về <span style="color:${NHAN[huong].mau}" class="font-bold">${NHAN[huong].ten}</span></li>`;
+  }).join('');
+}
+function canhBao(m) {
+  const ds = [];
+  if (day.length === 0) return ds;
+  if (day.length < 6) ds.push({ loai: 'it', t: `AI mới học <b>${day.length}</b> mẫu – quá ít để đoán chính xác. Hãy dạy thêm!` });
+  if (m.n.A === 0 || m.n.B === 0) ds.push({ loai: 'lech', t: `AI chưa thấy mẫu nào của nhãn <b>${m.n.A === 0 ? NHAN.A.ten : NHAN.B.ten}</b> → nó sẽ đoán mọi thứ về một phía!` });
+  else if (Math.max(m.n.A, m.n.B) / Math.min(m.n.A, m.n.B) >= 2.5) ds.push({ loai: 'lech', t: `Dữ liệu <b>lệch nhãn</b>: ${m.n.A} mẫu “${NHAN.A.ten}” so với ${m.n.B} mẫu “${NHAN.B.ten}”.` });
+  const top = DAC.slice().sort((a, b) => m.tiLe[b.k] - m.tiLe[a.k])[0];
+  if (day.length >= 4 && m.tiLe[top.k] >= .6) ds.push({ loai: 'vet', f: top, t: `<b>AI đang bị học vẹt / thiên kiến dữ liệu!</b> Gần như chỉ nhìn vào <b>${top.icon} ${top.ten}</b> (${Math.round(m.tiLe[top.k] * 100)}% sức nặng quyết định), bỏ qua các dấu hiệu khác.` });
+  return ds;
+}
+
+/* ================== TIỆN ÍCH ================== */
+let tt;
+function bao(html, ms = 2600) { const t = byId('toast'); t.innerHTML = html; t.classList.remove('an'); clearTimeout(tt); tt = setTimeout(() => t.classList.add('an'), ms); }
+const ngu = ms => new Promise(r => setTimeout(r, ms));
+let ac;
+function tieng(f = 660, dai = .12, kieu = 'sine', to = .08) {
+  if (!amThanh) return;
+  try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); const o = ac.createOscillator(), g = ac.createGain(); o.type = kieu; o.frequency.value = f; g.gain.value = to; g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + dai); o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + dai); } catch (e) {}
+}
+const tiengDung = () => { tieng(660, .12); setTimeout(() => tieng(990, .18), 110); };
+const tiengSai = () => { tieng(220, .3, 'square', .05); };
+function tron(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function theDac(s, nho) {
+  return `<div class="flex flex-wrap gap-2 ${nho ? '' : 'justify-center'}">${DAC.map(f =>
+    `<span class="inline-flex items-center gap-1.5 bg-white border-2 border-slate-200 rounded-full ${nho ? 'px-2 py-0.5 text-sm' : 'px-3 py-1.5 text-base'} font-semibold">
+      <span>${f.icon}</span><span class="text-slate-500 font-medium">${f.ten}:</span>
+      <span class="w-3 h-3 rounded-full border border-slate-300" style="background:${MAUVAT[s[f.k]]}"></span>${f.v[s[f.k]]}</span>`).join('')}</div>`;
+}
+function huyHieu(nhan, lon) { const n = NHAN[nhan]; return `<span class="inline-flex items-center gap-1 rounded-full font-bold ${lon ? 'px-3 py-1' : 'px-2 py-0.5 text-sm'}" style="background:${n.nhat};color:${n.mau}">${n.icon} ${n.ten}</span>`; }
+
+/* ================== TAB ================== */
+const TABS = [
+  { so: 1, ten: 'Huấn luyện AI', icon: '🧑‍🏫' },
+  { so: 2, ten: 'Bộ não AI', icon: '🧠' },
+  { so: 3, ten: 'Kiểm thử băng chuyền', icon: '🏭' },
+  { so: 4, ten: 'Đánh giá & dạy lại', icon: '🔧' }
+];
+function veTabs() {
+  byId('tabs').innerHTML = TABS.map(t => `<button role="tab" data-tab="${t.so}" class="whitespace-nowrap rounded-t-xl px-4 py-2.5 font-bold text-sm sm:text-base ${tab === t.so ? 'tab-on' : 'text-white/90 hover:bg-white/15'}">
+    <span class="inline-grid place-items-center w-6 h-6 rounded-full mr-1 text-xs ${tab === t.so ? 'bg-green-600 text-white' : 'bg-white/25'}">${t.so}</span>${t.icon} ${t.ten}</button>`).join('');
+}
+function moTab(n) {
+  if (dangChay && n !== 3) { dungLai = true; }
+  tab = n; veTabs();
+  document.querySelectorAll('.buoc').forEach((el, i) => el.classList.toggle('hidden', i + 1 !== n));
+  [null, veB1, veB2, veB3, veB4][n]();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+byId('tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) moTab(+b.dataset.tab); });
+function nutTiep(n, chu) { return `<button onclick="moTab(${n})" class="bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl px-5 py-3 text-lg shadow">${chu} →</button>`; }
+
+/* ================== BƯỚC 1: HUẤN LUYỆN ================== */
+function mauHienTai() {
+  if (viTri >= hangDoi.length) { hangDoi = tron(MAU_DAY); viTri = 0; }
+  return hangDoi[viTri];
+}
+function veB1() {
+  const s = mauHienTai(), m = moHinh(), n = day.length;
+  const pA = n ? m.n.A / n * 100 : 50;
+  const lech = n >= 4 && (m.n.A === 0 || m.n.B === 0 || Math.max(m.n.A, m.n.B) / Math.max(1, Math.min(m.n.A, m.n.B)) >= 2.5);
+  byId('b1').innerHTML = `
+  <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl px-4 py-3 mb-4 text-base">
+    <b>Nhiệm vụ:</b> Quan sát từng chiếc lá trên băng chuyền và các <b>đặc trưng</b> của nó, rồi dạy AI: lá này <b>khỏe</b> hay <b>bệnh</b>? Dùng phím <kbd>←</kbd> <kbd>→</kbd> cho nhanh. Dạy khoảng <b>${MUC_TIEU} mẫu</b> rồi sang Bước 2.
+  </div>
+  <div class="grid lg:grid-cols-[1fr_340px] gap-5">
+    <div class="bg-white rounded-3xl shadow-lg p-5 flex flex-col items-center">
+      <div class="text-slate-500 font-semibold">Mẫu đang dạy</div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-center mt-1">${s.ten}</h2>
+      <div id="la-day" class="the-dt my-3 rounded-3xl bg-gradient-to-b from-sky-50 to-emerald-50 px-10 py-4">${veLa(s, 250)}</div>
+      ${theDac(s)}
+      <div class="grid grid-cols-2 gap-4 w-full max-w-xl mt-5">
+        <button data-day="A" class="rounded-2xl py-4 text-xl font-extrabold text-white bg-khoe-500 hover:bg-khoe-600 shadow-lg active:scale-95 transition">
+          <kbd class="text-slate-700">←</kbd> ${NHAN.A.icon} ${NHAN.A.ten}</button>
+        <button data-day="B" class="rounded-2xl py-4 text-xl font-extrabold text-white bg-benh-500 hover:bg-benh-600 shadow-lg active:scale-95 transition">
+          ${NHAN.B.icon} ${NHAN.B.ten} <kbd class="text-slate-700">→</kbd></button>
+      </div>
+      <button data-bo-qua class="mt-3 text-slate-500 hover:text-slate-800 underline text-sm">Bỏ qua mẫu này</button>
+    </div>
+    <aside class="flex flex-col gap-4">
+      <div class="bg-white rounded-3xl shadow p-4">
+        <div class="flex justify-between font-bold"><span>📚 Đã dạy</span><span>${n}/${MUC_TIEU} mẫu</span></div>
+        <div class="h-4 bg-slate-100 rounded-full mt-2 overflow-hidden"><div class="thanh h-full bg-gradient-to-r from-lime-400 to-green-600 rounded-full" style="width:${Math.min(100, n / MUC_TIEU * 100)}%"></div></div>
+        <div class="font-bold mt-4">⚖️ Cân bằng giữa 2 nhãn</div>
+        <div class="flex h-8 rounded-xl overflow-hidden mt-2 text-white font-bold text-sm">
+          <div class="thanh grid place-items-center bg-khoe-500" style="width:${pA}%">${m.n.A || ''}</div>
+          <div class="thanh grid place-items-center bg-benh-500" style="width:${100 - pA}%">${m.n.B || ''}</div>
+        </div>
+        <div class="flex justify-between text-sm mt-1"><span style="color:${NHAN.A.mau}">${NHAN.A.icon} ${m.n.A} khỏe</span><span style="color:${NHAN.B.mau}">${m.n.B} bệnh ${NHAN.B.icon}</span></div>
+        <div class="mt-2 text-sm rounded-xl px-3 py-2 ${n < 4 ? 'bg-slate-50 text-slate-600' : lech ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}">
+          ${n < 4 ? 'Dạy thêm vài mẫu để xem tỉ lệ.' : lech ? '⚠️ Dữ liệu đang lệch về một nhãn!' : '✓ Hai nhãn khá cân bằng.'}</div>
+      </div>
+      <div class="bg-white rounded-3xl shadow p-4">
+        <div class="font-bold mb-2">🧰 Công cụ giáo viên</div>
+        <button data-nap="chuan" class="w-full mb-2 rounded-xl px-3 py-2.5 font-bold bg-sky-100 hover:bg-sky-200 text-sky-800 text-left">⚡ Nạp nhanh 10 mẫu chuẩn</button>
+        <button data-nap="bay" class="w-full mb-2 rounded-xl px-3 py-2.5 font-bold bg-amber-100 hover:bg-amber-200 text-amber-800 text-left">⚠️ Tạo bẫy Thiên kiến (Bias)</button>
+        <p class="text-xs text-slate-500 mb-2">Bẫy: dạy theo cảm tính <i>“cứ xanh là khỏe, cứ vàng/nâu là bệnh”</i>. Xem hậu quả ở Bước 2 và 3.</p>
+        <button data-xoa class="w-full rounded-xl px-3 py-2 font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600 text-left">🗑 Xoá hết, dạy lại từ đầu</button>
+      </div>
+      <div class="bg-white rounded-3xl shadow p-4">
+        <div class="font-bold mb-2">🗂 Dữ liệu em đã dạy</div>
+        <div class="flex flex-wrap gap-2 max-h-56 overflow-auto">${day.length ? day.map((t, i) => `
+          <div class="relative rounded-xl border-2 p-1 text-center w-[74px]" style="border-color:${NHAN[t.nhan].mau};background:${NHAN[t.nhan].nhat}" title="${t.s.ten} → ${NHAN[t.nhan].ten}">
+            ${veLa(t.s, 52)}<div class="text-[10px] leading-tight font-semibold truncate">${t.s.ten.replace(/^Lá /, '')}</div>
+            <button data-bo="${i}" class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-white border text-xs leading-none" title="Bỏ mẫu này">×</button>
+          </div>`).join('') : '<span class="text-slate-400 text-sm">Chưa có mẫu nào.</span>'}</div>
+      </div>
+      ${n >= 4 ? nutTiep(2, '🧠 Xem bộ não AI') : ''}
+    </aside>
+  </div>`;
+}
+function dayMau(nhan) {
+  const s = mauHienTai();
+  day.push({ s, nhan, nguon: 'hs' });
+  tieng(nhan === 'A' ? 700 : 440, .12);
+  const la = byId('la-day');
+  if (la) { la.classList.add(nhan === 'A' ? 'bay-A' : 'bay-B'); }
+  viTri++;
+  setTimeout(() => { veB1(); if (day.length === MUC_TIEU) bao('🎉 Đã đủ ' + MUC_TIEU + ' mẫu! Sang <b>Bước 2</b> xem AI đã học được gì.'); }, 380);
+}
+function napBo(ds, nguon) {
+  day = ds.map(id => { const s = tim(id); return { s, nhan: nguon === 'bay' ? (s.mau === 'xanh' ? 'A' : 'B') : s.dung, nguon }; });
+  kq = []; lichSu = []; soLanThu = 0;
+  veB1();
+  bao(nguon === 'bay' ? '⚠️ Đã nạp <b>dữ liệu lệch</b>: xanh = khỏe, vàng/nâu = bệnh. Hãy xem Bước 2!' : '⚡ Đã nạp 10 mẫu chuẩn, cân bằng 5 – 5.');
+}
+byId('b1').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.day) dayMau(t.dataset.day);
+  else if (t.hasAttribute('data-bo-qua')) { viTri++; veB1(); }
+  else if (t.dataset.nap) napBo(t.dataset.nap === 'bay' ? BO_BAY : BO_CHUAN, t.dataset.nap);
+  else if (t.hasAttribute('data-xoa')) { day = []; kq = []; lichSu = []; soLanThu = 0; veB1(); bao('Đã xoá dữ liệu. AI trở về “trắng trơn”.'); }
+  else if (t.dataset.bo !== undefined) { day.splice(+t.dataset.bo, 1); veB1(); }
+});
+
+/* ================== BƯỚC 2: BỘ NÃO AI ================== */
+function veB2() {
+  const m = moHinh();
+  if (!day.length) { byId('b2').innerHTML = trongRong('AI chưa học gì cả!', 'Hãy dạy AI ở Bước 1 (hoặc bấm “⚡ Nạp nhanh 10 mẫu chuẩn”).', 1); return; }
+  const cb = canhBao(m), MAX = 2.2;
+  const vet = cb.find(c => c.loai === 'vet');
+  byId('b2').innerHTML = `
+  <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl px-4 py-3 mb-4 text-base">
+    <b>AI học như thế nào?</b> Với mỗi đặc trưng, AI đếm xem giá trị đó xuất hiện ở lá khỏe nhiều hơn hay ở lá bệnh nhiều hơn. Từ đó nó tính <b>trọng số</b>: thanh
+    <span class="font-bold text-khoe-600">xanh kéo về “${NHAN.A.ten}”</span>, thanh <span class="font-bold text-benh-600">cam kéo về “${NHAN.B.ten}”</span>. Thanh càng dài, AI càng tin dấu hiệu đó.
+  </div>
+  ${cb.map(c => `<div class="${c.loai === 'vet' ? 'bg-red-600 text-white rung' : 'bg-amber-100 text-amber-900'} rounded-2xl px-4 py-3 mb-3 text-lg flex gap-3 items-start shadow">
+     <span class="text-3xl">${c.loai === 'vet' ? '🦜' : '⚠️'}</span><div>${c.t}${c.loai === 'vet' ? '<div class="text-base mt-1 opacity-90">Hậu quả: gặp lá có màu “lạ” nhưng khỏe, hoặc lá xanh nhưng bệnh, AI sẽ đoán sai. Thử ở Bước 3!</div>' : ''}</div></div>`).join('')}
+  ${cb.length ? '' : '<div class="bg-green-100 text-green-800 rounded-2xl px-4 py-3 mb-3 text-lg font-semibold">✅ AI đang xem xét nhiều dấu hiệu cùng lúc, không phụ thuộc vào một đặc trưng duy nhất.</div>'}
+  <div class="grid lg:grid-cols-[1fr_300px] gap-5">
+    <div class="bg-white rounded-3xl shadow-lg p-5">
+      <div class="grid grid-cols-[1fr_auto_1fr] text-sm font-bold mb-3 text-center">
+        <span class="text-khoe-600">◀ ${NHAN.A.icon} ${NHAN.A.ten}</span><span class="text-slate-400 px-2">|</span><span class="text-benh-600">${NHAN.B.ten} ${NHAN.B.icon} ▶</span>
+      </div>
+      ${DAC.map(f => `
+      <div class="mb-5 rounded-2xl p-3 ${vet && vet.f.k === f.k ? 'bg-red-50 ring-4 ring-red-300' : 'bg-slate-50'}">
+        <div class="flex justify-between items-center mb-2"><b class="text-lg">${f.icon} ${f.ten}</b>
+          <span class="text-sm font-semibold text-slate-600">Sức nặng quyết định: <b>${Math.round(m.tiLe[f.k] * 100)}%</b></span></div>
+        ${Object.keys(f.v).map(v => {
+          const w = m.w[f.k][v], dai = Math.min(1, Math.abs(w) / MAX) * 100, a = m.dem.A[f.k + ':' + v] || 0, b = m.dem.B[f.k + ':' + v] || 0;
+          return `<div class="grid grid-cols-[110px_1fr_1fr_70px] sm:grid-cols-[140px_1fr_1fr_90px] items-center gap-0 my-1.5">
+            <span class="font-semibold text-sm sm:text-base flex items-center gap-1.5"><span class="w-3 h-3 rounded-full border" style="background:${MAUVAT[v]}"></span>${f.v[v]}</span>
+            <div class="h-7 flex justify-end border-r-2 border-slate-400">${w > 0 ? `<div class="thanh h-full rounded-l-lg bg-gradient-to-l from-khoe-500 to-lime-400 text-white text-xs font-bold flex items-center pl-1" style="width:${dai}%">${dai > 18 ? '+' + w.toFixed(1) : ''}</div>` : ''}</div>
+            <div class="h-7 flex">${w < 0 ? `<div class="thanh h-full rounded-r-lg bg-gradient-to-r from-benh-500 to-orange-300 text-white text-xs font-bold flex items-center justify-end pr-1" style="width:${dai}%">${dai > 18 ? w.toFixed(1) : ''}</div>` : ''}</div>
+            <span class="text-xs text-slate-500 text-right">🌿${a} · 🦠${b}</span></div>`;
+        }).join('')}
+      </div>`).join('')}
+      <p class="text-xs text-slate-500">Số bên phải: số mẫu khỏe (🌿) và bệnh (🦠) có giá trị đó trong dữ liệu em dạy. Trọng số = ln(tỉ lệ ở lá khỏe ÷ tỉ lệ ở lá bệnh).</p>
+    </div>
+    <aside class="flex flex-col gap-4">
+      <div class="bg-white rounded-3xl shadow p-4">
+        <div class="font-bold mb-2">🧪 Thử hỏi AI</div>
+        <p class="text-sm text-slate-600 mb-2">Chọn đặc trưng của một chiếc lá tưởng tượng:</p>
+        ${DAC.map(f => `<label class="block text-sm font-semibold mt-2">${f.icon} ${f.ten}
+          <select data-thu="${f.k}" class="mt-1 w-full border-2 border-slate-200 rounded-xl px-2 py-1.5">${Object.keys(f.v).map(v => `<option value="${v}">${f.v[v]}</option>`).join('')}</select></label>`).join('')}
+        <div id="thu-kq" class="mt-3"></div>
+      </div>
+      <div class="bg-white rounded-3xl shadow p-4 text-sm">
+        <b>Dữ liệu đang dùng:</b> ${day.length} mẫu (${m.n.A} khỏe, ${m.n.B} bệnh).
+        <button onclick="moTab(1)" class="block mt-2 text-green-700 underline font-semibold">← Quay lại dạy thêm</button>
+      </div>
+      ${nutTiep(3, '🏭 Kiểm thử trên băng chuyền')}
+    </aside>
+  </div>`;
+  veThu();
+}
+function veThu() {
+  const s = { id: 'thu' }; document.querySelectorAll('[data-thu]').forEach(el => s[el.dataset.thu] = el.value);
+  const d = duDoan(moHinh(), s);
+  byId('thu-kq').innerHTML = `<div class="rounded-2xl p-3" style="background:${NHAN[d.nhan].nhat}">
+    <div class="text-sm">AI đoán:</div><div class="text-lg font-extrabold" style="color:${NHAN[d.nhan].mau}">${NHAN[d.nhan].icon} ${NHAN[d.nhan].ten}</div>
+    <div class="text-sm">Độ tự tin: <b>${Math.round(d.tin * 100)}%</b></div></div>`;
+}
+byId('b2').addEventListener('change', e => { if (e.target.dataset.thu) veThu(); });
+function trongRong(tieuDe, loi, n) {
+  return `<div class="bg-white rounded-3xl shadow-lg p-10 text-center"><div class="text-6xl mb-3">🤖💤</div><h2 class="text-2xl font-extrabold">${tieuDe}</h2>
+    <p class="text-lg text-slate-600 mt-2 mb-5">${loi}</p>${nutTiep(n, n === 1 ? '🧑‍🏫 Đến Bước 1' : '🏭 Đến Bước 3')}</div>`;
+}
+
+/* ================== BƯỚC 3: BĂNG CHUYỀN ================== */
+function veB3() {
+  if (!day.length) { byId('b3').innerHTML = trongRong('AI chưa được huấn luyện!', 'Cổng AI chưa biết gì nên chưa thể kiểm thử. Hãy dạy AI ở Bước 1 trước.', 1); return; }
+  const xong = kq.length;
+  const dung = kq.filter(k => k.du.nhan === k.s.dung).length;
+  byId('b3').innerHTML = `
+  <div class="bg-violet-50 border-2 border-violet-200 rounded-2xl px-4 py-3 mb-4 text-base">
+    <b>Kiểm thử:</b> ${MAU_THU.length} chiếc lá <b>MỚI</b> (AI chưa từng thấy) lần lượt đi qua <b>Cổng AI</b>. AI tự phân loại vào khay. Sau đó bác nông dân (chuyên gia) chấm xem AI đúng hay sai. Phím tắt: <kbd>Space</kbd> = mẫu tiếp theo.
+  </div>
+  <div class="grid lg:grid-cols-[1fr_340px] gap-5">
+    <div>
+      <div id="canh" class="relative h-[300px] rounded-3xl overflow-hidden bg-gradient-to-b from-sky-200 via-sky-100 to-lime-100 shadow-inner">
+        <div class="absolute left-4 top-3 text-sm font-bold text-sky-900/70">🏭 Băng chuyền nông trại</div>
+        <div class="absolute right-4 top-3 text-sm font-bold text-sky-900/70">Mẫu: <span id="dem">${xong}</span>/${MAU_THU.length}</div>
+        <div class="absolute inset-x-0 bottom-0 h-[44px] bg-slate-300"></div>
+        <div id="bang" class="bang absolute inset-x-0 bottom-[44px] h-[26px] border-y-4 border-slate-700"></div>
+        <div id="cong" class="absolute left-1/2 -translate-x-1/2 bottom-[70px] w-[190px] h-[215px]">
+          <div class="cong-vien absolute inset-0 border-[10px] border-b-0 border-indigo-600 rounded-t-[60px] transition-shadow"></div>
+          <div class="absolute -top-1 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-sm font-extrabold px-3 py-1 rounded-full whitespace-nowrap shadow">🤖 CỔNG AI</div>
+          <div class="laser absolute left-[10px] right-[10px] h-[4px] bg-rose-500 rounded-full" style="top:12%;box-shadow:0 0 12px 3px #f43f5e"></div>
+        </div>
+        <div id="vat" class="vat absolute bottom-[66px]" style="left:-200px"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-4">
+        ${['A', 'B'].map(n => `<div class="rounded-3xl border-4 border-dashed p-3 min-h-[130px]" style="border-color:${NHAN[n].mau};background:${NHAN[n].nhat}">
+          <div class="font-extrabold text-lg" style="color:${NHAN[n].mau}">🧺 Khay ${NHAN[n].icon} ${NHAN[n].ten}</div>
+          <div id="khay${n}" class="flex flex-wrap gap-2 mt-2">${kq.filter(k => k.du.nhan === n).map(k => oKhay(k)).join('')}</div></div>`).join('')}
+      </div>
+    </div>
+    <aside class="flex flex-col gap-4">
+      <div class="bg-white rounded-3xl shadow p-4">
+        <div class="flex gap-2">
+          <button id="chay-het" class="flex-1 rounded-2xl py-3 font-extrabold text-white bg-indigo-600 hover:bg-indigo-700 shadow">▶ Chạy tự động</button>
+          <button id="chay-1" class="flex-1 rounded-2xl py-3 font-extrabold text-indigo-700 bg-indigo-100 hover:bg-indigo-200">⏭ Từng mẫu</button>
+        </div>
+        <button id="thu-lai" class="w-full mt-2 rounded-xl py-2 font-semibold bg-slate-100 hover:bg-slate-200 text-slate-600">↺ Đưa lá trở lại, kiểm thử lại</button>
+      </div>
+      <div id="khung-du" class="bg-white rounded-3xl shadow p-4 min-h-[230px]">
+        <div class="text-slate-400 text-center mt-10">Bấm <b>▶ Chạy tự động</b> để bắt đầu.</div>
+      </div>
+      <div class="bg-white rounded-3xl shadow p-4">
+        <div class="flex justify-between font-bold"><span>🎯 Độ chính xác</span><span id="acc">${xong ? Math.round(dung / xong * 100) + '%' : '–'}</span></div>
+        <div class="h-4 bg-slate-100 rounded-full mt-2 overflow-hidden"><div id="acc-thanh" class="thanh h-full rounded-full bg-gradient-to-r from-amber-400 to-green-600" style="width:${xong ? dung / xong * 100 : 0}%"></div></div>
+        <div class="text-sm text-slate-500 mt-1" id="acc-ct">${xong ? `Đúng ${dung}/${xong} mẫu` : ''}</div>
+      </div>
+      <div id="nut-b4">${xong === MAU_THU.length ? nutTiep(4, '🔧 Đánh giá & dạy lại') : ''}</div>
+    </aside>
+  </div>`;
+  byId('chay-het').onclick = () => chay(true);
+  byId('chay-1').onclick = () => chay(false);
+  byId('thu-lai').onclick = () => { if (dangChay) { dungLai = true; return; } kq = []; veB3(); };
+}
+function oKhay(k) {
+  const ok = k.du.nhan === k.s.dung;
+  return `<div class="nay relative bg-white rounded-xl p-1 w-[66px] text-center shadow-sm" title="${k.s.ten}">${veLa(k.s, 48)}
+    <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full grid place-items-center text-white text-sm font-bold ${ok ? 'bg-green-600' : 'bg-red-600'}">${ok ? '✓' : '✗'}</span>
+    <div class="text-[10px] leading-tight truncate">${k.s.ten.replace(/^Lá /, '')}</div></div>`;
+}
+async function chay(tuDong) {
+  if (dangChay) { if (tuDong) dungLai = true; return; }
+  if (kq.length >= MAU_THU.length) { kq = []; veB3(); }
+  dangChay = true; dungLai = false;
+  const m = moHinh();
+  do {
+    const s = MAU_THU[kq.length], vat = byId('vat'), bang = byId('bang');
+    if (!vat) break;
+    byId('chay-het').textContent = tuDong ? '⏸ Tạm dừng' : '▶ Chạy tự động';
+    vat.style.transition = 'none'; vat.style.left = '-200px'; vat.style.transform = 'none'; vat.style.opacity = 1;
+    vat.innerHTML = veLa(s, 150) + `<div class="text-center text-xs font-bold bg-white/80 rounded-full px-2 mt-1">${s.ten}</div>`;
+    void vat.offsetWidth; vat.style.transition = '';
+    bang.classList.add('chay'); tieng(300, .4, 'sawtooth', .02);
+    vat.style.left = 'calc(50% - 62px)';
+    await ngu(1150); if (!byId('canh')) break;
+    bang.classList.remove('chay');
+    byId('cong').classList.add('quet'); tieng(1200, .5, 'triangle', .03);
+    byId('khung-du').innerHTML = `<div class="text-center mt-12 text-indigo-600 font-bold text-lg animate-pulse">🔴 AI đang quét “${s.ten}”…</div>`;
+    await ngu(1900); if (!byId('canh')) break;
+    byId('cong').classList.remove('quet');
+    const d = duDoan(m, s), ok = d.nhan === s.dung;
+    byId('khung-du').innerHTML = `
+      <div class="the-dt">
+        <div class="text-sm text-slate-500">AI dự đoán <b>${s.ten}</b> là:</div>
+        <div class="text-2xl font-extrabold mt-1" style="color:${NHAN[d.nhan].mau}">${NHAN[d.nhan].icon} ${NHAN[d.nhan].ten}</div>
+        <div class="flex justify-between text-sm font-semibold mt-3"><span>Độ tự tin</span><span>${Math.round(d.tin * 100)}%</span></div>
+        <div class="h-3 bg-slate-100 rounded-full overflow-hidden"><div class="thanh h-full rounded-full" style="width:${d.tin * 100}%;background:${NHAN[d.nhan].mau}"></div></div>
+        <div class="mt-3 font-bold text-sm">💡 Vì sao AI đoán như vậy?</div>
+        <ul class="text-sm list-disc pl-5 mt-1 space-y-1">${giaiThich(d)}</ul>
+        <div class="mt-3 rounded-xl px-3 py-2 font-bold ${ok ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+          ${ok ? '✓ Bác nông dân: ĐÚNG!' : `✗ Bác nông dân: SAI! Thật ra đây là “${NHAN[s.dung].ten}”.`}${s.batngo && !ok ? ' <span class="block font-semibold text-sm mt-1">⭐ Mẫu gây bất ngờ!</span>' : ''}</div>
+      </div>`;
+    ok ? tiengDung() : tiengSai();
+    vat.classList.add(d.nhan === 'A' ? 'bay-A' : 'bay-B');
+    await ngu(480);
+    vat.classList.remove('bay-A', 'bay-B'); vat.style.opacity = 0;
+    const k = { s, du: d }; kq.push(k);
+    byId('khay' + d.nhan).insertAdjacentHTML('beforeend', oKhay(k));
+    const dung = kq.filter(x => x.du.nhan === x.s.dung).length;
+    byId('dem').textContent = kq.length;
+    byId('acc').textContent = Math.round(dung / kq.length * 100) + '%';
+    byId('acc-thanh').style.width = dung / kq.length * 100 + '%';
+    byId('acc-ct').textContent = `Đúng ${dung}/${kq.length} mẫu`;
+    if (kq.length === MAU_THU.length) {
+      soLanThu++;
+      const acc = Math.round(dung / kq.length * 100);
+      lichSu.push({ ten: 'Kiểm thử lần ' + soLanThu, acc, n: day.length });
+      byId('nut-b4').innerHTML = nutTiep(4, '🔧 Đánh giá & dạy lại');
+      bao(`🏁 Xong! Độ chính xác của AI: <b>${acc}%</b>. ${acc < 80 ? 'Sang Bước 4 để sửa lỗi cho AI.' : 'Rất tốt! Xem chi tiết ở Bước 4.'}`, 4000);
+      break;
+    }
+    if (tuDong) await ngu(1400);
+  } while (tuDong && !dungLai);
+  dangChay = false;
+  const n = byId('chay-het'); if (n) n.textContent = kq.length && kq.length < MAU_THU.length ? '▶ Chạy tiếp' : '▶ Chạy tự động';
+  const b = byId('bang'); if (b) b.classList.remove('chay');
+}
+
+/* ================== BƯỚC 4: ĐÁNH GIÁ & DẠY LẠI ================== */
+let vuaSua = null;
+function veB4() {
+  if (!lichSu.length) { byId('b4').innerHTML = trongRong('Chưa có kết quả kiểm thử', 'Hãy cho các mẫu lá chạy qua băng chuyền ở Bước 3 trước.', 3); return; }
+  const m = moHinh();
+  const ds = MAU_THU.map(s => ({ s, d: duDoan(m, s) }));
+  const dung = ds.filter(x => x.d.nhan === x.s.dung).length, acc = Math.round(dung / ds.length * 100);
+  const max = Math.max(...lichSu.map(l => l.acc), 1);
+  byId('b4').innerHTML = `
+  <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl px-4 py-3 mb-4 text-base">
+    <b>Đánh giá:</b> Mẫu <span class="text-green-700 font-bold">xanh</span> = AI đoán đúng, mẫu <span class="text-red-700 font-bold">đỏ</span> = AI đoán sai.
+    Bấm <b>“🔧 Sửa lỗi & Dạy lại”</b> ở mẫu sai để dạy AI đáp án đúng – trọng số bộ não AI được tính lại ngay và cả danh sách được chấm lại.
+  </div>
+  <div class="grid lg:grid-cols-[1fr_320px] gap-5">
+    <div class="flex flex-col gap-3">${ds.map(({ s, d }) => {
+      const ok = d.nhan === s.dung, moi = vuaSua && vuaSua.truoc[s.id] !== undefined && vuaSua.truoc[s.id] !== ok;
+      return `<div class="${moi ? 'nay ring-4 ring-yellow-300' : ''} rounded-2xl border-2 p-3 flex flex-wrap sm:flex-nowrap gap-3 items-center ${ok ? 'border-green-300 bg-green-50' : 'border-red-300 bg-red-50'}">
+        <div class="shrink-0 bg-white rounded-xl p-1">${veLa(s, 84)}</div>
+        <div class="flex-1 min-w-[200px]">
+          <div class="font-extrabold text-lg">${s.ten} ${s.batngo ? '<span class="text-xs bg-yellow-300 text-yellow-900 rounded-full px-2 py-0.5 align-middle">⭐ Mẫu gây bất ngờ</span>' : ''}</div>
+          ${theDac(s, 1)}
+          <div class="text-sm mt-1.5">AI đoán: ${huyHieu(d.nhan)} <span class="text-slate-500">(${Math.round(d.tin * 100)}% tự tin)</span> · Đáp án: ${huyHieu(s.dung)}</div>
+          ${!ok || s.batngo ? `<div class="text-sm text-slate-600 mt-1">📝 ${s.gc}</div>` : ''}
+        </div>
+        <div class="shrink-0 text-center">${ok
+          ? '<div class="text-green-700 font-extrabold text-lg">✓ Đúng</div>'
+          : `<div class="text-red-700 font-extrabold text-lg mb-1">✗ Sai</div><button data-sua="${s.id}" class="rounded-xl px-3 py-2 font-bold text-white bg-red-600 hover:bg-red-700 shadow">🔧 Sửa lỗi & Dạy lại</button>`}</div>
+      </div>`; }).join('')}
+    </div>
+    <aside class="flex flex-col gap-4">
+      <div class="bg-white rounded-3xl shadow p-4 text-center">
+        <div class="font-bold">🎯 Độ chính xác hiện tại</div>
+        <div class="text-5xl font-extrabold mt-1 ${acc >= 80 ? 'text-green-600' : acc >= 60 ? 'text-amber-500' : 'text-red-600'}">${acc}%</div>
+        <div class="text-sm text-slate-500">Đúng ${dung}/${ds.length} mẫu · AI đã học ${day.length} mẫu</div>
+        ${acc === 100 ? '<div class="mt-2 text-green-700 font-bold">🏆 Tuyệt vời! AI đã phân loại đúng tất cả.</div>' : ''}
+      </div>
+      <div class="bg-white rounded-3xl shadow p-4">
+        <div class="font-bold mb-2">📈 Sự tiến bộ của AI</div>
+        <div class="flex items-end gap-2 h-40 border-b-2 border-slate-300 px-1">${lichSu.map((l, i) => `
+          <div class="flex-1 flex flex-col items-center justify-end h-full" title="${l.ten}: ${l.acc}%">
+            <span class="text-xs font-bold">${l.acc}%</span>
+            <div class="thanh w-full rounded-t-lg ${i === lichSu.length - 1 ? 'bg-green-500' : 'bg-slate-300'}" style="height:${l.acc / Math.max(100, max) * 100}%"></div></div>`).join('')}
+        </div>
+        <div class="flex gap-2 px-1 mt-1">${lichSu.map((l, i) => `<div class="flex-1 text-[10px] text-center text-slate-500 leading-tight">${i === 0 ? 'Lần đầu' : 'Sửa ' + i}</div>`).join('')}</div>
+      </div>
+      <div class="bg-amber-50 border-2 border-amber-200 rounded-3xl p-4 text-sm">
+        <div class="font-bold text-base mb-1">💬 Bài học rút ra</div>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>AI <b>chỉ biết những gì được dạy</b>: dữ liệu lệch → AI “học vẹt”, có <b>thiên kiến</b>.</li>
+          <li>Dữ liệu tốt phải <b>đủ nhiều, cân bằng, đa dạng</b> (cả lá vàng khỏe, lá xanh bệnh…).</li>
+          <li>Con người cần <b>kiểm tra và sửa lỗi</b> cho AI; nên thử lại trên những mẫu <b>mới</b>.</li>
+        </ul>
+      </div>
+      <div class="flex flex-col gap-2">
+        <button onclick="moTab(2)" class="rounded-2xl px-4 py-2.5 font-bold bg-sky-100 hover:bg-sky-200 text-sky-800">🧠 Xem trọng số mới</button>
+        <button onclick="kq=[];moTab(3)" class="rounded-2xl px-4 py-2.5 font-bold bg-indigo-100 hover:bg-indigo-200 text-indigo-800">🏭 Chạy lại băng chuyền</button>
+      </div>
+    </aside>
+  </div>`;
+}
+byId('b4').addEventListener('click', e => {
+  const b = e.target.closest('[data-sua]'); if (!b) return;
+  const s = tim(b.dataset.sua), m0 = moHinh(), truoc = {};
+  MAU_THU.forEach(x => truoc[x.id] = duDoan(m0, x).nhan === x.dung);
+  const acc0 = Math.round(Object.values(truoc).filter(Boolean).length / MAU_THU.length * 100);
+  day.push({ s, nhan: s.dung, nguon: 'sua' });
+  const m1 = moHinh(), ok1 = duDoan(m1, s).nhan === s.dung;
+  const acc1 = Math.round(MAU_THU.filter(x => duDoan(m1, x).nhan === x.dung).length / MAU_THU.length * 100);
+  lichSu.push({ ten: 'Sau khi sửa ' + s.ten, acc: acc1, n: day.length });
+  vuaSua = { truoc };
+  ok1 ? tiengDung() : tieng(520, .15);
+  bao(`🔧 AI đã học thêm: <b>${s.ten}</b> = ${NHAN[s.dung].ten}. Độ chính xác: <b>${acc0}% → ${acc1}%</b>${ok1 ? '' : '<br>AI vẫn chưa đổi ý – dạy thêm lần nữa để tăng trọng số!'}`, 4200);
+  veB4();
+});
+
+/* ================== PHÍM TẮT & KHỞI ĐỘNG ================== */
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,select,textarea')) return;
+  if (tab === 1 && e.key === 'ArrowLeft') { e.preventDefault(); dayMau('A'); }
+  else if (tab === 1 && e.key === 'ArrowRight') { e.preventDefault(); dayMau('B'); }
+  else if (tab === 3 && e.key === ' ') { e.preventDefault(); chay(false); }
+  else if (/^[1-4]$/.test(e.key) && !e.ctrlKey && !e.altKey) moTab(+e.key);
+});
+byId('nut-am').onclick = e => { amThanh = !amThanh; e.currentTarget.textContent = amThanh ? '🔊' : '🔇'; };
+byId('nut-toan').onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); };
+moTab(1);
+</script>
+</body>
+</html>
