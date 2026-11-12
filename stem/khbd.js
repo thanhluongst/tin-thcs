@@ -301,6 +301,7 @@
     "@media print{body.khbd-in>*:not(.khbd-nen){display:none!important}body.khbd-in .khbd-nen{position:static;background:none}body.khbd-in .khbd-thanh{display:none}body.khbd-in .khbd-cuon{padding:0;overflow:visible}body.khbd-in .khbd-giay{box-shadow:none;padding:0;max-width:none}}";
 
   function mo() {
+    if (window.GvKhoa && !GvKhoa.laGv()) { GvKhoa.mo(mo); return; }   // chỉ giáo viên
     if (document.querySelector(".khbd-nen")) return;
     if (!document.getElementById("khbd-css")) { var st = document.createElement("style"); st.id = "khbd-css"; st.textContent = CSS; document.head.appendChild(st); }
     var O = [["truong", "Trường"], ["to", "Tổ chuyên môn"], ["gv", "Họ và tên giáo viên"], ["lopDay", "Lớp dạy", D.lop + "A1, " + D.lop + "A2"], ["tietPPCT", "Tiết PPCT", "VD: 30, 31"], ["ngaySoan", "Ngày soạn", "dd/mm/yyyy"], ["ngayDay", "Ngày dạy", "dd/mm/yyyy"], ["diaDanh", "Địa danh (chỗ kí)"]];

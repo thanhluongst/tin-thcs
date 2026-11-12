@@ -136,7 +136,7 @@
 
   // Giáo viên
   var g = D.gv;
-  h.push('<details class="gv"><summary>📋 Dành cho giáo viên: kế hoạch 2 tiết, chuẩn bị, đánh giá</summary><div class="noi">' +
+  var gvHtml = ('<details class="gv" open><summary>📋 Dành cho giáo viên: kế hoạch 2 tiết, chuẩn bị, đánh giá</summary><div class="noi">' +
     '<p class="khbd-mo" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:0"><button class="btn chinh" data-khbd>📄 Kế hoạch bài dạy đầy đủ (mẫu 5512) · tải Word</button><span class="goi-y">Điền tên trường, tổ, giáo viên rồi tải tệp .docx để nộp Ban giám hiệu.</span></p>' +
     "<p><b>Vị trí trong PPCT:</b> " + esc(D.tiet) + ". <b>Yêu cầu cần đạt (Tin học):</b> " + g.yccd + "</p>" +
     "<p><b>Chuẩn bị:</b> " + g.chuanBi + "</p>" +
@@ -146,8 +146,10 @@
     }).join("") +
     (g.luuY ? "<p style='margin-top:12px'><b>Lưu ý:</b> " + g.luuY + "</p>" : "") +
     "<p><b>Liên kết với bài học:</b> <a href='../../" + D.thuMucBai + "/' target='_blank' rel='noopener'>trang học sinh</a> · <a href='../../" + D.thuMucBai + "/giaovien.html' target='_blank' rel='noopener'>trang giáo viên</a> của Bài " + esc(D.bai) + ".</p>" +
+    '<p style="margin-bottom:0"><button class="btn nho" data-gv-mo>🔒 Khoá lại phần giáo viên</button> <span class="goi-y">Nên khoá trước khi để học sinh dùng máy này.</span></p>' +
     "</div></details>");
-  h.push('<p class="chan-trang">Dự án STEM – Tin học ' + D.lop + " · Trường THCS Nhơn Mỹ · Bài làm được lưu trên trình duyệt của máy này.</p></main>");
+  h.push('<div id="gv-khu"></div>');   // chỉ hiện khi đã nhập mã giáo viên (gv-khoa.js)
+  h.push('<p class="chan-trang">Dự án STEM – Tin học ' + D.lop + ' · Trường THCS Nhơn Mỹ · Bài làm được lưu trên trình duyệt của máy này. · <button class="gv-mo" data-gv-mo>🔒 Giáo viên</button></p></main>');
   h.push('<div class="thong-bao" role="status" aria-live="polite"></div><div id="bao-cao"></div>');
   document.body.innerHTML = h.join("");
 
@@ -422,4 +424,10 @@
   }
 
   di(Math.min(4, Math.max(0, S.buoc || 0)));
+
+  /* phần giáo viên: chỉ dựng khi đã mở khoá bằng mã giáo viên (gv-khoa.js) */
+  if (window.GvKhoa) GvKhoa.nghe(function (la) {
+    $("#gv-khu").innerHTML = la ? gvHtml : "";
+    $$(".gv-mo").forEach(function (b) { b.textContent = la ? "🔓 Giáo viên (đang mở)" : "🔒 Giáo viên"; });
+  });
 })();
