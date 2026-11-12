@@ -42,7 +42,7 @@
     N = N.concat(K.dauTrang(CFG, "Bài học STEM – " + D.ten, "(Vận dụng " + esc(BAI) + " – " + LOP + ")", 2));
 
     /* I. MỤC TIÊU */
-    N.push(P("<b>I. MỤC TIÊU</b>", { truoc: 6 }));
+    N.push(K.Muc("I. MỤC TIÊU"));
     N.push(P("<b>1. Về kiến thức</b>"));
     N.push(G("Yêu cầu cần đạt (Chương trình Tin học 2018): " + g.yccd));
     N.push(G("Kiến thức liên môn STEM được vận dụng trong bài học:"));
@@ -72,7 +72,7 @@
     (g.pc || []).forEach(function (s) { N.push(G(s)); });
 
     /* II. THIẾT BỊ */
-    N.push(P("<b>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</b>", { truoc: 6 }));
+    N.push(K.Muc("II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU"));
     N.push(P("<b>1. Giáo viên</b>"));
     N.push(G(g.chuanBi));
     N.push(G("Trang dự án STEM trực tuyến (tình huống, thẻ kiến thức nền, xưởng thực hành mô phỏng, bảng tiêu chí): <i>" + esc(location.href.split("#")[0]) + "</i>"));
@@ -82,12 +82,12 @@
     N.push(G("Chia nhóm 3 – 4 HS, mỗi nhóm một máy tính; các nhóm làm trên cùng một máy trong cả 2 tiết (hoặc lưu bài lên lớp bằng mã buổi để mở lại ở máy khác)."));
 
     /* III. TIẾN TRÌNH */
-    N.push(P("<b>III. TIẾN TRÌNH DẠY HỌC</b>", { truoc: 6 }));
+    N.push(K.Muc("III. TIẾN TRÌNH DẠY HỌC"));
     var NOI = noiDung();
     [0, 1, 2, 3, 4].forEach(function (i) {
-      if (i === 0) N.push(P("<b>TIẾT 1</b>", { giua: 1, truoc: 6 }));
-      if (i === 3) N.push(P("<b>TIẾT 2</b>", { giua: 1, truoc: 6 }));
-      N.push(P("<b>Hoạt động " + (i + 1) + ". " + TEN_HD[i] + "</b>" + (HD[i].phut ? " <i>(" + HD[i].phut + " phút)</i>" : ""), { truoc: 4 }));
+      if (i === 0) N.push(P("<b>TIẾT 1</b>", { giua: 1, truoc: 10, sau: 2, nen: "D9D9D9", mau: K.MAU.dam }));
+      if (i === 3) N.push(P("<b>TIẾT 2</b>", { giua: 1, truoc: 10, sau: 2, nen: "D9D9D9", mau: K.MAU.dam }));
+      N.push(P("", { truoc: 4 })); N.push(K.Thanh(("Hoạt động " + (i + 1) + ". " + TEN_HD[i]).toUpperCase(), HD[i].phut ? HD[i].phut + " phút" : "", ["C55A11", "2E75B6", "2E75B6", "548235", "7030A0"][i]));
       var x = NOI[i];
       N.push(P("<b>a) Mục tiêu:</b> " + x.mt, { thut: 1 }));
       N.push(P("<b>b) Nội dung:</b>", { thut: 1 })); x.nd.forEach(function (s) { N.push(G(s, 2)); });
@@ -99,7 +99,7 @@
     });
 
     /* Phụ lục: bảng đánh giá */
-    N.push(P("<b>PHỤ LỤC. CÔNG CỤ ĐÁNH GIÁ</b>", { truoc: 10 }));
+    N.push(K.Muc("PHỤ LỤC. CÔNG CỤ ĐÁNH GIÁ"));
     N.push(P("<b>1. Tiêu chí sản phẩm</b> (HS xác định ở Hoạt động 1, kiểm tra ở Hoạt động 4)"));
     D.tieuChi.forEach(function (t, j) { N.push(P("TC" + (j + 1) + ". " + t.t, { thut: 1 })); });
     if (D.tieuChiNhom) N.push(P("<i>Mỗi nhóm đặt thêm một tiêu chí riêng và tự kiểm tra.</i>", { thut: 1 }));

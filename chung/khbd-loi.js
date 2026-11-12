@@ -47,12 +47,21 @@
   function ngay(cfg, k) { var r = TT.ngay[cfg.id] || {}; return r[k] != null && r[k] !== "" ? r[k] : ngayMacDinh(cfg)[k]; }
   function o(v, dai) { return v ? esc(v) : (dai ? "……………………………" : "…………"); }
 
-  /* ---------- mô hình văn bản ---------- */
+  /* ---------- mô hình văn bản ----------
+     P(html, k): đoạn. k: giua, phai, thut (mức thụt), co (cỡ chữ pt), truoc/sau (pt), mau (màu chữ "1F4E79"), nen (nền đoạn), dam (in đậm cả đoạn)
+     G(html, cap): gạch đầu dòng
+     T(cot, hang, k): bảng. Ô là chuỗi HTML, mảng nút, hoặc {c: chuỗi|mảng, nen: "hex", mau: "hex"}.
+        k: khung (0 = không viền), dau (hàng đầu là tiêu đề), nenDau, vien (màu viền), nho (chữ nhỏ)
+     H(src, w, h, cap): hình (data: ArrayBuffer để nhúng vào Word; thiếu data thì Word bỏ qua hình) */
   function P(html, k) { k = k || {}; k.t = "p"; k.h = html; return k; }
   function G(html, cap) { return P("- " + html, { thut: cap || 1 }); }
   function T(cot, hang, k) { k = k || {}; k.t = "t"; k.cot = cot; k.hang = hang; return k; }
+  function H(src, w, h, cap, data) { return { t: "img", src: src, w: w, h: h, cap: cap || "", data: data || null }; }
+  var RONG_HINH = 500, CAO_HINH = 360;   // px (96 dpi) – khoảng 13,2 cm × 9,5 cm
+  function coHinh(n) { var w = n.w || RONG_HINH, h = n.h || CAO_HINH, r = Math.min(1, RONG_HINH / w, CAO_HINH / h); return { w: Math.round(w * r), h: Math.round(h * r) }; }
+  function o2(c) { return c && typeof c === "object" && !Array.isArray(c) && "c" in c ? c : { c: c }; }
 
-  /* Đầu trang theo mẫu 5512: Trường/Tổ – Họ tên GV; KẾ HOẠCH BÀI DẠY; tên bài; môn, lớp; thời gian */
+  /* Đầu trang: Tuần/Tiết – Ngày soạn/Ngày dạy; KẾ HOẠCH BÀI DẠY; tên bài; môn, lớp; thời gian */
   function dauTrang(cfg, tenBai, phu, soTiet) {
     var N = [], a = so(cfg), ds = dsSo(a);
     N.push(T([50, 50], [[
@@ -60,13 +69,27 @@
       [P("Ngày soạn: " + (ngay(cfg, "soan") || "……/……/20……"), { phai: 1 }), P("Ngày dạy: " + (ngay(cfg, "day") || "……/……/20……"), { phai: 1 })]
     ]], { khung: 0 }));
     N.push(P("", {}));
-    N.push(P("<b>KẾ HOẠCH BÀI DẠY</b>", { giua: 1, co: 15 }));
-    N.push(P("<b>TÊN BÀI DẠY: " + esc(tenBai.toUpperCase()) + "</b>", { giua: 1, co: 14 }));
+    N.push(P("<b>KẾ HOẠCH BÀI DẠY</b>", { giua: 1, co: 15, mau: MAU.dam }));
+    N.push(P("<b>TÊN BÀI DẠY: " + esc(tenBai.toUpperCase()) + "</b>", { giua: 1, co: 14, mau: MAU.dam }));
     if (phu) N.push(P("<i>" + phu + "</i>", { giua: 1 }));
     N.push(P("Môn học: Tin học; lớp: " + (TT.lopDay ? esc(TT.lopDay) : cfg.lop), { giua: 1 }));
     N.push(P("Thời gian thực hiện: " + hai(soTiet) + " tiết", { giua: 1 }));
     N.push(P("", {}));
     return N;
+  }
+  /* Bảng màu dùng chung */
+  var MAU = { dam: "1F3864", muc: "DEEAF6", nhan: "1F4E79", ghi: "FFF2CC", vienGhi: "BF9000", buoc: "F2F2F2" };
+  /* Tiêu đề mục lớn (I, II, III): dải nền xanh nhạt, chữ đậm xanh đậm */
+  function Muc(text) { return P("<b>" + text + "</b>", { nen: MAU.muc, mau: MAU.dam, truoc: 8, sau: 4 }); }
+  /* Ô GHI NHỚ: khung vàng */
+  function GhiNho(tieuDe, dong) {
+    return T([100], [[{ c: [P("<b>" + tieuDe + "</b>", { mau: "7F6000" })].concat(dong.map(function (x) {
+      return x && x.td ? P("<b>" + x.td + "</b>", { mau: "7F6000", truoc: 2 }) : P("• " + x, { thut: 1 });   // {td: "..."} = tiêu đề mục con
+    })), nen: MAU.ghi }]], { vien: MAU.vienGhi });
+  }
+  /* Thanh tiêu đề hoạt động: nền màu đậm, chữ trắng */
+  function Thanh(text, phut, mau) {
+    return T([82, 18], [[{ c: [P("<b>" + text + "</b>", { mau: "FFFFFF" })], nen: mau }, { c: [P("<b>" + phut + "</b>", { mau: "FFFFFF", phai: 1 })], nen: mau }]], { vien: mau });
   }
   /* Ô kí: Duyệt của BGH – Tổ trưởng chuyên môn – Giáo viên */
   function chuKi() {
@@ -81,9 +104,16 @@
   /* ---------- xem trước HTML ---------- */
   function veHtml(N) {
     return N.map(function (n) {
-      if (n.t === "p") return '<p class="kp' + (n.giua ? " giua" : n.phai ? " phai" : "") + '" style="' + (n.thut ? "padding-left:" + (n.thut * 1.2) + "em;" : "") + (n.co ? "font-size:" + (n.co / 13) + "em;" : "") + (n.truoc ? "margin-top:" + n.truoc + "pt;" : "") + '">' + (boEmoji(n.h) || "&nbsp;") + "</p>";
-      return '<table class="kt' + (n.khung === 0 ? " khong" : "") + (n.nho ? " nho" : "") + '"><colgroup>' + n.cot.map(function (w) { return '<col style="width:' + w + '%">'; }).join("") + "</colgroup>" +
-        n.hang.map(function (row) { return "<tr>" + row.map(function (c) { return "<td>" + (typeof c === "string" ? boEmoji(c) : veHtml(c)) + "</td>"; }).join("") + "</tr>"; }).join("") + "</table>";
+      if (n.t === "p") return '<p class="kp' + (n.giua ? " giua" : n.phai ? " phai" : "") + '" style="' + (n.thut ? "padding-left:" + (n.thut * 1.2) + "em;" : "") + (n.co ? "font-size:" + (n.co / 13) + "em;" : "") +
+        (n.truoc ? "margin-top:" + n.truoc + "pt;" : "") + (n.sau ? "margin-bottom:" + n.sau + "pt;" : "") + (n.mau ? "color:#" + n.mau + ";" : "") + (n.nen ? "background:#" + n.nen + ";padding:3px 6px;" : "") + (n.dam ? "font-weight:700;" : "") + '">' + (boEmoji(n.h) || "&nbsp;") + "</p>";
+      if (n.t === "img") { var s = coHinh(n); return '<figure class="kh"><img src="' + esc(n.src) + '" alt="" style="width:' + s.w + "px;max-width:100%;height:auto\">" + (n.cap ? "<figcaption>" + esc(n.cap) + "</figcaption>" : "") + "</figure>"; }
+      return '<table class="kt' + (n.khung === 0 ? " khong" : "") + (n.nho ? " nho" : "") + '"' + (n.vien ? ' style="--vien:#' + n.vien + '"' : "") + "><colgroup>" + n.cot.map(function (w) { return '<col style="width:' + w + '%">'; }).join("") + "</colgroup>" +
+        n.hang.map(function (row, ri) {
+          return "<tr>" + row.map(function (c) {
+            var x = o2(c), nen = x.nen || (n.dau && ri === 0 ? (n.nenDau || "EDEDED") : "");
+            return '<td style="' + (nen ? "background:#" + nen + ";" : "") + (n.vien ? "border-color:#" + n.vien + ";" : "") + '">' + (typeof x.c === "string" ? boEmoji(x.c) : veHtml(x.c)) + "</td>";
+          }).join("") + "</tr>";
+        }).join("") + "</table>";
     }).join("");
   }
 
@@ -97,11 +127,11 @@
       document.head.appendChild(s);
     });
   }
-  function runs(X, html, co) {
+  function runs(X, html, co, mau, dam) {
     var d = document.createElement("div"); d.innerHTML = boEmoji(html); var out = [];
     (function di(el, b, it) {
       el.childNodes.forEach(function (c) {
-        if (c.nodeType === 3) { var t = c.nodeValue.replace(/\s+/g, " "); if (t) out.push(new X.TextRun({ text: t, bold: b, italics: it, size: co })); }
+        if (c.nodeType === 3) { var t = c.nodeValue.replace(/\s+/g, " "); if (t) out.push(new X.TextRun({ text: t, bold: b, italics: it, size: co, color: mau })); }
         else if (c.nodeType === 1) {
           var tag = c.tagName;
           if (tag === "BR") { out.push(new X.TextRun({ break: 1 })); return; }
@@ -109,40 +139,56 @@
           di(c, b || tag === "B" || tag === "STRONG", it || tag === "I" || tag === "EM");
         }
       });
-    })(d, false, false);
+    })(d, !!dam, false);
     return out;
   }
   function docxNodes(X, N, nho) {
-    var co = nho ? 24 : 26;
-    return N.map(function (n) {
-      if (n.t === "p") return new X.Paragraph({
-        children: runs(X, n.h, n.co ? n.co * 2 : co), alignment: n.giua ? X.AlignmentType.CENTER : n.phai ? X.AlignmentType.RIGHT : X.AlignmentType.JUSTIFIED,
-        indent: n.thut ? { left: 284 * n.thut } : undefined, spacing: { before: (n.truoc || 0) * 20, after: 40, line: 276 }
-      });
-      var khong = n.khung === 0, B = khong ? { style: X.BorderStyle.NONE, size: 0, color: "FFFFFF" } : { style: X.BorderStyle.SINGLE, size: 4, color: "000000" };
+    var co = nho ? 24 : 26, out = [];
+    N.forEach(function (n) {
+      if (n.t === "p") {
+        out.push(new X.Paragraph({
+          children: runs(X, n.h, n.co ? n.co * 2 : co, n.mau, n.dam), alignment: n.giua ? X.AlignmentType.CENTER : n.phai ? X.AlignmentType.RIGHT : X.AlignmentType.JUSTIFIED,
+          indent: n.thut ? { left: 284 * n.thut } : undefined, spacing: { before: (n.truoc || 0) * 20, after: n.sau ? n.sau * 20 : 40, line: 276 },
+          shading: n.nen ? { type: X.ShadingType.CLEAR, fill: n.nen, color: "auto" } : undefined
+        }));
+        return;
+      }
+      if (n.t === "img") {
+        if (!n.data) return;
+        var s = coHinh(n);
+        out.push(new X.Paragraph({ alignment: X.AlignmentType.CENTER, spacing: { before: 80, after: 20 }, keepNext: true, children: [new X.ImageRun({ data: n.data, transformation: { width: s.w, height: s.h } })] }));
+        if (n.cap) out.push(new X.Paragraph({ alignment: X.AlignmentType.CENTER, spacing: { after: 100 }, children: [new X.TextRun({ text: boEmoji(n.cap), italics: true, size: 22, color: "404040" })] }));
+        return;
+      }
+      var khong = n.khung === 0, vien = n.vien || "000000";
+      var B = khong ? { style: X.BorderStyle.NONE, size: 0, color: "FFFFFF" } : { style: X.BorderStyle.SINGLE, size: n.vien ? 8 : 4, color: vien };
       var bien = { top: B, bottom: B, left: B, right: B, insideHorizontal: B, insideVertical: B };
-      return new X.Table({
+      out.push(new X.Table({
         width: { size: 100, type: X.WidthType.PERCENTAGE }, borders: bien,
         columnWidths: n.cot.map(function (w) { return Math.round(9071 * w / 100); }),
         rows: n.hang.map(function (row, ri) {
           return new X.TableRow({
             tableHeader: !!(n.dau && ri === 0), cantSplit: false,
             children: row.map(function (c, ci) {
-              var ch = typeof c === "string" ? [P(c, { giua: n.dau && ri === 0 })] : c;
+              var x = o2(c), ch = typeof x.c === "string" ? [P(x.c, { giua: n.dau && ri === 0, mau: x.mau })] : x.c;
+              var nen = x.nen || (n.dau && ri === 0 ? (n.nenDau || "EDEDED") : "");
               return new X.TableCell({
                 width: { size: n.cot[ci], type: X.WidthType.PERCENTAGE }, borders: khong ? { top: B, bottom: B, left: B, right: B } : undefined,
-                margins: { top: 40, bottom: 40, left: 90, right: 90 },
-                shading: n.dau && ri === 0 ? { fill: "EDEDED", type: X.ShadingType.CLEAR, color: "auto" } : undefined,
+                margins: { top: 50, bottom: 50, left: 100, right: 100 },
+                shading: nen ? { fill: nen, type: X.ShadingType.CLEAR, color: "auto" } : undefined,
                 children: docxNodes(X, ch, n.nho)
               });
             })
           });
         })
-      });
+      }));
+      if (!khong) out.push(new X.Paragraph({ spacing: { after: 0 }, children: [] }));   // cách bảng kế tiếp
     });
+    return out;
   }
+  function chuanBi(cfg) { if (!cfg._cb) cfg._cb = cfg.chuanBi ? Promise.resolve(cfg.chuanBi()).catch(function () {}) : Promise.resolve(); return cfg._cb; }
   function taoBlob(cfg) {
-    return napDocx().then(function (X) {
+    return chuanBi(cfg).then(napDocx).then(function (X) {
       var doc = new X.Document({
         creator: TT.gv || "Giáo viên", title: cfg.tieuDe || "Kế hoạch bài dạy", description: "Kế hoạch bài dạy Tin học " + cfg.lop,
         styles: { default: { document: { run: { font: "Times New Roman", size: 26 } } } },
@@ -177,8 +223,8 @@
     ".khbd-giay{background:#fff;color:#000;max-width:794px;margin:0 auto;padding:56px 56px 56px 84px;font-family:'Times New Roman',Times,serif;font-size:16px;line-height:1.45;box-shadow:0 6px 30px rgba(0,0,0,.3)}" +
     ".khbd-giay .kp{margin:0 0 3px;text-align:justify}.khbd-giay .kp.giua{text-align:center}.khbd-giay .kt td .kp.phai,.khbd-giay .kp.phai{text-align:right}" +
     ".khbd-giay table.kt{width:100%;border-collapse:collapse;margin:4px 0 8px;table-layout:fixed}.khbd-giay .kt td{border:1px solid #000;padding:3px 6px;vertical-align:top}" +
-    ".khbd-giay .kt tr:first-child td{background:#ededed}.khbd-giay .kt.khong tr td{border:0;background:none}.khbd-giay .kt.nho{font-size:15px}" +
-    ".khbd-giay .kt td .kp{text-align:left}" +
+    ".khbd-giay .kt.khong tr td{border:0;background:none}.khbd-giay .kt.nho{font-size:15px}" +
+    ".khbd-giay .kt td .kp{text-align:left}.khbd-giay figure.kh{margin:8px 0 10px;text-align:center}.khbd-giay figure.kh figcaption{font-style:italic;font-size:.88em;color:#404040}" +
     "@media (max-width:640px){.khbd-giay{padding:22px 16px;font-size:14px}.khbd-thanh label{max-width:none}.khbd-nut{margin-left:0;width:100%}}" +
     "@media print{body.khbd-in>*:not(.khbd-nen){display:none!important}body.khbd-in .khbd-nen{position:static;background:none}body.khbd-in .khbd-thanh{display:none}body.khbd-in .khbd-cuon{padding:0;overflow:visible}body.khbd-in .khbd-giay{box-shadow:none;padding:0;max-width:none}}";
 
@@ -196,6 +242,7 @@
     var giay = nen.querySelector(".khbd-giay");
     function ve() { giay.innerHTML = veHtml(cfg.dung()); }
     ve();
+    chuanBi(cfg).then(function () { if (document.body.contains(giay)) ve(); });   // hình minh hoạ tải xong thì vẽ lại
     nen.addEventListener("input", function (e) {
       var k = e.target.dataset.tt; if (!k) return;
       var v = e.target.value.trim();
@@ -218,5 +265,5 @@
     nen.querySelector("[data-khbd-tai]").focus();
   }
 
-  window.KhbdLoi = { esc: esc, chu: chu, boEmoji: boEmoji, P: P, G: G, T: T, o: o, TT: TT, tiet: tiet, dauTrang: dauTrang, chuKi: chuKi, veHtml: veHtml, taoBlob: taoBlob, mo: mo };
+  window.KhbdLoi = { esc: esc, chu: chu, boEmoji: boEmoji, P: P, G: G, T: T, H: H, Muc: Muc, GhiNho: GhiNho, Thanh: Thanh, MAU: MAU, o: o, TT: TT, tiet: tiet, dauTrang: dauTrang, chuKi: chuKi, veHtml: veHtml, taoBlob: taoBlob, mo: mo };
 })();

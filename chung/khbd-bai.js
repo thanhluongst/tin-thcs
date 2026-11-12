@@ -72,7 +72,7 @@
   function acts(s) { return s.acts.filter(function (a) { return !a.ghi; }); }
   function khaiNiem(s) {
     return acts(s).filter(function (a) { return a.concept && L.CONCEPTS[a.concept]; }).map(function (a) { return L.CONCEPTS[a.concept].t; })
-      .filter(function (t) { return t.toLowerCase() !== String(s.title).toLowerCase(); });
+      .filter(function (t) { var x = t.toLowerCase(); return x !== String(s.title).toLowerCase() && !/^(ghi nhớ|ghi bài)$/.test(x); });
   }
   function mucTieu(s) {
     var ten = acts(s).map(function (a) { return a.title.replace(/^(Hoạt động \d+|Đọc hiểu|Thực hành)\s*[:–-]\s*/, ""); });
@@ -83,19 +83,54 @@
     return "HS tìm hiểu và nắm được kiến thức về " + thuong(s.title) + (kn.length ? " (" + kn.join("; ") + ")" : "") + " thông qua các nhiệm vụ: " + ten.join("; ") + ".";
   }
 
+  /* Màu theo loại hoạt động: [đậm (thanh tiêu đề), nhạt (ô bước)] */
+  function mauHD(s) {
+    if (s.id === "mo-dau") return ["C55A11", "FBE5D6"];
+    if (s.id === "luyen-tap") return ["548235", "E2F0D9"];
+    if (s.id === "van-dung") return ["7030A0", "E4DFEC"];
+    return ["2E75B6", "DEEBF7"];
+  }
+  function loaiHD(s) { return s.id === "mo-dau" ? "Mở đầu" : s.id === "luyen-tap" ? "Luyện tập" : s.id === "van-dung" ? "Vận dụng" : "Hình thành kiến thức"; }
+  function Nhan(text, mau) { return P("<b>" + text + "</b>", { mau: mau || K.MAU.nhan, truoc: 3 }); }
+
+  /* ---------- Hình minh hoạ lấy từ trang học sinh của bài (index.html) ---------- */
+  var HINH = {};   // stageId → { task: {taskId: [hình]}, cuoi: [hình] }
+  function chuanBi() {
+    if (!window.fetch || !window.DOMParser) return Promise.resolve();
+    return fetch(baseUrl + "index.html").then(function (r) { return r.ok ? r.text() : ""; }).then(function (html) {
+      if (!html) return;
+      var doc = new DOMParser().parseFromString(html, "text/html"), viec = [];
+      ST.forEach(function (s) {
+        var sec = doc.getElementById(s.id); if (!sec) return;
+        var h = HINH[s.id] = { task: {}, cuoi: [] }, cho = [];
+        Array.prototype.forEach.call(sec.querySelectorAll("figure.fig, [data-task]"), function (el) {
+          if (el.tagName === "FIGURE") {
+            var img = el.querySelector("img"); if (!img || !img.getAttribute("src")) return;
+            var cap = el.querySelector("figcaption");
+            var x = K.H(baseUrl + img.getAttribute("src"), +img.getAttribute("width") || 0, +img.getAttribute("height") || 0, cap ? chu(cap.innerHTML) : (img.getAttribute("alt") || ""));
+            cho.push(x);
+            viec.push(fetch(x.src).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (b) { x.data = b; }).catch(function () {}));
+          } else if (cho.length) { var k = el.getAttribute("data-task"); h.task[k] = (h.task[k] || []).concat(cho); cho = []; }
+        });
+        h.cuoi = cho;
+      });
+      return Promise.all(viec);
+    }).catch(function () {});
+  }
+
   function dung() {
-    var N = K.dauTrang(CFG, L.title, null, soTiet);
+    var N = K.dauTrang(CFG, L.title, null, soTiet), M = K.MAU;
 
     /* I. MỤC TIÊU */
-    N.push(P("<b>I. MỤC TIÊU</b>", { truoc: 6 }));
-    N.push(P("<b>1. Về kiến thức</b>"));
+    N.push(K.Muc("I. MỤC TIÊU"));
+    N.push(Nhan("1. Về kiến thức"));
     (NA ? NA.yccd : []).forEach(function (y) { N.push(G(esc(y) + ".")); });
-    N.push(P("<b>2. Về năng lực</b>"));
-    N.push(P("<i>a) Năng lực chung</i>", { thut: 1 }));
+    N.push(Nhan("2. Về năng lực"));
+    N.push(P("<b><i>a) Năng lực chung</i></b>", { thut: 1 }));
     N.push(G("<i>Tự chủ và tự học:</i> tự đọc phần kiến thức (Đọc hiểu, SGK), tự trả lời câu hỏi và đối chiếu với đáp án được chốt."));
     N.push(G("<i>Giao tiếp và hợp tác:</i> làm việc nhóm, trình bày bài làm trước lớp, nhận xét và góp ý bài của nhóm bạn."));
     N.push(G("<i>Giải quyết vấn đề và sáng tạo:</i> vận dụng kiến thức của bài để giải quyết các nhiệm vụ luyện tập và tình huống thực tiễn ở phần vận dụng."));
-    N.push(P("<i>b) Năng lực Tin học</i>", { thut: 1 }));
+    N.push(P("<b><i>b) Năng lực Tin học</i></b>", { thut: 1 }));
     var daCo = {};
     (NA ? NA.nls : []).forEach(function (m) {
       var nl = nlTheoMa(m); if (daCo[nl]) return; daCo[nl] = 1;
@@ -103,57 +138,67 @@
     });
     if (!daCo.NLe) N.push(G("<i>NLe – " + NL_TIN.NLe + ":</i> cùng nhóm thực hiện nhiệm vụ, chia sẻ bài làm và nhận xét bài của nhóm bạn trên trang học tập trực tuyến."));
     if (NA) {
-      N.push(P("<i>c) Năng lực số (Thông tư 02/2025/TT-BGDĐT; chỉ báo theo Công văn 3456)</i>", { thut: 1 }));
-      NA.nls.forEach(function (m) { N.push(G("<i>" + m + ":</i> " + esc(NLS_ATM.chiBao[m] || ""))); });
+      N.push(P("<b><i>c) Năng lực số</i></b> <i>(Thông tư 02/2025/TT-BGDĐT; chỉ báo theo Công văn 3456)</i>", { thut: 1 }));
+      NA.nls.forEach(function (m) { N.push(G("<b>" + m + ":</b> " + esc(NLS_ATM.chiBao[m] || ""))); });
       if (NA.atm.length) {
-        N.push(P("<i>d) An toàn mạng toàn diện (Công văn 6206)</i>", { thut: 1 }));
-        NA.atm.forEach(function (a) { N.push(G("<i>" + a.nhom + " [" + a.muc + "] – " + esc(NLS_ATM.nhomAtm[a.nhom]) + ":</i> " + esc(a.yc))); });
+        N.push(P("<b><i>d) An toàn mạng toàn diện</i></b> <i>(Công văn 6206)</i>", { thut: 1 }));
+        NA.atm.forEach(function (a) { N.push(G("<b>" + a.nhom + " [" + a.muc + "]</b> – " + esc(NLS_ATM.nhomAtm[a.nhom]) + ": " + esc(a.yc))); });
       }
-      N.push(G("<i>Mục tiêu tích hợp:</i> " + esc(NA.mt)));
+      N.push(T([100], [[{ c: [P("<b>Mục tiêu tích hợp:</b> " + esc(NA.mt))], nen: "EAF1FB" }]], { vien: "9DC3E6" }));
     }
-    N.push(P("<b>3. Về phẩm chất</b>"));
+    N.push(Nhan("3. Về phẩm chất"));
     N.push(G("<i>Chăm chỉ:</i> tích cực tham gia, hoàn thành các nhiệm vụ học tập được giao."));
     N.push(G("<i>Trung thực:</i> tự làm bài, báo cáo đúng kết quả của nhóm; nhận xét bài bạn khách quan."));
     N.push(G("<i>Trách nhiệm:</i> có trách nhiệm với nhiệm vụ chung của nhóm" + (NA && NA.atm.length ? "; có ý thức sử dụng môi trường số an toàn, văn minh." : "; sử dụng thiết bị đúng quy định của phòng máy.")));
 
     /* II. THIẾT BỊ */
-    N.push(P("<b>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</b>", { truoc: 6 }));
-    N.push(P("<b>1. Giáo viên</b>"));
+    N.push(K.Muc("II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU"));
+    N.push(Nhan("1. Giáo viên"));
     N.push(G("Máy tính, máy chiếu; SGK Tin học " + lop + "; kế hoạch bài dạy."));
     N.push(G("Trang giáo viên của bài (mở buổi học, mã QR, theo dõi tiến độ các nhóm, chiếu bài làm, chốt đáp án): <i>" + esc(baseUrl + "giaovien.html") + "</i>"));
     (NA ? NA.atm : []).forEach(function (a) { N.push(G("Học liệu cho hoạt động an toàn mạng (" + a.nhom + "): " + esc(a.hd))); });
-    N.push(P("<b>2. Học sinh</b>"));
+    N.push(Nhan("2. Học sinh"));
     N.push(G("SGK Tin học " + lop + ", vở ghi."));
     N.push(G("Mỗi nhóm một máy tính hoặc thiết bị truy cập trang học sinh của bài: <i>" + esc(baseUrl) + "</i> (nếu thiếu thiết bị: GV chiếu câu hỏi, nhóm trả lời trên phiếu)."));
 
-    /* III. TIẾN TRÌNH */
-    N.push(P("<b>III. TIẾN TRÌNH DẠY HỌC</b>", { truoc: 6 }));
+    /* III. TIẾN TRÌNH – bảng tóm tắt */
+    N.push(K.Muc("III. TIẾN TRÌNH DẠY HỌC"));
+    N.push(P("<b><i>Tóm tắt tiến trình</i></b>", { mau: M.nhan }));
+    var tieuDe = function (t) { return { c: [P("<b>" + t + "</b>", { giua: 1, mau: "FFFFFF" })], nen: M.dam }; };
+    N.push(T([30, 12, 58], [[tieuDe("Hoạt động"), tieuDe("Thời gian"), tieuDe("Mục tiêu chính")]].concat(ST.map(function (s, i) {
+      var m = mauHD(s);
+      return [{ c: [P("<b>" + esc(tenHD(s, i).replace(/^Hoạt động /, "HĐ ")) + "</b>", { mau: m[0] })], nen: m[1] }, { c: [P(PHUT[i] + " phút", { giua: 1 })] }, { c: [P(esc(mucTieu(s)))] }];
+    })), { vien: "8EAADB", nho: 1 }));
+
     var daQua = 0, tietDaGhi = 0;
     var oAtm = ST.findIndex(function (s) { return s.id === "luyen-tap"; }); if (oAtm < 0) oAtm = ST.length - 1;
     ST.forEach(function (s, i) {
-      var tietSo = Math.min(soTiet, Math.floor(daQua / 45) + 1);
-      if (soTiet > 1 && tietSo !== tietDaGhi) { N.push(P("<b>TIẾT " + tietSo + "</b>", { giua: 1, truoc: 6 })); tietDaGhi = tietSo; }
+      var tietSo = Math.min(soTiet, Math.floor(daQua / 45) + 1), mau = mauHD(s), hinhS = HINH[s.id] || { task: {}, cuoi: [] }, daDung = {};
+      if (soTiet > 1 && tietSo !== tietDaGhi) { N.push(P("<b>TIẾT " + tietSo + "</b>", { giua: 1, truoc: 10, sau: 2, nen: "D9D9D9", mau: M.dam })); tietDaGhi = tietSo; }
       daQua += PHUT[i];
       var A = acts(s), ghi = s.acts.filter(function (a) { return a.ghi && a.concept && L.CONCEPTS[a.concept]; });
-      var nd = [], sp = ["Câu trả lời của các nhóm trên trang học tập."];
+      var nd = [], sp = [G("Câu trả lời của các nhóm trên trang học tập.", 2)];
       A.forEach(function (a) {
-        var ts = (a.tasks || []).map(function (k) { return L.TASKS[k]; }).filter(Boolean);
+        var ts = (a.tasks || []).map(function (k) { return [k, L.TASKS[k]]; }).filter(function (x) { return x[1]; });
         var c = a.concept && L.CONCEPTS[a.concept];
-        nd.push("<b>" + esc(a.title) + "</b>" + (c ? ": đọc mục “" + esc(c.t) + "” (SGK, trang học tập)" + (ts.length ? " rồi trả lời câu hỏi." : ".") : (ts.length ? ":" : ".")));
-        ts.forEach(function (t) { nd.push("<i>" + esc(t.label) + (/[?!.:]$/.test(t.label) ? "" : ".") + "</i> " + cauHoi(t)); sp.push("<i>" + esc(t.label.replace(/[?.:]+$/, "")) + ":</i> " + t.k); });
+        nd.push(P("▸ <b>" + esc(a.title) + "</b>" + (c ? ": đọc mục “" + esc(c.t) + "” (SGK, trang học tập)" + (ts.length ? " rồi trả lời câu hỏi." : ".") : (ts.length ? ":" : ".")), { thut: 2, mau: undefined }));
+        ts.forEach(function (x) {
+          var k = x[0], t = x[1];
+          (hinhS.task[k] || []).forEach(function (h) { nd.push(h); daDung[h.src] = 1; });
+          nd.push(G("<i>" + esc(t.label) + (/[?!.:]$/.test(t.label) ? "" : ".") + "</i> " + cauHoi(t), 3));
+          sp.push(G("<i>" + esc(t.label.replace(/[?.:]+$/, "")) + ":</i> " + t.k, 2));
+        });
+      });
+      Object.keys(hinhS.task).forEach(function (k) { hinhS.task[k].forEach(function (h) { if (!daDung[h.src]) { nd.push(h); daDung[h.src] = 1; } }); });
+      hinhS.cuoi.forEach(function (h) { nd.push(h); });
+      var atmHere = NA && NA.atm.length && i === oAtm ? NA.atm : [];
+      atmHere.forEach(function (a) {
+        nd.push(T([100], [[{ c: [P("<b>Hoạt động tích hợp an toàn mạng (" + a.nhom + " [" + a.muc + "]):</b> " + esc(a.hd))], nen: "FCE4D6" }]], { vien: "F4B183" }));
+        sp.push(G("<i>Minh chứng an toàn mạng:</i> " + esc(a.mc), 2));
       });
       var ghiDong = [];
       ghi.forEach(function (a) { ghiDong = ghiDong.concat(dong(L.CONCEPTS[a.concept].b)); });
-      var ghiCau = ghiDong.map(function (x, j) {
-        var td = x.charAt(0) === "\u0001", t = chu(td ? x.slice(1) : x).replace(/[.;:]\s*$/, "");
-        return td ? (j ? " " : "") + "<b>" + t + "</b>:" : " " + t + ";";
-      }).join("").replace(/;\s*<b>/g, ". <b>").replace(/;$/, ".").trim();
-      if (ghiDong.length) sp.push("<i>Kiến thức ghi bài:</i> " + ghiCau);
-      var atmHere = NA && NA.atm.length && i === oAtm ? NA.atm : [];
-      atmHere.forEach(function (a) {
-        nd.push("<b>Hoạt động tích hợp an toàn mạng (" + a.nhom + " [" + a.muc + "]):</b> " + esc(a.hd));
-        sp.push("<i>Minh chứng an toàn mạng:</i> " + esc(a.mc));
-      });
+      var ghiNho = ghiDong.map(function (x) { return x.charAt(0) === "\u0001" ? { td: esc(chu(x.slice(1))) } : x; });
       var tenViec = A.map(function (a) { return a.title; }).join("; ");
       var tc = [
         (s.id === "mo-dau" ? ["GV mở buổi học trên trang giáo viên, chiếu mã QR; các nhóm vào trang học sinh của bài."] : [])
@@ -161,22 +206,26 @@
           .concat(atmHere.map(function (a) { return "GV tổ chức hoạt động an toàn mạng: " + esc(a.hd); })),
         ["HS làm việc nhóm, đọc SGK/phần Đọc hiểu, trả lời các câu hỏi trên trang học tập.", "GV theo dõi bảng tiến độ trên trang giáo viên, hỗ trợ nhóm còn lúng túng."],
         ["GV chiếu bài làm của 1 – 2 nhóm; đại diện nhóm trình bày, các nhóm khác nhận xét, bổ sung.", "GV gửi nhận xét, khen trên trang cho các nhóm."],
-        ["GV nhận xét, chốt đáp án (nút Chốt trên trang giáo viên)" + (atmHere.length ? "; thu minh chứng an toàn mạng." : ".")].concat(ghiDong.length ? ["GV chốt kiến thức; HS ghi bài các ý chính (mục Kiến thức ghi bài ở phần Sản phẩm)."] : [])
+        ["GV nhận xét, chốt đáp án (nút Chốt trên trang giáo viên)" + (atmHere.length ? "; thu minh chứng an toàn mạng." : ".")].concat(ghiDong.length ? ["GV chốt kiến thức; HS ghi bài theo ô Ghi nhớ."] : [])
       ];
-      N.push(P("<b>" + esc(tenHD(s, i)) + "</b> <i>(" + PHUT[i] + " phút)</i>", { truoc: 4 }));
-      N.push(P("<b>a) Mục tiêu:</b> " + esc(mucTieu(s)), { thut: 1 }));
-      N.push(P("<b>b) Nội dung:</b>", { thut: 1 })); nd.forEach(function (x) { N.push(G(x, 2)); });
-      N.push(P("<b>c) Sản phẩm:</b>", { thut: 1 })); sp.forEach(function (x) { N.push(G(x, 2)); });
-      N.push(P("<b>d) Tổ chức thực hiện:</b>", { thut: 1 }));
-      N.push(T([28, 72], [["<b>Bước</b>", "<b>Hoạt động của giáo viên và học sinh</b>"]].concat(
-        [["Chuyển giao nhiệm vụ", tc[0]], ["Thực hiện nhiệm vụ", tc[1]], ["Báo cáo, thảo luận", tc[2]], ["Kết luận, nhận định", tc[3]]]
-          .map(function (r) { return ["<b>" + r[0] + "</b>", r[1].map(function (x) { return P("- " + x); })]; })), { dau: 1 }));
+
+      N.push(P("", { truoc: 4 }));
+      N.push(K.Thanh(esc(tenHD(s, i)).toUpperCase(), PHUT[i] + " phút", mau[0]));
+      N.push(Nhan("a) Mục tiêu", mau[0])); N.push(P(esc(mucTieu(s)), { thut: 1 }));
+      N.push(Nhan("b) Nội dung", mau[0])); nd.forEach(function (x) { N.push(x); });
+      N.push(Nhan("c) Sản phẩm", mau[0])); sp.forEach(function (x) { N.push(x); });
+      if (ghiNho.length) N.push(K.GhiNho("GHI NHỚ", ghiNho));
+      N.push(Nhan("d) Tổ chức thực hiện", mau[0]));
+      var dau = function (t) { return { c: [P("<b>" + t + "</b>", { giua: 1, mau: "FFFFFF" })], nen: mau[0] }; };
+      N.push(T([26, 74], [[dau("Bước"), dau("Hoạt động của giáo viên và học sinh")]].concat(
+        [["Bước 1. Chuyển giao nhiệm vụ", tc[0]], ["Bước 2. Thực hiện nhiệm vụ", tc[1]], ["Bước 3. Báo cáo, thảo luận", tc[2]], ["Bước 4. Kết luận, nhận định", tc[3]]]
+          .map(function (r) { return [{ c: [P("<b>" + r[0] + "</b>", { mau: mau[0] })], nen: mau[1] }, r[1].map(function (x) { return P("- " + x); })]; })), { vien: mau[0] }));
     });
     return N.concat(K.chuKi());
   }
 
   var CFG = { id: id, lop: lop, tietMacDinh: NA ? NA.tiet : "", tieuDe: "KHBD – " + L.title + " – Tin học " + lop,
-    tenTep: "KHBD-Tin" + lop + "-Bai" + (NA ? NA.bai : "") + "-" + id.replace(/^tin\d-/, ""), dung: dung };
+    tenTep: "KHBD-Tin" + lop + "-Bai" + (NA ? NA.bai : "") + "-" + id.replace(/^tin\d-/, ""), dung: dung, chuanBi: chuanBi };
   window.KHBD_BAI = { dung: dung, taoBlob: function () { return K.taoBlob(CFG); }, mo: function () { K.mo(CFG); } };
 
   /* Nút trên trang giáo viên: đầu khu #app (chỉ hiện sau khi mở buổi học bằng mã giáo viên) */
@@ -185,7 +234,7 @@
     var sec = document.createElement("section");
     sec.className = "part"; sec.id = "khbd-bai";
     sec.innerHTML = '<div class="act" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="btn primary" type="button" id="khbd-mo">📄 Kế hoạch bài dạy (mẫu 5512) · tải Word</button>' +
-      '<span class="status">Dựng từ nội dung bài trên trang' + (NA ? ", kèm năng lực số – an toàn mạng; tiết PPCT " + esc(NA.tiet) : "") + '. Điền tên trường, tổ, giáo viên rồi tải tệp .docx nộp tổ trưởng.</span></div>';
+      '<span class="status">Dựng từ nội dung bài trên trang' + (NA ? ", kèm năng lực số – an toàn mạng; tiết PPCT " + esc(NA.tiet) : "") + '. Có hình minh hoạ lấy từ trang học sinh; xem trước rồi tải tệp .docx nộp tổ trưởng.</span></div>';
     app.insertBefore(sec, app.firstChild);
     sec.querySelector("#khbd-mo").addEventListener("click", function () { K.mo(CFG); });
   }
