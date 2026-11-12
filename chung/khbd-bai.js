@@ -97,22 +97,34 @@
   var HINH = {};   // stageId → { task: {taskId: [hình]}, cuoi: [hình] }
   function chuanBi() {
     if (!window.fetch || !window.DOMParser) return Promise.resolve();
-    return fetch(baseUrl + "index.html").then(function (r) { return r.ok ? r.text() : ""; }).then(function (html) {
+    var lay = function (u, kieu) { return fetch(u).then(function (r) { return r.ok ? r[kieu]() : null; }).catch(function () { return null; }); };
+    // khbd/hinh.json: ảnh chụp sẵn từ trang học sinh – fig: hình vẽ lại (lưu đồ, sơ đồ…), hd: khung nhiệm vụ của hoạt động chưa có hình
+    return Promise.all([lay(baseUrl + "index.html", "text"), lay(baseUrl + "khbd/hinh.json", "json")]).then(function (kq) {
+      var html = kq[0], man = kq[1] || { fig: {}, hd: {} };
       if (!html) return;
       var doc = new DOMParser().parseFromString(html, "text/html"), viec = [];
+      var taiVe = function (x) { viec.push(lay(x.src, "arrayBuffer").then(function (b) { x.data = b; })); return x; };
+      var thuTu = Array.prototype.slice.call(doc.querySelectorAll("section.part figure.fig"));
       ST.forEach(function (s) {
         var sec = doc.getElementById(s.id); if (!sec) return;
         var h = HINH[s.id] = { task: {}, cuoi: [] }, cho = [];
         Array.prototype.forEach.call(sec.querySelectorAll("figure.fig, [data-task]"), function (el) {
           if (el.tagName === "FIGURE") {
-            var img = el.querySelector("img"); if (!img || !img.getAttribute("src")) return;
-            var cap = el.querySelector("figcaption");
-            var x = K.H(baseUrl + img.getAttribute("src"), +img.getAttribute("width") || 0, +img.getAttribute("height") || 0, cap ? chu(cap.innerHTML) : (img.getAttribute("alt") || ""));
-            cho.push(x);
-            viec.push(fetch(x.src).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (b) { x.data = b; }).catch(function () {}));
+            var img = el.querySelector("img"), cap = el.querySelector("figcaption"), cs = cap ? chu(cap.innerHTML) : "";
+            if (img && img.getAttribute("src"))
+              cho.push(taiVe(K.H(baseUrl + img.getAttribute("src"), +img.getAttribute("width") || 0, +img.getAttribute("height") || 0, cs || img.getAttribute("alt") || "")));
+            else {
+              var i = thuTu.indexOf(el), f = man.fig && man.fig[i];
+              if (f) cho.push(taiVe(K.H(baseUrl + "khbd/f" + i + ".jpg", f.w, f.h, cs)));
+            }
           } else if (cho.length) { var k = el.getAttribute("data-task"); h.task[k] = (h.task[k] || []).concat(cho); cho = []; }
         });
         h.cuoi = cho;
+        var m = man.hd && man.hd[s.id];
+        if (m && !cho.length && !Object.keys(h.task).length) {
+          var x = taiVe(K.H(baseUrl + "khbd/" + s.id + ".jpg", m.w, m.h, "Nhiệm vụ trên trang học sinh – " + m.cap + (m.cat ? " (phần đầu)" : "")));
+          if (m.task) h.task[m.task] = [x]; else h.cuoi = [x];
+        }
       });
       return Promise.all(viec);
     }).catch(function () {});
