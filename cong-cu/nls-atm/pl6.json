@@ -1,0 +1,876 @@
+{
+ "6": [
+  {
+   "bai": "1",
+   "ten": "Thông tin và dữ liệu",
+   "yccd": [
+    "Nhận biết được sự khác nhau giữa thông tin và dữ liệu",
+    "Phân biệt được thông tin và vật mang thông tin",
+    "Nêu được ví dụ minh họa tầm quan trọng của thông tin và mối quan hệ giữa thông tin và dữ liệu"
+   ],
+   "ma": [
+    "1.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "2",
+   "ten": "Xử lí thông tin",
+   "yccd": [
+    "Nêu được các bước cơ bản trong xử lí thông tin (Thu nhận -> Lưu trữ -> xử lý-> Truyền thông tin)",
+    "Giải thích được máy tính là công cụ hiệu quả để xử lí thông tin qua ví dụ cụ thể"
+   ],
+   "ma": [
+    "5.2.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "3",
+   "ten": "Thông tin trong máy tính",
+   "yccd": [
+    "Giải thích được việc có thể biểu diễn thông tin chỉ với hai kí hiệu 0 và 1 (dãy bit)",
+    "Biết được bit là đơn vị nhỏ nhất trong lưu trữ thông tin",
+    "Nêu được tên và độ lớn các đơn vị đo dung lượng thông tin (Byte, KB, MB, GB, TB) và ước lượng khả năng lưu trữ của thiết bị nhớ"
+   ],
+   "ma": [
+    "1.3.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "4",
+   "ten": "Mạng máy tính",
+   "yccd": [
+    "Biết được mạng máy tính là gì và lợi ích của nó trong cuộc sống",
+    "Kể được tên những thành phần chính của một mạng máy tính (thiết bị đầu cuối, thiết bị kết nối, phần mềm mạng)",
+    "Nêu được ví dụ cụ thể về trường hợp mạng không dây tiện dụng hơn mạng có dây"
+   ],
+   "ma": [
+    "2.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "5",
+   "ten": "Internet",
+   "yccd": [
+    "Biết Internet là gì và một số đặc điểm chính của Internet",
+    "Biết một số lợi ích chính của Internet trong học tập, giao tiếp, giải trí"
+   ],
+   "ma": [
+    "1.1.TC1c"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "6",
+   "ten": "Mạng thông tin toàn cầu",
+   "yccd": [
+    "Trình bày sơ lược các khái niệm World Wide Web (WWW), Website, địa chỉ Website, trình duyệt web",
+    "Xem và nêu được các thông tin chính trên trang web cho trước"
+   ],
+   "ma": [
+    "1.1.TC1b"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM1",
+    "yc": [
+     "Thực hiện được quy trình kiểm chứng độc lập với một bài viết bất kỳ được giao: (1) Tra cứu tên miền/tổ chức đăng; (2) Tìm ít nhất một nguồn thứ hai độc lập; (3) Kiểm tra ngày đăng và tính thời sự; (4) Viết nhận xét ngắn về độ tin cậy có lập luận"
+    ]
+   }
+  },
+  {
+   "bai": "7",
+   "ten": "Tìm kiếm thông tin trên Internet",
+   "yccd": [
+    "Nêu được công dụng của máy tìm kiếm",
+    "Xác định được từ khóa ứng với mục đích tìm kiếm cho trước",
+    "Thực hiện được việc tìm kiếm và khai thác thông tin trên Internet"
+   ],
+   "ma": [
+    "1.1.TC1b"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM1",
+    "yc": [
+     "Thực hiện tìm kiếm thông tin theo quy trình có cấu trúc; phân tích và đánh giá độ tin cậy của kết quả tìm kiếm trước khi khai thác sử dụng"
+    ]
+   }
+  },
+  {
+   "bai": "8",
+   "ten": "Thư điện tử",
+   "yccd": [
+    "Biết thư điện tử là gì; ưu điểm và nhược điểm cơ bản của thư điện tử",
+    "Biết tài khoản thư điện tử, hộp thư điện tử và thực hiện việc đăng nhập, soạn, gửi, đăng xuất hộp thư"
+   ],
+   "ma": [
+    "4.1.TC1b"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM4",
+    "yc": [
+     "Nhận diện các thông điệp lừa đảo, thư rác qua email; không mở tệp đính kèm hoặc nhấp vào liên kết lạ trong thư điện tử"
+    ]
+   }
+  },
+  {
+   "bai": "9",
+   "ten": "An toàn thông tin trên Internet",
+   "yccd": [
+    "Biết một số tác hại và nguy cơ khi sử dụng Internet. Nêu và thực hiện được một số biện pháp phòng ngừa",
+    "Trình bày được tầm quan trọng của sự an toàn và hợp pháp của thông tin cá nhân và tập thể",
+    "Bảo vệ được thông tin và tài khoản cá nhân",
+    "Nhận diện được một số thông điệp lừa đảo hoặc mang nội dung xấu"
+   ],
+   "ma": [
+    "4.1.TC1b"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM4",
+    "yc": [
+     "Nhận diện được ít nhất ba hình thức lừa đảo trực tuyến phổ biến ở lứa tuổi học sinh (giả danh người thân, link trúng thưởng, tài khoản game giả) qua tin nhắn/email và nêu được hành động ứng phó an toàn"
+    ]
+   }
+  },
+  {
+   "bai": "10",
+   "ten": "Sơ đồ tư duy",
+   "yccd": [
+    "Biết sắp xếp một cách logic và trình bày dưới dạng sơ đồ tư duy các ý tưởng, khái niệm",
+    "Giải thích được lợi ích của sơ đồ tư duy, nêu nhu cầu sử dụng phần mềm sơ đồ tư duy",
+    "Tạo được sơ đồ tư duy đơn giản bằng phần mềm"
+   ],
+   "ma": [
+    "3.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "11",
+   "ten": "Định dạng văn bản",
+   "yccd": [
+    "Nêu được các chức năng đặc trưng của phần mềm soạn thảo văn bản",
+    "Trình bày được tác dụng của công cụ căn lề, định dạng văn bản",
+    "Thực hiện định dạng văn bản, trình bày trang văn bản và in"
+   ],
+   "ma": [
+    "3.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "12",
+   "ten": "Trình bày thông tin ở dạng bảng",
+   "yccd": [
+    "Biết được ưu điểm của việc trình bày thông tin ở dạng bảng",
+    "Trình bày được thông tin ở dạng bảng bằng phần mềm soạn thảo văn bản"
+   ],
+   "ma": [
+    "3.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "13",
+   "ten": "Tìm kiếm và thay thế",
+   "yccd": [
+    "Trình bày được tác dụng của công cụ tìm kiếm, thay thế trong phần mềm soạn thảo văn bản",
+    "Sử dụng được công cụ tìm kiếm và thay thế của phần mềm"
+   ],
+   "ma": [
+    "3.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "14",
+   "ten": "Thực hành tổng hợp: Hoàn thiện sổ lưu niệm (KT giữa HKII)",
+   "yccd": [
+    "Biết cách tổng hợp, sắp xếp các nội dung đã có thành một sản phẩm hoàn chỉnh",
+    "Đánh giá kĩ năng thực hành soạn thảo và định dạng văn bản"
+   ],
+   "ma": [
+    "3.1.TC1b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "15",
+   "ten": "Thuật toán",
+   "yccd": [
+    "Diễn tả được sơ lược khái niệm của thuật toán, nêu một vài ví dụ minh họa",
+    "Biết thuật toán có thể được mô tả dưới dạng liệt kê hoặc sơ đồ khối"
+   ],
+   "ma": [
+    "3.4.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "16",
+   "ten": "Các cấu trúc điều khiển",
+   "yccd": [
+    "Biết các cấu trúc: Tuần tự, rẽ nhánh và lặp",
+    "Mô tả được thuật toán đơn giản có các cấu trúc tuần tự, rẽ nhánh và lặp dưới dạng liệt kê hoặc sơ đồ khối"
+   ],
+   "ma": [
+    "3.4.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "17",
+   "ten": "Chương trình máy tính",
+   "yccd": [
+    "Biết được chương trình là mô tả một thuật toán để máy tính “hiểu” và thực hiện được"
+   ],
+   "ma": [
+    "3.4.TC1a"
+   ],
+   "atm": null
+  }
+ ],
+ "7": [
+  {
+   "bai": "1",
+   "ten": "Thiết bị vào - ra",
+   "yccd": [
+    "Củng cố và phát triển kiến thức về xử lí thông tin ở lớp 6",
+    "Biết và nhận ra các thiết bị vào – ra có nhiều loại, hình dạng khác nhau",
+    "Biết chức năng của thiết bị vào – ra trong thu nhận, lưu trữ, xử lí và truyền thông tin",
+    "Nêu được ví dụ cụ thể về những thao tác không đúng cách, gây ra lỗi cho thiết bị"
+   ],
+   "ma": [
+    "4.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "2",
+   "ten": "Phần mềm máy tính",
+   "yccd": [
+    "Nhận thức được vai trò của phần mềm trong hoạt động của máy tính",
+    "Phân chia phần mềm thành hai loại: hệ điều hành và phần mềm ứng dụng"
+   ],
+   "ma": [
+    "5.2.TC1b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "3",
+   "ten": "Quản lý dữ liệu trong máy tính",
+   "yccd": [
+    "Biết tệp chương trình cũng là dữ liệu, có thể được lưu trữ trong máy tính",
+    "Nêu được ví dụ về biện pháp an toàn dữ liệu như sao lưu dữ liệu, phòng chống xâm nhập trái phép và phòng chống virus,…"
+   ],
+   "ma": [
+    "1.3.TC1b",
+    "4.1.TC1c"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "4",
+   "ten": "Mạng xã hội và một số kênh trao đổi thông tin trên Internet",
+   "yccd": [
+    "Nêu được một số chức năng cơ bản của mạng xã hội. Nhận biết được một số website là mạng xã hội",
+    "Sử dụng được một số chức năng cơ bản của mạng xã hội để giao lưu và chia sẻ thông tin",
+    "Nêu được tên kênh trao đổi thông tin thông dụng và hậu quả của việc dùng thông tin vào mục đích sai trái"
+   ],
+   "ma": [
+    "2.5.TC1a",
+    "2.6.TC1b"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM2",
+    "yc": [
+     "Phân biệt được sự khác nhau giữa “mâu thuẫn thông thường” và “bắt nạt mạng” dựa trên ba tiêu chí: cố ý, lặp lại, tạo ra sự mất cân bằng quyền lực; thực hiện được cài đặt quyền riêng tư cơ bản trên mạng xã hội"
+    ]
+   }
+  },
+  {
+   "bai": "5",
+   "ten": "Ứng xử trên mạng",
+   "yccd": [
+    "Thực hiện được giao tiếp qua mạng theo đúng quy tắc và bằng ngôn ngữ lịch sự, thể hiện ứng xử có văn hoá",
+    "Biết được tác hại của bệnh nghiện Internet, từ đó có ý thức phòng tránh",
+    "Biết nhờ người lớn giúp đỡ, tư vấn khi cần thiết trong quá trình ứng xử trên mạng"
+   ],
+   "ma": [
+    "2.5.TC1a",
+    "4.3.TC1a"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM2",
+    "yc": []
+   }
+  },
+  {
+   "bai": "14",
+   "ten": "Thuật toán tìm kiếm tuần tự",
+   "yccd": [
+    "Giải thích được thuật toán tìm kiếm tuần tự",
+    "Biểu diễn và mô phỏng được hoạt động của thuật toán tìm kiếm tuần tự trên bộ dữ liệu nhỏ"
+   ],
+   "ma": [
+    "3.4.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "15",
+   "ten": "Thuật toán tìm kiếm nhị phân",
+   "yccd": [
+    "Giải thích được thuật toán tìm kiếm nhị phân",
+    "Biểu diễn và mô phỏng hoạt động thuật toán tìm kiếm nhị phân; giải thích mối liên quan giữa sắp xếp và tìm kiếm"
+   ],
+   "ma": [
+    "3.4.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "16",
+   "ten": "Thuật toán sắp xếp",
+   "yccd": [
+    "Giải thích được một vài thuật toán sắp xếp cơ bản (nổi bọt, chọn)",
+    "Biểu diễn và mô phỏng hoạt động thuật toán sắp xếp; nêu ý nghĩa việc chia bài toán thành những bài toán nhỏ hơn"
+   ],
+   "ma": [
+    "3.4.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "6",
+   "ten": "Làm quen với phần mềm bảng tính",
+   "yccd": [
+    "Nhận biết được một số khái niệm và chức năng cơ bản của phần mềm bảng tính",
+    "Thực hiện nhập và điều chỉnh dữ liệu trên bảng tính ở mức đơn giản"
+   ],
+   "ma": [
+    "1.3.TC1b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "7",
+   "ten": "Tính toán tự động trên bảng tính",
+   "yccd": [
+    "Nhận biết được một số kiểu dữ liệu trên bảng tính",
+    "Biết cách nhập và sao chép công thức trên bảng tính; giải thích việc dùng công thức để tính toán tự động"
+   ],
+   "ma": [
+    "1.3.TC1b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "8",
+   "ten": "Công cụ hỗ trợ tính toán",
+   "yccd": [
+    "Thực hiện được một số phép toán thông dụng, sử dụng được các hàm đơn giản: SUM, MAX, MIN, AVERAGE, COUNT…"
+   ],
+   "ma": [
+    "1.3.TC1b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "9",
+   "ten": "Trình bày bảng tính",
+   "yccd": [
+    "Biết và thực hiện được một số chức năng định dạng dữ liệu số và trình bày bảng tính",
+    "Áp dụng các hàm tính toán vào bài tập thực hành dự án"
+   ],
+   "ma": [
+    "3.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "10",
+   "ten": "Hoàn thiện bảng tính",
+   "yccd": [
+    "Thực hiện được các thao tác hoàn thiện và in bảng tính",
+    "Sử dụng bảng tính điện tử để giải quyết một vài công việc thực tế đơn giản"
+   ],
+   "ma": [
+    "3.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "11",
+   "ten": "Tạo bài trình chiếu",
+   "yccd": [
+    "Nêu được một số chức năng cơ bản của phần mềm trình chiếu",
+    "Tạo được một số bài trình chiếu có tiêu đề, cấu trúc phân cấp"
+   ],
+   "ma": [
+    "3.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "12",
+   "ten": "Định dạng đối tượng trên trang chiếu",
+   "yccd": [
+    "Sao chép được dữ liệu từ tệp văn bản sang trang trình chiếu",
+    "Đưa được hình ảnh minh họa vào bài trình chiếu; sử dụng định dạng hợp lý"
+   ],
+   "ma": [
+    "3.1.TC1a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "13",
+   "ten": "Thực hành tổng hợp: Hoàn thiện bài trình chiếu",
+   "yccd": [
+    "Biết đưa hiệu ứng động vào bài trình chiếu một cách hợp lý",
+    "Tổng hợp, sắp xếp các nội dung thành một bài trình chiếu hoàn chỉnh"
+   ],
+   "ma": [
+    "3.1.TC1b"
+   ],
+   "atm": null
+  }
+ ],
+ "8": [
+  {
+   "bai": "1",
+   "ten": "Lược sử công cụ tính toán",
+   "yccd": [
+    "Trình bày được sơ lược lịch sử phát triển máy tính",
+    "Nêu được ví dụ cho thấy sự phát triển máy tính đã đem đến những thay đổi lớn lao cho xã hội loài người"
+   ],
+   "ma": [
+    "5.2.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "2",
+   "ten": "Thông tin trong môi trường số",
+   "yccd": [
+    "Nêu được các đặc điểm của thông tin số: đa dạng, thu thập nhanh/nhiều, lưu trữ khổng lồ, có bản quyền, độ tin cậy khác nhau",
+    "Trình bày được tầm quan trọng của việc khai thác các nguồn thông tin đáng tin cậy, nêu ví dụ minh họa"
+   ],
+   "ma": [
+    "1.1.TC2b",
+    "1.2.TC2a"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM1",
+    "yc": []
+   }
+  },
+  {
+   "bai": "3",
+   "ten": "Thực hành khai thác thông tin số",
+   "yccd": [
+    "Sử dụng được công cụ tìm kiếm, xử lí và trao đổi thông tin trong môi trường số",
+    "Chủ động tìm kiếm được thông tin để thực hiện nhiệm vụ",
+    "Đánh giá được lợi ích của thông tin tìm được trong giải quyết vấn đề"
+   ],
+   "ma": [
+    "1.2.TC2a"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM1",
+    "yc": [
+     "Độc lập kiểm chứng độ tin cậy của các nguồn thông tin số, phân tích chiến lược thao túng cảm xúc trong bài đăng và viết nhận xét phân tích phản biện có lập luận"
+    ]
+   }
+  },
+  {
+   "bai": "4",
+   "ten": "Đạo đức và văn hóa trong sử dụng công nghệ số",
+   "yccd": [
+    "Nhận biết và giải thích được một số biểu hiện vi phạm đạo đức và pháp luật, biểu hiện thiếu văn hóa khi sử dụng công nghệ kĩ thuật số",
+    "Bảo đảm được các sản phẩm số do bản thân tạo ra thể hiện được đạo đức, tính văn hóa và không vi phạm pháp luật"
+   ],
+   "ma": [
+    "2.5.TC2a",
+    "3.3.TC2a"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM6",
+    "yc": [
+     "Tạo được một sản phẩm số có mục đích rõ ràng (bài thuyết trình, video ngắn, bài viết blog về chủ đề học sinh tự chọn) sử dụng đúng nguồn tư liệu có phép, ghi rõ loại giấy phép của từng tư liệu; và xác định được ít nhất hai hậu quả pháp lý cụ"
+    ]
+   }
+  },
+  {
+   "bai": "5",
+   "ten": "Sử dụng bảng tính giải quyết bài toán thực tế",
+   "yccd": [
+    "Giải thích sự thay đổi địa chỉ tương đối trong công thức khi sao chép",
+    "Giải thích sự khác nhau giữa địa chỉ tương đối và địa chỉ tuyệt đối của một ô tính",
+    "Sử dụng phần mềm bảng tính trợ giúp giải quyết bài toán thực tế"
+   ],
+   "ma": [
+    "1.3.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "6",
+   "ten": "Sắp xếp và lọc dữ liệu",
+   "yccd": [
+    "Nêu được một số tình huống thực tế cần sử dụng các chức năng sắp xếp và lọc dữ liệu",
+    "Thực hiện được các thao tác lọc, sắp xếp dữ liệu của phần mềm bảng tính"
+   ],
+   "ma": [
+    "1.3.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "7",
+   "ten": "Trình bày dữ liệu bằng biểu đồ",
+   "yccd": [
+    "Nêu được tình huống thực tế cần tạo biểu đồ",
+    "Thực hiện được các thao tác tạo biểu đồ của phần mềm bảng tính"
+   ],
+   "ma": [
+    "3.1.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "16",
+   "ten": "Tin học với nghề nghiệp",
+   "yccd": [
+    "Nêu được một số nghề nghiệp mà ứng dụng tin học làm tăng hiệu quả",
+    "Nêu tên một số nghề thuộc lĩnh vực tin học; nhận thức vấn đề bình đẳng giới trong ứng dụng CNTT"
+   ],
+   "ma": [
+    "5.4.TC2c"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "8a",
+   "ten": "Làm việc với danh sách dạng liệt kê và hình ảnh trong văn bản",
+   "yccd": [
+    "Thực hiện thao tác: tạo danh sách liệt kê, chèn, xóa, co dãn hình ảnh, vẽ hình đồ họa trong văn bản",
+    "Tạo được sản phẩm văn bản có tính thẩm mĩ phục vụ nhu cầu thực tế"
+   ],
+   "ma": [
+    "3.1.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "9a",
+   "ten": "Tạo đầu trang, chân trang cho văn bản",
+   "yccd": [
+    "Thực hiện được thao tác đánh số trang, thêm đầu trang và chân trang cho văn bản"
+   ],
+   "ma": [
+    "3.1.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "10a",
+   "ten": "Định dạng nâng cao cho trang chiếu",
+   "yccd": [
+    "Chọn đặt được màu sắc, cỡ chữ hài hoà và hợp lí với nội dung",
+    "Thực hiện được thao tác đánh số trang, thêm đầu trang và chân trang"
+   ],
+   "ma": [
+    "3.1.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "11a",
+   "ten": "Sử dụng bản mẫu cho bài trình chiếu",
+   "yccd": [
+    "Sử dụng được các bản mẫu (template) tạo bài trình chiếu",
+    "Nhúng được vào trang chiếu đường dẫn đến video hay tài liệu khác"
+   ],
+   "ma": [
+    "3.1.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "12",
+   "ten": "Từ thuật toán đến chương trình",
+   "yccd": [
+    "Mô tả được kịch bản đơn giản dưới dạng thuật toán và tạo được chương trình đơn giản",
+    "Hiểu chương trình là dãy các lệnh điều khiển máy tính thực hiện thuật toán"
+   ],
+   "ma": [
+    "3.4.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "13",
+   "ten": "Biểu diễn dữ liệu",
+   "yccd": [
+    "Nêu được khái niệm hằng, biến, kiểu dữ liệu, biểu thức và sử dụng chúng trong chương trình đơn giản"
+   ],
+   "ma": [
+    "3.4.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "14",
+   "ten": "Cấu trúc điều khiển",
+   "yccd": [
+    "Thể hiện được cấu trúc tuần tự, rẽ nhánh và lặp ở chương trình trong môi trường lập trình trực quan"
+   ],
+   "ma": [
+    "3.4.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "15",
+   "ten": "Gỡ lỗi",
+   "yccd": [
+    "Chạy thử, tìm lỗi và sửa được lỗi cho chương trình lập trình trực quan"
+   ],
+   "ma": [
+    "5.1.TC2b"
+   ],
+   "atm": null
+  }
+ ],
+ "9": [
+  {
+   "bai": "1",
+   "ten": "Thế giới kỹ thuật số",
+   "yccd": [
+    "Nhận biết được sự có mặt của các thiết bị có gắn bộ xử lý thông tin ở khắp nơi",
+    "Hiểu khả năng của máy tính và chỉ ra một số ứng dụng thực tế trong KHKT và đời sống",
+    "Giải thích được tác động của CNTT lên giáo dục và xã hội"
+   ],
+   "ma": [
+    "5.2.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "2",
+   "ten": "Thông tin trong giải quyết vấn đề",
+   "yccd": [
+    "Giải thích sự cần thiết phải quan tâm đến chất lượng thông tin khi tìm kiếm, tiếp nhận, trao đổi",
+    "Giải thích tính mới, tính chính xác, tính đầy đủ, tính sử dụng được của thông tin"
+   ],
+   "ma": [
+    "1.2.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "3",
+   "ten": "Thực hành: Đánh giá chất lượng thông tin",
+   "yccd": [
+    "Biết cách tìm kiếm được thông tin để giải quyết vấn đề",
+    "Đánh giá được chất lượng thông tin trong giải quyết vấn đề"
+   ],
+   "ma": [
+    "1.2.TC2b",
+    "6.3.TC2a"
+   ],
+   "atm": {
+    "muc": "KK",
+    "nhom": "ATM7",
+    "yc": [
+     "Sử dụng được ít nhất hai công cụ AI khác nhau cho cùng một nhiệm"
+    ]
+   }
+  },
+  {
+   "bai": "4",
+   "ten": "Một số vấn đề pháp lý về sử dụng dịch vụ Internet",
+   "yccd": [
+    "Trình bày một số tác động tiêu cực của công nghệ kỹ thuật số đối với đời sống con người",
+    "Nêu một số nội dung liên quan đến luật CNTT, nghị định dịch vụ Internet, các khía cạnh pháp lý của sở hữu, sử dụng thông tin",
+    "Nêu một số hành vi vi phạm pháp luật, trái đạo đức, thiếu văn hóa trên mạng"
+   ],
+   "ma": [
+    "4.1.TC2b"
+   ],
+   "atm": {
+    "muc": "B",
+    "nhom": "ATM4",
+    "yc": [
+     "Lập được kịch bản ứng phó cho ít nhất hai tình huống tấn công tài khoản khác nhau (bị chiếm tài khoản mạng xã hội vs. bị dùng tài khoản để nhắn tin lừa đảo bạn bè, xử lý được tình huống ít quen thuộc mà không cần hướng dẫn bước đầu)"
+    ]
+   }
+  },
+  {
+   "bai": "5",
+   "ten": "Tìm hiểu phần mềm mô phỏng",
+   "yccd": [
+    "Nêu được ví dụ phần mềm mô phỏng. Nhận ra lợi ích của phần mềm mô phỏng"
+   ],
+   "ma": [
+    "5.2.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "6",
+   "ten": "Thực hành: Khai thác phần mềm mô phỏng",
+   "yccd": [
+    "Nêu kiến thức thu nhận từ việc khai thác một vài phần mềm mô phỏng",
+    "Nhận biết sự mô phỏng thế giới thực nhờ máy tính giúp khám phá tri thức"
+   ],
+   "ma": [
+    "5.3.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "7",
+   "ten": "Trình bày thông tin trong trao đổi và hợp tác",
+   "yccd": [
+    "Sử dụng bài trình chiếu và sơ đồ tư duy trong trao đổi thông tin và hợp tác",
+    "Biết khả năng đính kèm văn bản, ảnh, video, trang tính vào sơ đồ tư duy"
+   ],
+   "ma": [
+    "2.4.TC2a",
+    "3.1.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "8",
+   "ten": "Thực hành: Sử dụng công cụ trực quan trình bày thông tin",
+   "yccd": [
+    "Sử dụng được hình ảnh, biểu đồ, video một cách hợp lý trong bài trình chiếu",
+    "Tạo sơ đồ tư duy đính kèm tài liệu và tạo bài trình chiếu hoàn chỉnh hợp tác nhóm"
+   ],
+   "ma": [
+    "2.4.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "9a",
+   "ten": "Sử dụng công cụ xác thực dữ liệu",
+   "yccd": [
+    "Sử dụng công cụ xác thực dữ liệu (Data Validation) của phần mềm bảng tính giải quyết bài toán quản lí tài chính"
+   ],
+   "ma": [
+    "1.3.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "10a",
+   "ten": "Sử dụng hàm Countif",
+   "yccd": [
+    "Sử dụng được hàm đếm theo điều kiện COUNTIF trong giải quyết bài toán quản lý tài chính"
+   ],
+   "ma": [
+    "1.3.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "11a",
+   "ten": "Sử dụng hàm Sumif",
+   "yccd": [
+    "Sử dụng được hàm tính tổng theo điều kiện SUMIF trong giải quyết bài toán quản lý tài chính gia đình"
+   ],
+   "ma": [
+    "1.3.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "12a",
+   "ten": "Sử dụng hàm If",
+   "yccd": [
+    "Sử dụng được hàm điều kiện IF trong giải quyết bài toán thực tiễn về quản lý tài chính"
+   ],
+   "ma": [
+    "1.3.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "13a",
+   "ten": "Hoàn thiện bảng tính quản lí tài chính gia đình",
+   "yccd": [
+    "Tạo được trang tính tổng hợp thông tin thu, chi gia đình",
+    "Hoàn thiện bảng tính quản lý tài chính gia đình hoàn chỉnh"
+   ],
+   "ma": [
+    "1.3.TC2b"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "14",
+   "ten": "Giải quyết vấn đề",
+   "yccd": [
+    "Trình bày được quá trình giải quyết vấn đề và mô tả giải pháp dưới dạng thuật toán (sơ đồ khối/liệt kê)"
+   ],
+   "ma": [
+    "3.4.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "15",
+   "ten": "Bài toán tin học",
+   "yccd": [
+    "Giải thích quy trình giải quyết vấn đề có các bước nhỏ hơn chuyển giao cho máy tính thực hiện",
+    "Giải thích khái niệm bài toán trong tin học và quy trình giao bài toán cho máy tính"
+   ],
+   "ma": [
+    "3.4.TC2a"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "17",
+   "ten": "Tin học và thế giới nghề nghiệp",
+   "yccd": [
+    "Trình bày công việc đặc thù và sản phẩm chính của người làm tin học trong ít nhất 3 nhóm nghề",
+    "Nêu ý kiến cá nhân về nhóm nghề; phân biệt nhóm nghề Tin học ứng dụng và Khoa học máy tính",
+    "Tìm hiểu thông qua Internet công việc ở các doanh nghiệp CNTT; giải thích nam/nữ đều thích hợp với ngành Tin học"
+   ],
+   "ma": [
+    "5.4.TC2c"
+   ],
+   "atm": null
+  },
+  {
+   "bai": "16",
+   "ten": "Thực hành: Lập chương trình máy tính",
+   "yccd": [
+    "Sử dụng được cấu trúc tuần tự, rẽ nhánh, lặp trong mô tả thuật toán và hoàn thiện chương trình",
+    "Giải thích được chương trình là bản mô tả thuật toán bằng ngôn ngữ máy tính hiểu và thực hiện được"
+   ],
+   "ma": [
+    "3.4.TC2a"
+   ],
+   "atm": null
+  }
+ ]
+}

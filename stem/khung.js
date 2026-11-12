@@ -136,9 +136,12 @@
 
   // Giáo viên
   var g = D.gv;
+  var NA = window.NLS_ATM ? NLS_ATM.lay(D.thuMucBai) : null;   // chung/nls-atm.js
   var gvHtml = ('<details class="gv" open><summary>📋 Dành cho giáo viên: kế hoạch 2 tiết, chuẩn bị, đánh giá</summary><div class="noi">' +
     '<p class="khbd-mo" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:0"><button class="btn chinh" data-khbd>📄 Kế hoạch bài dạy đầy đủ (mẫu 5512) · tải Word</button><span class="goi-y">Điền tên trường, tổ, giáo viên rồi tải tệp .docx để nộp Ban giám hiệu.</span></p>' +
-    "<p><b>Vị trí trong PPCT:</b> " + esc(D.tiet) + ". <b>Yêu cầu cần đạt (Tin học):</b> " + g.yccd + "</p>" +
+    "<p><b>Vị trí trong PPCT:</b> " + (NA ? "Tiết " + esc(NA.tiet) + " · " : "") + esc(D.tiet) + ". <b>Yêu cầu cần đạt (Tin học):</b> " + g.yccd + "</p>" +
+    (NA ? "<p><b>Năng lực số (TT 02/2025, CV 3456):</b> " + NA.nls.map(function (m) { return "<b>" + m + "</b> – " + esc(NLS_ATM.chiBao[m] || ""); }).join("; ") +
+      (NA.atm.length ? " <b>An toàn mạng:</b> " + NA.atm.map(function (a) { return a.nhom + " [" + a.muc + "]"; }).join(", ") : " <i>(Bài gốc không có địa chỉ an toàn mạng trong kế hoạch minh hoạ.)</i>") + "</p>" : "") +
     "<p><b>Chuẩn bị:</b> " + g.chuanBi + "</p>" +
     ["Tiết 1", "Tiết 2"].map(function (t, i) {
       return "<h4 style='margin:14px 0 6px'>" + t + "</h4><table><thead><tr><th style='width:90px'>Thời gian</th><th>Hoạt động</th></tr></thead><tbody>" +

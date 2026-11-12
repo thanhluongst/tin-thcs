@@ -20,6 +20,12 @@
   var TT = { truong: "THCS Nhơn Mỹ", to: "", gv: "", lopDay: "", ngaySoan: "", ngayDay: "", tietPPCT: "", diaDanh: "Nhơn Mỹ" };
   try { var cu = JSON.parse(localStorage.getItem(KHOA_TT) || "null"); if (cu) for (var k in cu) TT[k] = cu[k]; } catch (e) {}
   function luuTT() { try { localStorage.setItem(KHOA_TT, JSON.stringify(TT)); } catch (e) {} }
+  /* Năng lực số – an toàn mạng của bài gốc (chung/nls-atm.js) */
+  var NA = window.NLS_ATM ? NLS_ATM.lay(D.thuMucBai) : null;
+  /* Tiết PPCT lưu riêng từng dự án; mặc định theo PPCT của trường (bản cũ lưu chung một ô cho mọi dự án nên bỏ) */
+  if (!TT.tiet || typeof TT.tiet !== "object") TT.tiet = {};
+  delete TT.tietPPCT;
+  function tietPPCT() { var v = TT.tiet[D.id]; return v != null ? v : (NA ? NA.tiet : ""); }
   function o(v, dai) { return v ? esc(v) : (dai ? "……………………………" : "…………"); }
 
   /* ---------- mô hình tài liệu: P (đoạn) và T (bảng) ---------- */
@@ -59,7 +65,7 @@
     N.push(P("<b>TÊN BÀI DẠY: BÀI HỌC STEM – " + esc(D.ten.toUpperCase()) + "</b>", { giua: 1, co: 14 }));
     N.push(P("<i>(Vận dụng " + esc(BAI) + " – " + LOP + ")</i>", { giua: 1 }));
     N.push(P("Môn học: Tin học; lớp: " + (TT.lopDay ? esc(TT.lopDay) : D.lop), { giua: 1 }));
-    N.push(P("Thời gian thực hiện: 02 tiết" + (TT.tietPPCT ? " (Tiết PPCT: " + esc(TT.tietPPCT) + ")" : ""), { giua: 1 }));
+    N.push(P("Thời gian thực hiện: 02 tiết" + (tietPPCT() ? " (Tiết PPCT: " + esc(tietPPCT()) + ")" : ""), { giua: 1 }));
     if (TT.ngaySoan || TT.ngayDay) N.push(P("<i>Ngày soạn: " + o(TT.ngaySoan) + " · Ngày dạy: " + o(TT.ngayDay) + "</i>", { giua: 1 }));
     N.push(P("", {}));
 
@@ -78,6 +84,15 @@
     (g.nl || [["NLc", "Giải quyết vấn đề với sự hỗ trợ của công nghệ thông tin và truyền thông: vận dụng kiến thức " + esc(BAI) + " để tạo sản phẩm đáp ứng các tiêu chí đặt ra."],
               ["NLe", "Hợp tác trong môi trường số: cùng nhóm xây dựng, chia sẻ và góp ý sản phẩm số."]])
       .forEach(function (n) { N.push(G("<i>" + n[0] + ":</i> " + n[1])); });
+    if (NA) {
+      N.push(P("<i>c) Năng lực số (Thông tư 02/2025/TT-BGDĐT; chỉ báo theo Công văn 3456)</i>", { thut: 1 }));
+      NA.nls.forEach(function (m) { N.push(G("<i>" + m + ":</i> " + esc(NLS_ATM.chiBao[m] || ""))); });
+      if (NA.atm.length) {
+        N.push(P("<i>d) An toàn mạng toàn diện (Công văn 6206)</i>", { thut: 1 }));
+        NA.atm.forEach(function (a) { N.push(G("<i>" + a.nhom + " [" + a.muc + "]:</i> " + esc(a.yc))); });
+      }
+      N.push(G("<i>Mục tiêu tích hợp:</i> " + esc(NA.mt)));
+    }
     N.push(P("<b>3. Về phẩm chất</b>"));
     N.push(G("<i>Chăm chỉ:</i> kiên trì thử nghiệm, sửa lỗi đến khi sản phẩm đạt tiêu chí."));
     N.push(G("<i>Trách nhiệm:</i> hoàn thành phần việc được phân công, có trách nhiệm với sản phẩm chung của nhóm."));
@@ -179,7 +194,8 @@
     r.push({
       mt: "HS thực hiện được sản phẩm theo phương án đã chọn, thử nghiệm, phát hiện lỗi và điều chỉnh để sản phẩm đạt các tiêu chí.",
       nd: ["Nhóm làm sản phẩm trong xưởng thực hành (Bước 4) trên trang dự án; chạy thử và đối chiếu từng tiêu chí: " + D.tieuChi.map(function (t) { return chu(t.t); }).join(" ") ],
-      sp: ["Sản phẩm của nhóm; các tiêu chí đạt được tự đánh dấu trên trang dự án."].concat(g.luuY ? ["<i>Gợi ý cho GV:</i> " + g.luuY] : []),
+      sp: ["Sản phẩm của nhóm; các tiêu chí đạt được tự đánh dấu trên trang dự án."].concat(
+           NA ? ["<i>Minh chứng năng lực số</i> (" + NA.nls.join(", ") + "): sản phẩm của nhóm, điểm và đề xuất chỉnh sửa của hệ thống chấm, báo cáo dự án."] : []).concat(g.luuY ? ["<i>Gợi ý cho GV:</i> " + g.luuY] : []),
       tc: [["GV yêu cầu nhóm làm sản phẩm theo phương án đã chọn, đối chiếu " + D.tieuChi.length + " tiêu chí; các thành viên làm đúng phần việc được phân công."],
            [HD[3].chinh || "Nhóm làm sản phẩm, chạy thử, sửa lỗi.", "GV quan sát, hỗ trợ; không đưa lời giải sớm mà gợi ý nhóm thử nghiệm để tự tìm lỗi."],
            ["Nhóm bấm “Nhờ hệ thống chấm” trên trang dự án để nhận điểm theo bảng tiêu chí và danh sách đề xuất chỉnh sửa, rồi sửa sản phẩm theo đề xuất.", "Nhóm báo cáo tiến độ, những tiêu chí đã đạt, lỗi đã gặp và cách sửa."],
@@ -304,17 +320,21 @@
     if (window.GvKhoa && !GvKhoa.laGv()) { GvKhoa.mo(mo); return; }   // chỉ giáo viên
     if (document.querySelector(".khbd-nen")) return;
     if (!document.getElementById("khbd-css")) { var st = document.createElement("style"); st.id = "khbd-css"; st.textContent = CSS; document.head.appendChild(st); }
-    var O = [["truong", "Trường"], ["to", "Tổ chuyên môn"], ["gv", "Họ và tên giáo viên"], ["lopDay", "Lớp dạy", D.lop + "A1, " + D.lop + "A2"], ["tietPPCT", "Tiết PPCT", "VD: 30, 31"], ["ngaySoan", "Ngày soạn", "dd/mm/yyyy"], ["ngayDay", "Ngày dạy", "dd/mm/yyyy"], ["diaDanh", "Địa danh (chỗ kí)"]];
+    var O = [["truong", "Trường"], ["to", "Tổ chuyên môn"], ["gv", "Họ và tên giáo viên"], ["lopDay", "Lớp dạy", D.lop + "A1, " + D.lop + "A2"], ["tietPPCT", "Tiết PPCT", NA ? NA.tiet : "VD: 30, 31"], ["ngaySoan", "Ngày soạn", "dd/mm/yyyy"], ["ngayDay", "Ngày dạy", "dd/mm/yyyy"], ["diaDanh", "Địa danh (chỗ kí)"]];
     var nen = document.createElement("div"); nen.className = "khbd-nen"; nen.setAttribute("role", "dialog"); nen.setAttribute("aria-modal", "true"); nen.setAttribute("aria-label", "Kế hoạch bài dạy");
     nen.innerHTML = '<div class="khbd-thanh">' + O.map(function (f) {
-      return '<label>' + f[1] + '<input data-tt="' + f[0] + '" value="' + esc(TT[f[0]]) + '" placeholder="' + esc(f[2] || "") + '"></label>';
+      return '<label>' + f[1] + '<input data-tt="' + f[0] + '" value="' + esc(f[0] === "tietPPCT" ? tietPPCT() : TT[f[0]]) + '" placeholder="' + esc(f[2] || "") + '"></label>';
     }).join("") + '<div class="khbd-nut"><button class="btn chinh" data-khbd-tai>⬇ Tải Word (.docx)</button><button class="btn" data-khbd-in>🖨 In</button><button class="btn" data-khbd-dong aria-label="Đóng">✕ Đóng</button></div></div>' +
       '<div class="khbd-cuon"><div class="khbd-giay"></div></div>';
     document.body.appendChild(nen); document.body.style.overflow = "hidden";
     var giay = nen.querySelector(".khbd-giay");
     function ve() { giay.innerHTML = veHtml(dung()); }
     ve();
-    nen.addEventListener("input", function (e) { var k = e.target.dataset.tt; if (k) { TT[k] = e.target.value.trim(); luuTT(); ve(); } });
+    nen.addEventListener("input", function (e) {
+      var k = e.target.dataset.tt; if (!k) return;
+      if (k === "tietPPCT") TT.tiet[D.id] = e.target.value.trim(); else TT[k] = e.target.value.trim();
+      luuTT(); ve();
+    });
     nen.addEventListener("click", function (e) {
       if (e.target.closest("[data-khbd-tai]")) taiDocx(e.target.closest("[data-khbd-tai]"));
       else if (e.target.closest("[data-khbd-in]")) { document.body.classList.add("khbd-in"); window.print(); document.body.classList.remove("khbd-in"); }
