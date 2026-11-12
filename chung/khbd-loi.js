@@ -60,11 +60,6 @@
       [P("Ngày soạn: " + (ngay(cfg, "soan") || "……/……/20……"), { phai: 1 }), P("Ngày dạy: " + (ngay(cfg, "day") || "……/……/20……"), { phai: 1 })]
     ]], { khung: 0 }));
     N.push(P("", {}));
-    N.push(T([50, 50], [[
-      [P("Trường: " + o(TT.truong, 1)), P("Tổ: " + o(TT.to, 1))],
-      [P("Họ và tên giáo viên:", { giua: 1 }), P(TT.gv ? "<b>" + esc(TT.gv) + "</b>" : "……………………………", { giua: 1 })]
-    ]], { khung: 0 }));
-    N.push(P("", {}));
     N.push(P("<b>KẾ HOẠCH BÀI DẠY</b>", { giua: 1, co: 15 }));
     N.push(P("<b>TÊN BÀI DẠY: " + esc(tenBai.toUpperCase()) + "</b>", { giua: 1, co: 14 }));
     if (phu) N.push(P("<i>" + phu + "</i>", { giua: 1 }));
@@ -190,7 +185,7 @@
   function mo(cfg) {
     if (document.querySelector(".khbd-nen")) return;
     if (!document.getElementById("khbd-css")) { var st = document.createElement("style"); st.id = "khbd-css"; st.textContent = CSS; document.head.appendChild(st); }
-    var O = [["truong", "Trường"], ["to", "Tổ chuyên môn"], ["gv", "Họ và tên giáo viên"], ["lopDay", "Lớp dạy", cfg.lop + "A1, " + cfg.lop + "A2"], ["tiet", "Tiết PPCT", cfg.tietMacDinh || "VD: 30, 31"], ["soan", "Ngày soạn (bài này)", "để trống = tự tính"], ["day", "Ngày dạy (bài này)", "để trống = tự tính"], ["ngayTuan1", "Ngày dạy tuần 1 (mọi bài)", "dd/mm/yyyy"], ["diaDanh", "Địa danh (chỗ kí)"]];
+    var O = [["gv", "Họ và tên giáo viên (ô kí)"], ["lopDay", "Lớp dạy", cfg.lop + "A1, " + cfg.lop + "A2"], ["tiet", "Tiết PPCT", cfg.tietMacDinh || "VD: 30, 31"], ["soan", "Ngày soạn (bài này)", "để trống = tự tính"], ["day", "Ngày dạy (bài này)", "để trống = tự tính"], ["ngayTuan1", "Ngày dạy tuần 1 (mọi bài)", "dd/mm/yyyy"], ["diaDanh", "Địa danh (chỗ kí)"]];
     function giaTri(k) { return k === "tiet" ? tiet(cfg) : k === "soan" || k === "day" ? ((TT.ngay[cfg.id] || {})[k] || "") : TT[k]; }
     var nen = document.createElement("div"); nen.className = "khbd-nen"; nen.setAttribute("role", "dialog"); nen.setAttribute("aria-modal", "true"); nen.setAttribute("aria-label", "Kế hoạch bài dạy");
     nen.innerHTML = '<div class="khbd-thanh">' + O.map(function (f) {
