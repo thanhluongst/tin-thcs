@@ -6,7 +6,7 @@
 <title>Giới thiệu bình lọc nước – Dự án STEM Tin học 8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Lexend:wght@500;700&family=Merriweather:wght@700&display=swap">
-<link rel="stylesheet" href="../khung.css?v=6">
+<link rel="stylesheet" href="../khung.css?v=7">
 <style>
 .mau-ds { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
 .mau-the { border: 2px solid var(--vien); border-radius: 12px; padding: 6px; background: #fff; text-align: left; }
@@ -305,6 +305,38 @@ window.DU_AN = {
 
     veHet();
     return {
+      cham: function (c) {
+        var ds = W.ds, chu_ = ds.map(function (s) { return [s.t, s.nd, s.nd2].join(" "); }).join(" ").toLowerCase();
+        var PHAN = [
+          ["vấn đề", /vấn đề|ô nhiễm|nước bẩn|nước đục|thiếu nước|bẩn/],
+          ["vật liệu", /vật liệu|sỏi|cát|than|bông|chai/],
+          ["cách hoạt động", /hoạt động|chảy|lớp|giữ lại|thấm|đi qua/],
+          ["kết quả thử nghiệm", /kết quả|thử nghiệm|đo được|trong hơn/]
+        ];
+        var thieu = PHAN.filter(function (p) { return !p[1].test(chu_); }).map(function (p) { return p[0]; });
+        var coSo = ds.some(function (s) { return /kết quả|thử nghiệm/i.test(s.t || "") && /\d/.test((s.nd || "") + (s.nd2 || "")); });
+        var nPhan = PHAN.length - thieu.length;
+        var r2 = { m: nPhan === 4 && coSo ? 3 : nPhan >= 2 ? 2 : 1, ly: "Có " + nPhan + "/4 phần (vấn đề, vật liệu, cách hoạt động, kết quả)" + (thieu.length ? "; thiếu: " + thieu.join(", ") : "") + (coSo ? "; kết quả có số liệu." : "; kết quả chưa có số liệu đo.") };
+        var loKhac = {}; ds.forEach(function (s) { loKhac[s.lo] = 1; });
+        var r1 = !c.tc("bm") ? { m: 1, ly: "Chưa dùng bản mẫu." } : Object.keys(loKhac).length >= 3 && c.tc("dau") && c.tc("ket") ? { m: 3, ly: "Bản mẫu thống nhất; dùng " + Object.keys(loKhac).length + " kiểu bố cục, có trang tiêu đề và trang kết." } : { m: 2, ly: "Dùng bản mẫu thống nhất nhưng bố cục chưa hợp nội dung (cần trang tiêu đề, trang kết, nhiều kiểu bố cục)." };
+        var nHinh = ds.filter(function (s) { return s.h; }).length;
+        var r3 = { m: c.tc("gon") && c.tc("hinh") ? 3 : c.tc("gon") || nHinh ? 2 : 1, ly: (c.tc("gon") ? "Chữ ngắn gọn" : "Còn trang nhiều chữ") + "; " + nHinh + " trang có hình minh hoạ." };
+        var nLoi = 0;
+        ds.forEach(function (s, i) { var l = loiGon(s); if (l.length) nLoi++; if (l.length) c.goi(3, "Trang " + (i + 1) + (s.t ? " “" + esc(s.t) + "”" : "") + ": " + l.join("; ") + ". Mỗi ý một dòng ngắn."); });
+        if (thieu.length && ds.length) c.goi(3, "Bài trình chiếu còn thiếu phần: <b>" + thieu.join(", ") + "</b>. Thêm trang hoặc ý cho phần đó.");
+        if (ds.length && !coSo) c.goi(3, "Trang Kết quả thử nghiệm nên có <b>số liệu đo được</b> (VD: thời gian lọc 1 lít nước, so sánh độ trong trước và sau khi lọc).");
+        return {
+          rub: [r1, r2, r3, { m: null, ly: "Hệ thống không chấm được thuyết trình: giáo viên và nhóm bạn chấm khi nghe nhóm trình bày." }],
+          cach: {
+            bm: "Chọn một bản mẫu ở đầu xưởng.",
+            du: "Bấm <b>＋ Trang mới</b> cho đủ 6 trang và điền tiêu đề cho mọi trang.",
+            dau: "Trang 1 chọn bố cục Trang tiêu đề, ghi tên sản phẩm và “Nhóm …”.",
+            gon: nLoi ? false : "Mỗi trang tối đa 6 dòng, mỗi dòng tối đa 12 tiếng.",
+            hinh: "Chọn hình minh hoạ cho ít nhất 3 trang (hiện có " + nHinh + ").",
+            ket: "Trang cuối chọn bố cục Trang kết (cảm ơn, câu hỏi hoặc nguồn tham khảo)."
+          }
+        };
+      },
       baoCao: function () {
         var M = mau();
         return "<p><b>Bản mẫu:</b> " + (M ? M.ten : "(chưa chọn)") + " · <b>Số trang:</b> " + W.ds.length + "</p><ol>" +
@@ -320,8 +352,8 @@ window.DU_AN = {
 <script src="../../chung/config.js?v=23"></script>
 <script src="../../chung/api.js?v=29"></script>
 <script src="../../chung/tuc-thi.js?v=2"></script>
-<script src="../khung.js?v=6"></script>
-<script src="../khbd.js?v=1"></script>
+<script src="../khung.js?v=7"></script>
+<script src="../khbd.js?v=2"></script>
 <script src="../truc-tuyen.js?v=3"></script>
 </body>
 </html>

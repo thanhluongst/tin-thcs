@@ -6,7 +6,7 @@
 <title>Gian triển lãm lược sử – Dự án STEM Tin học 9</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="../khung.css?v=6">
+<link rel="stylesheet" href="../khung.css?v=7">
 <style>
 .tg-ds { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 6px; }
 .tg-ds li { display: flex; gap: 8px; align-items: center; border: 1px solid var(--vien); border-radius: 10px; padding: 6px 8px; background: #fff; }
@@ -315,6 +315,30 @@ window.DU_AN = {
     veTg(); veMm(); veKc(); api.luu();
 
     return {
+      cham: function (c) {
+        var dTg = W.tg.filter(function (m, i) { return m === i; }).length, okTg = tgDung();
+        var gt = [c.tl("b5-0"), c.tl("b5-1"), c.tl("b3-lydo")].join(" ");
+        var coLk = /bánh răng|đèn điện tử|bán dẫn|mạch tích hợp|vi xử lí|vi xử lý/i.test(gt);
+        var r1 = okTg ? (coLk ? { m: 3, ly: "Đúng thứ tự 7 mốc; câu trả lời có giải thích linh kiện của các thế hệ." } : { m: 2, ly: "Đúng thứ tự 7 mốc; chưa giải thích linh kiện từng thế hệ." }) :
+          { m: 1, ly: W.tgKt ? "Mới đúng " + dTg + "/" + MOC.length + " mốc." : "Chưa bấm Kiểm tra dòng thời gian." };
+        var nh = W.mm.nhanh, dk = demDk(), ba = ["st", "con", "dk"].filter(c.tc).length;
+        var r2 = { m: ba === 3 ? 3 : c.tc("st") ? 2 : 1, ly: nh.length + " nhánh chính, " + dk.t + " tệp đính kèm, " + dk.l + " siêu liên kết" + (c.tc("con") ? "; nhánh nào cũng có nhánh con." : "; còn nhánh chính chưa có nhánh con.") };
+        var nx = c.tieng("b5-1");
+        var r3 = c.tc("kc") ? (nx >= 12 ? { m: 3, ly: "Tính đúng mọi khoảng cách và có nhận xét, giải thích ở Bước 5." } : { m: 2, ly: "Tính đúng mọi khoảng cách; chưa có nhận xét, giải thích." }) : { m: 1, ly: okTg ? "Còn ô khoảng cách tính sai hoặc chưa nhập." : "Bảng khoảng cách chưa mở (dòng thời gian chưa đúng)." };
+        var rong = 0; (function di(n) { (n.nhanh || n.con || []).forEach(function (x) { if (!(x.ten || "").trim()) rong++; di(x); }); })(W.mm);
+        if (rong) c.goi(3, "Sơ đồ có " + rong + " nhánh chưa đặt tên: đặt tên hoặc xoá 🗑.");
+        if (okTg && !coLk) c.goi(4, "Câu 2 Bước 5: giải thích linh kiện từng thế hệ (bánh răng → đèn điện tử → bóng bán dẫn → mạch tích hợp) giúp máy tính nhỏ và nhanh dần thế nào.", "tl:b5-1");
+        return {
+          rub: [r1, r2, r3, c.thietKe(), c.hopTac()],
+          cach: {
+            tg: "Dùng ↑ ↓ sắp xếp lại (đang đúng " + dTg + "/" + MOC.length + " mốc), đọc lại thẻ Khoa học ở Bước 2, bấm Kiểm tra.",
+            st: "Đặt tên chủ đề trung tâm và bấm ＋ cho đủ 4 nhánh chính (hiện có " + nh.length + ").",
+            con: "Mỗi nhánh chính bấm ＋ thêm ít nhất 1 nhánh con có tên.",
+            dk: "Dùng 📎 để đính kèm ít nhất 3 tệp (hiện " + dk.t + ") và chèn 1 siêu liên kết (hiện " + dk.l + ").",
+            kc: okTg ? "Tính lại các ô đỏ hoặc còn trống: năm sau − năm trước." : "Sắp xếp đúng dòng thời gian để mở bảng, rồi tính số năm cho từng ô."
+          }
+        };
+      },
       baoCao: function () {
         function ds(n, cap) {
           var con = cap === 0 ? n.nhanh : n.con || [];
@@ -332,8 +356,8 @@ window.DU_AN = {
 <script src="../../chung/config.js?v=23"></script>
 <script src="../../chung/api.js?v=29"></script>
 <script src="../../chung/tuc-thi.js?v=2"></script>
-<script src="../khung.js?v=6"></script>
-<script src="../khbd.js?v=1"></script>
+<script src="../khung.js?v=7"></script>
+<script src="../khbd.js?v=2"></script>
 <script src="../truc-tuyen.js?v=3"></script>
 </body>
 </html>

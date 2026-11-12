@@ -121,10 +121,11 @@
   // Bước 4
   h.push('<section class="buoc" data-buoc="3">' + dau(3));
   h.push('<div class="the" data-loai="kt"><h3>Tiêu chí cần đạt</h3>' + tieuChiHtml(4) + "</div>");
-  h.push('<div id="xuong"></div>' + chanBuoc(3) + "</section>");
+  h.push('<div id="xuong"></div><p class="cham-nhanh"><button class="btn" data-cham-di>🤖 Nhờ hệ thống chấm và góp ý sản phẩm</button></p>' + chanBuoc(3) + "</section>");
 
   // Bước 5
   h.push('<section class="buoc" data-buoc="4">' + dau(4));
+  h.push('<div class="the he-cham" data-loai="kt" id="he-cham"><h3>🤖 Hệ thống chấm sản phẩm</h3><p class="goi-y" style="margin-top:0">Hệ thống xem sản phẩm ở Bước 4 và câu trả lời của nhóm, chấm theo bảng tiêu chí bên dưới và <b>đề xuất chỉnh sửa</b>. Sửa xong, bấm chấm lại để xem điểm thay đổi.</p><button class="btn chinh" data-cham>🤖 Chấm sản phẩm của nhóm</button><div id="kq-cham" aria-live="polite"></div></div>');
   h.push('<div class="the" data-loai="kt"><h3>Tự đánh giá sản phẩm</h3><p class="goi-y" style="margin-top:0">Bấm vào ô mức độ phù hợp với nhóm em (giáo viên và nhóm bạn có thể cùng chấm).</p><div class="rubric-wrap"><table class="rubric"><thead><tr><th>Tiêu chí</th><th>Mức 1 (1 điểm)</th><th>Mức 2 (2 điểm)</th><th>Mức 3 (3 điểm)</th></tr></thead><tbody>' +
     D.rubric.map(function (r, i) { return "<tr><th>" + r[0] + "</th>" + [1, 2, 3].map(function (m) { return '<td class="muc" data-rub="' + i + '" data-muc="' + m + '" tabindex="0">' + r[m] + "</td>"; }).join("") + "</tr>"; }).join("") +
     '</tbody></table></div><p style="display:flex;align-items:center;gap:12px;margin:12px 0 0"><span class="diem-to" id="diem-rub">–</span><span class="goi-y" id="diem-rub-t">Tổng điểm quy về thang 10</span></p></div>');
@@ -182,6 +183,8 @@
   document.addEventListener("click", function (e) {
     var t = e.target.closest("[data-di]"); if (t) { di(+t.dataset.di); return; }
     if (e.target.closest("[data-in]")) inBaoCao();
+    if (e.target.closest("[data-cham]")) cham(true);
+    if (e.target.closest("[data-cham-di]")) { di(4); cham(true); setTimeout(function () { var hc = $("#he-cham"); if (hc) hc.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60); }
   });
 
   // câu hỏi nhanh
@@ -284,6 +287,102 @@
     datHet: function () { return D.tieuChi.every(function (t) { return S.tc[t.k]; }); }
   };
   var X = D.xuong($("#xuong"), api) || {};
+
+  /* ---------- HỆ THỐNG CHẤM: chấm theo bảng tiêu chí + đề xuất chỉnh sửa ----------
+     Trang dự án cho xưởng trả về cham(c) → { rub: [{m: 1|2|3|null, ly: "lí do"}] (khớp D.rubric), cach: {k: "cách sửa tiêu chí k"} }
+     và có thể gọi c.goi(buoc, "đề xuất", khoá) để thêm đề xuất riêng. m = null: hệ thống không chấm được (GV chấm). */
+  function chuTron(s) { return String(s || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim(); }
+  function soTieng(k) { var t = (S.tl[k] || "").trim(); return t ? t.split(/\s+/).length : 0; }
+  function cham(hien, im) {
+    var DS = [], daCo = {};
+    var C = {
+      S: S, D: D,
+      tc: function (k) { return !!S.tc[k]; },
+      tl: function (k) { return (S.tl[k] || "").trim(); },
+      tieng: soTieng,
+      goi: function (b, t, k) { if (k && daCo[k]) return; if (k) daCo[k] = 1; DS.push({ b: b, t: t }); },
+      hopTac: function () {
+        var n = b3.viec.length, pc = b3.viec.filter(function (v, j) { return (S.pc[j] || "").trim(); }).length;
+        var ten = {}; b3.viec.forEach(function (v, j) { var x = (S.pc[j] || "").trim().toLowerCase(); if (x) ten[x] = 1; });
+        var nt = Object.keys(ten).length, tl5 = b5.hoi.filter(function (q, j) { return soTieng("b5-" + j) >= 5; }).length;
+        if (pc < n) C.goi(2, "Bảng phân công còn " + (n - pc) + " việc chưa có người phụ trách: ghi tên bạn phụ trách cho từng việc.", "pc");
+        else if (nt < 2) C.goi(2, "Bảng phân công mới có một bạn làm tất cả: chia việc cho các thành viên khác.", "pc");
+        return { m: pc === n && nt >= 2 && tl5 === b5.hoi.length ? 3 : pc > 0 ? 2 : 1,
+          ly: "Phân công " + pc + "/" + n + " việc cho " + nt + " bạn; trả lời " + tl5 + "/" + b5.hoi.length + " câu Bước 5. Phần trình bày do giáo viên, nhóm bạn đánh giá thêm." };
+      },
+      thietKe: function () {
+        var ss_ = b3.soSanh, n = ss_ ? ss_.phuongAn.length * ss_.tieuChi.length : 0, da = 0;
+        if (ss_) for (var i = 0; i < ss_.phuongAn.length; i++) for (var j = 0; j < ss_.tieuChi.length; j++) if ((S.ss || {})[i + "," + j]) da++;
+        var chon = S.pa != null, lyDo = soTieng("b3-lydo") >= 15, tcn = !D.tieuChiNhom || ((S.tl["tc-nhom"] || "").trim() && S.tcNhom), thu = soTieng("b5-0") >= 10;
+        if (ss_ && da < n) C.goi(2, "Bảng so sánh mới chấm " + da + "/" + n + " ô: chấm đủ mọi phương án theo từng tiêu chí.", "ss");
+        if (!chon) C.goi(2, "Chưa chọn phương án: đánh dấu ô Chọn ở phương án tốt nhất.", "pa");
+        if (soTieng("b3-lydo") < 15) C.goi(2, "Viết rõ hơn lí do chọn phương án, điểm yếu của nó và cách khắc phục (ít nhất 15 tiếng).", "tl:b3-lydo");
+        if (!thu) C.goi(4, "Câu 1 Bước 5: thử sản phẩm với người thật (nhóm bạn) và ghi lại kết quả, chỗ họ hiểu nhầm.", "tl:b5-0");
+        return { m: chon && da >= n && lyDo && tcn && thu ? 3 : chon && (da > 0 || !ss_) ? 2 : 1,
+          ly: (ss_ ? "Chấm " + da + "/" + n + " ô so sánh; " : "") + (chon ? "đã chọn phương án" : "chưa chọn phương án") + (lyDo ? ", có lí do" : ", lí do còn sơ sài") +
+            (D.tieuChiNhom ? (tcn ? "; đạt tiêu chí riêng" : "; tiêu chí riêng chưa đặt hoặc chưa đạt") : "") + (thu ? "; đã thử với người thật." : "; chưa ghi kết quả thử với người thật.") };
+      }
+    };
+    var KQ = X.cham ? X.cham(C) : null;
+    var rub = KQ && KQ.rub ? KQ.rub : D.rubric.map(function () { return { m: null, ly: "Giáo viên chấm." }; });
+    var cach = (KQ && KQ.cach) || {};
+
+    // đề xuất chung
+    if (!(KQ && KQ.boQuaTc)) D.tieuChi.forEach(function (t) { if (!S.tc[t.k] && cach[t.k] !== false) C.goi(3, "Chưa đạt: " + chuTron(t.t) + (cach[t.k] ? " <b>Cách sửa:</b> " + cach[t.k] : ""), "tc:" + t.k); });
+    if (D.tieuChiNhom) {
+      if (!(S.tl["tc-nhom"] || "").trim()) C.goi(0, "Nhóm chưa đặt tiêu chí riêng (cuối bảng Tiêu chí sản phẩm ở Bước 1).", "tcn");
+      else if (!S.tcNhom) C.goi(3, "Kiểm tra tiêu chí riêng “" + esc(S.tl["tc-nhom"]) + "”; đạt thì đánh dấu ở bảng Tiêu chí cần đạt.", "tcn");
+    }
+    if (!ss && b3.phuongAn) {
+      if (S.pa == null) C.goi(2, "Chưa chọn cách làm ở Bước 3.", "pa");
+      else if (S.pa !== b3.phuongAn.d) C.goi(2, "Xem lại cách làm đã chọn: " + chuTron(b3.phuongAn.g[S.pa]), "pa");
+    }
+    function cauHoi(buoc, ds, tien) {
+      ds.forEach(function (q, j) {
+        var k = tien + j, n = soTieng(k);
+        if (n < 3) C.goi(buoc, "Trả lời câu hỏi: <i>" + chuTron(q[0]) + "</i>", "tl:" + k);
+        else if (n < 8) C.goi(buoc, "Viết đầy đủ hơn câu: <i>" + chuTron(q[0]) + "</i> (hiện " + n + " tiếng).", "tl:" + k);
+      });
+    }
+    cauHoi(2, b3.hoi, "b3-"); cauHoi(4, b5.hoi, "b5-"); cauHoi(0, b1.hoi, "b1-");
+    var sai = [], chua = 0;
+    b2.quiz.forEach(function (c, i) { if (S.quiz[i] == null) chua++; else if (S.quiz[i] !== c.d) sai.push(i + 1); });
+    if (chua) C.goi(1, "Còn " + chua + " câu Kiểm tra nhanh chưa làm.", "quiz");
+    else if (sai.length) C.goi(1, "Kiểm tra nhanh còn sai câu " + sai.join(", ") + ": đọc lại thẻ kiến thức rồi chọn lại.", "quiz");
+
+    // xếp: sản phẩm (B4) trước, rồi giải pháp, chia sẻ, vấn đề, kiến thức
+    var THU_TU = [3, 4, 1, 0, 2]; // hạng của Bước 1..5: Bước 4 (sản phẩm) trước, rồi Bước 3, 5, 1, 2
+    DS.sort(function (a, b) { return THU_TU[a.b] - THU_TU[b.b]; });
+    // so với tự đánh giá
+    var lech = [];
+    rub.forEach(function (r, i) { if (r.m && S.rub[i] && S.rub[i] > r.m) lech.push("<b>" + D.rubric[i][0] + "</b>: nhóm tự chấm mức " + S.rub[i] + ", hệ thống thấy mức " + r.m); });
+
+    var co = rub.filter(function (r) { return r.m; }), tong = 0;
+    co.forEach(function (r) { tong += r.m; });
+    var d10 = co.length ? Math.round(tong / (3 * co.length) * 100) / 10 : null;
+    S.cham = { d: d10, m: rub.map(function (r) { return r.m || 0; }), n: DS.length, luc: Date.now() };
+    luu();
+    if (!hien && !$("#kq-cham").innerHTML) return S.cham;
+
+    function dsDx(ds) { return '<ol class="de-xuat">' + ds.map(function (x) { return '<li><span class="bb">Bước ' + (x.b + 1) + '</span><span class="nd">' + x.t + '</span><button class="btn nho" data-di="' + x.b + '">Sửa →</button></li>'; }).join("") + "</ol>"; }
+    var MAU_M = ["", "m1", "m2", "m3"], g = new Date(S.cham.luc);
+    $("[data-cham]").textContent = "🔄 Chấm lại";
+    $("#kq-cham").innerHTML =
+      '<div class="cham-dau"><span class="diem-to">' + (d10 == null ? "–" : String(d10).replace(".", ",")) + '</span><div><b>Điểm hệ thống chấm (thang 10)</b><br><span class="goi-y">Chấm lúc ' + ("0" + g.getHours()).slice(-2) + ":" + ("0" + g.getMinutes()).slice(-2) +
+      " · " + co.length + "/" + rub.length + " tiêu chí" + (co.length < rub.length ? " (tiêu chí còn lại do giáo viên chấm)" : "") + "</span></div></div>" +
+      '<div class="rubric-wrap"><table class="rubric cham-bang"><thead><tr><th>Tiêu chí</th><th>Mức</th><th>Vì sao</th></tr></thead><tbody>' +
+      rub.map(function (r, i) {
+        return "<tr><th>" + D.rubric[i][0] + '</th><td class="muc ' + (MAU_M[r.m] || "") + '">' + (r.m ? "Mức " + r.m : "GV chấm") + "</td><td>" + r.ly +
+          (r.m ? '<br><span class="goi-y">' + D.rubric[i][r.m] + "</span>" : "") + "</td></tr>";
+      }).join("") + "</tbody></table></div>" +
+      (DS.length ? "<h4>✏️ Đề xuất chỉnh sửa (" + DS.length + ")" + (DS.length > 6 ? " – sửa từ trên xuống" : "") + "</h4>" + dsDx(DS.slice(0, 6)) +
+        (DS.length > 6 ? '<details class="dx-them"><summary>Xem thêm ' + (DS.length - 6) + " đề xuất</summary>" + dsDx(DS.slice(6)) + "</details>" : "") : '<p class="cham-tot">🎉 Hệ thống không còn đề xuất chỉnh sửa nào. Nhóm hãy thuyết trình và nhờ nhóm bạn góp ý.</p>') +
+      (lech.length ? '<p class="cham-lech">⚖️ Nhóm tự chấm cao hơn hệ thống ở: ' + lech.join("; ") + ". Xem lại bảng tự đánh giá bên dưới.</p>" : "") +
+      '<p class="goi-y" style="margin-bottom:0">Hệ thống chỉ chấm những gì đo được trên trang. Phần thuyết trình, ý tưởng sáng tạo do giáo viên và nhóm bạn đánh giá.</p>';
+    if (hien && !im) bao(DS.length ? "Hệ thống có " + DS.length + " đề xuất chỉnh sửa." : "Sản phẩm đạt mọi yêu cầu hệ thống kiểm tra được!");
+    return S.cham;
+  }
+  if (S.cham) cham(true, true);
   /* cho phần trực tuyến (truc-tuyen.js): nộp sản phẩm, đánh giá chéo */
   window.STEM = { D: D, S: S, KHOA: KHOA, luu: luu, bao: bao, esc: esc, baoCao: function () { return X.baoCao ? X.baoCao() : ""; } };
 
@@ -313,6 +412,7 @@
     r.push("<h2>5. Đánh giá và điều chỉnh</h2><table><tr><th>Tiêu chí</th><th>Mức tự đánh giá</th></tr>" +
       D.rubric.map(function (x, i) { return "<tr><td>" + x[0] + "</td><td>" + (S.rub[i] ? "Mức " + S.rub[i] + ": " + x[S.rub[i]] : "") + "</td></tr>"; }).join("") +
       "</table><p><b>Tổng:</b> " + tong + "/" + D.rubric.length * 3 + " điểm (" + (Math.round(tong / (D.rubric.length * 3) * 100) / 10).toString().replace(".", ",") + "/10)</p>" +
+      (function () { var k = cham(false); return k && k.d != null ? "<p><b>Hệ thống chấm:</b> " + String(k.d).replace(".", ",") + "/10 (mức " + k.m.map(function (x) { return x || "GV"; }).join(" – ") + "); còn " + k.n + " đề xuất chỉnh sửa.</p>" : ""; })() +
       b5.hoi.map(function (q, j) { return tl("b5-" + j, q[0]); }).join(""));
     $("#bao-cao").innerHTML = r.join("");
     setTimeout(function () { window.print(); }, 50);

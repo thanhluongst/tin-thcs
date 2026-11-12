@@ -6,7 +6,7 @@
 <title>Báo cáo vườn rau – Dự án STEM Tin học 7</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="../khung.css?v=6">
+<link rel="stylesheet" href="../khung.css?v=7">
 <style>
 .ribbon { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px; background: #f1f5f9; border: 1px solid var(--vien); border-radius: 12px 12px 0 0; }
 .ribbon .nhom-l { display: flex; gap: 4px; align-items: center; padding-right: 8px; border-right: 1px solid var(--vien); }
@@ -319,6 +319,29 @@ window.DU_AN = {
     ve(); kiemTra();
 
     return {
+      cham: function (c) {
+        var so4 = ["pt", "cc", "tien", "ngay"].filter(c.tc).length, tb = ["td", "dc", "vien", "nb"].filter(c.tc).length;
+        var dam = Object.keys(W.f).filter(function (k) { return W.f[k].nen === "#475569"; }).length;
+        var r1 = { m: so4 === 4 ? 3 : so4 >= 2 ? 2 : 1, ly: "Định dạng đúng " + so4 + "/4 cột số (phần trăm, số thập phân, tiền, ngày)." };
+        var r2 = { m: tb === 4 && !dam ? 3 : tb >= 2 ? 2 : 1, ly: "Đạt " + tb + "/4 yêu cầu trình bày (gộp ô tiêu đề, tên cột nổi bật, kẻ viền, làm nổi bật số liệu)" + (dam ? "; có " + dam + " ô nền xám đậm, in đen trắng sẽ khó đọc" : "") + "." };
+        var dx = c.tl("b5-1"), coSo = /\d/.test(dx), nt = c.tieng("b5-1");
+        var r4 = { m: coSo && nt >= 12 ? 3 : nt >= 6 ? 2 : 1, ly: coSo && nt >= 12 ? "Đề xuất có dẫn số liệu cụ thể trong bảng." : nt >= 6 ? "Có đề xuất nhưng chưa dẫn số liệu cụ thể (con số) trong bảng." : "Chưa có đề xuất với Ban giám hiệu." };
+        if (dam) c.goi(3, "Có " + dam + " ô tô nền <b>xám đậm</b>: in đen trắng chữ sẽ bị che. Bật “Xem bản in đen trắng” để thử rồi đổi sang màu nhạt.");
+        if (nt >= 3 && !coSo) c.goi(4, "Câu 2 Bước 5: dẫn số liệu cụ thể trong bảng (tỉ lệ nảy mầm, chiều cao…) để đề xuất thuyết phục hơn.", "tl:b5-1");
+        return {
+          rub: [r1, r2, c.thietKe(), r4, c.hopTac()],
+          cach: {
+            td: "Chọn A1:H1, bấm <b>Merge &amp; Center</b>, rồi bấm In đậm.",
+            dc: "Chọn A2:H2: bấm In đậm, Căn giữa và tô một màu nền nhạt.",
+            pt: "Chọn E3:E7, chọn kiểu <b>Percentage</b>, bấm .00→.0 cho còn tối đa 1 chữ số thập phân.",
+            cc: "Chọn F3:F7, chọn kiểu <b>Number</b>, chỉnh còn đúng 1 chữ số thập phân.",
+            tien: "Chọn G3:G8, chọn kiểu <b>Number</b>, bấm .00→.0 đến khi không còn phần thập phân.",
+            ngay: "Chọn H3:H7, chọn kiểu <b>Date</b>.",
+            vien: "Chọn A2:H8, bấm <b>All Borders</b>.",
+            nb: "Đọc kĩ cột Tỉ lệ nảy mầm (hai loại rau rất sát nhau), tô một màu nền riêng chỉ cho ô cao nhất, khác màu dòng tên cột."
+          }
+        };
+      },
       baoCao: function () {
         var h = '<table style="font-size:11pt">';
         for (var r = 0; r < NH; r++) {
@@ -341,8 +364,8 @@ window.DU_AN = {
 <script src="../../chung/config.js?v=23"></script>
 <script src="../../chung/api.js?v=29"></script>
 <script src="../../chung/tuc-thi.js?v=2"></script>
-<script src="../khung.js?v=6"></script>
-<script src="../khbd.js?v=1"></script>
+<script src="../khung.js?v=7"></script>
+<script src="../khbd.js?v=2"></script>
 <script src="../truc-tuyen.js?v=3"></script>
 </body>
 </html>

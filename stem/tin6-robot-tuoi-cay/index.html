@@ -6,7 +6,7 @@
 <title>Robot tưới cây – Dự án STEM Tin học 6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="../khung.css?v=6">
+<link rel="stylesheet" href="../khung.css?v=7">
 <style>
 .vuon-wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
 @media (max-width: 800px) { .vuon-wrap { grid-template-columns: 1fr; } }
@@ -279,6 +279,38 @@ window.DU_AN = {
     veDau();
 
     return {
+      cham: function (c) {
+        var k = W.kq, n = W.lenh.length;
+        var dung = c.tc("tuoi") && c.tc("an") && c.tc("nuoc") && c.tc("ve");
+        var r1 = !k ? { m: 1, ly: "Nhóm chưa chạy thử thuật toán." } :
+          dung ? { m: 3, ly: "Robot tưới đủ 3 cây, an toàn, không tưới phí nước và về trạm sạc." } :
+          c.tc("tuoi") && !k.loi ? { m: 2, ly: "Tưới đủ 3 cây nhưng " + (k.phi ? "tưới phí nước " + k.phi + " lần" : "") + (k.phi && !k.ve ? " và " : "") + (!k.ve ? "chưa về trạm sạc" : "") + "." } :
+          { m: 1, ly: k.loi ? "Robot gặp lỗi: " + k.loi : "Mới tưới " + k.tuoi + "/3 cây." };
+        var r2 = !dung ? { m: 1, ly: "Thuật toán chưa đúng nên chưa xét độ ngắn gọn" + (n ? " (hiện " + n + " lệnh)." : ".") } :
+          n <= GIOI_HAN ? { m: 3, ly: n + " lệnh, không quá " + GIOI_HAN + "." } : n <= 40 ? { m: 2, ly: n + " lệnh (từ 33 đến 40)." } : { m: 1, ly: n + " lệnh (trên 40)." };
+        var vr = c.tl("b1-1"), coVR = /(đầu\s*vào|input)/i.test(vr) && /(đầu\s*ra|output)/i.test(vr), mt = c.tieng("b3-1");
+        var r3 = coVR && mt >= 15 ? { m: 3, ly: "Nêu đầu vào, đầu ra và mô tả thuật toán bằng lời (" + mt + " tiếng)." } :
+          coVR || c.tieng("b1-1") >= 6 ? { m: 2, ly: "Có nêu đầu vào, đầu ra; mô tả thuật toán bằng lời còn ngắn (" + mt + " tiếng)." } : { m: 1, ly: "Chưa nêu rõ đầu vào, đầu ra." };
+        if (!k) c.goi(3, "Bấm <b>▶ Chạy</b> để thử thuật toán của nhóm.");
+        else if (k.loi) c.goi(3, "Robot gặp lỗi “" + k.loi + "”. Dùng <b>⏭ Chạy từng bước</b> để tìm lệnh gây lỗi (lệnh tô đỏ) rồi sửa.");
+        var thua = [], L = W.lenh;
+        for (var i = 0; i + 1 < n; i++) if ((L[i] === "L" && L[i + 1] === "R") || (L[i] === "R" && L[i + 1] === "L")) thua.push("lệnh " + (i + 1) + "–" + (i + 2) + ": quay rồi quay ngược lại, bỏ cả hai");
+        for (var j = 0; j + 2 < n; j++) if ((L[j] === "L" || L[j] === "R") && L[j] === L[j + 1] && L[j] === L[j + 2]) thua.push("lệnh " + (j + 1) + "–" + (j + 3) + ": 3 lần " + LENH[L[j]][1] + " bằng 1 lần " + (L[j] === "L" ? "Quay phải" : "Quay trái"));
+        if (thua.length) c.goi(3, "Có lệnh quay thừa, rút gọn được: " + thua.slice(0, 3).join("; ") + ".");
+        if (!coVR) c.goi(0, "Câu 2 Bước 1: ghi rõ <b>đầu vào</b> (bản đồ vườn, vị trí, hướng của robot…) và <b>đầu ra</b> (3 cây đã tưới, robot ở trạm sạc).", "tl:b1-1");
+        if (mt < 15) c.goi(2, "Viết phác thảo thuật toán bằng lời đầy đủ hơn, theo thứ tự: Bước 1…, Bước 2…", "tl:b3-1");
+        return {
+          rub: [r1, r2, r3, c.hopTac()],
+          boQuaTc: !k,
+          cach: {
+            tuoi: "Robot phải đứng cạnh, <b>quay mặt vào</b> bồn cây rồi mới Tưới." + (k ? " Lần chạy gần nhất tưới được " + k.tuoi + "/3 cây." : ""),
+            an: "Không cho robot đi vào ô đá, bồn cây hoặc ra ngoài vườn; chạy từng bước để thấy lệnh gây va chạm.",
+            nuoc: "Tìm lệnh Tưới mà ô trước mặt robot không phải bồn cây chưa tưới" + (k && k.phi ? " (có " + k.phi + " lần tưới phí)" : "") + ", rồi xoá hoặc dời lệnh đó.",
+            ve: "Thêm lệnh để robot về trạm sạc (ô góc dưới bên trái) sau khi tưới xong.",
+            gon: "Thuật toán đang có " + n + " lệnh: thử thứ tự tưới khác hoặc bỏ lệnh quay thừa để còn không quá " + GIOI_HAN + " lệnh."
+          }
+        };
+      },
       baoCao: function () {
         var k = W.kq;
         return "<p><b>Thuật toán (" + W.lenh.length + " lệnh):</b></p><ol>" + W.lenh.map(function (c) { return "<li>" + LENH[c][1] + "</li>"; }).join("") + "</ol>" +
@@ -291,8 +323,8 @@ window.DU_AN = {
 <script src="../../chung/config.js?v=23"></script>
 <script src="../../chung/api.js?v=29"></script>
 <script src="../../chung/tuc-thi.js?v=2"></script>
-<script src="../khung.js?v=6"></script>
-<script src="../khbd.js?v=1"></script>
+<script src="../khung.js?v=7"></script>
+<script src="../khbd.js?v=2"></script>
 <script src="../truc-tuyen.js?v=3"></script>
 </body>
 </html>

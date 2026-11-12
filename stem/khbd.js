@@ -182,7 +182,7 @@
       sp: ["Sản phẩm của nhóm; các tiêu chí đạt được tự đánh dấu trên trang dự án."].concat(g.luuY ? ["<i>Gợi ý cho GV:</i> " + g.luuY] : []),
       tc: [["GV yêu cầu nhóm làm sản phẩm theo phương án đã chọn, đối chiếu " + D.tieuChi.length + " tiêu chí; các thành viên làm đúng phần việc được phân công."],
            [HD[3].chinh || "Nhóm làm sản phẩm, chạy thử, sửa lỗi.", "GV quan sát, hỗ trợ; không đưa lời giải sớm mà gợi ý nhóm thử nghiệm để tự tìm lỗi."],
-           ["Nhóm báo cáo tiến độ, những tiêu chí đã đạt, lỗi đã gặp và cách sửa."],
+           ["Nhóm bấm “Nhờ hệ thống chấm” trên trang dự án để nhận điểm theo bảng tiêu chí và danh sách đề xuất chỉnh sửa, rồi sửa sản phẩm theo đề xuất.", "Nhóm báo cáo tiến độ, những tiêu chí đã đạt, lỗi đã gặp và cách sửa."],
            ["GV nhận xét tiến độ, chỉ ra lỗi thường gặp; nhắc các nhóm hoàn thiện sản phẩm để chia sẻ."]]
     });
     var them5 = HD[4].them.slice();
