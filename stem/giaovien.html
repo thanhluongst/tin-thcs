@@ -60,6 +60,7 @@ table.xh tr.chon td { background: var(--lam-nhat); }
 .chieu ol li::before { content: counter(x); font-weight: 800; width: 32px; opacity: .7; }
 .chieu ol li b { flex: 1; } .chieu ol li span { font-weight: 800; color: #fde68a; }
 .chieu .dong { position: fixed; top: 14px; right: 14px; }
+.dx-gv { margin: 0; padding-left: 20px; font-size: 14px; } .dx-gv li { margin: 3px 0; }
 </style>
 </head>
 <body>
@@ -96,7 +97,7 @@ table.xh tr.chon td { background: var(--lam-nhat); }
       </div>
       <p class="goi-y" style="margin:8px 0 0">Bấm <b>Mở</b> để bắt đầu đếm giờ. Hết giờ, trang tự <b>đóng đánh giá chéo</b> (học sinh không sửa được điểm nữa) và chiếu bảng xếp hạng.</p>
       <div class="trong-so" style="margin-top:10px"><b>Cách tính điểm tổng:</b>
-        <label>Máy kiểm tra tiêu chí <input type="number" id="w-may" min="0" max="100"> %</label>
+        <label>Hệ thống chấm <input type="number" id="w-may" min="0" max="100"> %</label>
         <label>Nhóm bạn chấm <input type="number" id="w-ban" min="0" max="100"> %</label>
         <label>Giáo viên chấm <input type="number" id="w-gv" min="0" max="100"> %</label>
         <span class="goi-y">Phần nào chưa có điểm thì tự chia lại cho các phần còn lại.</span>
@@ -105,7 +106,7 @@ table.xh tr.chon td { background: var(--lam-nhat); }
 
     <div class="the" data-loai="kt"><h3>Thống kê và xếp hạng <span class="goi-y" id="cap-nhat" style="font-weight:400;text-transform:none"></span></h3>
       <div class="bang-wrap"><table class="xh"><thead><tr>
-        <th>Hạng</th><th>Nhóm</th><th>Lưu lần cuối<span class="it">bước đã xong</span></th><th>Tiêu chí đạt<span class="it">máy kiểm tra</span></th><th>Tự đánh giá</th>
+        <th>Hạng</th><th>Nhóm</th><th>Lưu lần cuối<span class="it">bước đã xong</span></th><th>Hệ thống chấm<span class="it">tiêu chí đạt · đề xuất còn lại</span></th><th>Tự đánh giá</th>
         <th>Nhóm bạn chấm<span class="it">trung bình · số lượt</span></th><th>Đã chấm bạn</th><th>Giáo viên chấm</th><th>Tổng</th>
       </tr></thead><tbody id="bang"></tbody></table></div>
       <p class="goi-y" id="ghi-chu"></p>
@@ -238,7 +239,7 @@ table.xh tr.chon td { background: var(--lam-nhat); }
       var ban = (d.ban[TASK] || {}).cm || [];
       var diem = ban.filter(function (c) { return !c.an; }).map(function (c) { var x = giaiMa(c.t); return x ? { g: c.g, from: c.from, d: x.d, m: x.m, chu: x.chu, an: c.an } : null; }).filter(Boolean);
       var tb = diem.length ? diem.reduce(function (s, x) { return s + x.d; }, 0) / diem.length : null;
-      var may = a.ntc ? (a.tc || []).length / a.ntc * 10 : null;
+      var may = a.htc && a.htc.d != null ? a.htc.d : a.ntc ? (a.tc || []).length / a.ntc * 10 : null;   // bài cũ chưa có hệ thống chấm: tỉ lệ tiêu chí đạt
       var gvRaw = (d.nx || {}).diemgv || "", k = /^([\d.,]+)\|([\s\S]*)$/.exec(gvRaw);
       var gv = k ? parseFloat(k[1].replace(",", ".")) : null;
       return { d: d, a: a, ban: ban, diem: diem, tb: tb, may: may, gv: isNaN(gv) ? null : gv, gvNx: k ? k[2] : "", da: 0 };
@@ -265,7 +266,7 @@ table.xh tr.chon td { background: var(--lam-nhat); }
         "<td>" + (x.hang ? '<span class="hang' + (x.hang <= 3 ? " h" + x.hang : "") + '">' + x.hang + "</span>" : "–") + "</td>" +
         '<td class="ten">' + esc(x.d.group || "?") + (x.a.lop ? '<span class="it">' + esc(x.a.lop) + "</span>" : "") + "</td>" +
         "<td>" + gio(x.d.t) + (x.a.buoc != null ? '<span class="it">' + x.a.buoc + "/5 bước</span>" : "") + "</td>" +
-        "<td>" + (x.a.ntc ? (x.a.tc || []).length + "/" + x.a.ntc : "–") + (x.a.tcn != null ? '<span class="it">riêng: ' + (x.a.tcn ? "✓" : "✗") + "</span>" : "") + "</td>" +
+        "<td><b>" + so(x.may) + "</b>" + '<span class="it">' + (x.a.ntc ? "tiêu chí " + (x.a.tc || []).length + "/" + x.a.ntc : "") + (x.a.tcn != null ? " · riêng " + (x.a.tcn ? "✓" : "✗") : "") + (x.a.htc ? " · " + x.a.htc.n + " đề xuất" : "") + "</span></td>" +
         "<td>" + so(x.a.tdg) + "</td>" +
         "<td><b>" + so(x.tb) + '</b><span class="it">' + x.diem.length + " lượt</span></td>" +
         "<td>" + x.da + "/" + Math.max(0, n - 1) + (n > 1 && x.da < n - 1 && MO ? '<span class="it canh">còn thiếu</span>' : "") + "</td>" +
@@ -305,14 +306,17 @@ table.xh tr.chon td { background: var(--lam-nhat); }
     var R = DU.rubric;
     var bang = R.map(function (r, i) {
       var v = x.diem.filter(function (q) { return q.m[i]; }), t = v.length ? v.reduce(function (s, q) { return s + q.m[i]; }, 0) / v.length : null;
-      return "<tr><td>" + r[0] + "</td><td>" + (t == null ? "–" : so(t) + "/3") + "</td></tr>";
+      var hm = x.a.htc && x.a.htc.m ? x.a.htc.m[i] : null, hl = x.a.htc && x.a.htc.ly ? x.a.htc.ly[i] : "";
+      return "<tr><td>" + r[0] + "</td><td" + (hl ? ' title="' + esc(hl) + '"' : "") + ">" + (hm ? hm + "/3" : x.a.htc ? "GV" : "–") + "</td><td>" + (t == null ? "–" : so(t) + "/3") + "</td></tr>";
     }).join("");
     var tl = x.a.tl || {}, cauB5 = (DU.buoc5.hoi || []).map(function (q, j) { return tl["b5-" + j] ? "<p><b>" + q[0] + "</b><br>" + esc(tl["b5-" + j]) + "</p>" : ""; }).join("");
     o.innerHTML = "<h3>" + esc(x.d.group) + (x.a.tv ? ' <span class="goi-y" style="text-transform:none">' + esc(x.a.tv) + "</span>" : "") + "</h3>" +
       '<div class="ct-luoi"><div><iframe sandbox title="Sản phẩm của nhóm"></iframe>' +
       (tl["tc-nhom"] ? "<p><b>Tiêu chí riêng:</b> " + esc(tl["tc-nhom"]) + (x.a.tcn ? " ✓" : " ✗") + "</p>" : "") +
       (tl["b3-lydo"] ? "<p><b>Lí do chọn phương án:</b><br>" + esc(tl["b3-lydo"]) + "</p>" : "") + cauB5 + "</div><div>" +
-      '<table class="tt-tk"><thead><tr><th>Tiêu chí (nhóm bạn chấm)</th><th>Mức TB</th></tr></thead><tbody>' + bang + "</tbody></table>" +
+      '<table class="tt-tk"><thead><tr><th>Tiêu chí</th><th>Hệ thống</th><th>Nhóm bạn (TB)</th></tr></thead><tbody>' + bang + "</tbody></table>" +
+      (x.a.htc ? '<h4 style="margin:14px 0 6px">Hệ thống chấm: ' + so(x.a.htc.d) + "/10 · " + x.a.htc.n + " đề xuất chỉnh sửa còn lại</h4>" +
+        (x.a.htc.ds && x.a.htc.ds.length ? '<ol class="dx-gv">' + x.a.htc.ds.map(function (q) { return "<li><b>Bước " + q.b + ":</b> " + esc(q.t) + "</li>"; }).join("") + "</ol>" + (x.a.htc.n > x.a.htc.ds.length ? '<p class="goi-y">… và ' + (x.a.htc.n - x.a.htc.ds.length) + " đề xuất khác.</p>" : "") : '<p class="goi-y">Không còn đề xuất nào.</p>') : '<p class="goi-y">Nhóm chưa lưu bài từ khi có hệ thống chấm.</p>') +
       '<h4 style="margin:14px 0 6px">Nhận xét của nhóm bạn (' + x.ban.length + ')</h4><ul class="nx-ds">' +
       (x.ban.length ? x.ban.map(function (c) {
         var q = giaiMa(c.t);
@@ -345,10 +349,10 @@ table.xh tr.chon td { background: var(--lam-nhat); }
 
   /* ---------- tải CSV ---------- */
   $("#csv").addEventListener("click", function () {
-    var R = DU.rubric, dong = [["Hạng", "Nhóm", "Lớp", "Thành viên", "Nộp lúc", "Tiêu chí đạt", "Tự đánh giá", "Nhóm bạn chấm (TB)", "Số lượt được chấm", "Đã chấm bạn"]
+    var R = DU.rubric, dong = [["Hạng", "Nhóm", "Lớp", "Thành viên", "Nộp lúc", "Tiêu chí đạt", "Hệ thống chấm", "Đề xuất còn lại", "Tự đánh giá", "Nhóm bạn chấm (TB)", "Số lượt được chấm", "Đã chấm bạn"]
       .concat(R.map(function (r) { return "TB " + r[0]; })).concat(["Giáo viên chấm", "Nhận xét GV", "Tổng"])];
     tinh().forEach(function (x) {
-      dong.push([x.hang || "", x.d.group, x.a.lop || "", x.a.tv || "", gio(x.d.t), x.a.ntc ? (x.a.tc || []).length + "/" + x.a.ntc : "", so(x.a.tdg), so(x.tb), x.diem.length, x.da]
+      dong.push([x.hang || "", x.d.group, x.a.lop || "", x.a.tv || "", gio(x.d.t), x.a.ntc ? (x.a.tc || []).length + "/" + x.a.ntc : "", so(x.may), x.a.htc ? x.a.htc.n : "", so(x.a.tdg), so(x.tb), x.diem.length, x.da]
         .concat(R.map(function (r, i) { var v = x.diem.filter(function (q) { return q.m[i]; }); return v.length ? so(v.reduce(function (s, q) { return s + q.m[i]; }, 0) / v.length) : ""; }))
         .concat([so(x.gv), x.gvNx, so(x.tong)]));
     });

@@ -360,12 +360,15 @@
     var co = rub.filter(function (r) { return r.m; }), tong = 0;
     co.forEach(function (r) { tong += r.m; });
     var d10 = co.length ? Math.round(tong / (3 * co.length) * 100) / 10 : null;
-    S.cham = { d: d10, m: rub.map(function (r) { return r.m || 0; }), n: DS.length, luc: Date.now() };
-    luu();
-    if (!hien && !$("#kq-cham").innerHTML) return S.cham;
+    var moi = { d: d10, m: rub.map(function (r) { return r.m || 0; }), n: DS.length, luc: Date.now() }, cu_ = S.cham;
+    if (cu_ && cu_.d === moi.d && cu_.n === moi.n && cu_.m.join() === moi.m.join()) moi.luc = cu_.luc;   // không đổi thì giữ giờ chấm cũ
+    else { S.cham = moi; luu(); }
+    var traVe = { d: moi.d, m: moi.m, n: moi.n, luc: moi.luc, ly: rub.map(function (r) { return chuTron(r.ly); }), ds: DS.map(function (x) { return { b: x.b + 1, t: chuTron(x.t).slice(0, 220) }; }) };
+    if (!hien && !$("#kq-cham").innerHTML) return traVe;
 
     function dsDx(ds) { return '<ol class="de-xuat">' + ds.map(function (x) { return '<li><span class="bb">Bước ' + (x.b + 1) + '</span><span class="nd">' + x.t + '</span><button class="btn nho" data-di="' + x.b + '">Sửa →</button></li>'; }).join("") + "</ol>"; }
     var MAU_M = ["", "m1", "m2", "m3"], g = new Date(S.cham.luc);
+    S.cham = moi;
     $("[data-cham]").textContent = "🔄 Chấm lại";
     $("#kq-cham").innerHTML =
       '<div class="cham-dau"><span class="diem-to">' + (d10 == null ? "–" : String(d10).replace(".", ",")) + '</span><div><b>Điểm hệ thống chấm (thang 10)</b><br><span class="goi-y">Chấm lúc ' + ("0" + g.getHours()).slice(-2) + ":" + ("0" + g.getMinutes()).slice(-2) +
@@ -380,11 +383,11 @@
       (lech.length ? '<p class="cham-lech">⚖️ Nhóm tự chấm cao hơn hệ thống ở: ' + lech.join("; ") + ". Xem lại bảng tự đánh giá bên dưới.</p>" : "") +
       '<p class="goi-y" style="margin-bottom:0">Hệ thống chỉ chấm những gì đo được trên trang. Phần thuyết trình, ý tưởng sáng tạo do giáo viên và nhóm bạn đánh giá.</p>';
     if (hien && !im) bao(DS.length ? "Hệ thống có " + DS.length + " đề xuất chỉnh sửa." : "Sản phẩm đạt mọi yêu cầu hệ thống kiểm tra được!");
-    return S.cham;
+    return traVe;
   }
   if (S.cham) cham(true, true);
   /* cho phần trực tuyến (truc-tuyen.js): nộp sản phẩm, đánh giá chéo */
-  window.STEM = { D: D, S: S, KHOA: KHOA, luu: luu, bao: bao, esc: esc, baoCao: function () { return X.baoCao ? X.baoCao() : ""; } };
+  window.STEM = { D: D, S: S, KHOA: KHOA, luu: luu, bao: bao, esc: esc, baoCao: function () { return X.baoCao ? X.baoCao() : ""; }, cham: function () { return cham(false); } };
 
   // báo cáo
   function inBaoCao() {

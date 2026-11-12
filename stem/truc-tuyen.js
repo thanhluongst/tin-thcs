@@ -45,6 +45,7 @@
 
   function banSao() { var o = {}; Object.keys(S).forEach(function (k) { if (k !== "on") o[k] = S[k]; }); return JSON.parse(JSON.stringify(o)); }
   function goi() {
+    var htc = null; try { htc = G.cham ? G.cham() : null; } catch (e) {}   // chấm lại trước khi lấy bản sao bài làm
     var st = banSao();
     var tc = D.tieuChi.filter(function (t) { return S.tc[t.k]; }).map(function (t) { return t.k; });
     var du = R.every(function (r, i) { return S.rub[i]; });
@@ -53,7 +54,8 @@
     ["b3-lydo", "b3-pa-rieng", "tc-nhom"].forEach(function (k) { if (S.tl[k]) tl[k] = String(S.tl[k]).slice(0, 600); });
     (D.buoc5.hoi || []).forEach(function (q, j) { var k = "b5-" + j; if (S.tl[k]) tl[k] = String(S.tl[k]).slice(0, 600); });
     var sp = ""; try { sp = G.baoCao(); } catch (e) {}
-    var ans = { sp: "", tc: tc, ntc: D.tieuChi.length, tcn: S.tl["tc-nhom"] ? !!S.tcNhom : null, tdg: tdg, lop: S.nhom.lop || "", tv: S.nhom.tv || "", tl: tl, buoc: S.xong.filter(Boolean).length };
+    var ans = { sp: "", tc: tc, ntc: D.tieuChi.length, tcn: S.tl["tc-nhom"] ? !!S.tcNhom : null, tdg: tdg, lop: S.nhom.lop || "", tv: S.nhom.tv || "", tl: tl, buoc: S.xong.filter(Boolean).length,
+      htc: htc ? { d: htc.d, m: htc.m, ly: htc.ly.map(function (x) { return x.slice(0, 200); }), n: htc.n, ds: htc.ds.slice(0, 10), luc: htc.luc } : null };
     var data = { sub: { duan: 1 }, ans: { duan: ans }, luu: st };
     var con = MAX - JSON.stringify(data).length;
     if (con < 0) throw new Error("Bài của nhóm quá dài để lưu lên lớp. Hãy rút gọn các câu trả lời.");
@@ -61,7 +63,8 @@
     var cols = [["Lớp", S.nhom.lop || ""], ["Thành viên", S.nhom.tv || ""], ["Đã xong (bước)", ans.buoc + "/5"],
       ["Tiêu chí sản phẩm đạt", tc.length + "/" + D.tieuChi.length],
       ["Tiêu chí riêng", (S.tl["tc-nhom"] || "") + (S.tl["tc-nhom"] ? (S.tcNhom ? " ✓" : " ✗") : "")],
-      ["Tự đánh giá (thang 10)", tdg == null ? "" : so(tdg)]];
+      ["Tự đánh giá (thang 10)", tdg == null ? "" : so(tdg)],
+      ["Hệ thống chấm (thang 10)", htc && htc.d != null ? so(htc.d) : ""], ["Đề xuất chỉnh sửa còn lại", htc ? htc.n : ""]];
     return { data: data, cols: cols, sig: JSON.stringify(st) };
   }
 
