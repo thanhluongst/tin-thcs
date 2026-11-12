@@ -136,6 +136,7 @@
   // Giáo viên
   var g = D.gv;
   h.push('<details class="gv"><summary>📋 Dành cho giáo viên: kế hoạch 2 tiết, chuẩn bị, đánh giá</summary><div class="noi">' +
+    '<p class="khbd-mo" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:0"><button class="btn chinh" data-khbd>📄 Kế hoạch bài dạy đầy đủ (mẫu 5512) · tải Word</button><span class="goi-y">Điền tên trường, tổ, giáo viên rồi tải tệp .docx để nộp Ban giám hiệu.</span></p>' +
     "<p><b>Vị trí trong PPCT:</b> " + esc(D.tiet) + ". <b>Yêu cầu cần đạt (Tin học):</b> " + g.yccd + "</p>" +
     "<p><b>Chuẩn bị:</b> " + g.chuanBi + "</p>" +
     ["Tiết 1", "Tiết 2"].map(function (t, i) {
