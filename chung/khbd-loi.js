@@ -93,9 +93,10 @@
   }
   /* Ô kí: Duyệt của BGH – Tổ trưởng chuyên môn – Giáo viên */
   function chuKi() {
-    return [P("", {}), T([34, 33, 33], [[
-      [P("<b>DUYỆT CỦA BAN GIÁM HIỆU</b>", { giua: 1 })],
-      [P("<b>TỔ TRƯỞNG CHUYÊN MÔN</b>", { giua: 1 })],
+    // cột 3 rộng để dòng "Nhơn Mỹ, ngày … tháng … năm 20…" nằm trên một hàng
+    return [P("", {}), T([18, 24, 58], [[
+      [P("<b>DUYỆT</b>", { giua: 1 }), P("<b>CỦA BGH</b>", { giua: 1 })],
+      [P("<b>TỔ TRƯỞNG</b>", { giua: 1 }), P("<b>CHUYÊN MÔN</b>", { giua: 1 })],
       [P("<i>" + esc(TT.diaDanh || "……") + ", ngày …… tháng …… năm 20……</i>", { giua: 1 }), P("<b>GIÁO VIÊN</b>", { giua: 1 }),
        P("", {}), P("", {}), P("", {}), P(TT.gv ? "<b>" + esc(TT.gv) + "</b>" : "", { giua: 1 })]
     ]], { khung: 0 })];
@@ -224,7 +225,7 @@
     ".khbd-giay .kp{margin:0 0 3px;text-align:justify}.khbd-giay .kp.giua{text-align:center}.khbd-giay .kt td .kp.phai,.khbd-giay .kp.phai{text-align:right}" +
     ".khbd-giay table.kt{width:100%;border-collapse:collapse;margin:4px 0 8px;table-layout:fixed}.khbd-giay .kt td{border:1px solid #000;padding:3px 6px;vertical-align:top}" +
     ".khbd-giay .kt.khong tr td{border:0;background:none}.khbd-giay .kt.nho{font-size:15px}" +
-    ".khbd-giay .kt td .kp{text-align:left}.khbd-giay figure.kh{margin:8px 0 10px;text-align:center}.khbd-giay figure.kh figcaption{font-style:italic;font-size:.88em;color:#404040}" +
+    ".khbd-giay .kt td .kp{text-align:left}.khbd-giay .kt td .kp.giua{text-align:center}.khbd-giay figure.kh{margin:8px 0 10px;text-align:center}.khbd-giay figure.kh figcaption{font-style:italic;font-size:.88em;color:#404040}" +
     "@media (max-width:640px){.khbd-giay{padding:22px 16px;font-size:14px}.khbd-thanh label{max-width:none}.khbd-nut{margin-left:0;width:100%}}" +
     "@media print{body.khbd-in>*:not(.khbd-nen){display:none!important}body.khbd-in .khbd-nen{position:static;background:none}body.khbd-in .khbd-thanh{display:none}body.khbd-in .khbd-cuon{padding:0;overflow:visible}body.khbd-in .khbd-giay{box-shadow:none;padding:0;max-width:none}}";
 
