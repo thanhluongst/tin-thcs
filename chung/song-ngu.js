@@ -87,8 +87,8 @@ function norm(s){
 var UI_EN = {"Nộp câu trả lời":"Submit","Sửa câu trả lời":"Edit answer","GV nhận xét & chốt":"Teacher: check & reveal","Ẩn phần chốt":"Hide answer key",
   "Chính xác!":"Correct!","Chưa đúng, xem phần chốt.":"Not correct, see the key.","Đã nộp":"Submitted","Đã nộp. Chờ thầy cô nhận xét và chốt.":"Submitted. Wait for your teacher.",
   "Nhận xét của thầy cô":"Teacher's comment","Thầy cô khen câu trả lời của em!":"Your teacher likes your answer!","Rất tốt, em hãy tiếp tục phát huy nhé.":"Very good, keep it up!",
-  "? Em chưa chắc":"? Not sure","Chưa làm":"Not started","Chưa nộp":"Not submitted","Đã nộp, chờ chốt":"Submitted, waiting","Đúng":"Correct","Cần sửa":"Needs fixing","Phần chốt":"Answer key","Chốt":"Key","Đáp án":"Answer"};
-var UI_RE = [[/^Đúng (\d+)\/(\d+)\. Xem các dòng màu đỏ\.$/, "Correct $1/$2. Check the red rows."], [/^Đáp án: (.*)$/, "Answer: $1"], [/^Chọn nhóm cho (.*)$/, "Choose a group for $1"]];
+  "? Em chưa chắc":"? Not sure","Chưa làm":"Not started","Chưa nộp":"Not submitted","Đã nộp, chờ chốt":"Submitted, waiting","Đúng":"Correct","Cần sửa":"Needs fixing","Phần chốt":"Answer key","Cổng…":"Choose…","Chọn…":"Choose…","Đưa lên":"Move up","Đưa xuống":"Move down","Chốt":"Key","Đáp án":"Answer"};
+var UI_RE = [[/^Đúng (\d+)\/(\d+)\. Xem các dòng màu đỏ\.$/, "Correct $1/$2. Check the red rows."], [/^Đáp án: (.*)$/, "Answer: $1"], [/^Chọn nhóm cho (.*)$/, "Choose a group for $1"], [/^.* sẽ được thầy cô chốt sau khi cả lớp trình bày\.?$/, "Your teacher will reveal this after the class presents."]];
 function trNode(n){
   var s = n.nodeValue, k = s.trim(); if (!k) return;
   var r = UI_EN[k]; if (r == null) UI_RE.some(function(p){ if (p[0].test(k)) { r = k.replace(p[0], p[1]); return true; } });
@@ -115,7 +115,11 @@ function hoatDong(o){
       ["label","q","k","ph"].forEach(function(f){ if (e[f] != null) t[f] = e[f]; });
       if (e.cats) t.cats = e.cats.slice();
       if (e.o) t.o = e.o.slice();
-      if (e.items && t.items) e.items.forEach(function(nm, i){ if (t.items[i]) t.items[i] = [nm].concat(t.items[i].slice(1)); });
+      if (e.opts) t.opts = e.opts.slice();
+      if (e.items && t.items) {
+        if (Array.isArray(e.items)) e.items.forEach(function(nm, i){ if (t.items[i] != null) t.items[i] = Array.isArray(t.items[i]) ? [nm].concat(t.items[i].slice(1)) : nm; });
+        else Object.keys(e.items).forEach(function(k){ if (k in t.items) t.items[k] = e.items[k]; });
+      }
     });
     var NX = LS.NX_MAU; if (NX && o.nx) Object.keys(o.nx).forEach(function(tid){ NX[tid] = o.nx[tid]; });
   }
@@ -151,6 +155,9 @@ function hoatDong(o){
         if (rows.length) { var cats = [].slice.call(rows[0].querySelectorAll(".seg button")).map(txt).filter(function(c){ return c && c.indexOf("?") < 0; });
           if (cats.length) add("The groups are: " + cats.join(", ") + ".", rows[0].querySelector(".seg"));
           rows.forEach(function(r){ add(txt(r.querySelector("span")), r); }); }
+        slot.querySelectorAll(".opts .opt").forEach(function(b){ add(txt(b).replace(/^([A-D])\.\s*/, "$1. "), b); });
+        slot.querySelectorAll(".match label > span").forEach(function(sp){ add(txt(sp), sp.parentNode); });
+        slot.querySelectorAll("ol.order li").forEach(function(li){ var sp = li.querySelectorAll("span")[1]; add(txt(sp).replace(/^[a-z]\)\s*/, ""), li); });
       });
       rate = spd; goB.hidden = true; stB.hidden = false;
       say("en", parts, function(k){ light(own[k]); }, end);

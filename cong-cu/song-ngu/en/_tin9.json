@@ -1,0 +1,176 @@
+{
+"tin9-bai-toan-tin-hoc": {"task": "q4", "tag": "<b>Reading</b> Steps to solve a computing problem",
+ "reading": "Read part <b>2</b> (textbook pages 80–81). Solving a computing problem follows steps like the problem-solving process in Lesson 14. To calculate wages with a computer:<ul><li><b>1) Define the problem:</b> find the input and the output. The input is the hourly wage (muc_luong) and the working hours (tgian_laodong). The output is the wage (tien_luong).</li><li><b>2) Design the algorithm:</b> split the problem into smaller problems by answering: (1) Which steps do we need? (2) In which order? First, the problem can be split into three steps in sequence: <i>Step 1.</i> Input the data: muc_luong and tgian_laodong. <i>Step 2.</i> Process the data to calculate tien_luong. <i>Step 3.</i> Output tien_luong. Keep splitting until each step can become a computer command. Describe the algorithm with only the basic control structures (sequence, branching and loop), as in Figure 15.3.</li></ul>",
+ "tasks": {
+  "q4": {"label": "Reading – Steps to solve a computing problem", "q": "Put the steps to solve a computing problem in the correct order.", "k": "Define the problem → Design the algorithm → Implement the algorithm → Debug and improve the program.",
+   "items": {"a": "Define the problem", "b": "Design the algorithm", "c": "Implement the algorithm", "d": "Debug and improve the program"}},
+  "q4m": {"label": "Reading – The steps for the wage problem", "q": "Which step of solving the wage problem is each job?", "k": "1 – Define the problem; 2 – Design the algorithm; 3 – Implement the algorithm; 4 – Debug and improve.",
+   "items": ["The input is muc_luong, tgian_laodong; the output is tien_luong.", "Split into: input the data, calculate the wage, output the result; draw the flowchart in Figure 15.3.", "Write a program for the algorithm, with extra variables luong_dmuc, luong_vuot.", "Run the program with different data and fix errors so it works correctly."],
+   "opts": ["Define the problem", "Design the algorithm", "Implement the algorithm", "Debug and improve the program"]}}},
+
+"tin9-cong-cu-truc-quan": {"task": "tg", "tag": "<b>Practice</b> Timeline diagram",
+ "reading": "Use a ready-made template (from the Internet or from your teacher) to make a timeline about the history of calculating tools, like Figure 8.6.",
+ "tasks": {
+  "tg": {"label": "Task 3 – Timeline", "q": "Look at the timeline (Figure 8.6). Match each year with its computer.", "k": "1642 – a, 1833 – b, 1945 – c, 1959 – d, 1964 – e, 1973 – f, 2007 – g. A timeline shows a <b>history</b> clearly and is easy to remember.",
+   "items": ["1642", "1833", "1945", "1959", "1964", "1973", "2007"],
+   "opts": ["a) The first mechanical calculator (Blaise Pascal)", "b) A general-purpose machine (Charles Babbage)", "c) ENIAC – 1st generation", "d) IBM 7090 – 2nd generation", "e) IBM System/360 – 3rd generation", "f) Micral microcomputer – 4th generation", "g) iPhone – 5th generation"], "ph": "Choose…"},
+  "cc": {"label": "Task 3 – Choose a visual tool", "q": "Which visual tool is best for each content?", "k": "1 – a, 2 – b, 3 – c, 4 – d. Choose the kind of visual that <b>gives the message best</b>, simply and clearly.",
+   "items": ["1) The history of calculating tools", "2) What the Pascaline calculator looks like", "3) How Charles Babbage's machine works", "4) Comparing the costs in a budget table"],
+   "opts": ["a) Timeline", "b) Picture", "c) Video", "d) Chart"], "ph": "Choose…"}}},
+
+"tin9-danh-gia-chat-luong-thong-tin": {"task": "ng", "tag": "<b>Reading</b> Reliable sources of information",
+ "reading": "You can find information in many places, but information on the Internet is not equally reliable. For each need, think about which source has the <b>authority</b>:<ul><li>Information about <b>grade 10 admissions</b> is on the website of the Department of Education and Training (usually <b>edu.vn</b>, for example phutho.edu.vn, Figure 3.3).</li><li>Information about <b>school activities and clubs</b> is on the school website.</li><li>Not all information is on those websites. <b>Compare and check</b> information before you use it.</li></ul>",
+ "tasks": {
+  "ng": {"label": "Task 1 – Where to look?", "q": "Where should you look for each kind of information so it is reliable?", "k": "1 – a, 2 – b, 3 – c, 4 – d. For each need, look for a source with <b>authority</b>. Information from AI or the Internet in general must be <b>compared and checked</b> before you use it.",
+   "items": ["1) Grade 10 admission information", "2) The school's activities and clubs", "3) A list of high schools near your home", "4) The school's awards in competitions and Olympiads"],
+   "opts": ["a) The website of the Department of Education and Training", "b) The school website", "c) An AI chatbot, then check the answer", "d) A search engine, using official newspapers first"], "ph": "Choose…"},
+  "dm": {"label": "Task 1 – Domain names", "q": "What domain do the websites of Departments of Education and Training usually have?", "k": "They usually end in <b>edu.vn</b>, for example <b>phutho.edu.vn</b> (Figure 3.3).",
+   "o": [".com", ".edu.vn", ".net", ".org"]},
+  "ai": {"label": "Task 1 – Using AI", "q": "You ask an AI chatbot “Name the high schools near Vinh Tuong, Phu Tho” and get a table of results (Figure 3.2). What should you do?", "k": "AI helps you <b>narrow the search</b> quickly, but the answer may be wrong or old. <b>Compare and check</b> it with an official source before you use it.",
+   "o": ["Use it at once because AI is always right.", "Do not use it because AI is always wrong.", "Use it to narrow the search, then check with the websites of the Department of Education and the schools.", "Use it only if the table has many schools."]}}},
+
+"tin9-giai-quyet-van-de": {"task": "b14", "tag": "<b>Reading</b> The steps of problem solving",
+ "reading": "Read part <b>1</b> (textbook pages 76–77). In Activity 1, the robot moved so that the wall was always on its right. In this way the wall leads the robot through the maze until it finds the Exit. Finding the Exit is a problem, solved in these steps:<ul><li><b>Understand the problem</b>: find what is given and what we need. The robot must find the Exit with no one to ask and no map. At each place it must choose a direction (turn right, go straight or turn left).</li><li><b>Analyse the problem</b>: split it into smaller, easier problems. The robot's decision has three cases: turn right, go straight, turn left. With no map, the robot can only use the position of the wall.</li><li><b>Choose a solution</b>: choose a way to solve the problem and describe it clearly. To keep the wall on the right, the robot chooses directions from right to left (Figure 14.2): a) If there is no wall on the right, turn right. b) If there is a wall on the right but not in front, go straight. c) If there are walls on the right and in front, turn left and choose again.</li></ul>",
+ "tasks": {
+  "b14": {"label": "Reading – The steps of problem solving", "q": "In Activity 1, which step of problem solving is each job?", "k": "1 – Understand the problem; 2 – Analyse the problem; 3 – Choose a solution; 4 – Carry out the solution; 5 – Evaluate the result.",
+   "items": ["Find out: we need the Exit, the robot has no one to ask and no map.", "Split the choice of direction into three cases: turn right, go straight, turn left.", "Choose the rule “from right to left” to always keep the wall on the right.", "The robot moves in the chosen way, like running an algorithm.", "Test the robot in many different mazes to improve it."],
+   "opts": ["Understand the problem", "Analyse the problem", "Choose a solution", "Carry out the solution", "Evaluate the result"]},
+  "tt": {"label": "Reading – Three situations (Figure 14.2)", "q": "Match each situation with the robot's choice in the right-wall algorithm.", "k": "a) turn right; b) go straight; c) turn left and choose again.",
+   "items": ["a) No wall on the right", "b) A wall on the right, no wall in front", "c) Walls on the right and in front"],
+   "opts": ["Turn right (turn right, then one step forward)", "Go straight (one step forward)", "Turn left and choose the direction again"]},
+  "b5": {"label": "Reading – The order of the steps", "q": "Put the steps of problem solving in the correct order.", "k": "Understand the problem → Analyse the problem → Choose a solution → Carry out the solution → Evaluate the result.",
+   "items": {"a": "Understand the problem", "b": "Analyse the problem", "c": "Choose a solution", "d": "Carry out the solution", "e": "Evaluate the result"}}}},
+
+"tin9-ham-countif": {"task": "vd", "tag": "<b>Reading</b> The COUNTIF function",
+ "reading": "Read part <b>1</b> (textbook page 42). To count the cells whose data meets a condition, use the <b>COUNTIF</b> function. Table 10a.1 shows some examples.",
+ "tasks": {
+  "vd": {"label": "Reading – Table 10a.1", "q": "Match each request with its formula (try it in the spreadsheet simulation).", "k": "1 – a; 2 – b; 3 – c (* stands for any characters); 4 – d (the condition is the value in cell D2).",
+   "items": ["Count the cells in A1:A4 with a number greater than 100", "Count the cells in A1:A4 with the word Yes", "Count the cells in A1:A4 with text that starts with Y", "Count the cells in A1:A4 with the same value as cell D2"],
+   "opts": ["a) =COUNTIF(A1:A4,\">100\")", "b) =COUNTIF(A1:A4,\"Yes\")", "c) =COUNTIF(A1:A4,\"Y*\")", "d) =COUNTIF(A1:A4,D2)"]},
+  "thamso": {"label": "Reading – COUNTIF arguments", "q": "In the formula =COUNTIF(range, criteria), match each argument with its meaning.", "k": "<b>range</b>: the cells to check and count; <b>criteria</b>: the condition to check the cells in range.",
+   "items": ["range", "criteria"],
+   "opts": ["a) The cells to check and count", "b) The condition to check the cells in range"]},
+  "g2": {"label": "Reading – The formula in cell G2", "q": "Why is =COUNTIF($B$3:$B$10,\"Ở\") in cell G2 changed to =COUNTIF($B$3:$B$10,F2)?", "k": "Using cell <b>F2</b> (a relative address) as the condition lets you <b>copy</b> the formula for the other spending items; the range <b>$B$3:$B$10</b> (an absolute address) stays the same.",
+   "o": ["Because the item name “Ở” is in cell F2; when you copy the formula down to G3…G10, F2 changes to F3,…, F10, so it counts the other items too.", "Because COUNTIF cannot use text as a condition.", "Because the old formula gave a wrong result.", "To make the formula shorter."]}}},
+
+"tin9-ham-if": {"task": "ts", "tag": "<b>Reading</b> The IF function",
+ "reading": "Read part <b>1</b> (textbook page 49). Using the 50-30-20 budgeting rule, you can comment on each spending group. For Needs: <i>If the spending rate is greater than 50%, the comment is “More”, otherwise it is “Less”.</i> To write the comments in cells O3 to O5 (Figure 12a.3), use the <b>IF</b> function: <b>=IF(logical_test,[value_if_true],[value_if_false])</b>. <b>logical_test</b>: the condition to check; <b>value_if_true</b>: the value returned if the condition is true; <b>value_if_false</b>: the value returned if the condition is false. In Figure 12a.3 the rate for Needs is in cell N3, so the formula in cell O3 is <b>=IF(N3&gt;50%,\"Nhiều hơn\",\"Ít hơn\")</b> (“More”, “Less”).",
+ "tasks": {
+  "ts": {"label": "Reading – IF arguments", "q": "In the formula =IF(logical_test,[value_if_true],[value_if_false]), match each argument with its meaning.", "k": "logical_test – a; value_if_true – b; value_if_false – c.",
+   "items": ["logical_test", "value_if_true", "value_if_false"],
+   "opts": ["a) The condition to check", "b) The value returned if the condition is true", "c) The value returned if the condition is false"]},
+  "o3": {"label": "Reading – The formula in cell O3", "q": "Cell N3 is 90.5%. The formula =IF(N3>50%,\"Nhiều hơn\",\"Ít hơn\") in cell O3 gives:", "k": "90.5% &gt; 50% is true → it returns value_if_true: <b>“Nhiều hơn”</b> (More).",
+   "o": ["Nhiều hơn (More)", "Ít hơn (Less)", "TRUE", "90.5%"]}}},
+
+"tin9-ham-sumif": {"task": "b111", "tag": "<b>Reading</b> The SUMIF function",
+ "reading": "Read part <b>1</b> (textbook pages 45–46). To manage a family budget, you need the total money for each income and spending item, so you can balance them. For example, you can avoid spending too much on things you do not need. To add up the money for each item, use <b>SUMIF</b>: <b>=SUMIF(range, criteria, [sum_range])</b>. <b>range</b>: the cells to check, or to add up if there is no sum_range; <b>criteria</b>: the condition; <b>sum_range</b> (optional): the cells to add up; if it is left out, the cells in range that meet the condition are added. Table 11a.1 shows the two ways to use SUMIF.",
+ "tasks": {
+  "b111": {"label": "Reading – Table 11a.1", "q": "Match each formula with its meaning (try it in the spreadsheet simulation).", "k": "Form 1 (no sum_range): add the cells in range that meet the condition. Form 2: check range A2:A5 and add the matching cells in sum_range B2:B5.",
+   "items": ["=SUMIF(A1:A5,\">5\")", "=SUMIF(A2:A5,\"Khoa\",B2:B5)"],
+   "opts": ["a) Add the values greater than 5 in A1:A5", "b) Add the values in B2:B5 where the matching cell in A2:A5 is “Khoa” (the total Khoa spent)"]},
+  "thamso": {"label": "Reading – SUMIF arguments", "q": "In the formula =SUMIF(range, criteria, [sum_range]), match each argument with its meaning.", "k": "range – a; criteria – b; sum_range – c.",
+   "items": ["range", "criteria", "sum_range (optional)"],
+   "opts": ["a) The cells to check, or to add up if there is no sum_range", "b) The condition to check", "c) The cells to add up; if left out, add the cells in range that meet the condition"]},
+  "chon": {"label": "Reading – Choose the right function", "q": "Which function should you use for each question about the Spending worksheet?", "k": "Total of a whole range: <b>SUM</b>. Count with a condition: <b>COUNTIF</b>. Add with a condition: <b>SUMIF</b> (for example =SUMIF(D3:D10,\">1000\")).",
+   "cats": ["SUM", "COUNTIF", "SUMIF"],
+   "items": ["The total of all spending", "How many times was money spent on “Ở” (housing)?", "The total money spent on “Ở” (housing)", "How many payments were over 1 000 thousand dong?", "The total of the payments over 1 000 thousand dong"]},
+  "h2": {"label": "Reading – The formula in cell H2", "q": "Which formula in cell H2 (Figure 11a.2) can be copied correctly to H3…H10?", "k": "The item name “Ở” is in cell <b>F2</b>, so the condition is F2 (it changes when copied); both ranges must be <b>absolute addresses</b>: =SUMIF($B$3:$B$10,F2,$D$3:$D$10).",
+   "o": ["=SUMIF($B$3:$B$10,F2,$D$3:$D$10)", "=SUMIF(B3:B10,\"Ở\",D3:D10)", "=SUMIF(B3:B10,F2,D3:D10)", "=SUM($D$3:$D$10)"]}}},
+
+"tin9-khai-thac-phan-mem-mo-phong": {"task": "am1", "tag": "<b>Practice</b> a), b) Open the software and build a circuit",
+ "reading": "<ul><li>Like Task 1, choose <b>SIMULATIONS</b> → <b>Physics</b> → <b>Circuit Construction Kit: DC – Virtual Lab</b>.</li><li>Drag the Battery, Light Bulb, Ammeter, Switch and Wire icons to the work area and connect the parts of the circuit (Figure 6.5a).</li><li><i>Note:</i> connect the ammeter in series with the part you measure, and never connect it directly to the two ends of the battery (Figure 6.5b).</li></ul>",
+ "tasks": {
+  "am1": {"label": "Task 2 – Measuring device", "q": "Which device do you use to measure the current in a circuit?", "k": "Use an <b>ammeter</b> to measure current (unit: ampere, A). A voltmeter measures voltage.",
+   "o": ["Voltmeter.", "Ammeter.", "Switch.", "Resistor."]},
+  "am2": {"label": "Task 2 – How to connect", "q": "Is the ammeter connected in parallel or in series with the part you measure?", "k": "The ammeter is connected <b>in series</b>, so the current through the part also goes through the ammeter (Figure 6.5a).",
+   "o": ["In parallel.", "In series.", "Any way.", "Directly to the two ends of the battery."]},
+  "am3": {"label": "Task 2 – A problem", "q": "In Figure 6.5b the ammeter is connected directly to the two ends of the battery. What happens?", "k": "An ammeter has a very small resistance. Connecting it directly to the battery makes a <b>short circuit</b>: a huge current (tens of thousands of amperes) and a <b>fire</b>. In the simulation you can see this problem <b>safely</b>.",
+   "o": ["The bulb is brighter.", "Nothing happens.", "A huge current (short circuit) causes a fire and damages the devices.", "The ammeter shows 0."]}}},
+
+"tin9-lap-chuong-trinh-may-tinh": {"task": "bien", "tag": "<b>Guide</b> a) Implement the algorithm",
+ "reading": "<b>Step 1.</b> Make the variables: input variables <i>muc_luong</i>, <i>tgian_laodong</i>; output variable <i>tien_luong</i>; helper variables <i>tgian_dmuc</i>, <i>tgian_vuot</i>, <i>luong_dmuc</i>, <i>luong_vuot</i>.",
+ "tasks": {
+  "bien": {"label": "Task 1 – Step 1. Make the variables", "q": "Put each variable of the wage program in the right group.", "k": "Input: muc_luong, tgian_laodong. Output: tien_luong. Helper: tgian_dmuc, tgian_vuot, luong_dmuc, luong_vuot.",
+   "cats": ["Input variable", "Output variable", "Helper variable"],
+   "items": ["muc_luong", "tgian_laodong", "tien_luong", "tgian_dmuc", "tgian_vuot", "luong_dmuc", "luong_vuot"]},
+  "lap": {"label": "Task 1 – Step 2. Describe the algorithm again", "q": "Why must the input of tgian_laodong change from a loop with the condition after (Figure 16.1a) to a loop with the condition before (Figure 16.1b)?", "k": "A program describes an algorithm with the rules of a programming language, so we change the description to use the <b>tools the language has</b> (Figure 16.1c).",
+   "o": ["To match the loop that Scratch has: “repeat until ⟨⟩” checks the condition before the loop body.", "Because a loop with the condition after always runs wrongly.", "To make the program faster.", "Because Scratch has no “ask and wait” block."]},
+  "hs": {"label": "Task 1 – Step 3. Note", "q": "In the Scratch program, how do you write the factor 1,5 of the wage algorithm?", "k": "Write <b>1.5</b>: use a dot, not a comma, between the whole part and the decimal part.",
+   "o": ["1.5", "1,5", "15/10,0", "1 5"]},
+  "ghep1": {"label": "Task 1 – Build the program", "q": "Put the groups of blocks (Figure 16.2) in the correct order to make the wage program.", "k": "Input muc_luong → input tgian_laodong (with checking) → branch to find normal and extra hours → calculate the wage → output the result.",
+   "items": {"a": "When green flag clicked; ask “Hourly wage of the worker?” and wait; set muc_luong to answer", "b": "Ask the working hours; repeat until not ⟨answer < 1 or answer > 60⟩: ask again; set tgian_laodong to answer", "c": "If tgian_laodong > 40 then … else … (calculate tgian_dmuc, tgian_vuot)", "d": "Set luong_dmuc, luong_vuot, tien_luong", "e": "Say join “Weekly wage = ” and tien_luong for 5 seconds; stop all"}}}},
+
+"tin9-phap-li-dich-vu-internet": {"task": "vb", "tag": "<b>Reading</b> b) Using Internet services legally",
+ "reading": "Read part <b>b)</b> (textbook pages 18–19).<ul><li>In 2006, the National Assembly passed the <b>Law on Information Technology No. 67/2006/QH11</b>.</li><li>In 2013, the Government issued <b>Decree No. 72/2013/NĐ-CP</b> on managing, providing and using Internet services and online information.</li><li>In 2018, the National Assembly passed the <b>Law on Cybersecurity</b>.</li></ul>Internet users must avoid illegal actions against: national security, order and social safety; the personal rights and reputation of people and organisations; intellectual property, property, gambling; information security; illegal advertising; distorting history, harming national unity, insulting or discriminating.",
+ "tasks": {
+  "vb": {"label": "Reading – Legal documents", "q": "Read part b). Match each legal document with its main content.", "k": "1 – a, 2 – b, 3 – c. All three documents list the <b>banned actions</b>.",
+   "items": ["1) Law on Information Technology No. 67/2006/QH11 (2006)", "2) Decree No. 72/2013/NĐ-CP (2013)", "3) Law on Cybersecurity (2018)"],
+   "opts": ["a) Rights and duties of organisations and people who use and develop IT", "b) Managing, providing and using Internet services, online information and online games", "c) Protecting national security, order and social safety in cyberspace"], "ph": "Choose…"},
+  "nhom": {"label": "Reading – Groups of actions to avoid", "q": "Which group of illegal actions does each action belong to?", "k": "1 – a, 2 – b, 3 – c, 4 – d, 5 – e. There is also the group <b>distorting history, harming national unity, insulting, discriminating</b>.",
+   "items": ["1) Posting false comments and made-up details about an unchecked event", "2) Posting another person's photo and number plate without permission", "3) Sharing someone else's program code without permission", "4) Spreading a virus through a fake prize link", "5) Advertising weapons or selling rare animals"],
+   "opts": ["a) National security, order and social safety", "b) Personal rights and reputation of people and organisations", "c) Intellectual property, property, gambling", "d) Information security in cyberspace", "e) Illegal advertising of products and services"], "ph": "Choose…"}}},
+
+"tin9-tai-chinh-gia-dinh": {"task": "p53a", "tag": "<b>Questions</b> Textbook page 53",
+ "reading": "1. Figure 13a.4 is a formula that takes the total income from the Thu nhập (Income) worksheet into the Tổng hợp (Summary) worksheet. Match the words Cell address, Worksheet name and Exclamation mark with the right places. 2. In a workbook with many worksheets, if a formula refers to a cell in another worksheet, what parts does the cell address have?",
+ "tasks": {
+  "p53a": {"label": "Question p.53 – Question 1", "q": "Figure 13a.4 shows the formula ='Thu nhập'!H7, which takes the total income from the Thu nhập worksheet into the Tổng hợp worksheet. Match each part (1), (2), (3) with its name.", "k": "(1) – Worksheet name; (2) – Exclamation mark; (3) – Cell address.",
+   "items": ["(1) 'Thu nhập'", "(2) !", "(3) H7"],
+   "opts": ["Worksheet name", "Exclamation mark", "Cell address"]},
+  "p53b": {"label": "Question p.53 – Question 2", "q": "In a workbook with many worksheets, if a formula refers to a cell in another worksheet, what parts does the cell address have?", "k": "<b>Worksheet name</b> + <b>!</b> + <b>cell address</b>, for example ='Thu nhập'!H7. A worksheet name with a space goes inside single quotes.",
+   "o": ["The worksheet name, an exclamation mark (!) and the cell address.", "Only the cell address.", "The file name and the cell address.", "The worksheet name and a colon (:)."]}}},
+
+"tin9-the-gioi-ki-thuat-so": {"task": "p6a", "tag": "<b>Questions</b> Textbook page 6",
+ "reading": "Read part <b>1. The digital world</b> (textbook pages 5–6). When you press a button on the remote control, the TV receives the information, processes it and changes to the channel you want. To do that, the TV has a <b>processor</b>. Not only computers, smartphones and TVs: fridges, washing machines, rice cookers, ATMs, face recognition systems, supermarket checkouts, automatic production lines,… also have processors. All these devices make the <b>digital world</b>.",
+ "tasks": {
+  "p6a": {"label": "Question p.6 – Question 1", "q": "Match each name with a device with a processor in Figure 1.2.", "k": "a – electronic board; b – CT scanner; c – assembly robot; d – self-driving car.",
+   "items": ["a) Figure 1.2a", "b) Figure 1.2b", "c) Figure 1.2c", "d) Figure 1.2d"],
+   "opts": ["1) Self-driving car", "2) CT scanner", "3) Electronic board", "4) Assembly robot"], "ph": "Choose…"},
+  "p6b": {"label": "Question p.6 – Question 2", "q": "Where do we usually see the devices in Figure 1.2?", "k": "Electronic board – airports, stations (flight and train information); CT scanner – hospitals; assembly robot – factories (car assembly); self-driving car – streets.",
+   "items": ["a) Electronic board", "b) CT scanner", "c) Assembly robot", "d) Self-driving car"],
+   "opts": ["1) Hospital", "2) Streets, traffic", "3) Airport, station", "4) Factory"], "ph": "Choose…"}}},
+
+"tin9-the-gioi-nghe-nghiep": {"task": "hd1a", "tag": "<b>Activity 1</b> Typical work of ICT professionals",
+ "reading": "In the Warm-up conversation, An, Minh and Khoa plan to make a computer game together. Each friend has their own interests and skills. Answer the questions: 1. Which ICT jobs could our three friends do in the future? 2. What is the typical work and the main product of those jobs?",
+ "tasks": {
+  "hd1a": {"label": "Activity 1 – Question 1", "q": "Which ICT jobs could the three friends do in the future? Match each friend with a group of jobs.", "k": "Khoa – software analysis and development; An – graphic design; Minh – system administration (databases and computer networks).",
+   "items": ["Khoa (writes the game script and turns it into software)", "An (draws characters and scenery with graphics software)", "Minh (puts the game on the Internet, monitors and manages it)"],
+   "opts": ["Software analyst and developer", "Graphic and multimedia designer", "Database and network specialist (system administrator)"]},
+  "hd1b": {"label": "Activity 1 – Question 2", "q": "What is the typical work and main product of those jobs? Match each group of jobs with its typical work.", "k": "Main products: software; graphics and multimedia products; database systems and computer networks.",
+   "items": ["Software analyst and developer", "Graphic and multimedia designer", "Database and network specialist"],
+   "opts": ["Study and analyse the parts of an information system; design, develop, test and maintain software", "Design content with pictures, sound, animation and video for games, films and advertising", "Design, build and connect database systems; plan security; build and manage computer networks"]}}},
+
+"tin9-thong-tin-giai-quyet-van-de": {"task": "nguon", "tag": "<b>Reading</b> Reliable sources",
+ "reading": "Read part <b>1</b> (textbook page 10). An's decision may be wrong because it is based on unchecked information; and choosing only one school reduces An's chances. To decide well, An needs good information from reliable sources. The Internet has a huge amount of information, but <b>quality, not quantity</b>, makes information useful. If your group is not sure about an item, choose <b>?</b> and explain it to the class.",
+ "tasks": {
+  "nguon": {"label": "Reading – Sources", "q": "Read part 1 (textbook page 10). To choose a high school, is each source reliable or does it need checking?", "k": "The textbook names reliable sources: <b>the website of the Department of Education and Training, the homeroom teacher, and experienced family members</b>. Unknown websites, adverts and anonymous comments must be <b>checked</b> before you decide.",
+   "cats": ["Reliable", "Needs checking"],
+   "items": ["The website of the Department of Education and Training", "The homeroom teacher's advice", "An experienced family member", "A school website a friend sent, and you do not know when it was updated", "An advert about the school on social media", "An anonymous comment on a forum"]}}},
+
+"tin9-tim-hieu-phan-mem-mo-phong": {"task": "li", "tag": "<b>Reading</b> Benefits and notes",
+ "reading": "Read part <b>2</b> (textbook pages 21–22). Simulation software lets users learn about and study an object at low cost; study theory in a visual, lively way; create many situations to practise; and avoid situations that can damage equipment or be dangerous. But the quality of simulation software is not the same.",
+ "tasks": {
+  "li": {"label": "Reading – Benefits", "q": "Read part 2 (textbook pages 21–22). Which are benefits of simulation software?", "k": "The first four are benefits. Simulation software <b>supports</b> but does not fully replace real practice; the quality <b>differs</b>, so choose good software.",
+   "cats": ["A benefit", "Not true"],
+   "items": ["Learn about and study an object at low cost", "Study theory in a visual, lively way by interacting", "Create many situations to practise and study more fully", "Avoid situations that damage equipment or are dangerous", "Fully replace all real practice lessons", "All simulation software is equally accurate"]},
+  "bq": {"label": "Reading – Notes", "q": "What should you remember when you use simulation software?", "k": "The quality of simulation software differs. Use <b>high-quality</b> software and <b>respect copyright</b>.",
+   "o": ["Any software is fine because the results are the same.", "Use high-quality software and do not break copyright.", "Only use simulations; real experiments are not needed.", "Download a cracked version to save money."]}}},
+
+"tin9-trao-doi-hop-tac": {"task": "cach", "tag": "<b>Reading</b> Ways to use mind maps and presentations",
+ "reading": "Read part <b>1</b> (textbook pages 27–28).<ul><li><b>Present in person:</b> easy to explain the big picture and the details, and to answer the audience's questions at once.</li><li><b>Share for others to view:</b> when you cannot present in person; use pictures, charts and videos; keep a mind map on one page and attach files for details.</li><li><b>Share for members to update:</b> each member edits at a time that suits them.</li><li><b>Share to work together in real time:</b> everyone edits online at the same time; also open a chat channel to talk.</li></ul>To use pictures, charts and videos well: <b>use the right visual tool</b> (simple, clear, gives the message best) and <b>keep good quality</b> (easy to see from far away, sharp, well arranged).",
+ "tasks": {
+  "cach": {"label": "Reading – Ways to use them", "q": "Read part 1 (textbook pages 27–28). Which way of using a mind map or presentation is each situation?", "k": "1 – a, 2 – b, 3 – c, 4 – d. Presenting in person explains the big picture and answers questions at once; sharing lets people view, update and work together without meeting.",
+   "items": ["1) The group leader presents the mind map to the class and answers questions at once", "2) Sending the mind map file (with photos and videos) for the teacher to view later", "3) Each member opens the online presentation and updates their part when it suits them", "4) The whole group edits the online presentation together and talks in a chat channel"],
+   "opts": ["a) Present in person", "b) Share for others to view", "c) Share for members to update", "d) Share to work together in real time"], "ph": "Choose…"},
+  "tq": {"label": "Reading – Visual tools", "q": "When you use pictures, charts and videos in a mind map or presentation, what should you do and what should you not do?", "k": "<b>Use the right visual tool</b> (simple, clear, gives the message best) and <b>keep good quality</b> (easy to see from far away, sharp, well arranged, colours that attract attention).",
+   "cats": ["Do", "Don't"],
+   "items": ["Show a history with a timeline", "Choose sharp pictures, well arranged and clear from far away", "Use colours to attract attention", "Add lots of pictures and effects even if they are not about the content", "Use very small text and blurry pictures", "Choose the most complicated visual possible"]}}},
+
+"tin9-xac-thuc-du-lieu": {"task": "dv", "tag": "<b>Reading</b> b) The Data Validation tool",
+ "reading": "Read part <b>1b</b> (textbook pages 35–36). When you use a spreadsheet for the family budget, you can keep Income and Spending data on one worksheet or on two worksheets. Figure 9a.2 shows the Spending worksheet (income is on the Income worksheet). The list of spending items is in column F. When you enter an item in column B, you just choose from that list. To limit the type or the value of data you enter in a cell, use the <b>Data Validation</b> tool. Figure 9a.3 shows another example.",
+ "tasks": {
+  "dv": {"label": "Reading – The Data Validation tool", "q": "The Data Validation tool is used to:", "k": "Data Validation <b>limits the type or the value of data</b> entered in a cell, so the data is correct and meets the needs of the task.",
+   "o": ["Limit the type or value of data entered in a cell, so the data is correct and meets the needs of the task.", "Add up the spending.", "Sort data in ascending order.", "Change the fill colour of a cell."]},
+  "allow": {"label": "Reading – Table 9a.1", "q": "Match each choice in the Allow box with its meaning.", "k": "Any value – a; Whole number – b; Decimal – c; List – d; Date – e; Text length – f. (Time: time; Custom: your own formula.)",
+   "items": ["Any value", "Whole number", "Decimal", "List", "Date", "Text length"],
+   "opts": ["a) Any value", "b) Whole numbers only", "c) Decimal numbers only", "d) Choose data from a drop-down list", "e) Dates only", "f) Limit the length of the text"]}}}
+}

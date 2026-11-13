@@ -1,0 +1,138 @@
+{
+"tin6-an-toan-thong-tin-tren-internet": {"task": "lt1", "tag": "<b>Practice</b> Spot the dangers", "reading": "",
+ "tasks": {
+  "lt1": {"label": "Practice – Question 1", "q": "When you use the Internet, which actions can put you in danger?", "k": "<b>A, B, D, E</b> are dangerous. C helps to protect your account.",
+   "cats": ["Dangerous", "Safe"],
+   "items": ["A. Downloading free software and files from the Internet.", "B. Opening a link in an email from an unknown sender.", "C. Changing the passwords of your social media and email accounts regularly.", "D. Not telling your parents or teachers when someone threatens you online.", "E. Following medicine advice and instructions found online."]},
+  "lt2": {"label": "Practice – Question 2", "q": "Which situations are risks of using the Internet?", "k": "<b>A, B, C, D, E</b> are risks. F is a benefit of the Internet.",
+   "cats": ["Risk", "Not a risk"],
+   "items": ["A. The computer is broken by a virus or malware.", "B. Personal or group information is stolen.", "C. Money is lost from a bank account.", "D. An online friend cheats you.", "E. Being addicted to social media or online games.", "F. Finishing an online English course."]}}},
+
+"tin6-cac-cau-truc-dieu-khien": {"task": "lt1", "tag": "<b>Practice</b> Recognise the structures", "reading": "",
+ "tasks": {
+  "lt1": {"label": "Practice – Question 1", "q": "Draw a flowchart with a branching structure for each sentence: a) If someone threatens you online, tell your parents. b) If you get an email with an attached file from an unknown address, do not open the file. c) If a stranger asks you for personal information in a message, do not send it.", "k": "All three are <b>if-then</b> structures (one branch). a) “Someone threatens me?” → Yes: “Tell my parents”. b) “Email from an unknown address with a file?” → Yes: “Do not open the file”. c) “A stranger asks for personal information?” → Yes: “Do not send it”. No: continue."},
+  "lt2": {"label": "Practice – Question 2", "q": "Which sentence can be shown by a flowchart with a loop?", "k": "Only <b>b</b> is a loop: “Homework not finished?” → Yes: “Do one exercise” and check again; No: stop. (a: if-then; c: if-then-else.)",
+   "cats": ["Loop", "Not a loop"],
+   "items": ["a) If it rains tomorrow morning, I will take a raincoat.", "b) If I have not finished my homework, I must keep doing it until it is finished.", "c) If we have three days off for New Year, my family will travel; if not, we will make another plan."]},
+  "lt3": {"label": "Practice – Question 3", "q": "Look at the two flowcharts in Figure 6.11a and Figure 6.11b. Which structure does each flowchart show?", "k": "Figure 6.11a: <b>loop</b> (throw the ball, check again, throw until you hit). Figure 6.11b: <b>if-then</b> (throw only once if you have not hit).",
+   "items": ["Figure 6.11a", "Figure 6.11b"],
+   "opts": ["1) Sequence", "2) If-then (one branch)", "3) If-then-else (two branches)", "4) Loop"], "ph": "Choose a structure…"}}},
+
+"tin6-chuong-trinh-may-tinh": {"task": "q1", "tag": "<b>Reading</b> Computer programs",
+ "reading": "Read part <b>1</b> (textbook pages 71–72). Computers do many jobs quickly and correctly, but we must give them instructions. Computers do not understand instructions in everyday language or in flowcharts. They need a <b>programming language</b>. A <b>program</b> is a set of commands in a programming language. It tells the computer each step of an algorithm. A program takes the <b>input</b>, processes it and gives the <b>output</b>. Scratch is a visual programming language. Other languages are Python, C, Java,… Figure 6.13 is a Scratch program that adds two numbers a and b. Press <b>Run</b> to see the computer do each command.",
+ "tasks": {
+  "q1": {"label": "Question – Algorithm and program", "q": "Look at the algorithm and the Scratch program in Figure 6.13. Match each job with the step and the Scratch commands.", "k": "Input: step 1 ↔ commands ③④⑤⑥ (ask and set a, b). Process: step 2 ↔ command ⑦ (set tong to a + b). Output: step 3 ↔ command ⑧ (say tong). Commands ①② start the program and say hello.",
+   "items": ["Input the data", "Process", "Show the output"],
+   "opts": ["a) Step 1. Input two numbers a and b – commands ③ ④ ⑤ ⑥", "b) Step 2. tong = a + b – command ⑦", "c) Step 3. Show the value of tong – command ⑧"], "ph": "Choose a step…"}}},
+
+"tin6-dinh-dang-van-ban": {"task": "dt", "tag": "<b>Reading</b> Paragraph format, page format, printing",
+ "reading": "Read part <b>2</b> (textbook pages 49–50). To make a document nice and easy to read, we format characters, paragraphs and pages.<ul><li><b>a) Paragraph format</b>: a paragraph ends when you press <b>Enter</b>. You can change the indent, the alignment and the line spacing. The commands are in the <b>Home</b> tab, <b>Paragraph</b> group: Align Left, Center, Align Right, Justify, Decrease/Increase Indent, Line and Paragraph Spacing.</li><li><b>b) Page format</b>: the commands are in the <b>Page Layout</b> tab, <b>Page Setup</b> group: <b>Orientation</b> (Portrait or Landscape), <b>Margins</b> (Left, Right, Top, Bottom) and paper <b>Size</b> (usually A4).</li><li><b>c) Printing</b>: in the <b>File</b> tab, choose <b>Print</b>: choose a printer, type the pages to print, preview, then click Print.</li></ul><i>Try the format buttons on the simulation: click a paragraph to select it, then press a button.</i>",
+ "tasks": {
+  "dt": {"label": "Reading – Paragraph or page format", "q": "Is each action a paragraph format or a page format?", "k": "<b>Paragraph</b>: Home tab, Paragraph group (alignment, indent, line spacing, paragraph spacing). <b>Page</b>: Page Layout tab, Page Setup group (orientation, margins, paper size).",
+   "cats": ["Paragraph format", "Page format"],
+   "items": ["Justify", "Increase the left indent", "Spacing between lines in a paragraph", "Spacing between paragraphs", "Choose portrait orientation (Portrait)", "Set the top, bottom, left and right margins (Margins)", "Choose A4 paper (Size)"]},
+  "vt": {"label": "Reading – Where are the commands?", "q": "Where is each group of commands in Microsoft Word?", "k": "Paragraph: Home / Paragraph. Page: Page Layout / Page Setup. Print: File / Print (choose a printer, pages to print, preview).",
+   "items": ["Paragraph format commands", "Page format commands", "The Print command"],
+   "opts": ["Home tab, Paragraph group", "Page Layout tab, Page Setup group", "File tab, Print command"], "ph": "Choose a place…"}}},
+
+"tin6-hoan-thien-so-luu-niem": {"task": "b1", "tag": "<b>Step 1</b> Collect the contents you have",
+ "reading": "In the last lessons you made text files for the class memory book, for example a short essay and a list of members. Put all of them into one file named Soluuniem.docx. Create a new document, then: click the <b>Insert</b> tab → in the <b>Text</b> group, choose <b>Object</b> → choose <b>Text from File…</b>",
+ "tasks": {
+  "b1": {"label": "Step 1 – Collect the contents", "q": "Put the actions in the correct order to add the contents of other files into Soluuniem.docx (use the ↑ ↓ buttons).", "k": "Insert → Object (Text group) → <b>Text from File…</b> → choose the file. Do it again for each file.",
+   "items": {"a": "Click the Insert tab", "b": "In the Text group, choose Object", "c": "Choose Text from File… and choose the file"}}}},
+
+"tin6-internet": {"task": "dd", "tag": "<b>Reading</b> Features of the Internet",
+ "reading": "Read part <b>2</b> (textbook page 21). The Internet has four main features: it is <b>global</b>, <b>interactive</b>, <b>easy to access</b> and it has <b>no owner</b>. It also has some other features:<ul><li><b>Up to date</b>: information is updated often.</li><li><b>Storage</b>: information is always stored and can be copied quickly and easily.</li><li><b>Variety</b>: it carries text, sound, pictures, videos,…</li><li><b>Anonymous</b>: users can use a nickname instead of their real name.</li></ul>",
+ "tasks": {
+  "dd": {"label": "Reading – Four main features", "q": "Match each description with the right feature of the Internet.", "k": "In order: <b>global</b>, <b>interactive</b>, <b>easy to access</b>, <b>no owner</b>.",
+   "items": ["In 2020, more than one third of the world's people in almost every country used the Internet.", "Users can send and receive information at once, not one-way like books, newspapers or TV.", "Users can search, store and share information quickly, at any time and in any place.", "No organisation or person owns or runs the Internet."],
+   "opts": ["Global", "Interactive", "Easy to access", "No owner"], "ph": "Choose a feature…"}}},
+
+"tin6-mang-may-tinh": {"task": "lt1", "tag": "<b>Practice</b> Benefits and wireless connection", "reading": "",
+ "tasks": {
+  "lt1": {"label": "Practice – Question 1", "q": "Why do we connect computers together? Choose True or False for each answer.", "k": "<b>A, C</b>. We connect computers to share devices and to exchange data.",
+   "cats": ["True", "False"],
+   "items": ["A. To share devices.", "B. To save electricity.", "C. To exchange data.", "D. To repair them easily."]},
+  "lt2": {"label": "Practice – Question 2", "q": "Which devices in Figure 2.2 have a wireless connection? Choose True or False.", "k": "<b>B, C</b>. The laptop and the mobile phone connect to the wireless router without cables. The desktop computer and the router use cables.",
+   "cats": ["True", "False"],
+   "items": ["A. Desktop computer.", "B. Laptop.", "C. Mobile phone.", "D. Router."]}}},
+
+"tin6-mang-thong-tin-toan-cau": {"task": "lt1", "tag": "<b>Practice</b> How information is organised", "reading": "",
+ "tasks": {
+  "lt1": {"label": "Practice – Question 1", "q": "How is information on the Internet organised?", "k": "<b>C</b>. In hypertext pages that are connected by links.",
+   "o": ["Like the information in a book.", "In separate texts.", "In hypertext pages that are connected by links.", "In any way."]},
+  "lt2": {"label": "Practice – Question 2", "q": "Match each part in column A with the right part in column B.", "k": "1 – c; 2 – d; 3 – a; 4 – b.",
+   "items": ["1) A website is a set of", "2) When you browse the web, to go to other content or another web page, you click", "3) To visit web pages, you need", "4) The WWW is a system of"],
+   "opts": ["a) to use a web browser.", "b) websites on the Internet.", "c) related web pages that you visit with one address.", "d) a link to it."]}}},
+
+"tin6-so-do-tu-duy": {"task": "p43a", "tag": "<b>Questions</b> Textbook page 43", "reading": "",
+ "tasks": {
+  "p43a": {"label": "Questions p.43 – Question 1", "q": "A mind map helps us to (choose the true answers):", "k": "<b>A, C, D</b>.",
+   "cats": ["True", "False"],
+   "items": ["A. Remember better.", "B. Solve maths problems.", "C. Be more creative.", "D. See the whole picture."]},
+  "p43b": {"label": "Questions p.43 – Question 2", "q": "A mind map is (choose the true answers):", "k": "<b>A, B, C</b>.",
+   "cats": ["True", "False"],
+   "items": ["A. A tool to organise information in the way we think.", "B. A way to share information.", "C. A creative way to take notes.", "D. A tool to type documents."]}}},
+
+"tin6-thong-tin-trong-may-tinh": {"task": "vb", "tag": "<b>Reading</b> Numbers, text, pictures and sound in a computer",
+ "reading": "Read part <b>1</b> (textbook pages 12–14).<ul><li><b>Numbers</b>: in Activity 1, each number from 0 to 7 becomes a string of three symbols 0 and 1. For numbers 0 to 15 we need four symbols. A string of 0s and 1s is a <b>bit string</b>; each symbol is a <b>bit</b> (from <b>Bi</b>nary digi<b>T</b>).</li><li><b>Text</b>: text has characters (letters, digits, punctuation, symbols,…). Each character becomes a bit string by using a <b>code table</b>.</li><li><b>Pictures</b>: a digital picture is made of <b>pixels</b>. Draw a grid on the picture; each square is a pixel. In a black and white picture, black is 1 and white is 0. A colour picture needs more bits for each pixel.</li><li><b>Sound</b>: sound comes from vibration, for example of a speaker or a guitar string. The speed of the vibration is saved as a number, then as a bit string. Example: a string that vibrates 440 times a second plays the note A: 440 → <span class=\"bit\">110111000</span>.</li></ul>",
+ "tasks": {
+  "vb": {"label": "Reading – Text", "q": "Look at Table 1.2. Which word is the bit string 01000010 01000001 01000100?", "k": "01000010 = B, 01000001 = A, 01000100 = D → <b>BAD</b>.",
+   "o": ["CAFE", "BAD", "DAB", "FED"]},
+  "ha": {"label": "Reading – Pictures", "q": "In the black and white picture in Figure 1.4, what symbol do we use for a black square (pixel)?", "k": "Black is <b>1</b>, white is <b>0</b>. Each row of 8 squares → a string of 8 bits.",
+   "o": ["0", "1", "2", "A"]}}},
+
+"tin6-thong-tin-va-du-lieu": {"task": "c1m", "tag": "<b>Questions</b> Textbook page 6",
+ "reading": "1. Match each item in column A with the right item in column B. 2. Is each line information or data: “16:00”, “0123456789”, “Please call me at 4 pm on 0123456789!”?",
+ "tasks": {
+  "c1m": {"label": "Question 1 – Match the columns", "q": "Match each item in column A with the right item in column B.", "k": "1 – b; 2 – a; 3 – c.",
+   "items": ["1) Information", "2) Data", "3) Data carrier"],
+   "opts": ["a) Numbers, text, pictures, sound,…", "b) Things that help people understand the world and themselves.", "c) A thing that holds data."]},
+  "c2": {"label": "Question 2 – Information or data?", "q": "Is each line information or data?", "k": "“16:00” and “0123456789” alone are only <b>data</b> (we do not know what they are for). “Please call me at 4 pm…” tells us what to do → it is <b>information</b>.",
+   "cats": ["Data", "Information"],
+   "items": ["16:00", "0123456789", "Please call me at 4 pm on 0123456789!"]}}},
+
+"tin6-thu-dien-tu": {"task": "un", "tag": "<b>Reading</b> Advantages and disadvantages",
+ "reading": "Read part <b>2</b> (textbook page 33). Many people and organisations use email. Compared with other ways of communication, email has many advantages and some disadvantages.",
+ "tasks": {
+  "un": {"label": "Reading – Advantages and disadvantages", "q": "Is each point an advantage or a disadvantage of email?", "k": "<b>Advantages</b>: low cost, saves time, convenient. <b>Disadvantages</b>: needs an electronic device with the Internet, can bring dangers and trouble.",
+   "cats": ["Advantage", "Disadvantage"],
+   "items": ["Sending and receiving is fast", "You can send one email to many people at the same time", "You can attach text, sound and picture files", "It is easy to store and search emails", "Low cost, many services are free", "You need the Internet to use it", "It can bring viruses", "You can get spam emails", "You can be cheated by fake emails"]}}},
+
+"tin6-thuat-toan": {"task": "q3", "tag": "<b>Reading</b> Flowcharts",
+ "reading": "Read part <b>2</b> (textbook pages 64–65). We can describe an algorithm by listing the steps in words, or by a <b>flowchart</b>. A flowchart has shapes for the steps and arrows for the order of the steps. The shapes are:",
+ "tasks": {
+  "q3": {"label": "Question 3 – Arrows in a flowchart", "q": "Which sentence about arrows in a flowchart is FALSE?", "k": "<b>C</b> is false. Arrows do not only connect the shapes; they also <b>show the next step</b>.",
+   "o": ["The arrow shows the direction in the flowchart.", "Arrows show the next step to do.", "Arrows are only used to connect the shapes in the flowchart."]},
+  "q4": {"label": "Question 4 – Shapes in a flowchart", "q": "Match each shape on the left with its meaning on the right.", "k": "1–a, 2–c, 3–d, 4–b.",
+   "items": ["1) Oval (pink)", "2) Parallelogram (blue)", "3) Rectangle (yellow)", "4) Arrow ↓"],
+   "opts": ["a) Start or End", "b) Shows the next step", "c) Input or Output", "d) Process step"], "ph": "Choose a meaning…"}}},
+
+"tin6-tim-kiem-thong-tin-tren-internet": {"task": "mt", "tag": "<b>Reading</b> Search engines",
+ "reading": "Read part <b>1</b> (textbook page 28). Searching for information is a popular Internet service. We use special websites called <b>search engines</b>, for example www.yahoo.com, www.google.com, www.bing.com, www.coccoc.com,… They work in a similar way. We type <b>keywords</b>, and the result is a <b>list of links</b> to web pages with those keywords.<br><i>Note:</i> The Internet is like a highway, so we must follow the law. It has useful information and also harmful information, so ask your parents before you use the Internet. Be careful when you share personal information online.",
+ "tasks": {
+  "mt": {"label": "Reading – Search engines", "q": "Is each address a search engine?", "k": "Search engines: Google, Bing, Coc Coc, Yahoo. Wikipedia is an encyclopedia website; mail.google.com is an email service.",
+   "cats": ["Search engine", "Not a search engine"],
+   "items": ["www.google.com", "www.bing.com", "www.coccoc.com", "www.yahoo.com", "vi.wikipedia.org", "mail.google.com"]}}},
+
+"tin6-tim-kiem-va-thay-the": {"task": "tl", "tag": "<b>Reading</b> Find and Replace",
+ "reading": "Read part <b>1</b> (textbook page 58). When we type a document, we often need to <b>find</b> a word or <b>replace</b> it with another word. In a short document this is easy. In a long document with hundreds of pages it is not. Word processors have the <b>Find</b> and <b>Replace</b> tools. They work quickly and correctly, save time and do not miss any word. Example: to change “watermelon” to “mango” in an ice cream recipe, use Find and Replace, and every “watermelon” becomes “mango”.",
+ "tasks": {
+  "tl": {"label": "Reading – Why Find and Replace?", "q": "In a document with hundreds of pages, why do we use the Find and Replace tool?", "k": "<b>B</b>. Find and Replace finds and changes words <b>quickly and correctly</b>, saves time and does not miss any word.",
+   "o": ["The document looks nicer.", "It finds and replaces words quickly and correctly, without missing any.", "The document becomes shorter.", "It corrects every spelling mistake automatically."]}}},
+
+"tin6-trinh-bay-bang": {"task": "cs", "tag": "<b>Reading</b> Editing a table",
+ "reading": "Read part <b>3</b> (textbook page 55). When you put the cursor in a table, <b>Table Tools</b> appears to help you format the table. To edit the table, choose the <b>Layout</b> tab.",
+ "tasks": {
+  "cs": {"label": "Reading – Editing a table", "q": "Match each command group in the Layout tab (Table Tools) with its job.", "k": "Delete – delete; Insert – add rows and columns; Merge/Split – join and split; Cell Size – cell size; Alignment – align text in a cell.",
+   "items": ["Delete", "Insert Above / Below / Left / Right", "Merge Cells / Split Cells / Split Table", "Height / Width (Cell Size)", "Alignment"],
+   "opts": ["Delete the table, rows or columns", "Add rows or columns", "Join cells, split cells or split the table", "Change the cell size", "Align the text and change its direction in a cell"], "ph": "Choose a job…"}}},
+
+"tin6-xu-li-thong-tin": {"task": "lt1", "tag": "<b>Practice</b> Data carriers and kinds of work", "reading": "",
+ "tasks": {
+  "lt1": {"label": "Practice – Question 1", "q": "In which step of information processing do we use a data carrier? Is computer memory a data carrier?", "k": "<b>A</b>. We use a data carrier to <b>store</b> information; computer memory holds data, so it <b>is a data carrier</b>.",
+   "o": ["Storing information; memory is a data carrier.", "Processing information; memory is not a data carrier.", "Receiving information; memory is not a data carrier.", "In no step."]},
+  "lt2": {"label": "Practice – Question 2", "q": "Sort the jobs into the steps of information processing.", "k": "a – receive; b – store; c – process; d – send.",
+   "cats": ["Receive", "Store", "Process", "Send"],
+   "items": ["a) Watching the route of a ship.", "b) Writing notes about a school trip.", "c) Changing a story into a poem.", "d) Giving a talk about friendship to the class."]}}}
+}

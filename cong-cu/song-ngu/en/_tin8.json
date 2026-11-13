@@ -1,0 +1,149 @@
+{
+"tin8-ban-mau-trinh-chieu": {"task": "bm", "tag": "<b>Reading</b> Themes and templates",
+ "reading": "Read part <b>1</b> (textbook pages 51–52). In grade 7 you used <b>themes</b>. A theme is a set of colours, fonts and picture effects that gives a presentation one professional look. Presentation software also has <b>templates</b>. A template is a design of one or more slides saved as a <b>.potx</b> file. It has the layout, colours, fonts, effects, background and even content. You can use ready-made templates or make your own, save them, use them again and share them. A template is usually made for one purpose or topic (a trip, a business project, a lesson,…), so its suggested content is also useful. Figure 11a.2 is a travel template: the slides are designed and the topics are suggested.",
+ "tasks": {
+  "bm": {"label": "Reading – Templates and themes", "q": "Do both themes and templates have each part, or only templates?", "k": "A theme is a set of <b>colours, fonts and picture effects</b>. A template also has the <b>layout, background and suggested content</b> for a topic.",
+   "cats": ["Both have it", "Only templates have it"],
+   "items": ["Colours", "Fonts", "Picture effects", "Slide layouts", "Suggested content for the presentation", "Instructions on how to type and present the content"]},
+  "ext": {"label": "Reading – Template files", "q": "A template is saved as a file with the extension:", "k": "A template is saved as a <b>.potx</b> file (a normal presentation is .pptx).",
+   "o": [".potx", ".pptx", ".docx", ".xlsx"]}}},
+
+"tin8-bang-tinh-bai-toan-thuc-te": {"task": "p22", "tag": "<b>Questions</b> Textbook page 22", "reading": "",
+ "tasks": {
+  "p22": {"label": "Question p.22", "q": "If you copy the formula in cell E4 (=C4*D4) to cells E6, E7, E8 and E9, what are the formulas in those cells?", "k": "E6: =C6*D6; E7: =C7*D7; E8: =C8*D8; E9: =C9*D9. Relative addresses change with the position of the cell.",
+   "items": ["1) Cell E6", "2) Cell E7", "3) Cell E8", "4) Cell E9"],
+   "opts": ["a) =C6*D6", "b) =C7*D7", "c) =C8*D8", "d) =C9*D9", "e) =C4*D4"], "ph": "Choose…"}}},
+
+"tin8-bieu-dien-du-lieu": {"task": "kieu", "tag": "<b>Reading</b> Data types and operations",
+ "reading": "Read part <b>1</b> (textbook pages 76–77). In Figure 13.1, “Tin học” is <b>text</b> data and 3.141592 is <b>number</b> data. In Figure 13.3, cell C1 adds 3 and 5 and gives the number 8; cell C2 joins the characters 3 and 5 and gives the string 35; cell C3 checks if 3 is less than 5 and gives TRUE, a <b>logical</b> value.<br>Programming languages sort data into types, so they can store them and use the right operations. Numbers are integers or real numbers; text is characters or strings; conditions and comparisons are logical. Each data type has a set of values and some operations. Scratch has three data types: <b>number</b>, <b>string</b> and <b>Boolean (logical)</b>. Each operation gives a value of a certain type.",
+ "tasks": {
+  "kieu": {"label": "Reading – Three data types in Scratch", "q": "Which Scratch data type is each value?", "k": "<b>Number</b>: whole numbers, decimals (15, 3.141592). <b>String</b>: characters or strings (@, Computer, the result of join). <b>Boolean</b>: true or false (the result of a comparison).",
+   "cats": ["Number", "String", "Boolean"],
+   "items": ["15", "3.141592", "@", "Computer", "true", "false", "The result of joining 3 and 5 (35 in cell C2)", "The result of the comparison 3 < 5"]},
+  "pt": {"label": "Reading – Operations (Table 13.2)", "q": "Match each operation with its result (try it in the simulation).", "k": "13 mod 4 = 1; join → “applebanana”; 70 &gt; 50 → true; and is true only when both are true → false; or is false only when both are false → true; not (true) → false.",
+   "items": ["13 mod 4", "join “apple” “banana”", "70 > 50", "⟨70 > 50⟩ and ⟨80 < 50⟩", "⟨50 = 50⟩ or ⟨30 > 50⟩", "not ⟨50 = 50⟩"],
+   "opts": ["a) 1", "b) applebanana", "c) true", "d) false"]}}},
+
+"tin8-bieu-do": {"task": "loai", "tag": "<b>Reading</b> Types of charts",
+ "reading": "Read part <b>1</b> (textbook pages 32–33). Charts show data visually, so it is easy to compare data or see if it goes up or down. Each type of chart has its own use:<ul><li><b>Column charts</b> are used to compare data.</li><li><b>Line charts</b> show how data goes up or down over time (Figure 7.3).</li><li><b>Pie charts</b> compare the parts with the whole (Figure 7.4).</li></ul>Try the <b>chart simulation</b>: choose a data table and a chart type, and see which type fits.",
+ "tasks": {
+  "loai": {"label": "Reading – Choose a chart type", "q": "Read part 1 (textbook pages 32–33). Which chart type should you use in each situation?", "k": "1 – a, 2 – b, 3 – c, 4 – b, 5 – a. <b>Column</b>: compare data; <b>line</b>: trend over time; <b>pie</b>: parts of a whole.",
+   "items": ["1) Compare the number of students interested in each ICT topic", "2) See the trend in the number of downloaded apps from 2017 to 2020", "3) The percentage of students for each topic out of all students surveyed", "4) The average temperature of a city over 12 months", "5) Compare the average ICT marks of 5 classes"],
+   "opts": ["a) Column chart", "b) Line chart", "c) Pie chart"], "ph": "Choose…"},
+  "it": {"label": "Reading – Reading a chart", "q": "In the column chart in Figure 7.2, which ICT topic has the fewest interested students?", "k": "The lowest column is <b>Word processing</b> (2 students). The highest is Computer graphics (15), then Programming languages (8).",
+   "o": ["Spreadsheets", "Word processing", "Presentation software", "Computer networks"]}}},
+
+"tin8-cau-truc-dieu-khien": {"task": "ct", "tag": "<b>Reading</b> c) Loops",
+ "reading": "Read part <b>1c</b> (textbook page 82). In the game, the player does not guess only once. The player guesses again and again until the secret number is found. Each time the guess is wrong, the computer asks again and compares the new answer with the secret number. The loop repeats only when the guess is wrong, so a correct guess is the <b>stop condition</b> of the loop. Figure 14.4a shows the algorithm, and Scratch uses the block “repeat until” (Figure 14.4d). Scratch has three loop blocks: repeat a fixed number of times (Figure 14.4b), forever (Figure 14.4c) and repeat until a condition (Figure 14.4d).",
+ "tasks": {
+  "ct": {"label": "Reading – Three control structures", "q": "Which control structure does each block or description show?", "k": "Sequence: blocks joined in order. Branching: <b>if … then</b> (one branch), <b>if … then … else</b> (two branches). Loop: <b>repeat n</b>, <b>forever</b>, <b>repeat until</b>.",
+   "cats": ["Sequence", "Branching", "Loop"],
+   "items": ["Joining blocks in order from top to bottom", "if ⟨ ⟩ then", "if ⟨ ⟩ then … else …", "repeat 10", "forever", "repeat until ⟨ ⟩"]},
+  "lap": {"label": "Reading – Three kinds of loops", "q": "Match each Scratch loop block with its kind of loop (Figure 14.4).", "k": "repeat 10 – a; forever – b; repeat until – c (stops when the condition is true).",
+   "items": ["repeat 10", "forever", "repeat until ⟨answer = secret number⟩"],
+   "opts": ["a) Repeat a fixed number of times", "b) Repeat forever", "c) Repeat until a condition is true"]}}},
+
+"tin8-danh-sach-hinh-anh": {"task": "kieu", "tag": "<b>Reading</b> Two kinds of lists",
+ "reading": "Read part <b>1</b> (textbook page 37). Word processors have two kinds of lists: <b>bulleted lists</b> and <b>numbered lists</b>. The survey in Figure 8a.1 is a numbered list. Figure 8a.3 has a numbered list with a bulleted list inside. Each item in a list is a paragraph; you press <b>Enter</b> to start a new item. In a bulleted list, each item starts with a bullet. In a numbered list, each item starts with a number or a letter and a full stop or a bracket. Bullets and numbers are added and updated automatically when you add or delete items. Lists make a document clear and nice, and help readers find information quickly. Try it in the <b>simulation</b> below.",
+ "tasks": {
+  "kieu": {"label": "Reading – Choose a kind of list", "q": "Read part 1 (textbook pages 36–37). Which content needs a numbered list, and which only needs a bulleted list?", "k": "When the order <b>matters</b> (steps, rankings), use a <b>numbered list</b>. When the items are <b>equal</b>, use a <b>bulleted list</b>.",
+   "cats": ["Numbered list", "Bulleted list"],
+   "items": ["The steps to shut down a computer safely", "My favourite foods", "The steps to cook rice in a rice cooker", "Things to bring on a picnic", "The top three teams in a football league"]}}},
+
+"tin8-dao-duc-van-hoa-so": {"task": "bh", "tag": "<b>Reading</b> Some kinds of violations",
+ "reading": "Read part <b>1</b> (textbook pages 18–19). Digital technology brings many benefits but also problems: rude, unethical or even illegal behaviour of people who use or create digital content. Examples: filming in a cinema; taking photos where it is not allowed (Figure 4.1); recording conversations without permission; downloading copyrighted songs or videos without permission; copying information from a website and saying it is yours; using cracked software; livestreaming or sharing school violence; posting other people's personal information without permission; joining, sharing or advertising websites about violence or gambling,… You need to learn about the law (Figure 4.2).",
+ "tasks": {
+  "bh": {"label": "Reading – A violation or not?", "q": "Read part 1 (textbook pages 18–19). Is each action unethical, illegal or rude?", "k": "The first four actions are violations. Listening to music on a licensed app, and using a photo with permission and the author's name, are <b>right</b>.",
+   "cats": ["Violation", "Not a violation"],
+   "items": ["Filming in a cinema", "Taking photos where there is a no-photo sign (Figure 4.1)", "Installing cracked software", "Livestreaming school violence", "Listening to music on a licensed app", "Using a friend's photo with permission and with the author's name"]}}},
+
+"tin8-dau-trang-chan-trang": {"task": "vitri", "tag": "<b>Reading</b> Header and Footer",
+ "reading": "Read part <b>1</b> (textbook pages 42–43). The <b>Header</b> and the <b>Footer</b> are the top part (top margin) and the bottom part (bottom margin) of a document. They are separate from the main text (Figure 9a.3) and often have notes, page numbers, the document title, the author's name,… They can also have pictures. Information in the header and footer appears on <b>every page</b> automatically, so you can keep some information through the whole document. It also makes the pages look professional. Example: in Figure 9a.2 the header and footer show the title “Project document”, page number “1” and “ICT Club”.<br>Try it in the simulation: click <b>Header ▾ → Blank</b> and type a line — it appears on <b>both pages</b>.",
+ "tasks": {
+  "vitri": {"label": "Reading – Where does it go?", "q": "Does each piece of information usually go in the header/footer or in the main text?", "k": "The header and footer have <b>short information</b> repeated on every page: page number, title, author, notes, logo. The main content goes in the <b>main text</b>.",
+   "cats": ["Header / Footer", "Main text"],
+   "items": ["Page number", "Document title, author's name", "The list of project tasks", "Organisation name (ICT Club), logo", "The questions of a survey", "A short note"]}}},
+
+"tin8-go-loi": {"task": "loai", "tag": "<b>Reading</b> a) Testing · b) Kinds of errors",
+ "reading": "Read part <b>1</b> (textbook pages 86–87). The game should show the number of guesses when the player finds the secret number. But when you run it, the number shown is always one less than the real number of guesses. Running a program to check it is called <b>testing</b>. Testing finds unusual situations, called <b>errors</b> (bugs). We must remove errors before the program is finished and shared.<br>The program still runs, but it does not follow the plan. There are two kinds of errors: 1) a <b>syntax error</b> happens when a command breaks the rules of the programming language, so the program does not run; 2) a <b>logic error</b> happens when the commands are written correctly but the program does not do what the plan says, like in the Guess the Number game.",
+ "tasks": {
+  "loai": {"label": "Reading – Two kinds of errors", "q": "Is each error a syntax error or a logic error?", "k": "<b>Syntax error</b>: breaks the rules, the program does not run. <b>Logic error</b>: correct syntax but the program does the wrong thing.",
+   "cats": ["Syntax error", "Logic error"],
+   "items": ["A command breaks the rules of the language, so the program does not run", "Typing the wrong command name (prnt instead of print) in a text-based language", "The number of guesses shown is one less than the real number", "Using “+” instead of “join” to join text and numbers", "The game allows more than 7 guesses but the plan says only 7"]}}},
+
+"tin8-khai-thac-thong-tin-so": {"task": "ct", "tag": "<b>Practice</b> Step 3: Structure and requirements",
+ "reading": "<b>Step 3.</b> Decide the level and the requirements of the presentation. For example:<ul><li>About 10 slides: a title slide, an outline slide, an introduction slide, some content slides, a conclusion slide and a references slide.</li><li>Each content slide has at most 6 points; each point has at most 2 lines.</li><li>The presentation has at least 2 pictures.</li></ul>",
+ "tasks": {
+  "ct": {"label": "Task 1 – Presentation structure", "q": "Put the slides of the presentation in a good order (use the ↑ ↓ buttons).", "k": "Order: <b>title → outline → introduction → content slides → conclusion → references</b>.",
+   "items": {"a": "Conclusion slide", "b": "Title slide", "c": "References slide", "d": "Introduction slide", "e": "Outline slide", "f": "Content slides"}},
+  "yc": {"label": "Task 1 – Step 3: Requirements", "q": "Following Step 3 (at most 6 points per slide, at most 2 lines per point, at least 2 pictures), does each slide meet the requirements?", "k": "About 10 slides; <b>at most 6 points per slide; at most 2 lines per point</b>; <b>at least 2 pictures</b>; a references slide.",
+   "cats": ["Meets the requirements", "Does not meet them"],
+   "items": ["A slide with 5 points, 1 line each", "A slide with 9 points", "A point that is 5 lines long", "A presentation with 3 pictures", "A presentation with no pictures", "A references slide with web addresses"]}}},
+
+"tin8-luoc-su-cong-cu-tinh-toan": {"task": "the", "tag": "<b>Reading</b> Five generations of computers",
+ "reading": "With new technology, electronic computers can be divided into five generations:<ul><li><b>1st generation (1945 – 1955):</b> vacuum tubes; magnetic drum memory; very big. Example: ENIAC (Figure 1.4).</li><li><b>2nd generation (1955 – 1965):</b> transistors; magnetic core and magnetic tape memory. Examples: IBM 7090, Minsk-22 (came to Viet Nam in 1968).</li><li><b>3rd generation (1965 – 1974):</b> integrated circuits (IC). Example: IBM System/360 (came to Viet Nam in 1967).</li><li><b>4th generation (1974 – 1990):</b> very large scale integration (VLSI) and microprocessors; CD, RAM, ROM, USB, SSD. Examples: Micral, IBM PC, Apple II.</li><li><b>5th generation (1990 – today):</b> ultra large scale integration (ULSI), parallel processing, artificial intelligence. Examples: smartphones, smart speakers, smart glasses.</li></ul>",
+ "tasks": {
+  "the": {"label": "Reading – Five generations", "q": "Read part 2 (textbook pages 7–8). Match each generation with its main electronic part.", "k": "1 – a, 2 – b, 3 – c, 4 – d, 5 – e. Each generation made electronic parts <b>smaller</b>, so devices became smaller, faster and used less energy.",
+   "items": ["1) 1st generation (1945 – 1955)", "2) 2nd generation (1955 – 1965)", "3) 3rd generation (1965 – 1974)", "4) 4th generation (1974 – 1990)", "5) 5th generation (1990 – today)"],
+   "opts": ["a) Vacuum tubes", "b) Transistors", "c) Integrated circuits (IC)", "d) Very large scale integration (VLSI) and microprocessors", "e) Ultra large scale integration (ULSI)"], "ph": "Choose…"},
+  "vd": {"label": "Reading – Which generation?", "q": "Which generation is each computer?", "k": "1 – a, 2 – b, 3 – c, 4 – d, 5 – e.",
+   "items": ["1) ENIAC (Figure 1.4)", "2) IBM 7090, Minsk-22 (Figure 1.5)", "3) IBM System/360 (Figure 1.6)", "4) Micral, IBM PC, Apple II", "5) Smartphones, smart speakers"],
+   "opts": ["a) 1st generation", "b) 2nd generation", "c) 3rd generation", "d) 4th generation", "e) 5th generation"], "ph": "Choose…"},
+  "bm": {"label": "Reading – Memory", "q": "Was each kind of memory used mainly in old computers (1st, 2nd generation) or new computers (4th generation and later)?", "k": "1st generation: <b>magnetic drum</b>; 2nd: <b>magnetic core, magnetic tape</b>; 4th: <b>CD, RAM, ROM, USB, SSD</b>,…",
+   "cats": ["Old generations", "New generations"],
+   "items": ["Magnetic drum", "Magnetic core, magnetic tape", "CD, RAM, ROM", "USB, SSD"]}}},
+
+"tin8-sap-xep-va-loc-du-lieu": {"task": "cn", "tag": "<b>Reading</b> Survey results of class 8A",
+ "reading": "Read part <b>1</b> (textbook pages 27–28). Each survey answer is one row in the spreadsheet; each name is split into Middle name and First name. The survey helps decide how to run the ICT Club, for example: (1) Sort the names in alphabetical order so they are easy to find; (2) Which students want to learn each ICT topic? (3) Which topic do most students choose? (4) Which groups are the students in, to make study groups? Use the <b>simulation</b> below to try sorting and filtering.",
+ "tasks": {
+  "cn": {"label": "Reading – Sort or filter?", "q": "Read part 1 (textbook pages 27–28). Should you sort or filter the data for each request?", "k": "<b>Sort</b>: change the order of the rows by one or more criteria. <b>Filter</b>: show only the rows that meet a condition; the other rows are hidden.",
+   "cats": ["Sort", "Filter"],
+   "items": ["Put the students' names in alphabetical order", "Get the list of students who want to learn Programming languages", "Get the list of Group 1 students who want to learn Computer graphics", "Order the classes by the number of students who do not use digital devices, from most to fewest", "Show only the classes with no students using digital devices for 5 hours or more"]},
+  "nd": {"label": "Reading – The most popular", "q": "In the survey results of class 8A (Figure 6.2), which ICT topic do most students choose?", "k": "<b>Programming languages</b> – 4 students: Vũ Thị Minh An, Trần Minh Châu, Đặng Mai Trang, Phùng Khánh Toàn. You can filter the Topic column to get this list.",
+   "o": ["Computer networks", "Computer graphics", "Programming languages", "Spreadsheets"]}}},
+
+"tin8-thong-tin-trong-moi-truong-so": {"task": "cach", "tag": "<b>Reading</b> Finding reliable information",
+ "reading": "Read part <b>2</b> (textbook pages 12–13). Unreliable information can be dishonest and misleading; rumours that lead to conclusions without evidence; or unchecked information that leads to wrong decisions. Tips to find reliable information:<ul><li><b>Check the source:</b> who gives the information and how trusted they are (a blog is less reliable because anyone can write a blog).</li><li><b>Tell opinions from facts:</b> an opinion is a point of view and is less reliable than a fact.</li><li><b>Check the evidence:</b> a conclusion without evidence is very unreliable.</li><li><b>Check how recent it is:</b> a web page that is not updated for a long time is usually less reliable.</li></ul>",
+ "tasks": {
+  "cach": {"label": "Reading – How to check", "q": "Read part 2 (textbook pages 12–13). Which tip does each action follow?", "k": "1 – a, 2 – b, 3 – c, 4 – d.",
+   "items": ["1) Check if the news is in an official newspaper or on a personal blog", "2) Notice that “I think this is the best film” is only a personal view", "3) Look for numbers and evidence for the conclusion", "4) Check when the web page was last updated"],
+   "opts": ["a) Check the source", "b) Tell opinions from facts", "c) Check the evidence", "d) Check how recent it is"], "ph": "Choose…"},
+  "ys": {"label": "Reading – Opinion or fact?", "q": "Is each sentence an opinion (a personal view) or a fact (it happened and can be checked)?", "k": "An opinion is a point of view, often with feelings and bias, so it is <b>less reliable</b> than a fact. A fact happened and <b>can be checked</b>.",
+   "cats": ["Opinion", "Fact"],
+   "items": ["“I believe it happened!”", "“I think this is the best cartoon of all time.”", "In 1642, Blaise Pascal built the mechanical calculator Pascaline.", "“This dish is surely the best in the city.”", "The Vietnamese team won 2–0 last night."]}}},
+
+"tin8-tin-hoc-nghe-nghiep": {"task": "li", "tag": "<b>Reading</b> ICT makes work more effective",
+ "reading": "Read part <b>1</b> (textbook pages 91–92). In history, technology has always changed how workers in every job do their work. Today ICT is used in almost every job and makes work more effective because:<ul><li>It <b>speeds up processing</b> and saves time. Example: accountants use software to do in minutes what took hours by hand; payments and transfers happen almost at once online.</li><li>It makes <b>communication</b> easy. Documents and messages reach colleagues and customers around the world at once.</li><li>It supports <b>teamwork</b> and wider work. Example: programmers work across borders with online tools, hold online meetings and edit the same document in the cloud.</li><li>It helps <b>improve skills</b> and gives information. Example: taxi drivers use booking apps, maps and traffic alerts to find customers and avoid traffic jams.</li></ul>",
+ "tasks": {
+  "li": {"label": "Reading – ICT makes work more effective", "q": "Which benefit of ICT does each example show?", "k": "Four benefits: faster <b>processing</b>; easy <b>communication</b>; <b>teamwork</b> and wider work; better <b>skills</b> and information.",
+   "cats": ["Faster processing, saves time", "Easy communication", "Teamwork, wider work", "Better skills, more information"],
+   "items": ["Accountants calculate with software in minutes; payments are almost instant", "Documents and messages reach colleagues and customers around the world at once", "Programmers work across borders on one shared document in the cloud", "Taxi drivers use booking apps, maps and traffic alerts to find the way"]},
+  "nghe": {"label": "Reading – ICT jobs and related jobs", "q": "Is each job an ICT job or a job that uses ICT?", "k": "ICT jobs: software developer, mobile app programmer, network administrator, web developer and designer. Jobs that use ICT: online seller, streamer, vlogger.",
+   "cats": ["ICT job", "Job that uses ICT"],
+   "items": ["Software developer", "Mobile app programmer", "Network administrator", "Web developer and designer", "Online seller", "Streamer (live broadcasting online)", "Vlogger (makes videos for social media)"]},
+  "h161": {"label": "Reading – Figure 16.1", "q": "Match each ICT application with the job in Figure 16.1.", "k": "Doctor – health records, remote check-ups; Journalist – online newspaper; Tourism manager – booking website; Office worker – word processing, storing files; Architect – design, 3D printing; Agricultural engineer – automatic watering, IoT.",
+   "items": ["Electronic health records; remote check-ups", "Posting articles quickly in an online newspaper", "Booking hotels on a website", "Word processing software, storing files", "Design software; 3D printing of models", "Automatic watering; Internet of Things (IoT)"],
+   "opts": ["a) Doctor", "b) Journalist", "c) Tourism manager", "d) Office worker", "e) Architect", "f) Agricultural engineer"]}}},
+
+"tin8-trang-chieu-nang-cao": {"task": "mau", "tag": "<b>Reading</b> Text and colours on slides",
+ "reading": "Read part <b>1</b> (textbook pages 46–47). Text on slides is different from text in a document: it is short and shows only the main ideas. Good slide text impresses the audience and helps them understand quickly. Colours are also very important: a nice, professional presentation combines content, layout and colour. Some tips:<ul><li><b>Warm colours</b> (red, orange, yellow,…) feel warm and make people lively and active.</li><li><b>Cool colours</b> (blue, purple,…) feel cool and make people calm and gentle.</li><li><b>Neutral colours</b> (white, black, beige,…) feel polite and soft.</li><li>The main colours should match the content: entertainment and festivals → warm colours; education → neutral colours; art, strong impressions, thank-you events → cool colours.</li><li>Combine colours from the same group (red, orange, yellow with brown; blue, green with grey).</li><li>Do not use too many colours on one slide.</li><li>Choose a text colour with high contrast to the background.</li></ul>",
+ "tasks": {
+  "mau": {"label": "Reading – Colour groups", "q": "Put each colour in the right group.", "k": "<b>Warm</b> (warm, lively, active): red, orange, yellow. <b>Cool</b> (calm, gentle): blue, purple, green. <b>Neutral</b> (polite, soft): white, black, beige.",
+   "cats": ["Warm colours", "Cool colours", "Neutral colours"],
+   "items": ["Red", "Orange", "Yellow", "Blue", "Purple", "Green", "White", "Black", "Beige"]},
+  "gam": {"label": "Reading – Colours for each topic", "q": "Which colour group should each presentation use?", "k": "Entertainment, festivals → <b>warm</b>. Education → <b>neutral</b>. Art, strong impressions, thank-you events → <b>cool</b>.",
+   "cats": ["Warm colours", "Neutral colours", "Cool colours"],
+   "items": ["Entertainment, festivals", "Education, learning", "Art, a strong impression", "A thank-you event"]},
+  "nt": {"label": "Reading – Tips for choosing colours", "q": "Is each idea a do or a don't?", "k": "Do: combine colours from the same group; text with <b>high contrast</b> to the background; main colours that match the content. Don't: use <b>too many colours</b>; text and background in the same tone (hard to read).",
+   "cats": ["Do", "Don't"],
+   "items": ["Combine colours from the same group (red, orange, yellow with brown)", "Use lots of colours on one slide to stand out", "Choose a text colour with high contrast to the background", "Yellow text on a light yellow background", "Choose main colours that match the content"]}}},
+
+"tin8-tu-thuat-toan-den-chuong-trinh": {"task": "map", "tag": "<b>Reading</b> From flowchart to program",
+ "reading": "Read part <b>1</b> (textbook pages 73–74). An equilateral triangle has three equal sides and three equal angles of 60 degrees. To move along an equilateral triangle, the sprite repeats two actions three times: move forward a number of steps equal to the side (for example 60 steps); turn left 120 degrees. The algorithm uses a sequence and a loop that repeats 3 times (the number of sides). After three times the loop stops. Figure 12.3a shows the flowchart.<br>Besides words and flowcharts, we can write a <b>program</b> so the computer “understands” and runs the algorithm. The Scratch program in Figure 12.3b does each step of the flowchart with a Scratch command. So a program is a sequence of commands that makes the computer carry out an algorithm.",
+ "tasks": {
+  "map": {"label": "Reading – From flowchart to program", "q": "Match each part of the flowchart (Figure 12.3a) with the Scratch command (Figure 12.3b).", "k": "Start – a; the three loop control boxes – b (repeat 3); Move 60 steps – c; Turn left 120 degrees – d (turn ↺ 120 degrees).",
+   "items": ["Start", "Count ← 1; Count ≤ 3; Add 1 to Count", "Move 60 steps", "Turn left 120 degrees"],
+   "opts": ["a) When green flag clicked", "b) repeat 3", "c) move 60 steps", "d) turn ↺ 120 degrees"]},
+  "ct": {"label": "Reading – Programs", "q": "A program is:", "k": "<b>A program is a sequence of commands that makes the computer carry out an algorithm.</b>",
+   "o": ["A sequence of commands that makes the computer carry out an algorithm.", "A flowchart that describes an algorithm.", "Steps listed in everyday language.", "A drawing on the Scratch stage."]}}}
+}

@@ -142,9 +142,9 @@
         <div data-task="hd1a" data-n="2"></div>
         <div data-task="hd1b" data-n="3"></div>
       </div>
-      <div class="act">
-        <div class="act-tag"><b>Đọc hiểu</b> Hàm điều kiện IF</div>
-        <div class="reading">Đọc mục <b>1</b> (SGK trang 49). Dựa trên quy tắc quản lí tài chính 50-30-20, em có thể đưa ra nhận xét về tình trạng chi tiêu của mỗi mục chi. Ví dụ, với mục chi Nhu cầu thiết yếu thì nhận xét là: <i>Nếu tỉ lệ chi lớn hơn 50% thì nhận xét là “Nhiều hơn”, còn không thì nhận xét là “Ít hơn”.</i> Để điền nhận xét như minh hoạ ở các ô từ O3 đến O5 trong Hình 12a.3, em sử dụng hàm điều kiện IF. Công thức chung của hàm IF là: <b>=IF(logical_test,[value_if_true],[value_if_false])</b>. Trong đó, ý nghĩa của các tham số như sau: <b>logical_test</b>: điều kiện kiểm tra; <b>value_if_true</b>: giá trị trả về nếu điều kiện là đúng; <b>value_if_false</b>: giá trị trả về nếu điều kiện là sai. Ví dụ, trong Hình 12a.3, tỉ lệ chi của mục Nhu cầu thiết yếu được lưu tại ô N3. Do đó, nhận xét ở trên về tình trạng của mục chi này được thực hiện bằng công thức tại ô O3 là <b>=IF(N3&gt;50%,"Nhiều hơn","Ít hơn")</b>.</div>
+      <div class="act" data-sn-hd="sn-ts">
+        <div class="act-tag"><span data-en="&lt;b&gt;Reading&lt;/b&gt; The IF function"><b>Đọc hiểu</b> Hàm điều kiện IF</span></div>
+        <div class="reading" data-en="Read part &lt;b&gt;1&lt;/b&gt; (textbook page 49). Using the 50-30-20 budgeting rule, you can comment on each spending group. For Needs: &lt;i&gt;If the spending rate is greater than 50%, the comment is “More”, otherwise it is “Less”.&lt;/i&gt; To write the comments in cells O3 to O5 (Figure 12a.3), use the &lt;b&gt;IF&lt;/b&gt; function: &lt;b&gt;=IF(logical_test,[value_if_true],[value_if_false])&lt;/b&gt;. &lt;b&gt;logical_test&lt;/b&gt;: the condition to check; &lt;b&gt;value_if_true&lt;/b&gt;: the value returned if the condition is true; &lt;b&gt;value_if_false&lt;/b&gt;: the value returned if the condition is false. In Figure 12a.3 the rate for Needs is in cell N3, so the formula in cell O3 is &lt;b&gt;=IF(N3&amp;gt;50%,&quot;Nhiều hơn&quot;,&quot;Ít hơn&quot;)&lt;/b&gt; (“More”, “Less”).">Đọc mục <b>1</b> (SGK trang 49). Dựa trên quy tắc quản lí tài chính 50-30-20, em có thể đưa ra nhận xét về tình trạng chi tiêu của mỗi mục chi. Ví dụ, với mục chi Nhu cầu thiết yếu thì nhận xét là: <i>Nếu tỉ lệ chi lớn hơn 50% thì nhận xét là “Nhiều hơn”, còn không thì nhận xét là “Ít hơn”.</i> Để điền nhận xét như minh hoạ ở các ô từ O3 đến O5 trong Hình 12a.3, em sử dụng hàm điều kiện IF. Công thức chung của hàm IF là: <b>=IF(logical_test,[value_if_true],[value_if_false])</b>. Trong đó, ý nghĩa của các tham số như sau: <b>logical_test</b>: điều kiện kiểm tra; <b>value_if_true</b>: giá trị trả về nếu điều kiện là đúng; <b>value_if_false</b>: giá trị trả về nếu điều kiện là sai. Ví dụ, trong Hình 12a.3, tỉ lệ chi của mục Nhu cầu thiết yếu được lưu tại ô N3. Do đó, nhận xét ở trên về tình trạng của mục chi này được thực hiện bằng công thức tại ô O3 là <b>=IF(N3&gt;50%,"Nhiều hơn","Ít hơn")</b>.</div>
         <div data-task="ts" data-n="1"></div>
         <div data-task="o3" data-n="2"></div>
         <div data-concept="c1"></div>
@@ -279,6 +279,8 @@
 <script src="../chung/mo-trinh-duyet.js?v=1"></script>
 <script src="../chung/giao-dien.js?v=1"></script>
 <script src="content.js?v=22"></script>
+<!--SN--><script src="../chung/song-ngu.js?v=12"></script>
+<script>SongNgu.hoatDong({"id":"sn-ts","tasks":{"ts":{"label":"Reading – IF arguments","q":"In the formula =IF(logical_test,[value_if_true],[value_if_false]), match each argument with its meaning.","k":"logical_test – a; value_if_true – b; value_if_false – c.","items":["logical_test","value_if_true","value_if_false"],"opts":["a) The condition to check","b) The value returned if the condition is true","c) The value returned if the condition is false"]},"o3":{"label":"Reading – The formula in cell O3","q":"Cell N3 is 90.5%. The formula =IF(N3>50%,\"Nhiều hơn\",\"Ít hơn\") in cell O3 gives:","k":"90.5% &gt; 50% is true → it returns value_if_true: <b>“Nhiều hơn”</b> (More).","o":["Nhiều hơn (More)","Ít hơn (Less)","TRUE","90.5%"]}},"nx":{}});</script><!--/SN-->
 <script src="../chung/outline.js?v=22"></script>
 <script src="../chung/api.js?v=28"></script>
 <script src="../chung/tuc-thi.js?v=2"></script>

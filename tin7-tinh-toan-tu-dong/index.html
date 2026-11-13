@@ -149,9 +149,9 @@
         <div data-task="kieu" data-n="2"></div>
       </div>
 
-      <div class="act">
-        <div class="act-tag"><b>Đọc hiểu</b> Công thức và kí hiệu phép toán</div>
-        <div class="reading">Đọc mục <b>1</b> (SGK trang 34). Khi nhập dữ liệu vào các ô trong trang tính, phần mềm sẽ tự động nhận biết được kiểu dữ liệu đã nhập và hiển thị theo khuôn dạng mặc định. Các kiểu dữ liệu cơ bản phần mềm nhận dạng được là văn bản, số, ngày tháng,… Khả năng hỗ trợ tính toán là đặc trưng ưu việt của các phần mềm bảng tính. Em có thể sử dụng <b>công thức</b> để thực hiện các tính toán với dữ liệu một cách nhanh chóng. Công thức có dạng các biểu thức toán học được nhập trực tiếp vào ô tính. Muốn nhập công thức cần gõ dấu <b>“=”</b> đầu tiên, sau đó gõ biểu thức. Các phép toán đơn giản là phép cộng (+), trừ (–), nhân (*), chia (/) và luỹ thừa (^). Công thức tính toán có thể chứa các số, phép toán và các dấu ngoặc tròn. Thứ tự thực hiện các phép toán trong công thức giống như trong các biểu thức toán học.</div>
+      <div class="act" data-sn-hd="sn-kihieu">
+        <div class="act-tag"><span data-en="&lt;b&gt;Reading&lt;/b&gt; Formulas and operator symbols"><b>Đọc hiểu</b> Công thức và kí hiệu phép toán</span></div>
+        <div class="reading" data-en="Read part &lt;b&gt;1&lt;/b&gt; (textbook page 34). When you type data into a cell, the software recognises the data type and shows it in the default format. The basic data types are text, numbers, dates,… Calculation is the best feature of spreadsheet software. You can use &lt;b&gt;formulas&lt;/b&gt; to calculate quickly. A formula is a maths expression typed into a cell. Start with &lt;b&gt;“=”&lt;/b&gt;, then type the expression. The simple operators are add (+), subtract (–), multiply (*), divide (/) and power (^). A formula can have numbers, operators and brackets. The order of operations is the same as in maths.">Đọc mục <b>1</b> (SGK trang 34). Khi nhập dữ liệu vào các ô trong trang tính, phần mềm sẽ tự động nhận biết được kiểu dữ liệu đã nhập và hiển thị theo khuôn dạng mặc định. Các kiểu dữ liệu cơ bản phần mềm nhận dạng được là văn bản, số, ngày tháng,… Khả năng hỗ trợ tính toán là đặc trưng ưu việt của các phần mềm bảng tính. Em có thể sử dụng <b>công thức</b> để thực hiện các tính toán với dữ liệu một cách nhanh chóng. Công thức có dạng các biểu thức toán học được nhập trực tiếp vào ô tính. Muốn nhập công thức cần gõ dấu <b>“=”</b> đầu tiên, sau đó gõ biểu thức. Các phép toán đơn giản là phép cộng (+), trừ (–), nhân (*), chia (/) và luỹ thừa (^). Công thức tính toán có thể chứa các số, phép toán và các dấu ngoặc tròn. Thứ tự thực hiện các phép toán trong công thức giống như trong các biểu thức toán học.</div>
         <div class="tbl-wrap"><table class="tbl" style="font-size:14px;max-width:560px">
           <caption style="caption-side:top;text-align:left;font-style:italic;padding:4px 0">Bảng 7.1. Một số kí hiệu phép toán dùng trong phần mềm bảng tính</caption>
           <thead><tr><th>Phép toán</th><th>Kí hiệu toán</th><th>Kí hiệu trong bảng tính</th><th>Ví dụ</th></tr></thead>
@@ -329,6 +329,8 @@
 <script src="../chung/mo-trinh-duyet.js?v=1"></script>
 <script src="../chung/giao-dien.js?v=1"></script>
 <script src="content.js?v=22"></script>
+<!--SN--><script src="../chung/song-ngu.js?v=12"></script>
+<script>SongNgu.hoatDong({"id":"sn-kihieu","tasks":{"kihieu":{"label":"Reading – Table 7.1","q":"How do you write the maths expression 5³ × 2 : 4 in a spreadsheet?","k":"<b>=5^3*2/4</b>. In a spreadsheet: multiply <b>*</b>, divide <b>/</b>, power <b>^</b>; a formula starts with <b>=</b>.","o":["=5³×2:4","=5^3*2/4","5^3*2/4","=5*3*2:4"]},"p35":{"label":"Question p.35","q":"Which spreadsheet formulas are wrong? Why? (Try them in the simulation.)","k":"<b>B is wrong</b>: one extra closing bracket. <b>C is wrong</b>: the multiply sign is missing; write = 2*(3 + 4). A and D are correct.","cats":["Correct","Wrong"],"items":["A. = 5^2 + 6*101","B. = 6*(3 + 2))","C. = 2(3 + 4)","D. = 1^2 + 2^2"]}},"nx":{}});</script><!--/SN-->
 <script src="../chung/outline.js?v=22"></script>
 <script src="../chung/api.js?v=28"></script>
 <script src="../chung/tuc-thi.js?v=2"></script>

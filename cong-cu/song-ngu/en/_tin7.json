@@ -1,0 +1,126 @@
+{
+"tin7-cong-cu-ho-tro-tinh-toan": {"task": "p41a", "tag": "<b>Questions</b> Textbook page 41", "reading": "",
+ "tasks": {
+  "p41a": {"label": "Questions p.41 – Question 1", "q": "How do you enter a function?", "k": "Like a formula: <b>= &lt;function name&gt;(&lt;arguments&gt;)</b>, then press Enter. Type the function name and the arguments correctly; capital or small letters are both OK; you can click cells or ranges with the mouse to use them as arguments."},
+  "p41b": {"label": "Questions p.41 – Question 2", "q": "Can the arguments of a function be cell addresses or ranges?", "k": "<b>Yes.</b> Example =SUM(D4:H4,15,K10): the arguments are the range D4:H4, the number 15 and the cell K10.",
+   "o": ["Yes. Arguments can be numbers, cell addresses or ranges.", "No. Arguments can only be numbers."]}}},
+
+"tin7-dinh-dang-trang-chieu": {"task": "p62", "tag": "<b>Questions</b> Textbook page 62", "reading": "",
+ "tasks": {
+  "p62": {"label": "Questions p.62", "q": "Which sentences are true and which are false?", "k": "a, b, d are <b>true</b>; c is <b>false</b>: the pictures (colours and patterns too) should match the content and the topic of the presentation.",
+   "cats": ["True", "False"],
+   "items": ["a) Pictures make a presentation more impressive.", "b) We should choose pictures that match the topic of the presentation.", "c) The colours and patterns of the pictures do not need to match the topic.", "d) Pictures should look beautiful."]}}},
+
+"tin7-hoan-thien-bai-trinh-chieu": {"task": "loai", "tag": "<b>Reading</b> Two kinds of animation effects",
+ "reading": "Read part <b>1</b> (textbook page 68). <b>Animation effects</b> decide how and when slides and objects on slides (text, pictures, charts, sound,…) appear in a slide show. There are two kinds:<ul><li>Effects for objects on a slide: <b>object animations</b>.</li><li>Effects for slides: <b>slide transitions</b>.</li></ul>Presentation software has many effects and options to control how objects appear. Effects make a presentation lively and interesting and help the audience pay attention. But too many effects, or the wrong effects, can distract the audience from the main content. So use effects carefully.",
+ "tasks": {
+  "loai": {"label": "Reading – Two kinds of effects", "q": "Read part 1 (textbook page 68). Which kind is each effect?", "k": "<b>Object animation</b>: how and when text, pictures,… appear on a slide. <b>Slide transition</b>: how the whole slide appears when you move to the next slide.",
+   "cats": ["Object animation", "Slide transition"],
+   "items": ["The title “GREEN SCHOOL” flies in from the bottom", "The picture of a tree slowly appears", "The new slide pushes the old slide to the left", "When we go to slide 2, the slide opens from the middle to both sides", "The lines of text appear one by one after each click"]}}},
+
+"tin7-hoan-thien-bang-tinh": {"task": "bd", "tag": "<b>Reading</b> b) Borders for cells and the data area",
+ "reading": "On the screen, a worksheet is a grid of cells, but the grid lines are not printed. So before you print, add borders around the cells and the data area if you need them:<ul><li>Select the data area and choose <b>Format Cells</b>.</li><li>In the Format Cells window, choose the <b>Border</b> tab. Set the borders as in Figure 10.4: choose the line style and colour; click each border line to draw it; click OK.</li></ul>",
+ "tasks": {
+  "bd": {"label": "Reading – Borders (Figure 10.4)", "q": "In the Border tab of the Format Cells window, what does each button do?", "k": "<b>None</b>: no border; <b>Outline</b>: border around the outside; <b>Inside</b>: lines between the cells inside. You can choose the line style and colour.",
+   "cats": ["None", "Outline", "Inside"],
+   "items": ["No border", "A border around the outside of the data area", "Lines between the cells inside"]},
+  "vien": {"label": "Reading – Table borders", "q": "You want the table A3:D6 to print with an outside border and lines between the cells. What do you do?", "k": "<b>B</b>. Add borders to the data area before you print or present the data.",
+   "o": ["Nothing. The computer prints the grid lines.", "Select A3:D6, open Format Cells, Border tab, choose Outline and Inside, click OK.", "Select the area and add a fill colour.", "Select the area and merge the cells."]}}},
+
+"tin7-mang-xa-hoi": {"task": "mucdich", "tag": "<b>Reading</b> b) Social networks",
+ "reading": "Read part <b>b</b> (textbook page 19). A <b>social network</b> is an online community where people interact with each other. Most social networks are <b>websites</b>. Depending on their purpose, they let you send private messages, comment on friends' pages, post photos and videos, discuss lessons, play online games,… Table 4.1 shows some social networks by purpose.",
+ "tasks": {
+  "mucdich": {"label": "Reading – Table 4.1", "q": "Read part b) and Table 4.1 (textbook page 19). What is the main purpose of each social network?", "k": "Facebook, Zalo: <b>chatting with friends</b>. YouTube: <b>sharing videos</b>. Instagram: <b>sharing photos</b>. Scratch: <b>learning forum</b> and discussion. Each social network usually has one main purpose.",
+   "cats": ["Chatting with friends", "Sharing videos", "Sharing photos", "Learning forum, discussion"],
+   "items": ["Facebook", "Zalo", "YouTube", "Instagram", "Scratch community"]},
+  "haimat": {"label": "Reading – Two sides of social networks", "q": "Read the last part of page 19. Is each action a useful or a wrong use of social networks?", "k": "Social networks have <b>two sides</b>: they help us connect and learn; but wrong use (fake news, threats, bullying, cheating in exams) hurts other people and ourselves, and can be punished by the school or the law.",
+   "cats": ["Useful", "Wrong"],
+   "items": ["Keeping in touch with friends", "Learning a new skill from a video", "Posting unchecked news that makes people worried", "Posting a photo of a test and asking others to do it", "Writing comments that threaten or bully a classmate", "Discussing homework with a study group"]}}},
+
+"tin7-phan-mem-bang-tinh": {"task": "font", "tag": "<b>Reading</b> c) Formatting data",
+ "reading": "To format data in an area of a worksheet: Step 1. Select the data area. Step 2. Use the commands in the <b>Font</b> and <b>Alignment</b> groups of the <b>Home</b> tab (Figure 6.6).",
+ "tasks": {
+  "font": {"label": "Reading – Formatting data", "q": "Look at Figure 6.6. Which group of the Home tab has each command?", "k": "<b>Font</b> group: font, size, style, fill colour, font colour. <b>Alignment</b> group: align data horizontally and vertically.",
+   "cats": ["Font group", "Alignment group"],
+   "items": ["Font, font size", "Bold, italic, underline", "Fill colour, font colour", "Align left, center, right", "Align top, middle, bottom"]},
+  "p32": {"label": "Question p.32", "q": "If you select an area and then type data, which cell gets the data?", "k": "<b>The active cell</b>: when you select an area, the first selected cell is the active cell, and the data goes into it.",
+   "o": ["All the cells in the area.", "The active cell (the first selected cell, usually the top left cell).", "The bottom right cell.", "You cannot type data."]}}},
+
+"tin7-phan-mem-may-tinh": {"task": "p12a", "tag": "<b>Questions</b> Textbook page 12", "reading": "",
+ "tasks": {
+  "p12a": {"label": "Questions p.12 – Question 1", "q": "Which are application software? Choose “Application” or “Operating system” for each one.", "k": "Application software: <b>B. Gmail, C. UnikeyNT, E. Zalo, F. Windows Media Player</b>. Linux and Windows 8 are operating systems.",
+   "cats": ["Application", "Operating system"],
+   "items": ["A. Linux", "B. Gmail", "C. UnikeyNT", "D. Windows 8", "E. Zalo", "F. Windows Media Player"]},
+  "p12b": {"label": "Questions p.12 – Question 2", "q": "Which file types can Windows Media Player open?", "k": "Windows Media Player plays music and videos, so it opens sound files <b>.mp3</b> and video files <b>.avi, .mp4</b> (A, C, D). A .jpg file is a picture, a .txt file is text.",
+   "cats": ["Can open", "Cannot open"],
+   "items": ["A. .mp3", "B. .jpg", "C. .avi", "D. .mp4", "E. .txt"]}}},
+
+"tin7-quan-li-du-lieu": {"task": "bang", "tag": "<b>Reading</b> a) Backing up data",
+ "reading": "Read part <b>2a</b> (textbook page 14). Storing information on a computer and on the Internet has many risks. Here are the main ways to protect data.<br><br><b>Back up</b> your data often. A backup is a copy of your files and folders on a storage device, so you can get your data back if something happens to the original.<ul><li><b>Local backup</b>: the copy is on the same computer or on a storage device such as an external hard drive or a USB. You can restore quickly, but if the device or the computer is lost, the copy is lost too.</li><li><b>Remote backup</b>: the copy is somewhere else, for example on another computer or on the Internet (the cloud). If your computer breaks, the backup is still safe.</li></ul>",
+ "tasks": {
+  "bang": {"label": "Reading – Storage devices (Table 3.1)", "q": "Read Table 3.1 (textbook page 15). Which storage device has each feature?", "k": "<b>USB, memory card</b>: small, easy to lose. <b>Optical disc</b>: cheap, rarely gets viruses, but small capacity and easy to break. <b>External hard drive</b>: large capacity but big and heavy. <b>Cloud</b>: access from anywhere but needs the Internet and can be attacked.",
+   "cats": ["Memory card, USB", "Optical disc", "External hard drive", "Cloud storage"],
+   "items": ["Small and handy but easy to lose", "Cheap but small capacity, needs a disc writer", "Large capacity but big and heavy, hard to carry", "You can open it on any computer with the Internet, needs a network", "Rarely gets viruses but breaks easily, hard to keep", "The service may not be reliable and hackers may attack it"]},
+  "saoluu": {"label": "Reading – Local or remote backup?", "q": "Read a) Backing up data. Is each action a local backup or a remote backup?", "k": "<b>Local</b>: the copy is in the same place as the computer (USB, external drive, disc) → fast to restore, but it can be lost with the computer in a fire or a theft. <b>Remote</b>: the copy is in another place (Internet, cloud) → still safe if the computer breaks.",
+   "cats": ["Local backup", "Remote backup"],
+   "items": ["Copying the DuLich folder to a USB", "Uploading the DuLich folder to Google Drive", "Copying photos to an external hard drive", "Saving a copy on OneDrive", "Writing data to a DVD and keeping it in a cupboard"]}}},
+
+"tin7-tao-bai-trinh-chieu": {"task": "p56", "tag": "<b>Questions</b> Textbook page 56", "reading": "",
+ "tasks": {
+  "p56": {"label": "Questions p.56", "q": "Which sentences are true and which are false?", "k": "a, b, c are <b>true</b>. d is <b>false</b>: automatic calculation is a job of spreadsheet software. The two basic jobs of presentation software are to <b>create a presentation</b> and to <b>show it</b>.",
+   "cats": ["True", "False"],
+   "items": ["a) We often use presentation software to make presentations for meetings, lessons, advertising,…", "b) Presentation software can create a presentation and save it as a file.", "c) We can type and edit text and pictures on slides.", "d) The main job of presentation software is automatic calculation."]}}},
+
+"tin7-thuat-toan-sap-xep": {"task": "ch1", "tag": "<b>Reading</b> Sorting the list 3, 4, 1, 5, 2",
+ "reading": "Read part <b>2</b> (textbook pages 80–82). Another sorting algorithm is <b>selection sort</b>. It looks at each position and puts the smallest of the following numbers there. To find the smallest number, it compares the number in the current position with each number after it, and swaps them if the number after it is smaller (Figure 16.5). The card with a <span style=\"border:2px solid #2f6fb3;padding:0 4px;border-radius:4px\">blue</span> border is the current position.",
+ "tasks": {
+  "ch1": {"label": "Question p.82 – Rounds 2, 3, 4 (Figure 16.5)", "q": "Selection sort on the list 3, 4, 1, 5, 2 (Figure 16.5). After round 1 the list is 1, 4, 3, 5, 2. In rounds 2, 3 and 4, does each comparison cause a swap?", "k": "Round 2: 3 &lt; 4 swap → 1 3 4 5 2; 5 no; 2 &lt; 3 swap → <b>1 2 4 5 3</b>. Round 3: 5 no; 3 &lt; 4 swap → <b>1 2 3 5 4</b>. Round 4: 4 &lt; 5 swap → <b>1 2 3 4 5</b>.",
+   "cats": ["Swap", "No swap"],
+   "items": ["Round 2: compare 3 (position 3) with 4 (position 2)", "Round 2: compare 5 (position 4) with 3 (position 2)", "Round 2: compare 2 (position 5) with 3 (position 2)", "Round 3: compare 5 (position 4) with 4 (position 3)", "Round 3: compare 3 (position 5) with 4 (position 3)", "Round 4: compare 4 (position 5) with 5 (position 4)"]}}},
+
+"tin7-thuat-toan-tim-kiem-nhi-phan": {"task": "vung", "tag": "<b>Reading</b> Find the customer named “Trúc”",
+ "reading": "Read part <b>1</b> (textbook pages 74–75). An's mother has more and more customers, so An types the customer list on the computer in <b>alphabetical order</b>. An wants to find the address of the customer “Trúc” (Figure 15.1). Because the list is sorted, An does not start from the top. An compares the name with the name in the <b>middle</b> of the list. If they are the same, the name is found. If the name comes after the middle name, An only looks in the <b>second half</b>; if it comes before, An looks in the <b>first half</b>. An repeats this until the name is found or the list is empty. Each time, the list becomes half as long, so this algorithm is called <b>binary search</b>.",
+ "tasks": {
+  "vung": {"label": "Reading – Make the search area smaller", "q": "Read the algorithm in words (textbook page 76). Find “Trúc” in Figure 15.1: after each comparison, is the new search area the first half or the second half?", "k": "“T” comes after “M” → <b>second half</b> (positions 6–9); “Tru” comes after “Tra” → <b>second half</b> (positions 8–9); the two names are the same → <b>found</b>, stop.",
+   "cats": ["First half", "Second half", "Found, stop"],
+   "items": ["Compare “Trúc” with “Mai” (position 5)", "Compare “Trúc” with “Trang” (position 7)", "Compare “Trúc” with “Trúc” (position 8)"]}}},
+
+"tin7-thuat-toan-tim-kiem-tuan-tu": {"task": "bt", "tag": "<b>Reading</b> The search problem",
+ "reading": "Read textbook page 71. In life we often search for data among tens, hundreds or even millions of items. Search algorithms help us find the data we need quickly. An's job can be written as a search problem:<ul><li><b>Input:</b> the customer list; the name of the customer to find.</li><li><b>Output:</b> the address of that customer.</li></ul>An checks the list from the first name to the last name. This is called <b>sequential search</b>. For each name, An checks if it is the right name. If yes, An writes the address and stops; if not, An goes to the next name. If An reaches the end of the list and does not find it, An says “not found” and stops. So while the name is not found and the list is not finished, An keeps searching. This is a <b>loop</b>. The loop checks two conditions:<ul><li>Condition 1: is this name the name we are looking for?</li><li>Condition 2: is the list finished?</li></ul>The flowchart in Figure 14.1 (drawn again in the simulation below) shows the steps.",
+ "tasks": {
+  "bt": {"label": "Reading – The search problem", "q": "Read the first part about sequential search. In An's problem, is each item an input or an output?", "k": "<b>Input</b>: the customer list; the name of the customer to find. <b>Output</b>: the address of that customer.",
+   "cats": ["Input", "Output"],
+   "items": ["The customer list", "The name of the customer to find", "The address of that customer"]},
+  "dk": {"label": "Reading – The two loop conditions", "q": "Sequential search uses a loop. Is each question condition 1 or condition 2?", "k": "Condition 1: is this name <b>the name we are looking for</b>? Condition 2: is <b>the list finished</b>? While the name is not found and the list is not finished, keep searching.",
+   "cats": ["Condition 1", "Condition 2"],
+   "items": ["Is this name the name we are looking for?", "Is the list finished?"]}}},
+
+"tin7-tinh-toan-tu-dong": {"task": "kihieu", "tag": "<b>Reading</b> Formulas and operator symbols",
+ "reading": "Read part <b>1</b> (textbook page 34). When you type data into a cell, the software recognises the data type and shows it in the default format. The basic data types are text, numbers, dates,… Calculation is the best feature of spreadsheet software. You can use <b>formulas</b> to calculate quickly. A formula is a maths expression typed into a cell. Start with <b>“=”</b>, then type the expression. The simple operators are add (+), subtract (–), multiply (*), divide (/) and power (^). A formula can have numbers, operators and brackets. The order of operations is the same as in maths.",
+ "tasks": {
+  "kihieu": {"label": "Reading – Table 7.1", "q": "How do you write the maths expression 5³ × 2 : 4 in a spreadsheet?", "k": "<b>=5^3*2/4</b>. In a spreadsheet: multiply <b>*</b>, divide <b>/</b>, power <b>^</b>; a formula starts with <b>=</b>.",
+   "o": ["=5³×2:4", "=5^3*2/4", "5^3*2/4", "=5*3*2:4"]},
+  "p35": {"label": "Question p.35", "q": "Which spreadsheet formulas are wrong? Why? (Try them in the simulation.)", "k": "<b>B is wrong</b>: one extra closing bracket. <b>C is wrong</b>: the multiply sign is missing; write = 2*(3 + 4). A and D are correct.",
+   "cats": ["Correct", "Wrong"],
+   "items": ["A. = 5^2 + 6*101", "B. = 6*(3 + 2))", "C. = 2(3 + 4)", "D. = 1^2 + 2^2"]}}},
+
+"tin7-trinh-bay-bang-tinh": {"task": "pct", "tag": "<b>Reading</b> b) Percentages · c) Dates",
+ "reading": "<b>b) Percentage format.</b> A percentage is a ratio between two values, for example a/b. As a percentage it is (a/b) × 100(%). Spreadsheet software can show such a ratio as a percentage. Steps: select the data area, open the Format Cells window, choose Number, choose <b>Percentage</b>, click OK.",
+ "tasks": {
+  "pct": {"label": "Reading – Percentages", "q": "Cell E4 has the value 0.982142857 (= 55/56). After you format it as Percentage with 2 decimal places, cell E4 shows:", "k": "<b>98.21%</b>. Percentage format multiplies the value by 100 and adds %; the value in the cell is still 0.982142857.",
+   "o": ["0.98", "98.21%", "0.98%", "9821%"]},
+  "ngay": {"label": "Reading – Dates", "q": "The software takes dates as mm/dd/yyyy. You want to type 15 March 2021 and show it in the Vietnamese style (dd/mm/yyyy). What do you do?", "k": "<b>B</b>. You still type in the software's default order (month/day/year); Format Cells only changes <b>how it looks</b>. If you type 15/3/2021, it becomes text (aligned left).",
+   "o": ["Type 15/3/2021. Done.", "Type 3/15/2021, then Format Cells → Date → Locale Vietnamese, choose day/month/year → OK.", "Type 2021/15/3.", "Type “15th of March”."]},
+  "phep": {"label": "Reading – Adding and subtracting dates", "q": "Cell A3 is 15/3/2021 and cell B3 is 31/3/2021 (Vietnamese style). The formula =B3-A3 gives:", "k": "<b>16</b> (days). You can add a whole number to a date (each number is one day): 3/1/2020 + 30 = 2/2/2020; one date minus another gives the number of days.",
+   "o": ["16", "31/3/2021", "#VALUE!", "46"]}}},
+
+"tin7-ung-xu-tren-mang": {"task": "tachai", "tag": "<b>Reading</b> Harms and advice",
+ "reading": "Read part <b>3</b> (textbook pages 25–26). If we do not control how we use our devices, the Internet can harm us a lot. Playing games too much or using social media all the time hurts our family relationships, our friendships and our studies. This is called <b>Internet addiction</b>. Some harms:<ul><li><b>Less contact with the world</b>: poor appetite, weight loss, bad sleep, weak body, not wanting to talk to anyone, only wanting to stay alone with a device.</li><li><b>Hard to focus on work and study</b>: if you check your phone every 10 minutes, can you focus on your lessons?</li><li><b>More risk of cyberbullying</b>: addicted people may become aggressive and hurt or threaten others: spreading false rumours, sending mean messages, sharing other people's photos and personal information without permission.</li><li><b>Easily led to bad websites</b>: information spreads widely and is hard to control; bad content can reach you by accident or on purpose.</li><li><b>Easily addicted to online games</b>.</li></ul>",
+ "tasks": {
+  "tachai": {"label": "Reading – Harms of Internet addiction", "q": "Read part 3 (textbook pages 25–26). Which harm of Internet addiction does each situation show?", "k": "Five harms: <b>less contact</b>, <b>hard to focus</b>, more risk of <b>cyberbullying</b>, easily <b>led to bad websites</b>, easily <b>addicted to games</b>. Internet addiction is bad for physical and mental health, school results and communication.",
+   "cats": ["Less contact", "Hard to focus", "Cyberbullying", "Led to bad content", "Game addiction"],
+   "items": ["Nam only wants to stay alone in the bedroom with the computer and does not want to talk to anyone.", "Lan opens her phone every 10 minutes to check messages, so the homework is never finished.", "A student sends a message calling another student “fat and ugly”.", "While watching a study video, Hung clicks link after link and ends up on a violent website.", "Minh feels restless and angry when there is no chance to play online games."]},
+  "loikhuyen": {"label": "Reading – Advice", "q": "Which piece of advice matches each action: Share, Move away, Limit or Follow?", "k": "<b>Share</b> with someone you trust; <b>Move away</b>: keep devices in a shared room; <b>Limit</b> your screen time; <b>Follow</b> good hobbies and habits (sports, reading, volunteering).",
+   "cats": ["Share", "Move away", "Limit", "Follow"],
+   "items": ["Telling Mum when you think you use your phone too much.", "Putting the computer in the living room, not in the bedroom.", "Installing an app that limits computer use to 1 hour a day.", "Joining a football club and reading books every evening."]}}}
+}
