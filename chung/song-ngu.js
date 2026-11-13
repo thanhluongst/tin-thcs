@@ -15,7 +15,8 @@ function pick(){
   if (!HAS) return;
   var vs = speechSynthesis.getVoices() || [];
   function f(lang, re){ return vs.filter(function(v){ var l = v.lang.replace("_", "-").toLowerCase(); return l.indexOf(lang) === 0 && (!re || re.test(v.name)); })[0]; }
-  V.en = f("en-us", /natural|online|neural/i) || f("en-us", /google/i) || f("en-us") || f("en-gb") || f("en") || null;
+  /* Giọng dễ nghe cho học sinh: giọng tự nhiên (Edge: Ava/Jenny/Aria/Emma Online Natural), rồi Google US English */
+  V.en = f("en-us", /(ava|jenny|aria|emma|michelle).*(natural|online)/i) || f("en-us", /natural|online|neural/i) || f("en-us", /google/i) || f("en-us") || f("en-gb") || f("en") || null;
   V.vi = f("vi", /natural|online|neural/i) || f("vi", /google/i) || f("vi") || null;
 }
 if (HAS) { pick(); if (speechSynthesis.addEventListener) speechSynthesis.addEventListener("voiceschanged", pick); }
@@ -129,6 +130,32 @@ function hoatDong(o){
     if (lsGet("song-ngu-cuon") === o.id) { lsSet("song-ngu-cuon", ""); setTimeout(function(){ act.scrollIntoView({block: "start"}); }, 400); }
     act.querySelectorAll("[data-en]").forEach(function(e){ if (L === "en") e.innerHTML = e.getAttribute("data-en"); });
     if (L !== "en") return;
+    /* Thanh nghe đọc: đọc tiêu đề, lời dặn, câu hỏi và tên từng thiết bị – tô sáng phần đang đọc */
+    var bar = document.createElement("div"); bar.className = "sn-listen";
+    bar.innerHTML = '<button type="button" class="btn sn-l-go">' + SPK + 'Listen</button><button type="button" class="btn sn-l-stop" hidden>■ Stop</button>'
+      + '<span class="sn-l-sp" role="group" aria-label="Speed"><button type="button" data-r="0.8" aria-pressed="true">Slow</button><button type="button" data-r="1" aria-pressed="false">Normal</button></span>';
+    var rd = act.querySelector(".reading"); (rd || tag).insertAdjacentElement("afterend", bar);
+    var spd = 0.8, goB = bar.querySelector(".sn-l-go"), stB = bar.querySelector(".sn-l-stop"), lit = null;
+    bar.querySelector(".sn-l-sp").addEventListener("click", function(e){ var b = e.target.closest("button"); if (!b) return; spd = +b.dataset.r; bar.querySelectorAll(".sn-l-sp button").forEach(function(x){ x.setAttribute("aria-pressed", x === b); }); });
+    function txt(e){ return e ? e.textContent.replace(/\s+/g, " ").trim() : ""; }
+    function light(e){ if (lit) lit.classList.remove("sn-lit"); lit = e; if (e) { e.classList.add("sn-lit"); var r = e.getBoundingClientRect(); if (r.top < 60 || r.bottom > innerHeight - 20) e.scrollIntoView({block: "center", behavior: "smooth"}); } }
+    function end(){ light(null); stB.hidden = true; goB.hidden = false; }
+    goB.addEventListener("click", function(){
+      var parts = [], own = [];
+      function add(t, e, cham){ t = (t || "").replace(/^\d+\.\s*/, "").replace(/\b(INTO|OUT OF|OUT|IN)\b/g, function(w){ return w.toLowerCase(); }); if (t) { parts.push({t: t, cham: cham}); own.push(e); } }
+      if (tag) { var tt = [].slice.call(tag.querySelectorAll("[data-en]")).map(txt).join(". "); add(tt, tag); }
+      if (rd) rd.textContent.replace(/\s\?\s/g, " the question mark ").split(/(?<=[.?!])\s+(?=[A-Z])/).forEach(function(se){ add(se.trim(), rd); });
+      act.querySelectorAll("[data-task]").forEach(function(slot){
+        var tk = LS && LS.TASKS && LS.TASKS[slot.dataset.task]; add(tk ? tk.q : "", slot.querySelector(".q-text"));
+        var rows = slot.querySelectorAll(".sort-row");
+        if (rows.length) { var cats = [].slice.call(rows[0].querySelectorAll(".seg button")).map(txt).filter(function(c){ return c && c.indexOf("?") < 0; });
+          if (cats.length) add("The groups are: " + cats.join(", ") + ".", rows[0].querySelector(".seg"));
+          rows.forEach(function(r){ add(txt(r.querySelector("span")), r); }); }
+      });
+      rate = spd; goB.hidden = true; stB.hidden = false;
+      say("en", parts, function(k){ light(own[k]); }, end);
+    });
+    stB.addEventListener("click", function(){ stop(); end(); });
     trTree(act);
     new MutationObserver(function(rs){ rs.forEach(function(r){ if (r.type === "characterData") trNode(r.target); else r.addedNodes.forEach(trTree); }); })
       .observe(act, {childList: true, subtree: true, characterData: true});
@@ -284,6 +311,9 @@ css.textContent = ""
 + ".sn-qspk{width:34px;height:34px}.sn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.sn-in{flex:1;min-width:160px;font:inherit;font-size:17px;padding:8px 10px;border:2px solid var(--line,#cde3e0);border-radius:10px;background:var(--surface,#fff);color:var(--fg,#1c2a29)}.sn-in:focus{outline:none;border-color:var(--info,#1d4ed8)}"
 + ".sn-fb{margin:6px 0 0;font-size:15px}.sn-fb.ok{color:var(--ok,#15803d)}.sn-fb.bad{color:var(--bad,#b91c1c)}"
 + ".sn-lang-sm{margin-left:auto;vertical-align:middle}.sn-lang-sm button{padding:4px 10px;font-size:13px}.act-tag:has(.sn-lang-sm){display:flex;flex-wrap:wrap;align-items:center;gap:8px}"
++ ".sn-listen{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 10px}.sn-listen .btn svg{width:18px;height:18px;vertical-align:-4px;margin-right:4px;fill:currentColor;stroke:currentColor;stroke-width:1.6}"
++ ".sn-l-sp{display:inline-flex;border:1px solid var(--line,#cde3e0);border-radius:999px;overflow:hidden}.sn-l-sp button{border:none;background:var(--surface,#fff);color:var(--fg,#1c2a29);font:600 13px var(--font-body,system-ui);padding:6px 12px;cursor:pointer}.sn-l-sp button[aria-pressed=true]{background:var(--info,#1d4ed8);color:#fff}"
++ ".sn-lit{background:var(--warn-soft,#fdf2d3)!important;box-shadow:0 0 0 3px var(--warn-soft,#fdf2d3);border-radius:8px;transition:background .2s}"
 + ".sn-act-en{outline:2px solid var(--info,#1d4ed8);outline-offset:4px;border-radius:12px}.sn-in-act{border-width:1px;margin-top:14px}"
 + "@media(max-width:520px){.sn-grid{grid-template-columns:1fr}}@media print{.sn-bar,.sn-game,.sn-spk,.sn-lang{display:none}}";
 document.head.appendChild(css);
