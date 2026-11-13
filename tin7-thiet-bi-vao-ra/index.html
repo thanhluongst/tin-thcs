@@ -286,11 +286,19 @@
 <script src="../chung/khen.js?v=2"></script>
 <script src="../chung/hs.js?v=40"></script>
 <script src="../chung/doc-tieng-anh.js?v=2"></script>
-<script src="../chung/song-ngu.js?v=1"></script>
+<script src="../chung/song-ngu.js?v=2"></script>
 <script>SongNgu(document.getElementById("sn-tbvr"), {
   tieuDe: "English corner: Input & Output devices",
   moDau: {en: "An input device sends data into the computer. An output device shows the results to us.", vi: "Thiết bị vào đưa dữ liệu vào máy tính. Thiết bị ra đưa kết quả ra cho con người."},
   nhom: {input: "thiết bị vào", output: "thiết bị ra", both: "vừa vào vừa ra"},
+  hoi: [
+    {q: "Which device do we use to type letters and numbers?", vi: "Ta dùng thiết bị nào để gõ chữ và số?", d: ["keyboard"], giai: "Bàn phím là thiết bị vào."},
+    {q: "Which device shows texts and pictures?", vi: "Thiết bị nào hiển thị chữ và hình ảnh?", d: ["monitor", "screen", "display"], giai: "Màn hình là thiết bị ra."},
+    {q: "Which device plays music and sounds?", vi: "Thiết bị nào phát nhạc và âm thanh?", d: ["speaker", "speakers", "loudspeaker", "headphones"], giai: "Loa là thiết bị ra."},
+    {q: "Which device prints the results on paper?", vi: "Thiết bị nào in kết quả ra giấy?", d: ["printer"], giai: "Máy in là thiết bị ra."},
+    {q: "Is a microphone an input device or an output device?", vi: "Micro là thiết bị vào hay thiết bị ra?", d: ["input device", "input"], giai: "Micro đưa âm thanh vào máy tính nên là thiết bị vào."},
+    {q: "Is a touch screen an input device, an output device, or both?", vi: "Màn hình cảm ứng là thiết bị vào, thiết bị ra hay cả hai?", d: ["both", "input and output", "both input and output", "input and output device"], giai: "Màn hình cảm ứng vừa nhận lệnh chạm vừa hiển thị kết quả."}
+  ],
   tu: [
     {icon:"⌨️", en:"keyboard", loai:"input", vi:"bàn phím", cau:"We type letters and numbers with the keyboard.", dich:"Ta gõ chữ và số bằng bàn phím.", giai:"Keyboard là bàn phím. Đây là thiết bị vào, dùng để gõ chữ và số vào máy tính."},
     {icon:"🖱️", en:"mouse", loai:"input", vi:"chuột", cau:"We click and drag with the mouse.", dich:"Ta nháy và kéo thả bằng chuột.", giai:"Mouse là chuột máy tính. Đây là thiết bị vào, dùng để chọn, nháy chuột và kéo thả."},

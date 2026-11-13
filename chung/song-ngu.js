@@ -81,6 +81,15 @@ window.SongNgu = function(el, d){
   if (d.choi !== false) h += '<div class="sn-game"><div class="sn-gh"><b>🎧 Listen and choose – Nghe và chọn</b><span class="sn-score"></span></div>'
     + '<p class="sn-gq">Bấm <b>Bắt đầu</b>, nghe từ tiếng Anh rồi chọn đúng thiết bị.</p><div class="sn-opts"></div>'
     + '<div class="sn-gbar"><button type="button" class="btn primary sn-go">Bắt đầu</button><button type="button" class="btn sn-again" hidden>' + SPK + 'Nghe lại</button></div></div>';
+  if (d.hoi && d.hoi.length) {
+    h += '<div class="sn-qa"><div class="sn-gh"><b>✍️ Answer in English – Trả lời bằng tiếng Anh</b><span class="sn-qsc"></span></div><p class="sn-vi">Đọc (hoặc bấm 🔊 nghe) câu hỏi, gõ câu trả lời bằng <b>chữ tiếng Anh</b> rồi bấm <b>Check</b>.</p>';
+    d.hoi.forEach(function(x, i){
+      h += '<div class="sn-qi" data-q="' + i + '"><div class="sn-top"><button type="button" class="sn-spk sn-qspk" aria-label="Nghe câu hỏi">' + SPK + '</button><div class="sn-w"><span class="sn-en"><b>' + (i + 1) + '.</b> ' + esc(x.q) + '</span><span class="sn-vi sn-mean">' + esc(x.vi || "") + '</span></div></div>'
+        + '<div class="sn-row"><input type="text" class="sn-in" autocomplete="off" spellcheck="false" placeholder="Type in English…" aria-label="Câu trả lời câu ' + (i + 1) + '">'
+        + '<button type="button" class="btn primary sn-chk">Check</button><button type="button" class="btn sn-hint">Gợi ý</button></div><p class="sn-fb" aria-live="polite"></p></div>';
+    });
+    h += '</div>';
+  }
   h += '</div>';
   el.innerHTML = h;
 
@@ -108,6 +117,34 @@ window.SongNgu = function(el, d){
     cards.forEach(function(c){ seq(+c.dataset.i).forEach(function(x){ list.push(x); owner.push(c); }); });
     stopB.hidden = false; say(list, function(k){ mark(owner[k]); }, done);
   });
+
+  /* Câu hỏi trả lời bằng chữ tiếng Anh. hoi: [{q, vi, d:["keyboard","a keyboard"], goiY:"k _ _ _"}] */
+  function norm(s){ return String(s).toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\b(a|an|the|it is|it's|its|is)\b/g, " ").replace(/\s+/g, " ").trim(); }
+  var qok = {};
+  function qscore(){ var s = el.querySelector(".sn-qsc"); if (s) s.textContent = "Đúng: " + Object.keys(qok).length + "/" + d.hoi.length; }
+  el.querySelectorAll(".sn-qi").forEach(function(box){
+    var x = d.hoi[+box.dataset.q], inp = box.querySelector(".sn-in"), fb = box.querySelector(".sn-fb"), tries = 0;
+    var ans = x.d.map(norm), main = x.d[0];
+    box.querySelector(".sn-qspk").addEventListener("click", function(){ mark(null); say([{t: x.q, lang: "en"}, {t: x.vi || "", lang: "vi"}].filter(function(a){ return a.t; })); });
+    box.querySelector(".sn-hint").addEventListener("click", function(){
+      var hint = x.goiY || main.split(" ").map(function(w){ return w.charAt(0) + w.slice(1).replace(/./g, " _"); }).join("   ");
+      fb.className = "sn-fb"; fb.textContent = "Gợi ý: " + hint + (x.vi ? "" : "");
+      say([{t: main, lang: "en", cham: true}]);
+    });
+    function check(){
+      var v = norm(inp.value); if (!v) { fb.className = "sn-fb"; fb.textContent = "Em hãy gõ câu trả lời bằng tiếng Anh."; inp.focus(); return; }
+      var ok = ans.some(function(a){ return v === a || (" " + v + " ").indexOf(" " + a + " ") >= 0; });
+      tries++;
+      box.classList.toggle("ok", ok); box.classList.toggle("bad", !ok);
+      if (ok) { qok[box.dataset.q] = 1; fb.className = "sn-fb ok"; fb.innerHTML = "✅ Correct! <b>" + esc(main) + "</b>" + (x.giai ? " – " + esc(x.giai) : ""); say([{t: "Correct! " + main, lang: "en"}].concat(x.giai ? [{t: x.giai, lang: "vi"}] : [])); }
+      else if (tries < 2) { fb.className = "sn-fb bad"; fb.textContent = "❌ Not yet. Try again! (Kiểm tra chính tả, hoặc bấm Gợi ý)"; say([{t: "Not yet. Try again!", lang: "en"}]); }
+      else { fb.className = "sn-fb bad"; fb.innerHTML = "❌ Đáp án: <b>" + esc(main) + "</b>. Em gõ lại cho đúng nhé." + (x.giai ? " " + esc(x.giai) : ""); say([{t: "The answer is " + main, lang: "en"}, {t: "Đáp án là " + main + ". " + (x.giai || ""), lang: "vi"}]); }
+      qscore();
+    }
+    box.querySelector(".sn-chk").addEventListener("click", check);
+    inp.addEventListener("keydown", function(e){ if (e.key === "Enter") { e.preventDefault(); check(); } });
+  });
+  if (d.hoi) qscore();
 
   /* Trò chơi Nghe và chọn */
   var g = el.querySelector(".sn-game"); if (!g) return;
@@ -166,6 +203,9 @@ css.textContent = ""
 + ".sn-opt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;border:2px solid var(--line,#cde3e0);border-radius:12px;background:var(--surface,#fff);color:var(--fg,#1c2a29);font:inherit;cursor:pointer}.sn-opt span{font-size:32px}"
 + ".sn-opt:hover{border-color:var(--info,#1d4ed8)}.sn-opt.ok{border-color:var(--ok,#15803d);background:var(--ok-soft,#dcf3e3)}.sn-opt.bad{border-color:var(--bad,#b91c1c);background:var(--bad-soft,#fde3e3)}"
 + ".sn-gbar{display:flex;gap:10px;flex-wrap:wrap}"
++ ".sn-qa{margin-top:14px;border-top:1px dashed var(--line,#cde3e0);padding-top:12px}.sn-qi{border:1px solid var(--line,#cde3e0);border-radius:12px;padding:10px 12px;margin-top:10px}.sn-qi.ok{border-color:var(--ok,#15803d);background:var(--ok-soft,#dcf3e3)}.sn-qi.bad{border-color:var(--bad,#b91c1c)}"
++ ".sn-qspk{width:34px;height:34px}.sn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.sn-in{flex:1;min-width:160px;font:inherit;font-size:17px;padding:8px 10px;border:2px solid var(--line,#cde3e0);border-radius:10px;background:var(--surface,#fff);color:var(--fg,#1c2a29)}.sn-in:focus{outline:none;border-color:var(--info,#1d4ed8)}"
++ ".sn-fb{margin:6px 0 0;font-size:15px;min-height:1px}.sn-fb.ok{color:var(--ok,#15803d)}.sn-fb.bad{color:var(--bad,#b91c1c)}.sn-novi .sn-qa .sn-vi{visibility:visible}"
 + "@media(max-width:520px){.sn-grid{grid-template-columns:1fr}}@media print{.sn-bar,.sn-game,.sn-spk,.sn-sw{display:none}}";
 document.head.appendChild(css);
 })();
