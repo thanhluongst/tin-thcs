@@ -182,6 +182,12 @@
         <div class="reading">Sau khi thầy cô chốt, em chép nội dung dưới đây vào vở.</div>
         <div data-concept="g2"></div>
       </div>
+
+      <div class="act">
+        <div class="act-tag"><b>English corner</b> Học bằng tiếng Anh: Input &amp; Output devices</div>
+        <div class="reading">Bấm 🔊 để nghe từ tiếng Anh, câu ví dụ và lời giải thích. Sau đó chơi <b>Listen and choose</b>.</div>
+        <div id="sn-tbvr" data-song-ngu></div>
+      </div>
     </section>
 
     <section class="part" id="phan-2">
@@ -280,5 +286,23 @@
 <script src="../chung/khen.js?v=2"></script>
 <script src="../chung/hs.js?v=40"></script>
 <script src="../chung/doc-tieng-anh.js?v=2"></script>
+<script src="../chung/song-ngu.js?v=1"></script>
+<script>SongNgu(document.getElementById("sn-tbvr"), {
+  tieuDe: "English corner: Input & Output devices",
+  moDau: {en: "An input device sends data into the computer. An output device shows the results to us.", vi: "Thiết bị vào đưa dữ liệu vào máy tính. Thiết bị ra đưa kết quả ra cho con người."},
+  nhom: {input: "thiết bị vào", output: "thiết bị ra", both: "vừa vào vừa ra"},
+  tu: [
+    {icon:"⌨️", en:"keyboard", loai:"input", vi:"bàn phím", cau:"We type letters and numbers with the keyboard.", dich:"Ta gõ chữ và số bằng bàn phím.", giai:"Keyboard là bàn phím. Đây là thiết bị vào, dùng để gõ chữ và số vào máy tính."},
+    {icon:"🖱️", en:"mouse", loai:"input", vi:"chuột", cau:"We click and drag with the mouse.", dich:"Ta nháy và kéo thả bằng chuột.", giai:"Mouse là chuột máy tính. Đây là thiết bị vào, dùng để chọn, nháy chuột và kéo thả."},
+    {icon:"🎤", en:"microphone", loai:"input", vi:"micro", cau:"The microphone records your voice.", dich:"Micro thu giọng nói của em.", giai:"Microphone là micro. Đây là thiết bị vào, đưa âm thanh vào máy tính."},
+    {icon:"📷", en:"webcam", loai:"input", vi:"camera máy tính", cau:"The webcam takes pictures and videos.", dich:"Webcam chụp ảnh và quay video.", giai:"Webcam là camera gắn với máy tính. Đây là thiết bị vào, đưa hình ảnh vào máy tính."},
+    {icon:"📠", en:"scanner", loai:"input", vi:"máy quét", cau:"The scanner copies a paper page into the computer.", dich:"Máy quét chép trang giấy vào máy tính.", giai:"Scanner là máy quét. Đây là thiết bị vào, biến trang giấy thành ảnh trong máy tính."},
+    {icon:"🖥️", en:"monitor", loai:"output", vi:"màn hình", cau:"The monitor shows texts and pictures.", dich:"Màn hình hiển thị chữ và hình ảnh.", giai:"Monitor là màn hình. Đây là thiết bị ra, hiển thị kết quả cho ta xem."},
+    {icon:"🔊", en:"speaker", loai:"output", vi:"loa", cau:"The speaker plays music and sounds.", dich:"Loa phát nhạc và âm thanh.", giai:"Speaker là loa. Đây là thiết bị ra, phát âm thanh từ máy tính."},
+    {icon:"🖨️", en:"printer", loai:"output", vi:"máy in", cau:"The printer prints the results on paper.", dich:"Máy in in kết quả ra giấy.", giai:"Printer là máy in. Đây là thiết bị ra, đưa kết quả ra giấy."},
+    {icon:"📽️", en:"projector", loai:"output", vi:"máy chiếu", cau:"The projector shows the lesson on a big screen.", dich:"Máy chiếu chiếu bài học lên màn lớn.", giai:"Projector là máy chiếu. Đây là thiết bị ra, chiếu hình ảnh lên màn lớn."},
+    {icon:"📱", en:"touch screen", loai:"both", vi:"màn hình cảm ứng", cau:"A touch screen is both an input and an output device.", dich:"Màn hình cảm ứng vừa là thiết bị vào vừa là thiết bị ra.", giai:"Touch screen là màn hình cảm ứng. Ta chạm để nhập lệnh, màn hình cũng hiển thị kết quả, nên nó vừa là thiết bị vào vừa là thiết bị ra."}
+  ]
+});</script>
 </body>
 </html>
