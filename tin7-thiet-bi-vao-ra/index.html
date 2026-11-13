@@ -162,7 +162,6 @@
         <div class="act-tag"><b data-en="Group work">Thảo luận nhóm</b> <span data-en="Sort the devices into groups">Xếp thiết bị vào đúng nhóm</span></div>
         <div class="reading" data-en="Each student chooses 4 devices first, then the group agrees. If your group is not sure about a device, choose &lt;b&gt;?&lt;/b&gt; and explain it to the class. Ask yourself: &lt;i&gt;Does the information go INTO the computer or OUT OF the computer?&lt;/i&gt;">Mỗi bạn tự chọn trước 4 thiết bị, sau đó cả nhóm thống nhất. Thiết bị nào nhóm còn tranh luận thì chọn <b>?</b> để trình bày trước lớp. Câu hỏi gợi ý: <i>thông tin đi vào máy tính hay đi ra khỏi máy tính?</i></div>
         <div data-task="sortDev"></div>
-        <div id="sn-tbvr"></div>
       </div>
 
       <div class="act">
@@ -289,31 +288,6 @@
 <script src="../chung/khen.js?v=2"></script>
 <script src="../chung/hs.js?v=40"></script>
 <script src="../chung/doc-tieng-anh.js?v=2"></script>
-<script>SongNgu(document.getElementById("sn-tbvr"), {
-  theo: "hd-xep-nhom",
-  tieuDe: {en: "Input and output devices", vi: "Thiết bị vào và thiết bị ra"},
-  moDau: {en: "An input device sends data into the computer. An output device shows the results to us.", vi: "Thiết bị vào đưa dữ liệu vào máy tính. Thiết bị ra đưa kết quả ra cho con người."},
-  nhom: {input: {en: "input", vi: "thiết bị vào"}, output: {en: "output", vi: "thiết bị ra"}, both: {en: "input & output", vi: "vào và ra"}},
-  tu: [
-    {icon:"⌨️", en:"keyboard", vi:"Bàn phím", loai:"input", cau:"We type letters and numbers with the keyboard.", dich:"Ta gõ chữ và số bằng bàn phím.", giaiEn:"The keyboard is an input device.", giai:"Bàn phím là thiết bị vào."},
-    {icon:"🖱️", en:"mouse", vi:"Chuột", loai:"input", cau:"We click and drag with the mouse.", dich:"Ta nháy và kéo thả bằng chuột.", giaiEn:"The mouse is an input device.", giai:"Chuột là thiết bị vào."},
-    {icon:"🎤", en:"microphone", vi:"Micro", loai:"input", cau:"The microphone records your voice.", dich:"Micro thu giọng nói của em.", giaiEn:"The microphone is an input device. It sends sound into the computer.", giai:"Micro là thiết bị vào, đưa âm thanh vào máy tính."},
-    {icon:"📷", en:"webcam", vi:"Webcam", loai:"input", cau:"The webcam takes pictures and videos.", dich:"Webcam chụp ảnh và quay video.", giaiEn:"The webcam is an input device. It sends pictures into the computer.", giai:"Webcam là thiết bị vào, đưa hình ảnh vào máy tính."},
-    {icon:"📠", en:"scanner", vi:"Máy quét", loai:"input", cau:"The scanner copies a paper page into the computer.", dich:"Máy quét chép trang giấy vào máy tính.", giaiEn:"The scanner is an input device.", giai:"Máy quét là thiết bị vào."},
-    {icon:"🖥️", en:"monitor", vi:"Màn hình", loai:"output", cau:"The monitor shows texts and pictures.", dich:"Màn hình hiển thị chữ và hình ảnh.", giaiEn:"The monitor is an output device.", giai:"Màn hình là thiết bị ra."},
-    {icon:"🔊", en:"speaker", vi:"Loa", loai:"output", cau:"The speaker plays music and sounds.", dich:"Loa phát nhạc và âm thanh.", giaiEn:"The speaker is an output device.", giai:"Loa là thiết bị ra."},
-    {icon:"🖨️", en:"printer", vi:"Máy in", loai:"output", cau:"The printer prints the results on paper.", dich:"Máy in in kết quả ra giấy.", giaiEn:"The printer is an output device.", giai:"Máy in là thiết bị ra."},
-    {icon:"📽️", en:"projector", vi:"Máy chiếu", loai:"output", cau:"The projector shows the lesson on a big screen.", dich:"Máy chiếu chiếu bài học lên màn lớn.", giaiEn:"The projector is an output device.", giai:"Máy chiếu là thiết bị ra."},
-    {icon:"📱", en:"touch screen", vi:"Màn hình cảm ứng", loai:"both", cau:"We touch the screen to give commands, and the screen shows the results.", dich:"Ta chạm vào màn hình để ra lệnh, màn hình cũng hiển thị kết quả.", giaiEn:"A touch screen is both an input and an output device.", giai:"Màn hình cảm ứng vừa là thiết bị vào vừa là thiết bị ra."}
-  ],
-  hoi: [
-    {q:"Which device do we use to type letters and numbers?", vi:"Ta dùng thiết bị nào để gõ chữ và số?", d:["keyboard"], dVi:["bàn phím"], giaiEn:"It is an input device.", giai:"Bàn phím là thiết bị vào."},
-    {q:"Which device shows texts and pictures?", vi:"Thiết bị nào hiển thị chữ và hình ảnh?", d:["monitor","screen","display"], dVi:["màn hình"], giaiEn:"It is an output device.", giai:"Màn hình là thiết bị ra."},
-    {q:"Which device plays music and sounds?", vi:"Thiết bị nào phát nhạc và âm thanh?", d:["speaker","speakers","loudspeaker","headphones"], dVi:["loa","tai nghe"], giaiEn:"It is an output device.", giai:"Loa là thiết bị ra."},
-    {q:"Which device prints the results on paper?", vi:"Thiết bị nào in kết quả ra giấy?", d:["printer"], dVi:["máy in"], giaiEn:"It is an output device.", giai:"Máy in là thiết bị ra."},
-    {q:"Is a microphone an input device or an output device?", vi:"Micro là thiết bị vào hay thiết bị ra?", d:["input device","input"], dVi:["thiết bị vào","vào"], giaiEn:"It sends sound into the computer.", giai:"Micro đưa âm thanh vào máy tính."},
-    {q:"Is a touch screen an input device, an output device, or both?", vi:"Màn hình cảm ứng là thiết bị vào, thiết bị ra hay cả hai?", d:["both","input and output","both input and output"], dVi:["cả hai","vừa vào vừa ra","vào và ra"], giaiEn:"We touch it to give commands, and it shows the results.", giai:"Ta chạm để ra lệnh, màn hình cũng hiển thị kết quả."}
-  ]
-});</script>
+
 </body>
 </html>
