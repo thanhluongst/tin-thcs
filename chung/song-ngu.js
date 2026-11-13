@@ -76,11 +76,73 @@ function norm(s){
     .replace(/[^a-z0-9 ]+/g, " ").replace(/\b(a|an|the|it is|it s|its|is|la|cai|chiec|thiet bi la)\b/g, " ").replace(/\s+/g, " ").trim();
 }
 
+/* ===== Một HOẠT ĐỘNG của bài dạy bằng tiếng Anh =====
+   Nạp song-ngu.js NGAY SAU content.js (trước hs.js), rồi gọi:
+   SongNgu.hoatDong({id: "hd-xep-nhom",                     // id của <div class="act">
+     tasks: {sortDev: {label, q, cats:[...], items:[tên EN theo đúng thứ tự], k}},   // bản tiếng Anh của câu hỏi
+     nx: {sortDev: {ok:[...], fix:[...]}} });
+   Trong hoạt động: phần tử có data-en="..." được thay nội dung khi chọn English.
+   Chọn ngôn ngữ → nhớ trên máy, tải lại trang (bài làm của học sinh giữ nguyên vì lưu theo thứ tự). */
+var UI_EN = {"Nộp câu trả lời":"Submit","Sửa câu trả lời":"Edit answer","GV nhận xét & chốt":"Teacher: check & reveal","Ẩn phần chốt":"Hide answer key",
+  "Chính xác!":"Correct!","Chưa đúng, xem phần chốt.":"Not correct, see the key.","Đã nộp":"Submitted","Đã nộp. Chờ thầy cô nhận xét và chốt.":"Submitted. Wait for your teacher.",
+  "Nhận xét của thầy cô":"Teacher's comment","Thầy cô khen câu trả lời của em!":"Your teacher likes your answer!","Rất tốt, em hãy tiếp tục phát huy nhé.":"Very good, keep it up!",
+  "? Em chưa chắc":"? Not sure","Chưa làm":"Not started","Chưa nộp":"Not submitted","Đã nộp, chờ chốt":"Submitted, waiting","Đúng":"Correct","Cần sửa":"Needs fixing","Phần chốt":"Answer key","Chốt":"Key","Đáp án":"Answer"};
+var UI_RE = [[/^Đúng (\d+)\/(\d+)\. Xem các dòng màu đỏ\.$/, "Correct $1/$2. Check the red rows."], [/^Đáp án: (.*)$/, "Answer: $1"], [/^Chọn nhóm cho (.*)$/, "Choose a group for $1"]];
+function trNode(n){
+  var s = n.nodeValue, k = s.trim(); if (!k) return;
+  var r = UI_EN[k]; if (r == null) UI_RE.some(function(p){ if (p[0].test(k)) { r = k.replace(p[0], p[1]); return true; } });
+  if (r != null && r !== k) n.nodeValue = s.replace(k, r);
+}
+function trTree(root){
+  if (root.nodeType === 3) { if (!root.parentNode || !root.parentNode.closest(".sn-box")) trNode(root); return; }
+  if (root.nodeType !== 1 || root.closest(".sn-box")) return;
+  var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), n, a = [];
+  while ((n = tw.nextNode())) if (!n.parentNode.closest(".sn-box")) a.push(n);
+  a.forEach(trNode);
+  root.querySelectorAll("[aria-label],[title]").forEach(function(e){ ["aria-label","title"].forEach(function(at){ var v = e.getAttribute(at); if (v) UI_RE.forEach(function(p){ if (p[0].test(v)) e.setAttribute(at, v.replace(p[0], p[1])); }); }); });
+}
+var HD = {};
+function hdKey(id){ return "song-ngu-hd:" + location.pathname.replace(/index.html$/, "") + ":" + id; }
+function hdLang(id){ var v = lsGet(hdKey(id)); return v === "en" || v === "vi" ? v : (window.SONG_NGU_MAC_DINH === "en" ? "en" : "vi"); }
+
+function hoatDong(o){
+  var L = hdLang(o.id); HD[o.id] = L;
+  var LS = window.LESSON;
+  if (L === "en" && LS) {
+    Object.keys(o.tasks || {}).forEach(function(tid){
+      var t = LS.TASKS && LS.TASKS[tid], e = o.tasks[tid]; if (!t) return;
+      ["label","q","k","ph"].forEach(function(f){ if (e[f] != null) t[f] = e[f]; });
+      if (e.cats) t.cats = e.cats.slice();
+      if (e.o) t.o = e.o.slice();
+      if (e.items && t.items) e.items.forEach(function(nm, i){ if (t.items[i]) t.items[i] = [nm].concat(t.items[i].slice(1)); });
+    });
+    var NX = LS.NX_MAU; if (NX && o.nx) Object.keys(o.nx).forEach(function(tid){ NX[tid] = o.nx[tid]; });
+  }
+  function setup(){
+    var act = document.querySelector('[data-sn-hd="' + o.id + '"]') || document.getElementById(o.id); if (!act) return;
+    act.classList.add("sn-act"); act.classList.toggle("sn-act-en", L === "en"); act.setAttribute("lang", L);
+    var tag = act.querySelector(".act-tag");
+    var sw = document.createElement("span"); sw.className = "sn-lang sn-lang-sm"; sw.setAttribute("role", "group"); sw.setAttribute("aria-label", "Ngôn ngữ dạy / Teaching language");
+    sw.innerHTML = '<button type="button" data-l="vi" aria-pressed="' + (L === "vi") + '">Tiếng Việt</button><button type="button" data-l="en" aria-pressed="' + (L === "en") + '">English</button>';
+    sw.addEventListener("click", function(e){ var b = e.target.closest("button"); if (!b || b.dataset.l === L) return; lsSet(hdKey(o.id), b.dataset.l); stop(); lsSet("song-ngu-cuon", o.id); location.reload(); });
+    if (tag) tag.appendChild(sw); else act.insertBefore(sw, act.firstChild);
+    if (lsGet("song-ngu-cuon") === o.id) { lsSet("song-ngu-cuon", ""); setTimeout(function(){ act.scrollIntoView({block: "start"}); }, 400); }
+    act.querySelectorAll("[data-en]").forEach(function(e){ if (L === "en") e.innerHTML = e.getAttribute("data-en"); });
+    if (L !== "en") return;
+    trTree(act);
+    new MutationObserver(function(rs){ rs.forEach(function(r){ if (r.type === "characterData") trNode(r.target); else r.addedNodes.forEach(trTree); }); })
+      .observe(act, {childList: true, subtree: true, characterData: true});
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", setup); else setup();
+}
+
 window.SongNgu = function(el, d){
   if (!el) return;
   var key = "song-ngu:" + location.pathname + ":" + (el.id || "");
   var L = lsGet(key); if (L !== "en" && L !== "vi") L = window.SONG_NGU_MAC_DINH === "en" ? "en" : "vi";
+  if (d.theo) L = HD[d.theo] || hdLang(d.theo);   /* đi theo công tắc của hoạt động */
   el.classList.add("sn-box", "no-ta");
+  if (d.theo) el.classList.add("sn-in-act");
 
   function wordOf(w){ return L === "en" ? w.en : w.vi; }
   function tagOf(k){ var n = (d.nhom || {})[k]; return n ? pickL(n, L) : k; }
@@ -88,7 +150,7 @@ window.SongNgu = function(el, d){
   function render(){
     stop();
     var t = T[L], h = '<div class="sn-head"><div class="sn-tt"><b>' + esc(pickL(d.tieuDe, L)) + '</b><small>' + t.sub + '</small></div>'
-      + '<div class="sn-lang" role="group" aria-label="Ngôn ngữ dạy / Teaching language"><button type="button" data-l="vi" aria-pressed="' + (L === "vi") + '">Tiếng Việt</button><button type="button" data-l="en" aria-pressed="' + (L === "en") + '">English</button></div></div>'
+      + (d.theo ? "" : '<div class="sn-lang" role="group" aria-label="Ngôn ngữ dạy / Teaching language"><button type="button" data-l="vi" aria-pressed="' + (L === "vi") + '">Tiếng Việt</button><button type="button" data-l="en" aria-pressed="' + (L === "en") + '">English</button></div>') + '</div>'
       + '<div class="sn-body" lang="' + L + '"><div class="sn-bar"><button type="button" class="btn sn-all">' + SPK + t.all + '</button><button type="button" class="btn sn-stop" hidden>' + t.stop + '</button>'
       + '<label class="sn-rate">' + t.speed + ' <select><option value="0.75"' + (rate === 0.75 ? " selected" : "") + '>' + t.slow + '</option><option value="1"' + (rate === 1 ? " selected" : "") + '>' + t.mid + '</option><option value="1.2"' + (rate === 1.2 ? " selected" : "") + '>' + t.fast + '</option></select></label></div>';
     if (d.moDau) h += '<div class="sn-intro sn-say" data-i="-1"><button type="button" class="sn-spk" aria-label="🔊">' + SPK + '</button><p class="sn-txt">' + esc(pickL(d.moDau, L)) + '</p></div>';
@@ -193,6 +255,7 @@ window.SongNgu = function(el, d){
   }
   render();
 };
+window.SongNgu.hoatDong = hoatDong;
 
 var css = document.createElement("style");
 css.textContent = ""
@@ -220,6 +283,8 @@ css.textContent = ""
 + ".sn-qi{border:1px solid var(--line,#cde3e0);border-radius:12px;padding:10px 12px;margin-top:10px}.sn-qi.ok{border-color:var(--ok,#15803d);background:var(--ok-soft,#dcf3e3)}.sn-qi.bad{border-color:var(--bad,#b91c1c)}"
 + ".sn-qspk{width:34px;height:34px}.sn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.sn-in{flex:1;min-width:160px;font:inherit;font-size:17px;padding:8px 10px;border:2px solid var(--line,#cde3e0);border-radius:10px;background:var(--surface,#fff);color:var(--fg,#1c2a29)}.sn-in:focus{outline:none;border-color:var(--info,#1d4ed8)}"
 + ".sn-fb{margin:6px 0 0;font-size:15px}.sn-fb.ok{color:var(--ok,#15803d)}.sn-fb.bad{color:var(--bad,#b91c1c)}"
++ ".sn-lang-sm{margin-left:auto;vertical-align:middle}.sn-lang-sm button{padding:4px 10px;font-size:13px}.act-tag:has(.sn-lang-sm){display:flex;flex-wrap:wrap;align-items:center;gap:8px}"
++ ".sn-act-en{outline:2px solid var(--info,#1d4ed8);outline-offset:4px;border-radius:12px}.sn-in-act{border-width:1px;margin-top:14px}"
 + "@media(max-width:520px){.sn-grid{grid-template-columns:1fr}}@media print{.sn-bar,.sn-game,.sn-spk,.sn-lang{display:none}}";
 document.head.appendChild(css);
 })();
