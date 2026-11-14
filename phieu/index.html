@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Phiếu học tập</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#eef2f1; --paper:#fff; --fg:#111; --muted:#555; --line:#bbb; --accent:#0f7a6c; --key:#fdf2d3;
+  --font-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--font-body)}
+.tools{position:sticky;top:0;z-index:5;background:#0f7a6c;color:#fff;padding:10px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tools a{color:#fff}
+.tools select,.tools label{font:inherit;font-size:14px}
+.tools select{max-width:100%;padding:5px 8px;border-radius:8px;border:0}
+.tools button{font:600 14px var(--font-body);border:0;border-radius:8px;padding:6px 12px;cursor:pointer;background:#fff;color:#0f7a6c}
+.page{max-width:800px;margin:16px auto;background:var(--paper);padding:28px 32px;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+@media (max-width:600px){.page{padding:18px 16px;margin:0}}
+.head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start;border-bottom:2px solid #111;padding-bottom:10px}
+.head h1{font-size:20px;margin:2px 0 6px;line-height:1.3}
+.blank{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
+.blank span{flex:1;min-width:150px;border-bottom:1px dotted #333;padding-bottom:2px}
+.qr{display:flex;gap:10px;text-align:center;font-size:11px;color:var(--muted)}
+.qr svg{width:92px;height:92px;display:block}
+.cau{margin:16px 0 0;break-inside:avoid}
+.cau .so{font-weight:700}
+.opts{list-style:none;padding:0;margin:6px 0 0 6px;display:grid;gap:3px}
+.opts li::before{content:"☐ ";font-size:16px}
+table{border-collapse:collapse;width:100%;margin-top:6px;font-size:14px}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:left;vertical-align:top}
+th{background:#f3f3f3}
+td.o{width:56px;text-align:center}
+.lines{margin-top:6px}
+.lines div{border-bottom:1px dotted #777;height:26px}
+.key{display:none;margin-top:6px;background:var(--key);border-left:4px solid #b45309;padding:6px 10px;font-size:14px}
+.dapan .key{display:block}
+.sm{font-size:12.5px;color:var(--muted)}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+@media print{body{background:#fff}.tools{display:none}.page{box-shadow:none;margin:0;max-width:none;padding:0}@page{margin:14mm 14mm}}
+</style>
+</head>
+<body>
+<div class="tools">
+  <a href="../">← Mục lục</a>
+  <select id="bai" aria-label="Chọn bài"></select>
+  <label><input type="checkbox" id="tl" checked> Câu tự luận</label>
+  <label><input type="checkbox" id="da"> Kèm đáp án (bản giáo viên)</label>
+  <button type="button" onclick="print()">🖨️ In phiếu</button>
+</div>
+<div class="page" id="page"></div>
+<script src="../danh-muc.js?v=1"></script>
+<script src="../on-tap/ngan-hang.js?v=2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const NH = window.NGAN_HANG || {}, L = "ABCDEFGH";
+const BAI = [];
+window.CHUONG_TRINH.forEach(Lp => Lp.chuDe.forEach(cd => cd.bai.forEach(b => { if (NH[b.repo] && NH[b.repo].cau.length) BAI.push(b); })));
+const qs = new URLSearchParams(location.search);
+let cur = qs.get("bai") && NH[qs.get("bai")] ? qs.get("bai") : (BAI[0] && BAI[0].repo);
+$("bai").innerHTML = [6, 7, 8, 9].map(l => '<optgroup label="Tin ' + l + '">' + BAI.filter(b => b.lop === l).map(b => '<option value="' + b.repo + '">Tin ' + l + " · Bài " + esc(b.so) + ". " + esc(b.ten) + "</option>").join("") + "</optgroup>").join("");
+$("bai").value = cur;
+
+function qr(url){
+  try { const q = qrcode(0, "M"); q.addData(url); q.make(); return q.createSvgTag({cellSize: 3, margin: 0, scalable: true}); }
+  catch (e) { return '<div style="width:92px;height:92px;border:1px dashed #999;display:grid;place-items:center">QR</div>'; }
+}
+function dong(n){ return '<div class="lines">' + "<div></div>".repeat(n) + "</div>"; }
+function ve(){
+  const b = BAI.find(x => x.repo === cur), n = NH[cur];
+  if (!b || !n) { $("page").innerHTML = '<p class="empty">Chưa có câu hỏi.</p>'; return; }
+  history.replaceState(null, "", "?bai=" + cur);
+  document.title = "Phiếu học tập – Tin " + b.lop + " Bài " + b.so;
+  const urlHS = new URL("../" + b.url, location.href).href, urlOT = new URL("../on-tap/?bai=" + b.repo, location.href).href;
+  const ds = n.cau.filter(c => $("tl").checked || c.type !== "open");
+  let h = '<div class="head"><div><div class="sm">PHIẾU HỌC TẬP · TIN HỌC ' + b.lop + "</div><h1>" + esc(n.ten) + "</h1>"
+    + '<div class="blank"><span>Họ và tên:</span><span style="flex:.45;min-width:90px">Lớp:</span><span style="flex:.45;min-width:90px">Ngày:</span></div></div>'
+    + '<div class="qr"><div>' + qr(urlHS) + "Làm bài trên máy</div><div>" + qr(urlOT) + "Ôn tập</div></div></div>";
+  ds.forEach((c, i) => {
+    h += '<div class="cau"><div><span class="so">Câu ' + (i + 1) + ".</span> " + c.q + "</div>";
+    if (c.type === "mcq") h += '<ul class="opts">' + c.o.map((o, k) => "<li><b>" + L[k] + ".</b> " + o + "</li>").join("") + "</ul>";
+    else if (c.type === "sort") h += "<table><thead><tr><th>Nội dung</th>" + c.cats.map(t => '<th class="o">' + esc(t) + "</th>").join("") + "</tr></thead><tbody>"
+      + c.items.map(it => "<tr><td>" + it[0] + "</td>" + c.cats.map(() => '<td class="o">☐</td>').join("") + "</tr>").join("") + "</tbody></table>";
+    else if (c.type === "match") h += '<table><tbody><tr><th>Cột A</th><th class="o">Ghép</th><th>Cột B</th></tr>'
+      + c.items.map((it, j) => "<tr><td>" + it[0] + '</td><td class="o">……</td><td>' + (c.opts[j] || "") + "</td></tr>").join("")
+      + c.opts.slice(c.items.length).map(o => '<tr><td></td><td class="o"></td><td>' + o + "</td></tr>").join("") + "</tbody></table>";
+    else if (c.type === "order") h += '<p class="sm" style="margin:4px 0 0">Ghi số thứ tự 1, 2, 3… vào ô.</p><table><tbody>'
+      + (c.start || Object.keys(c.items)).map(k => '<tr><td class="o">☐</td><td>' + c.items[k] + "</td></tr>").join("") + "</tbody></table>";
+    else h += dong(4);
+    let dap = "";
+    if (c.type === "mcq" && !/^(<b>)?[A-H]/.test(c.k || "")) dap = "<b>Đáp án: " + L[c.a] + ".</b> ";
+    else if (c.type === "order") dap = "<b>Thứ tự đúng:</b> " + c.ans.map(k => c.items[k]).join(" → ") + ". ";
+    else if (c.type === "sort") dap = "<b>Đáp án:</b> " + c.items.map(it => it[0].split(/[.)]/)[0] + " → " + c.cats[it[1]]).join("; ") + ". ";
+    else if (c.type === "match") dap = "<b>Đáp án:</b> " + c.items.map(it => it[0].split(")")[0] + "–" + ((c.opts[it[1] - 1] || "").split(")")[0])).join(", ") + ". ";
+    if (dap || c.k) h += '<div class="key">' + dap + (c.k || "") + "</div>";
+    h += "</div>";
+  });
+  h += '<p class="sm" style="margin-top:20px">Quét mã QR bên trên để làm bài trên máy hoặc điện thoại, hoặc để ôn tập ở nhà.</p>';
+  $("page").innerHTML = h;
+  $("page").classList.toggle("dapan", $("da").checked);
+}
+$("bai").onchange = e => { cur = e.target.value; ve(); };
+$("tl").onchange = ve; $("da").onchange = ve;
+ve();
+})();
+</script>
+<script src="../chung/sw-dk.js?v=1"></script>
+</body>
+</html>

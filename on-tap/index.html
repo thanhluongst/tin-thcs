@@ -102,7 +102,7 @@ select{font:inherit;padding:7px 10px;border-radius:10px;border:1px solid var(--l
 </main>
 <script src="../danh-muc.js?v=1"></script>
 <script src="../chung/nls-atm.js?v=1"></script>
-<script src="ngan-hang.js?v=1"></script>
+<script src="ngan-hang.js?v=2"></script>
 <script>
 (function(){
 "use strict";
@@ -112,6 +112,7 @@ const put = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catc
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const tron = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const NH = window.NGAN_HANG || {};
+Object.values(NH).forEach(n => n.cau = n.cau.filter(c => c.type !== "open"));   /* câu tự luận chỉ dùng cho phiếu in */
 const KQ = get("ontap-v1", {});
 
 /* Bài theo danh mục, chỉ bài có câu hỏi hoặc thẻ */
@@ -253,5 +254,6 @@ function veThe(lat){
 veChon();
 })();
 </script>
+<script src="../chung/sw-dk.js?v=1"></script>
 </body>
 </html>

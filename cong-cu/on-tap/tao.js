@@ -1,4 +1,4 @@
-/* Gom câu tự chấm (mcq, sort, match, order) và khái niệm (CONCEPTS) của mọi bài thành on-tap/ngan-hang.js
+/* Gom câu hỏi (tự chấm: mcq, sort, match, order; tự luận: open – chỉ dùng cho phiếu in) và khái niệm (CONCEPTS) của mọi bài thành on-tap/ngan-hang.js
    Chạy: node cong-cu/on-tap/tao.js   (từ thư mục tin-thcs). Chạy lại mỗi khi sửa content.js của bài. */
 "use strict";
 const fs = require("fs"), path = require("path"), vm = require("vm");
@@ -19,12 +19,13 @@ for (const d of fs.readdirSync(goc).sort()) {
     else if (t.type === "sort") Object.assign(c, {cats: t.cats, items: t.items});
     else if (t.type === "match") Object.assign(c, {items: t.items, opts: t.opts});
     else if (t.type === "order") Object.assign(c, {items: t.items, ans: t.ans, start: t.start});
+    else if (t.type === "open") c.label = t.label || "";
     else continue;
     cau.push(c);
   }
   const the = Object.values(L.CONCEPTS || {}).filter(c => !c.ghi && c.t && c.b).map(c => ({t: c.t, b: c.b}));
   out[d] = {id: L.id, ten: L.title, cau, the};
-  nCau += cau.length; nThe += the.length;
+  nCau += cau.filter(c => c.type !== "open").length; nThe += the.length;
 }
 fs.writeFileSync(path.join(goc, "on-tap", "ngan-hang.js"),
   "/* SINH TỰ ĐỘNG bởi cong-cu/on-tap/tao.js – đừng sửa tay. */\nwindow.NGAN_HANG = " + JSON.stringify(out) + ";\n");

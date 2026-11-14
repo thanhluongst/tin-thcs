@@ -293,7 +293,7 @@ function renderTabs(){
 }
 function lessonRow(b){
   const links = b.tt === "dang"
-    ? '<a href="' + esc(b.url) + '" target="_blank" rel="noopener">Học sinh</a><a href="' + esc(b.url) + 'giaovien.html" target="_blank" rel="noopener">Giáo viên</a>' : "";
+    ? '<a href="' + esc(b.url) + '" target="_blank" rel="noopener">Học sinh</a><a href="' + esc(b.url) + 'giaovien.html" target="_blank" rel="noopener">Giáo viên</a><a href="phieu/?bai=' + esc(b.repo) + '" target="_blank" rel="noopener" title="Phiếu học tập in giấy, có mã QR">Phiếu in</a>' : "";
   return '<div class="lesson"><span class="num">' + esc(b.so) + '</span><span class="title">' + esc(b.ten) + "</span>"
     + '<span class="links">' + links + '<span class="badge b-' + b.tt + '">' + TT[b.tt] + "</span></span>"
     + '<span class="meta"><span>Thư mục <code>' + esc(b.repo) + '</code></span><span>id <code>' + esc(b.id) + "</code></span>"
@@ -595,5 +595,6 @@ render();
 if (ss("hub-pin")) loadTK(ss("hub-pin"));
 })();
 </script>
+<script src="chung/sw-dk.js?v=1"></script>
 </body>
 </html>
