@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Đấu trường Sắp xếp · Tin học 7</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<script src="../chung/config.js"></script>
+<style>
+/* Layout: thanh điểm cố định trên, 3 tab trò chơi, mỗi trò là một "bàn chơi" lớn ở giữa */
+:root{
+  --bg:#eef3f8; --panel:#ffffff; --fg:#14213d; --muted:#5b6b85; --line:#d3dce8;
+  --accent:#1b6fe0; --accent-ink:#ffffff; --good:#14915a; --bad:#d23b3b; --warn:#e8a317; --chip:#e3ecf8;
+  --display:"Be Vietnam Pro",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1626; --panel:#16213a; --fg:#e6edf8; --muted:#94a3bd; --line:#2a3858;
+  --accent:#5b9cff; --accent-ink:#0b1220; --good:#3ccf8a; --bad:#ff6b6b; --warn:#ffc24b; --chip:#1f2d4b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1626; --panel:#16213a; --fg:#e6edf8; --muted:#94a3bd; --line:#2a3858;
+  --accent:#5b9cff; --accent-ink:#0b1220; --good:#3ccf8a; --bad:#ff6b6b; --warn:#ffc24b; --chip:#1f2d4b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--display);font-size:16px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px}
+.wrap{max-width:960px;margin:0 auto;display:grid;gap:16px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+h1{margin:0;font-size:1.6rem;font-weight:800;text-wrap:balance}
+.sub{color:var(--muted);font-size:.9rem}
+.score{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.score input{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg);width:180px}
+.pts{font-family:var(--mono);font-weight:700;font-size:1.3rem;background:var(--accent);color:var(--accent-ink);padding:6px 14px;border-radius:8px;font-variant-numeric:tabular-nums}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav button{flex:1 1 180px}
+button{font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--fg);padding:10px 14px;border-radius:10px}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button.on,button.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:disabled{opacity:.45;cursor:default}
+.board{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:16px;min-height:380px}
+.board h2{margin:0;font-size:1.2rem}
+.hint{color:var(--muted);margin:0}
+.q{font-size:1.35rem;font-weight:600;min-height:3.2em}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.big{font-size:1.2rem;padding:16px 28px;min-width:140px}
+.timer{height:10px;background:var(--chip);border-radius:6px;overflow:hidden}
+.timer i{display:block;height:100%;background:var(--warn);transition:width .1s linear}
+.msg{min-height:1.6em;font-weight:600;text-align:center}
+.ok{color:var(--good)} .no{color:var(--bad)}
+.cards{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.card{width:64px;height:80px;border-radius:10px;border:2px solid var(--line);background:var(--chip);display:grid;place-items:center;
+  font-family:var(--mono);font-weight:700;font-size:1.5rem;transition:transform .25s}
+.card.cmp{border-color:var(--warn);transform:translateY(-8px)}
+.card.done{background:var(--good);color:var(--accent-ink);border-color:var(--good)}
+.card.out{opacity:.3}
+.card.btn{cursor:pointer}
+.card small{font-size:.65rem;color:var(--muted);font-weight:500}
+.stat{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-family:var(--mono);color:var(--muted)}
+@media (max-width:480px){.card{width:44px;height:60px;font-size:1.1rem}}
+@media (prefers-reduced-motion:reduce){.card,.timer i{transition:none}}
+
+.xh{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.xh h2{margin:0 0 8px;font-size:1.1rem}
+.xh ol{margin:0;padding-left:1.6em;display:grid;gap:4px;font-variant-numeric:tabular-nums}
+.xh li b{font-family:var(--mono);float:right}
+.xh li.toi{color:var(--accent);font-weight:700}
+.chieu .xh ol{font-size:1.8rem;gap:10px}
+.trang-thai{font-size:.85rem;color:var(--muted)}
+.foot{color:var(--muted);font-size:.85rem;text-align:center}
+.foot a{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div><h1>Đấu trường Sắp xếp</h1><div class="sub">Tin học 7 · Sắp xếp nổi bọt và tìm kiếm nhị phân</div></div>
+    <div class="score"><input id="lop" placeholder="Lớp (vd 7A1)" style="width:120px"><input id="ten" placeholder="Họ tên của em"><span class="pts" id="pts">0 điểm</span></div>
+  </header>
+  <nav>
+    <button id="t1" class="on">1. Đúng hay Sai?</button>
+    <button id="t2">2. Thợ nổi bọt</button>
+    <button id="t3">3. Thám tử nhị phân</button>
+  </nav>
+  <section class="board" id="board"></section>
+  <section class="xh" id="xh"><h2>Bảng xếp hạng lớp <span id="xhlop"></span></h2><ol id="xhds"><li>Nhập lớp và họ tên để vào bảng xếp hạng.</li></ol><div class="trang-thai" id="tt"></div></section>
+  <div class="foot"><a href="./">← Về bài Thuật toán sắp xếp</a> · Giáo viên chiếu bảng xếp hạng: thêm <b>?xh=7A1</b> vào cuối địa chỉ</div>
+</div>
+
+<script>
+let diem=0;const B=document.getElementById('board');
+const cong=n=>{diem+=n;document.getElementById('pts').textContent=diem+' điểm';guiDiem()};
+const tabs=['t1','t2','t3'];let stopTimer=null;
+tabs.forEach((id,i)=>document.getElementById(id).onclick=()=>{tabs.forEach(t=>document.getElementById(t).classList.toggle('on',t===id));[game1,game2,game3][i]()});
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+
+/* ===== Trò 1: Đúng/Sai tốc độ ===== */
+const CAU=[
+["Sắp xếp nổi bọt so sánh hai phần tử đứng cạnh nhau.",1],
+["Sau mỗi vòng sắp xếp nổi bọt (tăng dần), số lớn nhất còn lại được đưa về cuối dãy.",1],
+["Tìm kiếm nhị phân dùng được cho mọi dãy, kể cả dãy chưa sắp xếp.",0],
+["Tìm kiếm tuần tự kiểm tra lần lượt từng phần tử từ đầu dãy.",1],
+["Mỗi bước tìm kiếm nhị phân loại bỏ khoảng một nửa dãy.",1],
+["Sắp xếp nổi bọt đổi chỗ hai số kể cả khi chúng đã đúng thứ tự.",0],
+["Với dãy 1000 phần tử đã sắp xếp, tìm kiếm nhị phân cần tối đa khoảng 10 bước.",1],
+["Sắp xếp chọn tìm phần tử nhỏ nhất rồi đưa về đầu phần chưa sắp xếp.",1],
+["Chia bài toán lớn thành bài toán nhỏ hơn giúp giải quyết dễ dàng hơn.",1],
+["Tìm kiếm nhị phân luôn nhanh hơn tuần tự kể cả khi dãy chỉ có 1 phần tử.",0]];
+function game1(){
+  if(stopTimer)stopTimer();
+  const ds=shuffle(CAU.slice());let k=0,dung=0;
+  B.innerHTML=`<h2>Đúng hay Sai?</h2><p class="hint">Mỗi câu có 10 giây. Trả lời càng nhanh càng nhiều điểm.</p>
+  <div class="timer"><i id="bar"></i></div><div class="q" id="q"></div>
+  <div class="row"><button class="big" id="bD">ĐÚNG</button><button class="big" id="bS">SAI</button></div>
+  <div class="msg" id="m"></div><div class="stat" id="st"></div>`;
+  let t0,iv,lock;
+  const show=()=>{
+    if(k>=ds.length){B.querySelector('.q').textContent=`Hoàn thành! Em đúng ${dung}/${ds.length} câu.`;bD.disabled=bS.disabled=true;
+      B.insertAdjacentHTML('beforeend','<div class="row"><button class="pri" id="lai">Chơi lại</button></div>');lai.onclick=game1;return}
+    lock=false;q.textContent=`Câu ${k+1}: `+ds[k][0];m.textContent='';t0=Date.now();
+    st.textContent=`Đúng ${dung} · Câu ${k+1}/${ds.length}`;
+    clearInterval(iv);iv=setInterval(()=>{const c=10-(Date.now()-t0)/1000;bar.style.width=Math.max(0,c*10)+'%';if(c<=0)tl(-1)},100)};
+  const tl=v=>{if(lock)return;lock=true;clearInterval(iv);
+    const c=Math.max(0,10-(Date.now()-t0)/1000);
+    if(v===ds[k][1]){dung++;const p=50+Math.round(c*5);cong(p);m.className='msg ok';m.textContent=`Chính xác! +${p}`}
+    else{m.className='msg no';m.textContent=(v<0?'Hết giờ! ':'Chưa đúng. ')+'Đáp án: '+(ds[k][1]?'ĐÚNG':'SAI')}
+    k++;setTimeout(show,1400)};
+  bD.onclick=()=>tl(1);bS.onclick=()=>tl(0);stopTimer=()=>clearInterval(iv);show();
+}
+
+/* ===== Trò 2: Thợ nổi bọt ===== */
+function game2(){
+  if(stopTimer)stopTimer();
+  let a=shuffle([3,8,1,9,5,2]).slice(),n=a.length,vong=0,i=0,sai=0,doi=0;
+  B.innerHTML=`<h2>Thợ nổi bọt</h2><p class="hint">Sắp xếp dãy <b>tăng dần</b>. Hai thẻ được nâng lên đang được so sánh: số bên trái lớn hơn thì <b>Đổi chỗ</b>, ngược lại thì <b>Giữ nguyên</b>.</p>
+  <div class="cards" id="c"></div>
+  <div class="row"><button class="big pri" id="bd">Đổi chỗ</button><button class="big" id="bg">Giữ nguyên</button></div>
+  <div class="msg" id="m"></div><div class="stat" id="st"></div>`;
+  const ve=()=>{c.innerHTML=a.map((v,j)=>`<div class="card ${j>=n-vong?'done':''} ${j===i||j===i+1?'cmp':''}">${v}</div>`).join('');
+    st.textContent=`Vòng ${vong+1} · Số lần đổi chỗ ${doi} · Sai ${sai}`};
+  const chon=muonDoi=>{
+    const can=a[i]>a[i+1];
+    if(muonDoi!==can){sai++;m.className='msg no';m.textContent=can?`${a[i]} > ${a[i+1]} nên phải đổi chỗ!`:`${a[i]} < ${a[i+1]} đã đúng thứ tự, giữ nguyên!`;ve();return}
+    if(can){[a[i],a[i+1]]=[a[i+1],a[i]];doi++}
+    cong(20);m.className='msg ok';m.textContent=can?'Đổi chỗ đúng! +20':'Giữ nguyên đúng! +20';
+    i++;if(i>=n-vong-1){vong++;i=0;m.textContent+=` · Hết vòng ${vong}: số ${a[n-vong]} đã "nổi" về đúng chỗ.`}
+    if(vong>=n-1){vong=n;i=-5;ve();const th=Math.max(0,100-sai*20);cong(th);
+      m.className='msg ok';m.textContent=`Dãy đã sắp xếp xong! Thưởng hoàn thành +${th}`;bd.disabled=bg.disabled=true;
+      B.insertAdjacentHTML('beforeend','<div class="row"><button class="pri" id="lai">Dãy mới</button></div>');lai.onclick=game2;return}
+    ve()};
+  bd.onclick=()=>chon(true);bg.onclick=()=>chon(false);ve();
+}
+
+/* ===== Trò 3: Thám tử nhị phân ===== */
+function game3(){
+  if(stopTimer)stopTimer();
+  const s=new Set();while(s.size<15)s.add(1+Math.random()*99|0);
+  const a=[...s].sort((x,y)=>x-y),x=a[Math.random()*15|0];
+  let lo=0,hi=14,buoc=0,mo=new Set();
+  B.innerHTML=`<h2>Thám tử nhị phân</h2><p class="hint">15 thẻ úp chứa các số đã <b>sắp xếp tăng dần</b>. Hãy tìm số <b style="font-family:var(--mono);font-size:1.3em">${x}</b>. Thám tử giỏi luôn mở thẻ <b>ở giữa</b> vùng còn lại.</p>
+  <div class="cards" id="c"></div><div class="msg" id="m"></div><div class="stat" id="st"></div>`;
+  const ve=()=>{c.innerHTML=a.map((v,j)=>`<div class="card btn ${j<lo||j>hi?'out':''} ${mo.has(j)&&v===x?'done':''}" data-j="${j}">${mo.has(j)?v:'?'}<small>${j+1}</small></div>`).join('');
+    st.textContent=`Số bước ${buoc} · Tối đa cần 4 bước`;
+    c.querySelectorAll('.card').forEach(el=>el.onclick=()=>chon(+el.dataset.j))};
+  const chon=j=>{
+    if(j<lo||j>hi||lo>hi)return;
+    const mid=(lo+hi)>>1;
+    if(j!==mid&&j!==((lo+hi+1)>>1)){m.className='msg no';m.textContent=`Chưa phải thẻ ở giữa! Vùng còn lại từ thẻ ${lo+1} đến ${hi+1}, hãy chọn thẻ số ${mid+1}.`;return}
+    buoc++;mo.add(j);cong(30);
+    if(a[j]===x){lo=hi=j;ve();const th=Math.max(0,(5-buoc)*40);cong(th);m.className='msg ok';
+      m.textContent=`Tìm thấy ${x} sau ${buoc} bước! Thưởng +${th}`;
+      B.insertAdjacentHTML('beforeend','<div class="row"><button class="pri" id="lai">Ván mới</button></div>');lai.onclick=game3;return}
+    m.className='msg ok';
+    if(a[j]<x){m.textContent=`${a[j]} < ${x} nên loại bỏ nửa bên trái. +30`;lo=j+1}
+    else{m.textContent=`${a[j]} > ${x} nên loại bỏ nửa bên phải. +30`;hi=j-1}
+    ve()};
+  ve();
+}
+/* ===== Bảng xếp hạng (Firebase RTDB: xh/<bài>/<lớp_ngày>/<tên> = {n,d,t}) ===== */
+const FB=String((window.APP_CONFIG||{}).FIREBASE_URL||"").replace(/\/+$/,"");
+const BAI="tin7-sap-xep";
+const k=s=>String(s).trim().replace(/[.#$\[\]\/%]/g,"_").slice(0,38);
+const ngay=new Date().toISOString().slice(0,10);
+const nhom=l=>k(l.toUpperCase())+"_"+ngay;
+const ten=document.getElementById('ten'),lop=document.getElementById('lop'),tt=document.getElementById('tt');
+try{ten.value=localStorage.getItem('xh-ten')||'';lop.value=localStorage.getItem('xh-lop')||''}catch(e){}
+let hen;
+function guiDiem(){clearTimeout(hen);hen=setTimeout(async()=>{
+  const n=ten.value.trim(),l=lop.value.trim();if(!FB||!n||!l)return;
+  try{localStorage.setItem('xh-ten',n);localStorage.setItem('xh-lop',l)}catch(e){}
+  try{const r=await fetch(FB+"/xh/"+BAI+"/"+encodeURIComponent(nhom(l))+"/"+encodeURIComponent(k(n))+".json",{method:"PUT",body:JSON.stringify({n:n.slice(0,40),d:diem,t:Date.now()})});
+    tt.textContent=r.ok?"Đã gửi điểm lên bảng xếp hạng.":"Chưa gửi được điểm (bảng xếp hạng chưa được bật).";}catch(e){tt.textContent="Mất kết nối, điểm sẽ gửi lại ở lần cộng điểm sau."}
+  taiXH()},600)}
+async function taiXH(lopXem){
+  const l=lopXem||lop.value.trim();if(!FB||!l)return;
+  document.getElementById('xhlop').textContent=l.toUpperCase();
+  try{const r=await fetch(FB+"/xh/"+BAI+"/"+encodeURIComponent(nhom(l))+".json");if(!r.ok)return;
+    const v=await r.json()||{};const ds=Object.values(v).sort((a,b)=>b.d-a.d).slice(0,lopXem?15:10);
+    const toi=ten.value.trim();
+    document.getElementById('xhds').innerHTML=ds.length?ds.map(x=>`<li class="${x.n===toi?'toi':''}">${String(x.n).replace(/[<&]/g,'')} <b>${x.d}</b></li>`).join(''):'<li>Chưa có ai. Hãy là người đầu tiên!</li>'}catch(e){}}
+[ten,lop].forEach(el=>el.addEventListener('change',()=>{guiDiem();taiXH()}));
+const xem=new URLSearchParams(location.search).get('xh');
+if(xem){document.body.classList.add('chieu');['board'].forEach(id=>document.getElementById(id).hidden=true);
+  document.querySelector('nav').hidden=true;document.querySelector('.score').hidden=true;
+  taiXH(xem);setInterval(()=>taiXH(xem),2000)}
+else{taiXH();setInterval(()=>taiXH(),5000)}
+game1();
+</script>
+
+</body>
+</html>

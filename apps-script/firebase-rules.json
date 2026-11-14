@@ -25,6 +25,17 @@
           }
         }
       }
+    },
+    "xh": {
+      "$bai": {
+        "$lop": {
+          ".read": true,
+          "$hs": {
+            ".write": true,
+            ".validate": "$hs.length < 40 && newData.hasChildren(['n', 'd', 't']) && newData.child('d').isNumber() && newData.child('d').val() < 100000 && newData.child('n').isString() && newData.child('n').val().length <= 40"
+          }
+        }
+      }
     }
   }
 }
