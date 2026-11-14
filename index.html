@@ -100,6 +100,7 @@ header{border-bottom:6px solid var(--accent)}
 .btn.ghost{background:transparent;color:var(--accent)}
 .tk-msg{font-size:14px;color:var(--muted);margin:8px 0 0}
 .tk-msg.bad{color:#b42318}
+#nx{margin:12px 0;border:1.5px solid var(--accent);border-radius:14px;padding:12px 14px;background:var(--accent-soft)}#nx .nx-it{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;padding:10px 0;border-top:1px solid var(--line)}#nx .nx-it:first-of-type{border-top:0}#nx textarea{width:100%;font:inherit;font-size:14.5px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);color:var(--fg);resize:vertical;min-height:62px}#nx .nx-h{display:flex;gap:8px;align-items:center;flex-wrap:wrap}#nx .nx-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:6px 0 4px}
 .ho-tro{margin:14px 0;border:1.5px solid #dc2626;border-radius:14px;padding:10px 14px;background:rgba(220,38,38,.05)}.ho-tro>summary{cursor:pointer;font-weight:700}.ho-tro .sm{font-weight:400}.ht-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px 18px;margin-top:10px}.ht-grid h3{margin:0 0 4px;font-size:15px}.ht-grid ul{margin:0;padding-left:18px}.ht-grid li{margin:2px 0}.ht-grid p{margin:6px 0 0}
 .tk-sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
 @media (max-width:640px){.tk-sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -219,7 +220,8 @@ header{border-bottom:6px solid var(--accent)}
   <section class="tk" id="hs" aria-labelledby="hs-h" hidden>
     <div class="tk-head">
       <h2 id="hs-h">Tiến độ và xếp hạng học sinh</h2>
-      <button class="btn ghost" id="hs-csv" type="button">Tải CSV</button>
+      <span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn ghost" id="nx-mo" type="button" aria-expanded="false">📝 Nhận xét TT 22</button>
+<button class="btn ghost" id="hs-csv" type="button">Tải CSV</button></span>
     </div>
     <div class="hs-tools">
       <label class="sm" for="hs-lop">Lớp</label><select id="hs-lop"></select>
@@ -236,6 +238,7 @@ header{border-bottom:6px solid var(--accent)}
         <label class="sm" for="hs-kh">Cộng mỗi lời khen</label><input id="hs-kh" type="number" min="0" max="2" step="0.25" value="0.5">
       </div>
     </details>
+    <div id="nx" hidden></div>
     <div id="hs-body"></div>
   </section>
   <div id="list"></div>
@@ -247,6 +250,7 @@ header{border-bottom:6px solid var(--accent)}
 <script src="chung/mo-trinh-duyet.js?v=1"></script>
 <script src="chung/giao-dien.js?v=1"></script>
 <script src="chung/api.js?v=28"></script>
+<script src="chung/nls-atm.js?v=1"></script>
 <script>
 (function(){
 "use strict";
@@ -336,6 +340,7 @@ function renderTK(){
     });
   });
   host.innerHTML = h + '</tbody></table></div><p class="tk-msg">Bấm vào một bài để xem từng buổi học. “Hoàn thành TB”: tỉ lệ câu đã nộp trên tổng số câu, tính trung bình các nhóm / học sinh.</p>';
+  renderNX();
   host.querySelectorAll("tr.bai").forEach(tr => {
     const tg = () => { const open = tr.getAttribute("aria-expanded") !== "true"; tr.setAttribute("aria-expanded", String(open));
       host.querySelectorAll('tr.ct[data-p="' + tr.dataset.i + '"]').forEach(x => x.hidden = !open); };
@@ -485,6 +490,53 @@ function renderHS(){
     tr.onclick = tg; tr.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tg(); } };
   });
 }
+/* NHẬN XÉT THEO TT 22: câu nhận xét gợi ý cho từng em, giáo viên sửa được (nhớ trên máy), chép hoặc tải CSV để nhập sổ điểm */
+const MIEN_NLS = {"1": "khai thác dữ liệu và thông tin", "2": "giao tiếp và hợp tác trên môi trường số", "3": "sáng tạo nội dung số", "4": "an toàn số", "5": "giải quyết vấn đề bằng công nghệ", "6": "ứng dụng trí tuệ nhân tạo"};
+const nxGet = () => { try { return JSON.parse(store("hub-nx") || "{}") || {}; } catch(e) { return {}; } };
+const nxKey = r => r.lop + "|" + hsKey(r.ten);
+function nxGoiY(r){
+  const xong = r.list.filter(x => !x.vang && x.cau && x.sub / x.cau >= 0.8), vang = r.list.filter(x => x.vang);
+  /* miền năng lực số mạnh nhất: đếm qua các bài em đã hoàn thành */
+  const dem = {};
+  xong.forEach(x => { const b = BY_ID[x.bai], n = b && window.NLS_ATM && NLS_ATM.lay(b.repo); if (n) [...new Set(n.nls.map(c => c[0]))].forEach(m => dem[m] = (dem[m] || 0) + 1); });
+  const manh = Object.keys(dem).sort((a, b) => dem[b] - dem[a])[0];
+  const yeu = r.list.filter(x => !x.vang && x.dung + x.sai >= 2 && x.dung / (x.dung + x.sai) < 0.5).map(x => { const b = BY_ID[x.bai]; return b ? "Bài " + b.so : x.bai; });
+  const ds = a => a.slice(0, 3).join(", ") + (a.length > 3 ? "…" : "");
+  const t = [];
+  if (r.xl === "tot") t.push("Hoàn thành tốt " + r.nbai + "/" + r.nlop + " bài" + (r.dd != null ? ", trả lời đúng " + r.dd + "% câu hỏi" : "") + ".");
+  else if (r.xl === "kha") t.push("Hoàn thành " + r.ht + "% nhiệm vụ học tập, nắm được kiến thức cơ bản.");
+  else if (r.xl === "dat") t.push("Hoàn thành " + r.ht + "% nhiệm vụ, nắm được một phần kiến thức.");
+  else t.push("Chưa hoàn thành nhiệm vụ học tập (" + r.ht + "%).");
+  if (r.khen) t.push("Tích cực, được khen " + r.khen + " lần.");
+  if (manh && r.xl !== "cd") t.push("Có năng lực " + MIEN_NLS[manh] + " tốt.");
+  if (vang.length) t.push("Cần nộp bù: " + ds(vang.map(x => { const b = BY_ID[x.bai]; return b ? "Bài " + b.so : x.bai; })) + ".");
+  if (yeu.length) t.push("Cần ôn lại " + ds(yeu) + ".");
+  else if (r.dd != null && r.dd < 60) t.push("Cần cẩn thận hơn khi làm bài.");
+  if (r.xl === "tot" && !vang.length) t.push("Tiếp tục phát huy.");
+  return t.join(" ");
+}
+function renderNX(){
+  const host = document.getElementById("nx"); if (host.hidden) return;
+  const list = rankList(hsInLop()).slice().sort((a, b) => a.lop.localeCompare(b.lop, "vi", {numeric: true}) || a.ten.localeCompare(b.ten, "vi"));
+  const NX = nxGet();
+  if (!list.length) { host.innerHTML = '<p class="sm" style="margin:0">Chưa có dữ liệu.</p>'; return; }
+  host.innerHTML = '<div class="nx-tools"><b style="flex:1;min-width:200px">Nhận xét gợi ý (' + list.length + ' em)</b><button class="btn ghost" type="button" id="nx-chep">📋 Chép tất cả</button><button class="btn ghost" type="button" id="nx-csv">Tải CSV nhận xét</button><button class="btn ghost" type="button" id="nx-xoa">↺ Về gợi ý gốc</button></div>'
+    + '<p class="sm" style="margin:0 0 4px">Câu nhận xét sinh từ mức hoàn thành, tỉ lệ đúng, lời khen, bài nợ và miền năng lực số (TT 02/2025) của các bài em đã làm. Thầy cô sửa trực tiếp, máy tự nhớ. Lọc theo lớp ở ô “Lớp” phía trên.</p>'
+    + list.map((r, i) => { const k = nxKey(r), v = NX[k] != null ? NX[k] : nxGoiY(r);
+      return '<div class="nx-it"><div class="nx-h"><b>' + esc(r.ten) + '</b><span class="sm">' + esc(r.lop) + " · " + d10(r.diem) + "</span>" + xlHtml(r.xl) + (NX[k] != null ? '<span class="sm">(đã sửa)</span>' : "") + '</div><textarea data-k="' + esc(k) + '" data-i="' + i + '" aria-label="Nhận xét ' + esc(r.ten) + '">' + esc(v) + "</textarea></div>"; }).join("");
+  host.querySelectorAll("textarea").forEach(ta => ta.addEventListener("input", () => { const N = nxGet(); N[ta.dataset.k] = ta.value; store("hub-nx", JSON.stringify(N)); }));
+  const rows = () => list.map(r => { const N = nxGet(), k = nxKey(r); return [r.ten, r.lop, d10(r.diem), XL[r.xl], N[k] != null ? N[k] : nxGoiY(r)]; });
+  document.getElementById("nx-chep").onclick = () => { const txt = rows().map(x => x[0] + "\t" + x[4]).join("\n"); const b = document.getElementById("nx-chep");
+    try { navigator.clipboard.writeText(txt).then(() => b.textContent = "✓ Đã chép", () => b.textContent = "Không chép được"); } catch(e) { b.textContent = "Không chép được"; } };
+  document.getElementById("nx-csv").onclick = () => { const q = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+    const lines = [["Nhóm / Học sinh", "Lớp", "Điểm (10)", "Xếp loại", "Nhận xét"].map(q).join(",")].concat(rows().map(x => x.map(q).join(",")));
+    const a = document.createElement("a"), lop = document.getElementById("hs-lop").value;
+    a.href = URL.createObjectURL(new Blob(["﻿" + lines.join("\r\n")], {type: "text/csv;charset=utf-8"}));
+    a.download = "nhan-xet" + (lop ? "-" + fold(lop).replace(/\s+/g, "-") : "") + "-" + new Date().toISOString().slice(0, 10) + ".csv"; a.click(); };
+  document.getElementById("nx-xoa").onclick = () => { if (!confirm("Bỏ mọi chỗ thầy cô đã sửa của các em đang hiện, quay về câu gợi ý gốc?")) return;
+    const N = nxGet(); list.forEach(r => delete N[nxKey(r)]); store("hub-nx", JSON.stringify(N)); renderNX(); };
+}
+document.getElementById("nx-mo").onclick = () => { const h = document.getElementById("nx"), b = document.getElementById("nx-mo"); h.hidden = !h.hidden; b.setAttribute("aria-expanded", String(!h.hidden)); renderNX(); };
 function hsLopOptions(){
   const sel = document.getElementById("hs-lop"), cur = sel.value || store("hub-hs-lop") || "";
   const lops = [...new Set(HS.map(r => r.lop))].sort((a, b) => a.localeCompare(b, "vi", {numeric: true}));
