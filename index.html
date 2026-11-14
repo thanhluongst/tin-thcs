@@ -100,6 +100,7 @@ header{border-bottom:6px solid var(--accent)}
 .btn.ghost{background:transparent;color:var(--accent)}
 .tk-msg{font-size:14px;color:var(--muted);margin:8px 0 0}
 .tk-msg.bad{color:#b42318}
+.ho-tro{margin:14px 0;border:1.5px solid #dc2626;border-radius:14px;padding:10px 14px;background:rgba(220,38,38,.05)}.ho-tro>summary{cursor:pointer;font-weight:700}.ho-tro .sm{font-weight:400}.ht-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px 18px;margin-top:10px}.ht-grid h3{margin:0 0 4px;font-size:15px}.ht-grid ul{margin:0;padding-left:18px}.ht-grid li{margin:2px 0}.ht-grid p{margin:6px 0 0}
 .tk-sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
 @media (max-width:640px){.tk-sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .tk-sum div{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--bg)}
@@ -392,6 +393,39 @@ function rankList(list){
   return s;
 }
 function hsInLop(){ const lop = document.getElementById("hs-lop").value; return HS.filter(r => !lop || r.lop === lop); }
+/* CẦN HỖ TRỢ: học sinh dưới mức Đạt, nợ bài, bài cả lớp còn yếu; gợi ý đôi bạn cùng tiến (theo lớp đang chọn) */
+function hoTroHtml(all){
+  const li = a => a.length ? "<ul>" + a.join("") + "</ul>" : '<p class="sm">Không có.</p>';
+  const lb = x => '<a href="' + esc((BY_ID[x] || {}).url || "#") + '" target="_blank" rel="noopener">' + esc(tenBai(x)) + "</a>";
+  /* 1. Chưa đạt: nêu lí do chính */
+  const cd = all.filter(r => r.xl === "cd").sort((a, b) => a.diem - b.diem);
+  const ly = r => { const v = r.list.filter(x => x.vang), t = [];
+    if (v.length) t.push("chưa nộp " + v.length + " bài");
+    else if (r.ht < 80) t.push("mới nộp " + r.ht + "% số câu");
+    if (r.dd != null && r.dd < 50) t.push("đúng " + r.dd + "% câu tự chấm");
+    return t.join(", ") || "điểm thấp"; };
+  /* 2. Đôi bạn cùng tiến: ghép em Chưa đạt với bạn Tốt cùng lớp, mỗi bạn Tốt kèm tối đa 1 em */
+  const tot = {}; all.filter(r => r.xl === "tot").sort((a, b) => b.diem - a.diem).forEach(r => (tot[r.lop] = tot[r.lop] || []).push(r));
+  const cap = cd.map(r => { const b = (tot[r.lop] || []).shift(); return b ? "<li><b>" + esc(r.ten) + "</b> ↔ " + esc(b.ten) + ' <span class="sm">(' + esc(r.lop) + ")</span></li>" : ""; }).filter(Boolean);
+  /* 3. Nợ bài (không tính các em đã ở mục 1) */
+  const no = all.filter(r => r.xl !== "cd" && r.list.some(x => x.vang)).map(r => "<li><b>" + esc(r.ten) + '</b> <span class="sm">(' + esc(r.lop) + ")</span>: " + r.list.filter(x => x.vang).map(x => lb(x.bai)).join(", ") + "</li>");
+  /* 4. Bài cả lớp yếu: hoàn thành TB < 70% hoặc đúng < 60% */
+  const bai = {};
+  all.forEach(r => r.list.forEach(x => { const o = bai[x.bai] = bai[x.bai] || {n: 0, ht: 0, d: 0, c: 0, vang: 0}; o.n++; if (x.vang) o.vang++;
+    o.ht += x.cau ? Math.min(x.sub, x.cau) / x.cau : 0; o.d += x.dung; o.c += x.dung + x.sai; }));
+  const yeu = Object.keys(bai).map(k => { const o = bai[k]; return {k, ht: Math.round(100 * o.ht / o.n), dd: o.c ? Math.round(100 * o.d / o.c) : null, vang: o.vang, n: o.n}; })
+    .filter(o => o.ht < 70 || (o.dd != null && o.dd < 60)).sort((a, b) => a.ht - b.ht)
+    .map(o => "<li>" + lb(o.k) + ' <span class="sm">· hoàn thành TB ' + o.ht + "%" + (o.dd != null ? " · đúng " + o.dd + "%" : "") + (o.vang ? " · " + o.vang + "/" + o.n + " chưa nộp" : "") + "</span></li>");
+  const n = cd.length + no.length + yeu.length;
+  return '<details class="ho-tro"' + (n ? " open" : "") + '><summary>🆘 Cần hỗ trợ <span class="sm">' + (n ? cd.length + " em chưa đạt · " + no.length + " em nợ bài · " + yeu.length + " bài cả lớp còn yếu" : "lớp đang ổn") + "</span></summary>"
+    + '<div class="ht-grid">'
+    + '<div><h3>Chưa đạt (dưới 5,0)</h3>' + li(cd.map(r => "<li><b>" + esc(r.ten) + '</b> <span class="sm">(' + esc(r.lop) + ") " + d10(r.diem) + " – " + ly(r) + "</span></li>"))
+    + '<p class="sm"><b>Gợi ý:</b> giao lại bài còn thiếu ở chế độ một máy; hỏi trực tiếp các câu sai; mở “Chốt kiến thức” để em xem lại.</p></div>'
+    + '<div><h3>Đôi bạn cùng tiến</h3>' + li(cap) + '<p class="sm">Ghép em chưa đạt với bạn xếp loại Tốt cùng lớp để ngồi cạnh, cùng làm bài (đánh giá đồng đẳng theo TT 22).</p></div>'
+    + '<div><h3>Nợ bài</h3>' + li(no) + '<p class="sm">Nhắc em mở bài và nộp bù; bấm tên bài để mở trang học sinh.</p></div>'
+    + '<div><h3>Bài cả lớp còn yếu</h3>' + li(yeu) + '<p class="sm">Hoàn thành TB dưới 70% hoặc đúng dưới 60%: nên dành 5–10 phút đầu tiết sau ôn lại, chiếu “Chốt kiến thức” của bài.</p></div>'
+    + "</div></details>";
+}
 function renderHS(){
   const host = document.getElementById("hs-body");
   const all = rankList(hsInLop());
@@ -405,6 +439,7 @@ function renderHS(){
   let h = '<div class="tk-sum"><div><b>' + n + '</b><span>Nhóm / học sinh</span></div><div><b>' + d10(Math.round(10 * all.reduce((s, r) => s + r.diem, 0) / n) / 10)
     + '</b><span>Điểm trung bình</span></div><div><b>' + Math.round(all.reduce((s, r) => s + r.ht, 0) / n) + '%</b><span>Hoàn thành TB</span></div><div><span>Xếp loại</span><div class="xls">'
     + Object.keys(XL).map(x => '<span class="xl xl-' + x + '">' + XL[x] + " " + dem[x] + "</span>").join("") + "</div></div></div>";
+  h += hoTroHtml(all);
   h += '<div class="tk-wrap"><table><thead><tr>' + HS_COLS.map(([c, lab]) => '<th class="so ' + c + '" data-k="' + c + '" tabindex="0"'
     + (k === c ? ' aria-sort="' + (d > 0 ? "ascending" : "descending") + '"' : "") + ">" + lab + (k === c ? (d > 0 ? " ▲" : " ▼") : "") + "</th>").join("") + "</tr></thead><tbody>";
   const medal = ["", "🥇", "🥈", "🥉"];
