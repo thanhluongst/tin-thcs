@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<script>(function(){var t="light";try{t=localStorage.getItem("giao-dien")||"light"}catch(e){}document.documentElement.setAttribute("data-theme",t)})();</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ma trận năng lực</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lexend:wght@500;600;700&display=swap">
+<style>
+:root{
+  --bg:#f3f7f6; --surface:#fff; --sunk:#e7efed; --line:#cddbd8; --fg:#15302c; --muted:#58706b;
+  --accent:#0f7a6c; --accent-ink:#fff; --accent-soft:#d6efe9; --ok:#15803d; --ok-soft:#dcf3e3;
+  --b:#991b1b; --b-soft:#fee2e2; --kk:#075985; --kk-soft:#e0f2fe; --warn:#a16207; --warn-soft:#fdf2d3;
+  --font-display:"Lexend","Be Vietnam Pro",system-ui,sans-serif; --font-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1716; --surface:#152220; --sunk:#1b2b28; --line:#2b403c; --fg:#e3efec; --muted:#9bb3ad;
+  --accent:#3cc2ad; --accent-ink:#06201c; --accent-soft:#173a35; --ok:#4ade80; --ok-soft:#14301f;
+  --b:#fca5a5; --b-soft:#3a1717; --kk:#7dd3fc; --kk-soft:#0c2a3a; --warn:#e8b64c; --warn-soft:#3a2e10; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1716; --surface:#152220; --sunk:#1b2b28; --line:#2b403c; --fg:#e3efec; --muted:#9bb3ad;
+  --accent:#3cc2ad; --accent-ink:#06201c; --accent-soft:#173a35; --ok:#4ade80; --ok-soft:#14301f;
+  --b:#fca5a5; --b-soft:#3a1717; --kk:#7dd3fc; --kk-soft:#0c2a3a; --warn:#e8b64c; --warn-soft:#3a2e10; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15.5px/1.55 var(--font-body)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header{background:var(--accent);color:var(--accent-ink);padding:20px 0 22px}
+header a{color:inherit}
+h1,h2,h3{font-family:var(--font-display);line-height:1.25}
+h1{margin:6px 0 4px;font-size:clamp(23px,5vw,31px)}
+h2{font-size:19px;margin:0 0 8px}
+h3{font-size:15.5px;margin:14px 0 6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:16px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:99px;padding:5px 14px;font:600 14px var(--font-body);cursor:pointer}
+.pill[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:7px 12px;font:600 14px var(--font-body);cursor:pointer;text-decoration:none}
+.sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:640px){.sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sum div{background:var(--sunk);border-radius:12px;padding:10px 12px}
+.sum b{display:block;font:700 24px var(--font-display);color:var(--accent)}
+.sm{font-size:13px;color:var(--muted)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{background:var(--sunk);font-weight:700;white-space:nowrap}
+.ma{font-family:ui-monospace,Consolas,monospace;font-weight:700;white-space:nowrap}
+.chip{display:inline-block;border-radius:99px;padding:1px 8px;margin:1px 3px 1px 0;font-size:12.5px;font-weight:600;background:var(--accent-soft);color:var(--fg);white-space:nowrap;text-decoration:none}
+.chip.b{background:var(--b-soft);color:var(--b)} .chip.kk{background:var(--kk-soft);color:var(--kk)}
+.trong{color:var(--warn);font-weight:600}
+.gap{background:var(--warn-soft);border-radius:12px;padding:10px 12px;margin-top:10px}
+.mien{font-weight:700;background:var(--sunk)}
+td.done{background:var(--ok-soft)}
+input[type=date]{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;padding:3px 6px;background:var(--surface);color:var(--fg)}
+.bar{height:10px;border-radius:99px;background:var(--sunk);overflow:hidden;margin:6px 0 2px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.foot{font-size:13px;color:var(--muted);margin:24px 0 40px}
+@media print{header{background:none;color:#000}.btn,.pill:not([aria-pressed="true"]){display:none}.card{break-inside:avoid-page;border-color:#bbb}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a href="../" style="font-size:14px">← Mục lục bài học</a>
+  <h1>Ma trận năng lực số, an toàn mạng và AI</h1>
+  <p style="margin:0;opacity:.92">Cả năm học 2026–2027, theo từng lớp: mã nào đã có bài dạy, mã nào còn trống, chuyên đề AI đã dạy bao nhiêu tiết.</p>
+</div></header>
+<main class="wrap">
+  <div class="card">
+    <div class="row" id="lop"></div>
+    <div class="sum" id="sum" style="margin-top:12px"></div>
+    <div class="row" style="margin-top:10px"><button class="btn" type="button" onclick="print()">🖨️ In ma trận lớp này</button><span class="sm">Dùng làm minh chứng khi kiểm tra chuyên môn.</span></div>
+  </div>
+  <section class="card" id="ai"></section>
+  <section class="card" id="nls"></section>
+  <section class="card" id="atm"></section>
+  <p class="foot">Nguồn: Tài liệu tập huấn NLS – ATM toàn diện môn Tin học THCS (Bộ GDĐT, 10/2026) Phụ lục 6; Khung nội dung giáo dục AI (QĐ 2422/QĐ-BGDĐT, CV 5588) và KHBD chuyên đề AI mẫu của tài liệu tập huấn; tiết theo PPCT của trường. Ứng dụng trải nghiệm AI gắn với bài chuyên đề chỉ là gợi ý.</p>
+</main>
+<script src="../danh-muc.js?v=1"></script>
+<script src="../chung/nls-atm.js?v=1"></script>
+<script>
+const AI_BAI = {"6": [{"so": "1", "ten": "AI do con người tạo ra và điều khiển", "tiet": 2, "ma": ["6.A1.1", "6.A1.2"], "yc": {"6.A1.1": "Giải thích được AI là sản phẩm do con người tạo ra, lập trình và điều khiển để thực hiện những nhiệm vụ cụ thể; AI không tự sinh ra và không hoạt động độc lập với con người. Nêu được ví dụ về một số công cụ AI quen thuộc", "6.A1.2": "Trình bày được vai trò của AI chỉ là công cụ hỗ trợ hoạt động của con người; con người đưa ra quyết định cuối cùng và chịu trách nhiệm khi sử dụng AI."}}, {"so": "2", "ten": "Học tập, kiểm chứng và ra quyết định với AI", "tiet": 2, "ma": ["6.A1.3", "6.A3.1", "6.A3.2"], "yc": {"6.A1.3": "Thực hiện được việc kiểm tra lại một kết quả do AI đưa ra (đối chiếu với sách giáo khoa, nguồn tin cậy khác hoặc hỏi thầy cô) trước khi sử dụng, thể hiện thói quen “con người quyết định cuối cùng”.", "6.A3.1": "Nêu được ví dụ về tình huống con người ra quyết định với sự hỗ trợ của AI (ví dụ: trong y tế, AI gợi ý chẩn đoán, bác sĩ xem xét và quyết định phương án điều trị; trong giao thông, AI đề xuất lộ trình nhanh hơn, người lá", "6.A3.2": "Trình bày được lợi ích của AI trong việc hỗ trợ con người học hỏi, rèn luyện kĩ năng và mở rộng hiểu biết khi được sử dụng đúng cách, có mục đích rõ ràng. Sử dụng được một công cụ AI phù hợp lứa tuổi (trực tiếp hoặc theo"}}, {"so": "3", "ten": "Dữ liệu cá nhân, quyền riêng tư và an toàn AI", "tiet": 2, "ma": ["6.A3.3", "6.A3.4", "6.B2.1"], "yc": {"6.A3.3": "Giải thích được dữ liệu cá nhân (hình ảnh, giọng nói, họ tên, địa chỉ, thông tin học tập, thói quen sử dụng mạng,...) là tài sản của mỗi người; chỉ chủ sở hữu mới có quyền quyết định việc chia sẻ hoặc cho phép sử dụng dữ", "6.A3.4": "Trình bày được khái niệm quyền riêng tư ở mức đơn giản; nêu được tác hại khi dữ liệu cá nhân bị sử dụng sai mục đích và ý nghĩa của việc bảo vệ quyền riêng tư đối với sự an toàn, danh dự và tự do của con người trong môi ", "6.B2.1": "Đặt được một số câu hỏi đơn giản để kiểm tra tính an toàn và minh bạch của ứng dụng AI (ví dụ: “Công cụ này có an toàn không?”, “Công cụ này có thu thập thông tin cá nhân không?”, “Có thể tắt tính năng này không?”) và áp"}}, {"so": "4", "ten": "Mặt tốt, mặt hạn chế và giới hạn của AI", "tiet": 2, "ma": ["6.B1.1", "6.C1.2", "6.D2.1"], "yc": {"6.B1.1": "Chỉ ra được mặt tích cực và hạn chế của một số tính năng AI cụ thể (ví dụ: tính năng thu thập dữ liệu người dùng giúp AI đưa ra gợi ý chính xác hơn nhưng có thể ảnh hưởng đến quyền riêng tư).", "6.C1.2": "Nêu được ví dụ về tác động tích cực và tác động tiêu cực của AI đối với cuộc sống của bản thân, gia đình.", "6.D2.1": "Trình bày được một số giới hạn của hệ thống AI so với con người qua các tình huống, công việc mà con người thực hiện phù hợp hơn (chẳng hạn như các công việc cần sự thấu hiểu cảm xúc, sáng tạo, ra quyết định trong tình h"}}, {"so": "5", "ten": "Bên trong một công cụ AI", "tiet": 2, "ma": ["6.C1.1"], "yc": {"6.C1.1": "Giải thích được hai thành phần chính để huấn luyện (“dạy”) AI là dữ liệu (ví dụ: văn bản, hình ảnh) và thuật toán (phương pháp học từ dữ liệu). Mô tả được các bước hoạt động chính của một công cụ AI qua ví dụ đơn giản (v"}}, {"so": "6", "ten": "Nhận diện ứng dụng và công nghệ AI quanh em", "tiet": 1, "ma": ["6.C2.1", "6.C2.2", "6.C3.1"], "yc": {"6.C2.1": "Phân biệt được công cụ, tính năng có ứng dụng AI và không ứng dụng AI qua các ví dụ gần gũi trong cuộc sống (ví dụ: trợ lí ảo có ứng dụng AI; máy tính bỏ túi không ứng dụng AI).", "6.C2.2": "Kể được tên và mô tả được chức năng chính của một số công cụ AI thông dụng (như trợ lí ảo; ứng dụng bản đồ; công cụ dịch thuật;…).", "6.C3.1": "Kể được tên một số công nghệ AI quen thuộc trong đời sống (ví dụ: nhận dạng hình ảnh, chuyển đổi giữa văn bản và giọng nói,...)."}}, {"so": "7", "ten": "Lựa chọn sử dụng AI phù hợp", "tiet": 1, "ma": ["6.D1.1"], "yc": {"6.D1.1": "Nêu được một số tình huống quen thuộc nên hoặc không nên sử dụng AI (ví dụ: nên dùng AI để luyện phát âm ngoại ngữ, tìm đường đi; không nên nhờ AI viết hộ bài văn, làm hộ bài tập vì làm giảm cơ hội tự rèn luyện, làm giảm"}}], "7": [{"so": "1", "ten": "Con người giữ quyền quyết định và xác thực kết quả AI", "tiet": 2, "ma": ["7.A1.1", "7.A1.2", "7.A2.1"], "yc": {"7.A1.1": "Giải thích được lí do con người cần giữ quyền ra quyết định khi sử dụng AI (ví dụ như bảo đảm công bằng: con người có thể xem xét hoàn cảnh và cảm xúc mà AI không hiểu được; bảo đảm an toàn: con người có thể ngăn chặn cá", "7.A1.2": "Nêu được ví dụ hậu quả có thể xảy ra khi không có sự xác thực của con người về độ chính xác của kết quả do AI đưa ra trong một số trường hợp thực tế.", "7.A2.1": "Phân tích được các tác hại có thể xảy ra nếu con người cho phép AI đưa ra quyết định cuối cùng trong một số tình huống thực tế."}}, {"so": "2", "ten": "Quy định pháp lý ngăn chặn công cụ AI có hại", "tiet": 1, "ma": ["7.A2.2"], "yc": {"7.A2.2": "Nêu được các hậu quả có thể xảy ra nếu không có các quy định pháp lý nhằm ngăn chặn việc thiết kế và sản xuất các công cụ AI có hại trong một số tình huống thực tế."}}, {"so": "3", "ten": "Quyền tự chủ của con người khi tương tác với AI", "tiet": 1, "ma": ["7.A3.1", "7.A3.2"], "yc": {"7.A3.1": "Nêu được ví dụ về tình huống AI được phép tự động thực hiện một số thao tác thay con người (ví dụ: tự động kiểm tra và sửa lỗi chính tả khi soạn thảo văn bản) và tình huống con người cần trực tiếp quyết định.", "7.A3.2": "Giải thích được sự cần thiết phải bảo vệ quyền tự chủ của con người khi sử dụng AI để đưa ra các quyết định quan trọng."}}, {"so": "4", "ten": "Đánh giá ứng dụng và xây dựng môi trường AI có đạo đức", "tiet": 2, "ma": ["7.B2.1", "7.B2.2"], "yc": {"7.B2.1": "Nêu được một số tiêu chí đơn giản (dựa trên các nguyên tắc đạo đức) để đánh giá mức độ phù hợp, an toàn của một ứng dụng AI.", "7.B2.2": "Nêu được ví dụ về các hành động cụ thể góp phần xây dựng môi trường AI có đạo đức (ví dụ: báo cáo lỗi, không sử dụng ứng dụng độc hại, yêu cầu sự minh bạch)."}}, {"so": "5", "ten": "Sử dụng AI có trách nhiệm và khai báo trung thực", "tiet": 1, "ma": ["7.B3.1"], "yc": {"7.B3.1": "Thể hiện được thái độ và cam kết cá nhân trong việc sử dụng AI có trách nhiệm thông qua một số hình thức đơn giản (ví dụ: bài viết ngắn, hùng biện hoặc sản phẩm học tập cụ thể). Thể hiện được việc khai báo trung thực khi"}}, {"so": "6", "ten": "Dữ liệu huấn luyện và các cách AI học", "tiet": 2, "ma": ["7.C4.1", "7.C5.1", "7.C5.2"], "yc": {"7.C4.1": "Trình bày được các vấn đề đạo đức có thể nảy sinh từ dữ liệu huấn luyện AI (ví dụ: dữ liệu thiếu đa dạng dẫn đến phân biệt đối xử, dữ liệu riêng tư bị xâm phạm).", "7.C5.1": "Mô tả được các bước chính trong quá trình huấn luyện AI qua một ví dụ cụ thể (như thu thập và gán nhãn dữ liệu ảnh chó, mèo; cho máy học từ dữ liệu; kiểm tra khả năng phân biệt trên ảnh mới; điều chỉnh nếu kết quả chưa t", "7.C5.2": "Nêu được ví dụ về một số cách học khác nhau của AI ở mức độ đơn giản (ví dụ: học từ dữ liệu đã được con người phân loại, gán nhãn sẵn; tự tìm ra quy luật từ dữ liệu; học qua thử nghiệm và rút kinh nghiệm từ kết quả)."}}, {"so": "7", "ten": "Phát hiện ý tưởng dự án AI từ thực tiễn", "tiet": 1, "ma": ["7.D1.1"], "yc": {"7.D1.1": "Nêu được ví dụ về một vấn đề trong trường học hoặc cộng đồng có thể được giải quyết hoặc cải thiện bằng AI; mô tả được phạm vi của vấn đề đó (ví dụ: trong trường học có thể xây dựng chatbot giải đáp thắc mắc thường gặp v"}}, {"so": "8", "ten": "Lập kế hoạch dự án sáng tạo có sử dụng AI", "tiet": 2, "ma": ["7.D2.1"], "yc": {"7.D2.1": "Lập được kế hoạch cho một dự án sáng tạo có sử dụng AI theo nhóm nhỏ."}}], "8": [{"so": "1", "ten": "AI không thay thế con người và rủi ro khi lạm dụng AI tạo sinh", "tiet": 2, "ma": ["8.A1.1", "8.A1.2"], "yc": {"8.A1.1": "Nêu được một số lĩnh vực mà AI không nên thay thế con người (ví dụ: trong giáo dục, giáo viên hiểu tâm lí học sinh, biết khích lệ, hướng dẫn và dạy đạo đức; trong y tế, bác sĩ không chỉ chữa bệnh mà còn động viên, lắng n", "8.A1.2": "Nêu được những rủi ro của việc lạm dụng các công cụ AI tạo sinh, liên hệ với nguy cơ suy giảm tư duy phản biện, kĩ năng sáng tạo, sử dụng thông tin sai lệch; từ đó nêu được sự cần thiết của việc kiểm chứng nguồn thông ti"}}, {"so": "2", "ten": "Nhận diện nguy cơ AI theo dõi và thao túng người dùng", "tiet": 1, "ma": ["8.A2.1", "8.A2.2"], "yc": {"8.A2.1": "Giải thích được việc một số hệ thống, dịch vụ sử dụng AI có thể thu thập, phân tích và sử dụng dữ liệu cá nhân của người dùng (vị trí, thói quen, hình ảnh, giọng nói, sở thích,...) để kiểm soát hành vi, gây ảnh hưởng hoặ", "8.A2.2": "Nhận biết được hiện tượng sử dụng AI để kiểm soát người dùng (ví dụ: việc sử dụng AI không minh bạch hoặc sai mục đích, khiến người dùng bị theo dõi mà không biết; bị đề xuất thông tin, quảng cáo hoặc nội dung một chiều;"}}, {"so": "3", "ten": "Vai trò và trách nhiệm của các bên trong hệ sinh thái AI", "tiet": 2, "ma": ["8.A3.1", "8.A3.2", "8.A3.3"], "yc": {"8.A3.1": "Phân biệt được vai trò của người dùng và người phát triển khi tương tác với AI.", "8.A3.2": "Nêu được ví dụ về các bên (người sáng tạo, nhà cung cấp, người sử dụng) phải chịu trách nhiệm pháp lý đối với hậu quả do công cụ AI gây ra trong một số tình huống cụ thể (ví dụ: người dùng AI tạo hình ảnh giả mạo người k", "8.A3.3": "Nêu được những việc thể hiện trách nhiệm giải trình khi sử dụng AI trong học tập và tạo sản phẩm (ví dụ: cho biết sản phẩm có sử dụng AI và sử dụng ở phần nào; nói rõ công cụ AI đã dùng khi được hỏi; chịu trách nhiệm kiể"}}, {"so": "4", "ten": "Nhận diện, phòng tránh rủi ro và phát triển AI có đạo đức", "tiet": 2, "ma": ["8.B1.1", "8.B2.1", "8.B3.1"], "yc": {"8.B1.1": "Nhận diện và phân loại được một số rủi ro phổ biến khi sử dụng AI: rủi ro về dữ liệu và quyền riêng tư; rủi ro do thuật toán thiên vị hoặc đưa ra kết luận sai; rủi ro bị lừa đảo bằng nội dung giả mạo do AI tạo ra (hình ả", "8.B2.1": "Trình bày được một số việc làm, cách thức đơn giản để bảo vệ dữ liệu cá nhân, tôn trọng bản quyền và phòng tránh, giảm thiểu rủi ro khi sử dụng, phát triển AI trong các dự án học tập.", "8.B3.1": "Nêu được các vấn đề đạo đức cần lưu ý khi phát triển AI (ví dụ: bảo mật thông tin, không cung cấp thông tin sai lệch, không xúc phạm người khác)."}}, {"so": "5", "ten": "AI “đọc”, “nghe” và “nhìn” như thế nào?", "tiet": 1, "ma": ["8.C1.1"], "yc": {"8.C1.1": "Mô tả được ở mức đơn giản cách AI thực hiện một số chức năng cơ bản như “đọc”, “nghe”, “nhìn” (ví dụ: để “nghe”, AI thu âm thanh, chuyển giọng nói thành văn bản rồi phân tích để hiểu nội dung; để “nhìn”, AI phân tích các"}}, {"so": "6", "ten": "AI nhận diện cảm xúc dựa trên những dấu hiệu nào?", "tiet": 1, "ma": ["8.C5.1"], "yc": {"8.C5.1": "Nêu được cách AI nhận diện cảm xúc dựa vào các đặc điểm (ví dụ: nét mặt; từ khoá trong văn bản và lời nói; ngữ điệu của lời nói; cử chỉ như gật đầu, lắc đầu,...)."}}, {"so": "7", "ten": "Xác định vấn đề thực tế có thể giải quyết bằng AI", "tiet": 1, "ma": ["8.D1.1"], "yc": {"8.D1.1": "Xác định được một số vấn đề thực tế có thể giải quyết bằng AI."}}, {"so": "8", "ten": "Thiết kế kịch bản hội thoại có ứng dụng AI", "tiet": 2, "ma": ["8.D2.1"], "yc": {"8.D2.1": "Trình bày được ví dụ về một kịch bản hội thoại cho một tình huống cụ thể có ứng dụng AI (ví dụ: chatbot, trợ lí ảo)."}}], "9": [{"so": "1", "ten": "Thách thức, tác động và thiên vị của AI đối với xã hội", "tiet": 2, "ma": ["9.A1.1", "9.A2.1", "9.A2.2"], "yc": {"9.A1.1": "Trình bày được ý kiến cá nhân về một thách thức mà xã hội đang đối mặt trong kỉ nguyên AI (ví dụ: hi sinh sự an toàn của người dùng để ưu tiên đổi mới và phát triển AI).", "9.A2.1": "Nêu được dẫn chứng để giải thích vì sao AI có tác động lớn đến xã hội.", "9.A2.2": "Giải thích được các vấn đề “thiên vị”, “thành kiến” mà AI có thể gây ra đối với xã hội."}}, {"so": "2", "ten": "Học tập, thể hiện bản thân và định hướng nghề nghiệp trong thế giới AI", "tiet": 2, "ma": ["9.A3.1", "9.A3.2", "9.A3.3", "9.A3.4"], "yc": {"9.A3.1": "Trình bày được những năng lực con người cần rèn luyện trong thế giới có AI, như biết học cách học (rèn luyện khả năng tự học, học suốt đời), phát triển tư duy phản biện (biết phân tích, đánh giá thông tin do AI cung cấp)", "9.A3.2": "Xác định được mục tiêu học tập cá nhân trong thế giới có AI (ví dụ: học cách sử dụng AI để tìm kiếm và tóm tắt thông tin; sử dụng AI để rèn luyện kĩ năng viết, đọc, vẽ, tư duy logic; luyện tập giao tiếp hoặc học ngôn ngữ", "9.A3.3": "Nêu được ví dụ cách sử dụng AI như một công cụ giúp thể hiện bản thân và theo đuổi đam mê.", "9.A3.4": "Trình bày được ví dụ một số thay đổi mà AI có thể mang lại cho các ngành nghề trong tương lai, từ đó nêu được một số kĩ năng gắn với các ngành nghề cụ thể cần trang bị để làm việc hiệu quả cùng AI."}}, {"so": "3", "ten": "Người dùng có trách nhiệm và ứng phó nội dung giả mạo do AI", "tiet": 2, "ma": ["9.B2.1", "9.B2.2", "9.B2.3"], "yc": {"9.B2.1": "Trình bày được vai trò của người dùng trong việc kiểm soát và chịu trách nhiệm đối với kết quả cuối cùng do AI tạo ra. Khai báo được việc sử dụng AI trong sản phẩm học tập của bản thân.", "9.B2.2": "Nêu được vai trò của cá nhân và cộng đồng trong việc giám sát, phản hồi và đề xuất giải pháp để sử dụng AI một cách an toàn, công bằng, hợp lí.", "9.B2.3": "Phân tích được một số dấu hiệu của nội dung giả mạo do AI tạo ra; kiểm chứng được thông tin bằng các nguồn phù hợp và đề xuất được cách ứng phó khi phát hiện nội dung có dấu hiệu giả mạo hoặc lừa đảo."}}, {"so": "4", "ten": "Kiến tạo AI công bằng bằng dữ liệu đa dạng", "tiet": 1, "ma": ["9.B3.1", "9.B3.2"], "yc": {"9.B3.1": "Giải thích được tầm quan trọng của việc huấn luyện AI theo hướng không phân biệt đối xử và tôn trọng sự đa dạng.", "9.B3.2": "Nêu được một số cách thu thập dữ liệu bảo đảm công bằng, không bỏ sót hay thiên vị các nhóm đối tượng khác nhau."}}, {"so": "5", "ten": "Ý tưởng sáng tạo giải quyết vấn đề bằng AI", "tiet": 1, "ma": ["9.C2.1"], "yc": {"9.C2.1": "Đề xuất được ý tưởng mới, sáng tạo để giải quyết một vấn đề bằng AI."}}, {"so": "6", "ten": "Cải thiện dữ liệu để nâng cao chất lượng sản phẩm AI", "tiet": 1, "ma": ["9.C4.1"], "yc": {"9.C4.1": "Trình bày được một số cách cải thiện bộ dữ liệu để nâng cao chất lượng của sản phẩm AI (ví dụ: bổ sung dữ liệu còn thiếu, loại bỏ dữ liệu trùng lặp, sửa dữ liệu sai hoặc gán nhãn lại cho đúng)."}}, {"so": "7", "ten": "Con người đồng sáng tạo và dẫn dắt AI", "tiet": 1, "ma": ["9.D1.1"], "yc": {"9.D1.1": "Trình bày được vai trò của con người là người đồng sáng tạo và dẫn dắt trong việc thiết kế, vận hành và phát triển các hệ thống, công cụ AI."}}, {"so": "8", "ten": "Kiểm tra và đánh giá sản phẩm AI", "tiet": 2, "ma": ["9.D2.1"], "yc": {"9.D2.1": "Nêu được một số cách kiểm tra đơn giản để đánh giá sản phẩm AI (ví dụ: với mô hình nhận dạng, thử với dữ liệu mới chưa dùng khi huấn luyện, đếm số lần cho kết quả đúng và sai; với chatbot, đặt nhiều câu hỏi khác nhau, ki"}}]};
+/* Ứng dụng trải nghiệm trên trang gợi ý dùng cho bài chuyên đề AI (lớp: số bài) */
+const AI_APP = [
+  ["ai-cay-trong/", "🩺🌿 AI Bác Sĩ Cây Trồng", {7: ["6"], 9: ["4", "6"]}],
+  ["ai-canh-sat-mang/", "👮‍♀️📱 AI Cảnh Sát Mạng", {6: ["3"], 8: ["2"]}],
+  ["ai-tham-tu-tin-gia/", "🕵️📰 AI Thám Tử Tin Giả", {6: ["2"], 9: ["3"]}],
+  ["ai-gac-cong-lenh-hoi/", "🤖💬 AI Gác Cổng Lệnh Hỏi", {7: ["5"], 8: ["1"]}]
+];
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const get = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k) || "null"); return v == null ? d : v; } catch(e) { return d; } };
+const put = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} };
+const NA = window.NLS_ATM;
+const MIEN = {"1": "Khai thác dữ liệu và thông tin", "2": "Giao tiếp và hợp tác", "3": "Sáng tạo nội dung số", "4": "An toàn", "5": "Giải quyết vấn đề", "6": "Ứng dụng trí tuệ nhân tạo"};
+const SO_NL = {"1": 3, "2": 6, "3": 4, "4": 4, "5": 4, "6": 3};   /* TT 02/2025: 6 miền, 24 năng lực thành phần */
+const MACH = {A: "Tư duy lấy con người làm trung tâm", B: "Đạo đức AI", C: "Kĩ thuật và ứng dụng AI", D: "Thiết kế hệ thống AI"};
+let lop = get("matran-lop", 6) || 6;
+const DAY = get("matran-ai", {});
+
+function baiCuaLop(l){
+  const r = [];
+  window.CHUONG_TRINH.forEach(L => { if (L.lop === l) L.chuDe.forEach(cd => cd.bai.forEach(b => { const n = NA.lay(b.repo); if (n) r.push({b, n, tiet: parseInt(String(n.tiet), 10) || 99}); })); });
+  return r.sort((a, b) => a.tiet - b.tiet);
+}
+const chipBai = (x, cls) => '<a class="chip' + (cls ? " " + cls : "") + '" href="../' + esc(x.b.url) + 'giaovien.html" target="_blank" rel="noopener" title="' + esc(x.b.ten) + '">B' + esc(x.b.so) + " · T" + esc(x.n.tiet) + "</a>";
+
+function ve(){
+  put("matran-lop", lop);
+  $("lop").innerHTML = [6, 7, 8, 9].map(l => '<button class="pill" type="button" data-l="' + l + '" aria-pressed="' + (l === lop) + '">Tin ' + l + "</button>").join("");
+  const BAI = baiCuaLop(lop), AI = (AI_BAI && AI_BAI[lop]) || [];
+
+  /* ----- Năng lực số ----- */
+  const theoMa = {};
+  BAI.forEach(x => x.n.nls.forEach(m => (theoMa[m] = theoMa[m] || []).push(x)));
+  const nlCo = new Set(Object.keys(theoMa).map(m => m.split(".").slice(0, 2).join(".")));
+  let h = '<h2>📌 Năng lực số (TT 02/2025, chỉ báo theo CV 3456)</h2><p class="sm" style="margin:0 0 8px">Lớp ' + lop + " ở bậc " + (lop <= 7 ? "3 (TC1)" : "4 (TC2)") + ". Mỗi dòng là một chỉ báo được dạy trong ít nhất một bài; bấm bài để mở trang giáo viên.</p>"
+    + '<div class="tw"><table><thead><tr><th>Mã chỉ báo</th><th>Nội dung</th><th>Bài · tiết PPCT</th></tr></thead><tbody>';
+  Object.keys(MIEN).forEach(mi => {
+    const ma = Object.keys(theoMa).filter(m => m[0] === mi).sort();
+    h += '<tr><td colspan="3" class="mien">Miền ' + mi + ". " + MIEN[mi] + ' <span class="sm">· ' + ma.length + " chỉ báo</span></td></tr>";
+    ma.forEach(m => { h += '<tr><td class="ma">' + m + "</td><td>" + esc(NA.chiBao[m] || "") + "</td><td>" + theoMa[m].map(x => chipBai(x)).join("") + "</td></tr>"; });
+    if (!ma.length) h += '<tr><td colspan="3" class="trong">Chưa có bài nào của lớp ' + lop + " gắn miền này.</td></tr>";
+  });
+  const trong = [];
+  Object.keys(SO_NL).forEach(mi => { for (let k = 1; k <= SO_NL[mi]; k++) if (!nlCo.has(mi + "." + k)) trong.push(mi + "." + k); });
+  h += "</tbody></table></div>" + '<div class="gap"><b>Năng lực thành phần chưa có bài dạy ở lớp ' + lop + " (" + trong.length + "/24):</b> " + (trong.length ? trong.map(m => '<span class="ma">' + m + "</span>").join(", ") : "không còn") + '<br><span class="sm">Có thể bổ sung khi lồng ghép ở môn khác hoặc ở chuyên đề AI (miền 6).</span></div>';
+  $("nls").innerHTML = h;
+
+  /* ----- An toàn mạng ----- */
+  const theoNhom = {};
+  BAI.forEach(x => x.n.atm.forEach(a => (theoNhom[a.nhom] = theoNhom[a.nhom] || []).push({x, a})));
+  h = '<h2>🛡️ An toàn mạng toàn diện (CV 6206)</h2><div class="tw"><table><thead><tr><th>Nhóm</th><th>Nội dung</th><th>Bài · tiết PPCT</th></tr></thead><tbody>';
+  Object.keys(NA.nhomAtm).forEach(g => {
+    const ds = theoNhom[g] || [];
+    h += '<tr><td class="ma">' + g + "</td><td>" + esc(NA.nhomAtm[g]) + "</td><td>" + (ds.length ? ds.map(d => chipBai(d.x, d.a.muc === "B" ? "b" : "kk")).join("") : '<span class="trong">Chưa có bài</span>') + "</td></tr>";
+  });
+  $("atm").innerHTML = h + '</tbody></table></div><p class="sm" style="margin:6px 0 0"><span class="chip b">đỏ</span> bắt buộc [B] · <span class="chip kk">xanh</span> khuyến khích [KK]</p>';
+
+  /* ----- Chuyên đề AI ----- */
+  const D = DAY[lop] = DAY[lop] || {};
+  const tong = AI.reduce((s, b) => s + b.tiet, 0), da = AI.filter(b => D[b.so]).reduce((s, b) => s + b.tiet, 0);
+  const mach = {}; AI.forEach(b => b.ma.forEach(m => { const k = m.split(".")[1][0]; mach[k] = (mach[k] || 0) + 1; }));
+  h = '<h2>🤖 Chuyên đề giáo dục AI (QĐ 2422) – ' + tong + ' tiết cốt lõi</h2><p class="sm" style="margin:0">Đánh dấu ngày dạy từng bài (lưu trên máy này). Đã dạy <b>' + da + "/" + tong + ' tiết</b>.</p><div class="bar"><i style="width:' + (tong ? 100 * da / tong : 0) + '%"></i></div>'
+    + '<p class="sm" style="margin:2px 0 8px">Số yêu cầu cần đạt theo mạch: ' + Object.keys(MACH).map(k => "<b>" + k + "</b> " + MACH[k] + ": " + (mach[k] || 0)).join(" · ") + "</p>"
+    + '<div class="tw"><table><thead><tr><th>Bài</th><th>Tiết</th><th>Yêu cầu cần đạt</th><th>Trải nghiệm trên trang</th><th>Ngày dạy</th></tr></thead><tbody>'
+    + AI.map(b => { const app = AI_APP.filter(a => (a[2][lop] || []).indexOf(b.so) >= 0);
+      return "<tr><td" + (D[b.so] ? ' class="done"' : "") + "><b>Bài " + b.so + ".</b> " + esc(b.ten) + "</td><td>" + b.tiet + "</td><td>" + b.ma.map(m => '<span class="ma" title="' + esc(b.yc[m] || "") + '">' + m + "</span>").join(", ") + "</td><td>"
+        + (app.map(a => '<a class="chip" href="../' + a[0] + '" target="_blank" rel="noopener">' + a[1] + "</a>").join("") || '<span class="sm">–</span>') + '</td><td><input type="date" data-so="' + b.so + '" value="' + esc(D[b.so] || "") + '" aria-label="Ngày dạy bài ' + b.so + '"></td></tr>'; }).join("")
+    + "</tbody></table></div>" + (AI.length ? "" : '<p class="trong">Chưa có dữ liệu chuyên đề AI cho lớp này.</p>') + '<p class="sm" style="margin:6px 0 0">Rê chuột vào mã để xem nội dung yêu cầu cần đạt.</p>';
+  $("ai").innerHTML = h;
+  $("ai").querySelectorAll("input[type=date]").forEach(i => i.addEventListener("change", () => { if (i.value) D[i.dataset.so] = i.value; else delete D[i.dataset.so]; put("matran-ai", DAY); ve(); }));
+
+  /* ----- Tóm tắt ----- */
+  const nAtmB = new Set(); BAI.forEach(x => x.n.atm.forEach(a => { if (a.muc === "B") nAtmB.add(a.nhom); }));
+  $("sum").innerHTML = [[BAI.length, "bài Tin học có mã NLS"], [(24 - trong.length) + "/24", "năng lực thành phần đã có bài"], [Object.keys(theoNhom).length + "/8", "nhóm an toàn mạng (" + nAtmB.size + " bắt buộc)"], [da + "/" + tong, "tiết chuyên đề AI đã dạy"]]
+    .map(s => "<div><b>" + s[0] + '</b><span class="sm">' + s[1] + "</span></div>").join("");
+}
+$("lop").addEventListener("click", e => { const b = e.target.closest("button"); if (b) { lop = Number(b.dataset.l); ve(); } });
+ve();
+})();
+</script>
+</body>
+</html>
