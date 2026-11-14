@@ -45,7 +45,21 @@ let myWriter = null;
 const classDocs = [];
 if (!S.clientId) S.clientId = "m" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
-function saveLocal(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
+function saveLocal(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {}  saveHoSo(); }
+/* Hồ sơ của em (../ho-so/): tóm tắt tiến độ bài này vào khoá chung "hoso-v1" */
+let khenN = 0;
+function saveHoSo(){
+  try {
+    const dir = (location.pathname.match(/\/(tin[6-9]-[a-z0-9-]+)\//) || [])[1]; if (!dir) return;
+    const sub = TASK_IDS.filter(id => S.sub && S.sub[id]);
+    let tc = 0, ok = 0;
+    sub.forEach(id => { const g = grade(id, S); if (g && typeof g.ok === "boolean") { tc++; if (g.ok) ok++; } });
+    const H = JSON.parse(localStorage.getItem("hoso-v1") || "{}") || {};
+    const old = H[dir] || {};
+    H[dir] = {id: window.LESSON.id, ten: window.LESSON.title || "", n: TASK_IDS.length, sub: sub.length, tc, ok, khen: Math.max(khenN, old.khen || 0), name: S.name || "", t: Date.now(), d0: old.d0 || Date.now()};
+    localStorage.setItem("hoso-v1", JSON.stringify(H));
+  } catch(e) {}
+}
 let rafPending = false;
 function changed(){ if (!rafPending) { rafPending = true; requestAnimationFrame(() => { rafPending = false; renderAll(); }); } S.t = Date.now(); saveLocal(); if (myWriter && mode === "online") myWriter.queue(); updateProgress(); if (dashOn()) { renderDash(); renderGroups(); } }
 const dashOn = () => mode === "local" && !!S.teacher;
@@ -354,8 +368,9 @@ document.querySelectorAll("[data-concept]").forEach(slot => {
 /* ================= TIẾN ĐỘ, CHẾ ĐỘ ================= */
 function updateProgress(){
   const n = mode === "online" ? Object.keys(NX).filter(k => k.indexOf("like.") === 0 && TASKS[k.slice(5)]).length : 0;
+  if (n > khenN) { khenN = n; saveHoSo(); }
   const p = document.getElementById("prog");
-  p.innerHTML = "Đã nộp " + countSub(S) + "/" + TASK_IDS.length + " câu" + (n ? ' <span class="praise-count" title="Số câu được thầy cô khen">⭐ ' + n + " lời khen</span>" : "");
+  p.innerHTML = "Đã nộp " + countSub(S) + "/" + TASK_IDS.length + " câu" + (n ? ' <span class="praise-count" title="Số câu được thầy cô khen">⭐ ' + n + " lời khen</span>" : "") + ' · <a href="../ho-so/" title="Huy hiệu và tiến độ mọi bài">🏅 Hồ sơ của em</a>';
 }
 /* Lời khen mới của thầy cô: chúc mừng một lần cho mỗi câu (nhớ trên máy, tải lại trang không lặp lại) */
 function celebrateNew(){
@@ -659,7 +674,7 @@ outline = window.Outline.mount({
   progress: a => a.tasks.length ? {done: a.tasks.filter(t => S.sub[t]).length, total: a.tasks.length} : {done: 0, total: 0, label: ""},
   chot: a => a.tasks.length ? a.tasks.every(t => isRev(t)) : isRev(a.concept)
 });
-renderAll();
+renderAll(); saveHoSo();
 if (S.session && String(S.active).indexOf("on:") === 0) {
   if (API.demo) leaveSession();
   else { $("buoi").value = S.session; goOnline(); }
