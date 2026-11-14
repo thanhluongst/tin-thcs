@@ -48,6 +48,7 @@ if (!S.clientId) S.clientId = "m" + Date.now().toString(36) + Math.random().toSt
 function saveLocal(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {}  saveHoSo(); }
 /* Hồ sơ của em (../ho-so/): tóm tắt tiến độ bài này vào khoá chung "hoso-v1" */
 let khenN = 0;
+const ONTAP_DIR = (location.pathname.match(/\/(tin[6-9]-[a-z0-9-]+)\//) || [])[1] || "";
 function saveHoSo(){
   try {
     const dir = (location.pathname.match(/\/(tin[6-9]-[a-z0-9-]+)\//) || [])[1]; if (!dir) return;
@@ -370,7 +371,7 @@ function updateProgress(){
   const n = mode === "online" ? Object.keys(NX).filter(k => k.indexOf("like.") === 0 && TASKS[k.slice(5)]).length : 0;
   if (n > khenN) { khenN = n; saveHoSo(); }
   const p = document.getElementById("prog");
-  p.innerHTML = "Đã nộp " + countSub(S) + "/" + TASK_IDS.length + " câu" + (n ? ' <span class="praise-count" title="Số câu được thầy cô khen">⭐ ' + n + " lời khen</span>" : "") + ' · <a href="../ho-so/" title="Huy hiệu và tiến độ mọi bài">🏅 Hồ sơ của em</a>';
+  p.innerHTML = "Đã nộp " + countSub(S) + "/" + TASK_IDS.length + " câu" + (n ? ' <span class="praise-count" title="Số câu được thầy cô khen">⭐ ' + n + " lời khen</span>" : "") + ' · <a href="../ho-so/" title="Huy hiệu và tiến độ mọi bài">🏅 Hồ sơ của em</a>' + (ONTAP_DIR ? ' · <a href="../on-tap/?bai=' + ONTAP_DIR + '" title="Luyện câu hỏi, thẻ ghi nhớ của bài này">📝 Ôn tập</a>' : "");
 }
 /* Lời khen mới của thầy cô: chúc mừng một lần cho mỗi câu (nhớ trên máy, tải lại trang không lặp lại) */
 function celebrateNew(){
