@@ -665,6 +665,9 @@ $("leave").addEventListener("click", leaveSession);
 /* Link có ?buoi=MÃ thì điền sẵn mã buổi học */
 const qBuoi = API.normSession(new URLSearchParams(location.search).get("buoi") || "");
 if (qBuoi) $("buoi").value = qBuoi;
+/* Link có ?ten=… (phần mềm Quản lý phòng máy mở bài cho từng máy) thì điền sẵn tên học sinh */
+const qTen = (new URLSearchParams(location.search).get("ten") || "").replace(/[<>]/g, "").trim().slice(0, 60);
+if (qTen) { S.name = qTen; nm.value = qTen; nm.dataset.touched = "1"; saveLocal(); }
 
 if (API.demo) {
   const lead = document.querySelector("header .lead");
@@ -676,7 +679,14 @@ outline = window.Outline.mount({
   chot: a => a.tasks.length ? a.tasks.every(t => isRev(t)) : isRev(a.concept)
 });
 renderAll(); saveHoSo();
-if (S.session && String(S.active).indexOf("on:") === 0) {
+/* Có cả tên và mã buổi trên link: tự vào buổi học (đổi sang buổi mới nếu máy đang ở buổi khác) */
+if (qTen && qBuoi && !API.demo && !(S.session === qBuoi && String(S.active).indexOf("on:") === 0)) {
+  if (S.session && String(S.active).indexOf("on:") === 0) leaveSession();
+  S.name = qTen; nm.value = qTen;
+  $("buoi").value = qBuoi;
+  joinSession();
+}
+else if (S.session && String(S.active).indexOf("on:") === 0) {
   if (API.demo) leaveSession();
   else { $("buoi").value = S.session; goOnline(); }
 }
