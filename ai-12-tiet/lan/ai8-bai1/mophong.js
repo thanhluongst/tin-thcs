@@ -1,6 +1,7 @@
 /* Mô phỏng Bài 1 lớp 8 – chỉ để minh hoạ, số liệu giả định. Hàm tiện ích (_el,_shell,_seg,_wireSeg,histTable) có sẵn trong khung lop/mophong.js. */
-function _meter(lbl,v,col){return `<div style="margin:6px 0"><div style="display:flex;justify-content:space-between;font-weight:600"><span>${lbl}</span><span>${v}%</span></div><div style="height:14px;background:#e5e7eb;border-radius:99px;overflow:hidden"><i style="display:block;height:100%;width:${v}%;background:${col};transition:width .6s"></i></div></div>`;}
 const SIMS={
+/* hàm vẽ thước đo dùng chung (không phải mô phỏng) */
+_m(lbl,v,col){return `<div style="margin:6px 0"><div style="display:flex;justify-content:space-between;font-weight:600"><span>${lbl}</span><span>${v}%</span></div><div style="height:14px;background:#e5e7eb;border-radius:99px;overflow:hidden"><i style="display:block;height:100%;width:${v}%;background:${col};transition:width .6s"></i></div></div>`;},
 /* 1. Giao việc cho AI đến mức nào? */
 replace(){
   const F={gd:['Giáo dục','chấm, nhận xét bài văn'],yt:['Y tế','báo kết quả bệnh, tư vấn'],nt:['Nghệ thuật','vẽ tranh dự thi']};
@@ -17,7 +18,7 @@ replace(){
   e.querySelector('.run').onclick=()=>{ if(window.FX) FX.play('whoosh');
     const p=+pc.value/100, sp=Math.round(30+70*p), th=Math.round(p<=.5?90-20*p:80-150*(p-.5)), tr=Math.round(p<=.5?95-10*p:90-160*(p-.5)), ds=Math.round(st.f==='nt'?95-90*p:85-60*p);
     const cl=v=>Math.max(5,Math.min(100,v)); const v=[sp,cl(th),cl(tr),cl(ds)];
-    e.querySelector('.out').innerHTML=`<p><b>${F[st.f][0]}</b> – ${F[st.f][1]}</p>`+_meter('⚡ Tốc độ, tiết kiệm công sức',v[0],'#2563eb')+_meter('💗 Sự thấu hiểu, tình cảm',v[1],'#db2777')+_meter('🧑‍⚖️ Có người chịu trách nhiệm rõ ràng',v[2],'#16a34a')+_meter('✍️ Dấu ấn riêng của con người',v[3],'#d97706')+
+    e.querySelector('.out').innerHTML=`<p><b>${F[st.f][0]}</b> – ${F[st.f][1]}</p>`+SIMS_BAI._m('⚡ Tốc độ, tiết kiệm công sức',v[0],'#2563eb')+SIMS_BAI._m('💗 Sự thấu hiểu, tình cảm',v[1],'#db2777')+SIMS_BAI._m('🧑‍⚖️ Có người chịu trách nhiệm rõ ràng',v[2],'#16a34a')+SIMS_BAI._m('✍️ Dấu ấn riêng của con người',v[3],'#d97706')+
       `<p class="hint">${p>=.9?'⚠ Giao hết cho AI: nhanh nhưng mất sự thấu hiểu và không rõ ai chịu trách nhiệm.':p<=.1?'Không dùng AI: vẫn tốt nhưng chậm, tốn công.':'✅ AI hỗ trợ, con người quyết định: cân bằng hơn.'}</p>`;
     st.hist.unshift([F[st.f][0],pc.value+'%',...v.map(x=>x+'%')]); st.hist=st.hist.slice(0,6); histTable(e,st.hist,(x,j)=>j>=3&&parseInt(x)<40?'r':'');
     if(window.FX) FX.play('ding');};
