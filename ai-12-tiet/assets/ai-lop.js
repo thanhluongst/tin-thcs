@@ -8,5 +8,5 @@ const AI_LOP={
 const KT={6:{9:'Kiểm tra giữa kì I',17:'Ôn tập',18:'Kiểm tra cuối kì I',25:'Kiểm tra giữa kì II',33:'Ôn tập',34:'Kiểm tra cuối kì II'},
 7:{9:'Kiểm tra giữa kì I',17:'Ôn tập',18:'Kiểm tra cuối kì I',26:'Kiểm tra giữa kì II',33:'Ôn tập',34:'Kiểm tra cuối kì II'}};
 KT[8]=KT[9]=Object.assign({},KT[7],{8:'Kiểm tra giữa kì I'});delete KT[8][9];
-const LAN=['ai8-bai3'];   // bài AI đã cài vào máy chủ LAN (ai-12-tiet/lan/)
+const LAN=['ai8-bai1','ai8-bai2','ai8-bai3'];   // bài AI đã cài vào máy chủ LAN (ai-12-tiet/lan/)
 const STEM={6:[28,29],7:[19,20],8:[23,24],9:[15,16]};
