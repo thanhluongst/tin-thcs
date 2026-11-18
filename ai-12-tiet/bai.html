@@ -1,0 +1,34 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bài học AI 6</title><link rel="stylesheet" href="assets/style.css"></head><body>
+<header class="top"><div class="w"><a href="./?lop=6">← AI 12 tiết – Lớp 6</a><h1 id="ti"></h1><p id="sub"></p></div></header>
+<main><div class="tabs" id="tabs"></div><div id="panes"></div></main>
+<footer>Mô phỏng chỉ để minh hoạ · tình huống giả định · đánh giá theo mức đáp ứng YCCĐ (CV 5588)</footer>
+<script src="assets/data.js"></script><script src="assets/sims.js"></script><script>
+const b=+(new URLSearchParams(location.search).get('b')||1),L=LESSONS.find(x=>x.so==b)||LESSONS[0];
+const K='ncbh6_'+L.so+'_',sv=(k,v)=>{try{localStorage.setItem(K+k,v)}catch(e){}},ld=k=>{try{return localStorage.getItem(K+k)||''}catch(e){return''}};
+document.title='Bài '+L.so+' – AI 6';ti.textContent=L.ic+' Bài '+L.so+'. '+L.ten;sub.textContent=`Tiết ${L.tiet} · Tuần ${L.tuan} · ${L.yccd.map(y=>y[0]).join(', ')}`;
+const note=(k,ph)=>`<textarea data-k="${k}" placeholder="${ph}">${ld(k)}</textarea>`;
+const P=[
+['① Chuẩn bị (thiết kế chung)',`<div class="card"><h3>🎯 Yêu cầu cần đạt</h3><table>${L.yccd.map(y=>`<tr><td><b>${y[0]}</b></td><td>${y[1]}</td></tr>`).join('')}</table></div>
+<div class="card"><h3>❓ Câu hỏi nghiên cứu của tổ</h3><p>${L.nc.cau}</p><h4>Tiến trình dự kiến</h4><table><tr><th>Hoạt động</th><th>Phút</th><th>Mô phỏng</th></tr>${L.hd.map(h=>`<tr><td>${h.t}</td><td>${h.phut}</td><td>${h.sim?SIMS[h.sim].t:'—'}</td></tr>`).join('')}</table>
+<h4>Dự đoán khó khăn của HS</h4>${note('dudoan','Tổ ghi các dự đoán…')}</div>`],
+['② Dạy minh hoạ',L.hd.map((h,i)=>`<div class="card hd"><h3>Hoạt động ${i+1}. ${h.t}</h3><div class="meta">⏱ ${h.phut} phút</div>
+<div class="nv">📋 <b>Nhiệm vụ:</b> ${h.nv}</div>${h.sim?`<div class="sim" data-sim="${h.sim}"><h4>${SIMS[h.sim].t}</h4><div></div><p class="note">⚠ Mô phỏng chỉ để minh hoạ.</p></div>`:''}
+<div class="q" data-i="${i}"><b>🤔 ${h.q.q}</b>${h.q.o.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}<button class="btn">Trả lời</button><div></div></div>
+<div class="chot" id="c${i}"><h5>📝 Chốt kiến thức</h5><ul>${h.chot.map(c=>`<li>${c}</li>`).join('')}</ul></div></div>`).join('')+
+`<div class="card"><h3>📒 Ghi nhớ</h3><ul>${L.ghi.map(g=>`<li>${g}</li>`).join('')}</ul></div>`],
+['③ Dự giờ – quan sát HS',`<div class="card"><p>Người dự giờ ngồi gần 1 nhóm, <b>quan sát học sinh</b> (không đánh giá GV).</p>${L.nc.quan.map((q,i)=>`<h4>${i+1}. ${q}</h4>${note('qs'+i,'Ghi bằng chứng: HS nói/làm gì, lúc nào…')}`).join('')}
+<h4>Khoảnh khắc HS "vỡ lẽ" / bị kẹt</h4>${note('khoanh','…')}</div>`],
+['④ Suy ngẫm – chia sẻ',`<div class="card"><h4>HS đã học được gì? Bằng chứng?</h4>${note('sn1','')}<h4>Chỗ nào HS chưa học được? Vì sao?</h4>${note('sn2','')}
+<h4>Điều chỉnh cho lần dạy sau (thiết kế lại)</h4>${note('sn3','')}<button class="btn" onclick="exp()">⬇ Tải biên bản (.txt)</button> <button class="btn g" onclick="print()">🖨 In</button></div>`]];
+P.forEach((p,i)=>{const t=document.createElement('button');t.textContent=p[0];t.onclick=()=>show(i);tabs.append(t);panes.insertAdjacentHTML('beforeend',`<div class="pane" style="display:none">${p[1]}</div>`)});
+function show(i){[...tabs.children].forEach((t,j)=>t.classList.toggle('on',i==j));[...panes.children].forEach((p,j)=>p.style.display=i==j?'':'none');try{sessionStorage.setItem('tab'+b,i)}catch(e){}}
+let s0=0;try{s0=+(sessionStorage.getItem('tab'+b)||0)}catch(e){}show(location.hash=='#day'?1:s0);
+document.querySelectorAll('.sim').forEach(s=>SIMS[s.dataset.sim].f(s.querySelector('div')));
+document.querySelectorAll('.q').forEach(q=>q.querySelector('button').onclick=()=>{const i=+q.dataset.i,v=q.querySelector('input:checked');if(!v)return;
+ const ok=+v.value===L.hd[i].q.ok;q.lastElementChild.innerHTML=`<div class="res ${ok?'ok':'no'}">${ok?'✅ Chính xác!':'❌ Chưa đúng – hãy chạy lại mô phỏng và quan sát kĩ.'}</div>`;if(ok)document.getElementById('c'+i).classList.add('show')});
+document.querySelectorAll('textarea').forEach(t=>t.oninput=()=>sv(t.dataset.k,t.value));
+function exp(){let s=`BIÊN BẢN NGHIÊN CỨU BÀI HỌC\nBài ${L.so}. ${L.ten} (lớp 6)\nCâu hỏi nghiên cứu: ${L.nc.cau}\n\n`;
+ document.querySelectorAll('textarea').forEach(t=>{const h=t.previousElementSibling;s+=`# ${h?h.textContent:t.dataset.k}\n${t.value||'(trống)'}\n\n`});
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+s],{type:'text/plain'}));a.download=`NCBH_AI6_Bai${L.so}.txt`;a.click()}
+</script></body></html>

@@ -1,0 +1,37 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 12 tiết THCS</title><link rel="stylesheet" href="assets/style.css">
+<style>.wk td:first-child{width:52px;text-align:center}.ai{background:var(--pri2)}.kt{background:var(--warnb)}.stem{background:var(--okb)}.hk td{background:var(--line);font-weight:600}
+.legend span{display:inline-block;padding:2px 10px;border-radius:6px;margin-right:6px;font-size:.85rem}</style></head><body>
+<header class="top"><div class="w"><a href="../">← Tin học THCS</a><h1>🧪 Giáo dục AI 12 tiết – Nghiên cứu bài học</h1><p>Lồng với phân phối chương trình Tin học 6–9 (2026–2027) · chia theo lớp</p></div></header>
+<main>
+<div class="tabs" id="tabs"></div>
+<div id="lop"></div>
+<div class="card"><h2>Chu trình nghiên cứu bài học trong mỗi bài</h2><div class="cycle">
+<div><b>① Chuẩn bị</b>Tổ đọc YCCĐ, đặt câu hỏi nghiên cứu, dự đoán khó khăn của HS.</div>
+<div><b>② Dạy minh hoạ</b>HS làm mô phỏng → trả lời câu quan sát → chốt kiến thức.</div>
+<div><b>③ Dự giờ</b>Quan sát việc học của HS, ghi bằng chứng.</div>
+<div><b>④ Suy ngẫm</b>Thảo luận, điều chỉnh thiết kế, tải biên bản.</div></div></div>
+<div class="card"><h2>💡 Phương pháp lồng ghép đề xuất</h2><ul>
+<li><b>Học qua mô phỏng (kiểu PhET):</b> HS thay đổi thông số → quan sát → ghi bảng "Lần chạy" → tự rút ra quy luật.</li>
+<li><b>Dự đoán – Quan sát – Giải thích:</b> câu hỏi trước và sau mô phỏng.</li>
+<li><b>5E:</b> khớp 4 hoạt động CV 5512. <b>Unplugged AI:</b> xếp thẻ, đèn Xanh–Vàng–Đỏ, không cần tài khoản AI (HS dưới 13 tuổi).</li>
+<li><b>Nối với tiết Tin học cùng tuần:</b> mở đầu tiết AI bằng kiến thức Tin vừa học (xem bảng tuần).</li>
+<li><b>Đánh giá vì sự tiến bộ (CV 5588):</b> mức đáp ứng YCCĐ + minh chứng, không chấm điểm.</li></ul></div>
+</main><footer>Tổ Tin học · tình huống giả định · mô phỏng chỉ để minh hoạ</footer>
+<script src="assets/data.js"></script><script src="assets/ai-lop.js"></script><script src="assets/ppct.js"></script><script>
+const wkOf=s=>{const[a,b]=s.split('–').map(Number);return b?[a,b]:[a]};
+function show(L){[...tabs.children].forEach(t=>t.classList.toggle('on',t.dataset.l==L));try{localStorage.setItem('ai12lop',L)}catch(e){}
+ const ai=AI_LOP[L],aiW={};ai.forEach(a=>wkOf(a[3]).forEach((w,i)=>aiW[w]=[a,wkOf(a[2])[i]||a[2]]));
+ const cards=ai.map(a=>{const l=L==6&&LESSONS.find(x=>x.so==a[0]);return `<a class="card post" ${l?`href="bai.html?b=${a[0]}"`:''}>${l?`<div class="ic">${l.ic}</div>`:''}<h3>Bài ${a[0]}. ${a[1]}</h3>
+ <span class="tag">Tiết AI ${a[2]}</span><span class="tag">Tuần ${a[3]}</span>${l?`<span class="tag">${l.hd.filter(h=>h.sim).length} mô phỏng</span>`:'<span class="tag" style="opacity:.6">đang xây dựng</span>'}</a>`}).join('');
+ let rows='';for(let w=1;w<=35;w++){if(w==1)rows+='<tr class="hk"><td colspan="3">Học kì I</td></tr>';if(w==19)rows+='<tr class="hk"><td colspan="3">Học kì II</td></tr>';
+  const p=PPCT[L][w],k=KT[L][w],a=aiW[w],st=STEM[L].includes(w);
+  const tin=k?`📝 ${k}`:p?`<a href="../${p[2]}/" target="_blank">Bài ${p[0]}. ${p[1]}</a>${st?' <span class="tag">STEM</span>':''}`:'—';
+  const ac=a?(L==6?`<a href="bai.html?b=${a[0][0]}">Bài ${a[0][0]}. ${a[0][1]}</a>`:`Bài ${a[0][0]}. ${a[0][1]}`)+` <small>(tiết AI ${a[1]})</small>`:'';
+  rows+=`<tr><td>${w}</td><td class="${k?'kt':st?'stem':''}">${tin}</td><td class="${a?'ai':''}">${ac}</td></tr>`}
+ lop.innerHTML=`<h2>Lớp ${L} – 12 tiết AI</h2><div class="grid">${cards}</div>
+ <div class="card"><h2>📅 Kế hoạch theo tuần – Lớp ${L}</h2><p class="legend"><span class="ai">AI 12 tiết</span><span class="stem">Bài STEM</span><span class="kt">Kiểm tra</span></p>
+ <div style="overflow-x:auto"><table class="wk"><tr><th>Tuần / tiết</th><th>Tin học (PPCT 35 tiết)</th><th>Giáo dục AI (12 tiết)</th></tr>${rows}</table></div></div>`}
+[6,7,8,9].forEach(L=>{const b=document.createElement('button');b.textContent='Lớp '+L;b.dataset.l=L;b.onclick=()=>show(L);tabs.append(b)});
+let L0=+(new URLSearchParams(location.search).get('lop'))||0;if(!L0)try{L0=+localStorage.getItem('ai12lop')}catch(e){}show(PPCT[L0]?L0:6);
+</script></body></html>
