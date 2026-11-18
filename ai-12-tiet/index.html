@@ -23,7 +23,7 @@ const wkOf=s=>{const[a,b]=s.split('–').map(Number);return b?[a,b]:[a]};
 function show(L){[...tabs.children].forEach(t=>t.classList.toggle('on',t.dataset.l==L));try{localStorage.setItem('ai12lop',L)}catch(e){}
  const ai=AI_LOP[L],aiW={};ai.forEach(a=>wkOf(a[3]).forEach((w,i)=>aiW[w]=[a,wkOf(a[2])[i]||a[2]]));
  const cards=ai.map(a=>{const l=L==6&&LESSONS.find(x=>x.so==a[0]);return `<a class="card post" ${l?`href="bai.html?b=${a[0]}"`:''}>${l?`<div class="ic">${l.ic}</div>`:''}<h3>Bài ${a[0]}. ${a[1]}</h3>
- <span class="tag">Tiết AI ${a[2]}</span><span class="tag">Tuần ${a[3]}</span>${l?`<span class="tag">${l.hd.filter(h=>h.sim).length} mô phỏng</span>`:'<span class="tag" style="opacity:.6">đang xây dựng</span>'}</a>`}).join('');
+ <span class="tag">Tiết AI ${a[2]}</span><span class="tag">Tuần ${a[3]}</span>${l?`<span class="tag">${l.hd.filter(h=>h.sim).length} mô phỏng</span>`:'<span class="tag" style="opacity:.6">đang xây dựng</span>'}${LAN.includes(`ai${L}-bai${a[0]}`)?'<span class="tag">🖥 Dạy trên LAN</span>':''}</a>`}).join('');
  let rows='';for(let w=1;w<=35;w++){if(w==1)rows+='<tr class="hk"><td colspan="3">Học kì I</td></tr>';if(w==19)rows+='<tr class="hk"><td colspan="3">Học kì II</td></tr>';
   const p=PPCT[L][w],k=KT[L][w],a=aiW[w],st=STEM[L].includes(w);
   const tin=k?`📝 ${k}`:p?`<a href="../${p[2]}/" target="_blank">Bài ${p[0]}. ${p[1]}</a>${st?' <span class="tag">STEM</span>':''}`:'—';
