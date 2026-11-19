@@ -18,12 +18,14 @@
 <li><b>Nối với tiết Tin học cùng tuần:</b> mở đầu tiết AI bằng kiến thức Tin vừa học (xem bảng tuần).</li>
 <li><b>Đánh giá vì sự tiến bộ (CV 5588):</b> mức đáp ứng YCCĐ + minh chứng, không chấm điểm.</li></ul></div>
 </main><footer>Tổ Tin học · tình huống giả định · mô phỏng chỉ để minh hoạ</footer>
-<script src="assets/data.js"></script><script src="assets/ai-lop.js"></script><script src="assets/ppct.js"></script><script>
+<script src="assets/labs.js"></script><script src="assets/data.js"></script><script src="assets/ai-lop.js"></script><script src="assets/ppct.js"></script><script>
 const wkOf=s=>{const[a,b]=s.split('–').map(Number);return b?[a,b]:[a]};
 function show(L){[...tabs.children].forEach(t=>t.classList.toggle('on',t.dataset.l==L));try{localStorage.setItem('ai12lop',L)}catch(e){}
  const ai=AI_LOP[L],aiW={};ai.forEach(a=>wkOf(a[3]).forEach((w,i)=>aiW[w]=[a,wkOf(a[2])[i]||a[2]]));
- const cards=ai.map(a=>{const l=L==6&&LESSONS.find(x=>x.so==a[0]);return `<a class="card post" ${l?`href="bai.html?b=${a[0]}"`:''}>${l?`<div class="ic">${l.ic}</div>`:''}<h3>Bài ${a[0]}. ${a[1]}</h3>
- <span class="tag">Tiết AI ${a[2]}</span><span class="tag">Tuần ${a[3]}</span>${l?`<span class="tag">${l.hd.filter(h=>h.sim).length} mô phỏng</span>`:'<span class="tag" style="opacity:.6">đang xây dựng</span>'}${LAN.includes(`ai${L}-bai${a[0]}`)?'<span class="tag">🖥 Dạy trên LAN</span>':''}</a>`}).join('');
+ const cards=ai.map(a=>{const l=L==6&&LESSONS.find(x=>x.so==a[0]),lk=LAB_BAI[`ai${L}-bai${a[0]}`],X=LABS[lk]||{c1:'#4f46e5',c2:'#7c3aed',ic:'🤖'};
+  const h=l?`bai.html?b=${a[0]}`:'';return `<div class="card les" style="--l1:${X.c1};--l2:${X.c2}"><div class="les-art"><span class="ic">${l?l.ic:X.ic}</span><span class="so">${a[0]}</span></div>
+  <div class="les-b"><h3>${h?`<a href="${h}">`:''}Bài ${a[0]}. ${a[1]}${h?'</a>':''}</h3><div><span class="tag">Tiết AI ${a[2]}</span><span class="tag">Tuần ${a[3]}</span>${l?`<span class="tag">${l.hd.filter(h=>h.sim).length} mô phỏng</span>`:''}${LAN.includes(`ai${L}-bai${a[0]}`)?'<span class="tag">🖥 Dạy trên LAN</span>':''}</div>
+  <div class="les-act">${h?`<a class="go" href="${h}">📖 Bài học</a>`:''}${X.u?`<a class="go lab" href="${X.u}" target="_blank" rel="noopener">${X.ic} ${X.t}</a>`:''}</div></div></div>`}).join('');
  let rows='';for(let w=1;w<=35;w++){if(w==1)rows+='<tr class="hk"><td colspan="3">Học kì I</td></tr>';if(w==19)rows+='<tr class="hk"><td colspan="3">Học kì II</td></tr>';
   const p=PPCT[L][w],k=KT[L][w],a=aiW[w],st=STEM[L].includes(w);
   const tin=k?`📝 ${k}`:p?`<a href="../${p[2]}/" target="_blank">Bài ${p[0]}. ${p[1]}</a>${st?' <span class="tag">STEM</span>':''}`:'—';

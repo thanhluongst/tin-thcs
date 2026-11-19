@@ -3,7 +3,7 @@
 <header class="top"><div class="w"><a href="./?lop=6">← AI 12 tiết – Lớp 6</a><h1 id="ti"></h1><p id="sub"></p></div></header>
 <main><div class="tabs" id="tabs"></div><div id="panes"></div></main>
 <footer>Mô phỏng chỉ để minh hoạ · tình huống giả định · đánh giá theo mức đáp ứng YCCĐ (CV 5588)</footer>
-<script src="assets/data.js"></script><script src="assets/sims.js"></script><script>
+<script src="assets/labs.js"></script><script src="assets/data.js"></script><script src="assets/sims.js"></script><script>
 const b=+(new URLSearchParams(location.search).get('b')||1),L=LESSONS.find(x=>x.so==b)||LESSONS[0];
 const K='ncbh6_'+L.so+'_',sv=(k,v)=>{try{localStorage.setItem(K+k,v)}catch(e){}},ld=k=>{try{return localStorage.getItem(K+k)||''}catch(e){return''}};
 document.title='Bài '+L.so+' – AI 6';ti.textContent=L.ic+' Bài '+L.so+'. '+L.ten;sub.textContent=`Tiết ${L.tiet} · Tuần ${L.tuan} · ${L.yccd.map(y=>y[0]).join(', ')}`;
@@ -12,7 +12,7 @@ const P=[
 ['① Chuẩn bị (thiết kế chung)',`<div class="card"><h3>🎯 Yêu cầu cần đạt</h3><table>${L.yccd.map(y=>`<tr><td><b>${y[0]}</b></td><td>${y[1]}</td></tr>`).join('')}</table></div>
 <div class="card"><h3>❓ Câu hỏi nghiên cứu của tổ</h3><p>${L.nc.cau}</p><h4>Tiến trình dự kiến</h4><table><tr><th>Hoạt động</th><th>Phút</th><th>Mô phỏng</th></tr>${L.hd.map(h=>`<tr><td>${h.t}</td><td>${h.phut}</td><td>${h.sim?SIMS[h.sim].t:'—'}</td></tr>`).join('')}</table>
 <h4>Dự đoán khó khăn của HS</h4>${note('dudoan','Tổ ghi các dự đoán…')}</div>`],
-['② Dạy minh hoạ',L.hd.map((h,i)=>`<div class="card hd"><h3>Hoạt động ${i+1}. ${h.t}</h3><div class="meta">⏱ ${h.phut} phút</div>
+['② Dạy minh hoạ',(X=>X?`<div class="labx" style="--l1:${X.c1};--l2:${X.c2}"><div class="big">${X.ic}</div><div><small>🚀 Phòng thí nghiệm mở rộng</small><h3>${X.t}</h3><p>${X.d}</p><a href="${X.u}" target="_blank" rel="noopener">▶ Vào phòng thí nghiệm</a></div></div>`:'')(LABS[LAB_BAI['ai6-bai'+L.so]])+L.hd.map((h,i)=>`<div class="card hd"><h3>Hoạt động ${i+1}. ${h.t}</h3><div class="meta">⏱ ${h.phut} phút</div>
 <div class="nv">📋 <b>Nhiệm vụ:</b> ${h.nv}</div>${h.sim?`<div class="sim" data-sim="${h.sim}"><h4>${SIMS[h.sim].t}</h4><div></div><p class="note">⚠ Mô phỏng chỉ để minh hoạ.</p></div>`:''}
 <div class="q" data-i="${i}"><b>🤔 ${h.q.q}</b>${h.q.o.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join('')}<button class="btn">Trả lời</button><div></div></div>
 <div class="chot" id="c${i}"><h5>📝 Chốt kiến thức</h5><ul>${h.chot.map(c=>`<li>${c}</li>`).join('')}</ul></div></div>`).join('')+
