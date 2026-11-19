@@ -112,7 +112,7 @@ button,.nut{font:inherit;font-weight:700;border:0;border-radius:12px;padding:11p
   <section class="the" id="b4" hidden>
     <h2><span class="so">4</span> Gửi link cho học sinh</h2>
     <p class="mo">Học sinh mở link (hoặc quét mã QR) → nhập số căn cước → xác minh họ tên → vào lớp.</p>
-    <div class="qr"><div style="flex:1;min-width:260px"><div class="link" id="link"></div>
+    <div class="qr"><div style="flex:1;min-width:260px"><div id="ngan" hidden style="font-size:clamp(26px,5vw,44px);font-weight:800;letter-spacing:.5px;color:var(--xanh,#2563eb);margin:0 0 4px">…</div><div class="mo" id="ngan-g" hidden style="margin:0 0 8px">👆 Link ngắn: học sinh gõ đúng địa chỉ này (luôn dẫn tới bài thầy cô vừa tạo cho lớp). Link đầy đủ:</div><div class="link" id="link"></div>
       <div class="hang">
         <button type="button" id="chep">📋 Chép link</button>
         <button type="button" class="phu" id="xemchieu">📽 Chiếu link cho cả lớp</button>
@@ -282,6 +282,10 @@ function taoLink(){
   const lop2 = b.lop2;   /* bài có content.js: dạy theo kiểu giáo viên điều khiển; còn lại mở trang bài thường */
   LINK = "http://" + ip + ":" + INFO.port + (lop2 ? "/lop/" + CHON + "/" + encodeURIComponent(buoi) + "/" : "/" + CHON + "/?buoi=" + encodeURIComponent(buoi));
   $("link").textContent = LINK;
+  const ma = (l || buoi).toLowerCase().replace(/[^a-z0-9]/g, ""), host = ip + (String(INFO.port) === "80" ? "" : ":" + INFO.port);
+  $("ngan").hidden = $("ngan-g").hidden = true;
+  if (/^[6-9][a-z0-9]{1,8}$/.test(ma)) api("linkngan", {pin: ss("gv-pin"), ma, dich: LINK.replace(/^https?:\/\/[^/]+/, "")}).then(() => {
+    $("ngan").textContent = host + "/" + ma; $("ngan").hidden = $("ngan-g").hidden = false; }).catch(() => {});
   $("mogv").href = lop2 ? "/lop/" + CHON + "/" + encodeURIComponent(buoi) + "/gv" : "/" + CHON + "/giaovien.html?buoi=" + encodeURIComponent(buoi);
   const qr = $("qr");
   if (typeof window.qrcode === "function") { const c = window.qrcode(0, "M"); c.addData(LINK); c.make(); qr.src = c.createDataURL(8, 2); qr.hidden = false; $("loi4").textContent = ""; }

@@ -10,6 +10,7 @@ const http = require("http"), fs = require("fs"), path = require("path"), crypto
 
 const ROOT = path.resolve(__dirname, "..");
 const DATA = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(__dirname, "du-lieu");
+const NGAN_F = path.join(DATA, "link-ngan.json");
 const CFG = Object.assign({port: 8080, pin: "tin7"}, readJson(path.join(DATA, "cau-hinh.json")) || {});
 if (process.env.PORT) CFG.port = Number(process.env.PORT);
 if (!fs.existsSync(DATA)) fs.mkdirSync(DATA, {recursive: true});
@@ -110,6 +111,10 @@ function api(action, p){
   if (action === "luuDiem") { pinOK(p.pin); const o = readJson(DIEM_F) || {}; if (p.cfg) o.cfg = p.cfg; if (p.chinh) o.chinh = Object.assign(o.chinh || {}, p.chinh);
     Object.keys(o.chinh || {}).forEach(k => { if (o.chinh[k] === "" || o.chinh[k] == null) delete o.chinh[k]; });
     fs.writeFileSync(DIEM_F, JSON.stringify(o, null, 1)); return {ok: true, diem: o}; }
+  /* Link ngắn: http://<máy>/<lớp> (ví dụ /7a1) → bài giáo viên vừa tạo link cho lớp đó */
+  if (action === "linkngan") { pinOK(p.pin); const ma = String(p.ma || "").toLowerCase().replace(/[^a-z0-9]/g, ""), dich = String(p.dich || "");
+    if (!/^[6-9][a-z0-9]{1,8}$/.test(ma) || !/^\/[\w\-./?=%]+$/.test(dich)) throw new Error("Link ngắn không hợp lệ");
+    const o = readJson(NGAN_F) || {}; o[ma] = dich; fs.writeFileSync(NGAN_F, JSON.stringify(o, null, 1)); return {ok: true, ma}; }
   if (action === "checkpin") { pinOK(p.pin); return {ok: true}; }
   /* Mở lại bài đã làm (mọi bài, không chỉ STEM): đăng nhập lại / đổi máy vẫn làm tiếp */
   if (action === "load") { own(p);
@@ -243,6 +248,8 @@ http.createServer(async (req, res) => {
       if (!kf || !fs.existsSync(kf)) return send(res, 404, JSON.stringify({ok: false, error: "Chưa có kế hoạch bài dạy cho bài này (chạy khbd/tao-khbd.py)."}));
       res.writeHead(200, {"Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Cache-Control": "no-store"}); return fs.createReadStream(kf).pipe(res);
     }
+    { const m = u.pathname.match(/^\/([6-9][a-z0-9]{1,8})\/?$/i), o = m && readJson(NGAN_F);
+      if (o && o[m[1].toLowerCase()]) { res.writeHead(302, {Location: o[m[1].toLowerCase()], "Cache-Control": "no-store"}); return res.end(); } }
     if (u.pathname === "/gv" || u.pathname === "/gv/") { u.pathname = "/may-chu-lan/trang-chu.html"; }
     if (u.pathname === "/thong-ke" || u.pathname === "/thong-ke/") { u.pathname = "/may-chu-lan/thong-ke.html"; }
     if (u.pathname === "/chung/config.js") return send(res, 200, LAN_CONFIG, MIME[".js"]);
