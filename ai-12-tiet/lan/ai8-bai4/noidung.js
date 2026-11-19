@@ -34,7 +34,7 @@ const STEPS=[
   key:['Dữ liệu: <b>nhập ít, nhập giả, nhập khi được phép</b>.','Bản quyền: <b>ghi nguồn</b> và <b>ghi nhận việc dùng AI</b>.','Giả mạo: <b>Dừng – Hỏi – Kiểm</b>.']},
  {t:'Hội đồng thẩm định',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'8.B3.1',ic:'student',
   story:'Một trường (giả định) định lắp <b>camera nhận diện khuôn mặt</b> ở cửa lớp để điểm danh tự động. Nhóm em là Hội đồng thẩm định (Chủ toạ, Thư kí, Đại diện HS, Đại diện phụ huynh, Kĩ thuật viên). Dùng mô phỏng để thử các biện pháp giảm thiểu.',
-  qs:[{id:'sim3',type:'sim',sim:'council'},
+  qs:[{id:'lab',type:'sim',sim:'lab_thamtu'},{id:'sim3',type:'sim',sim:'council'},
    {id:'risk3',type:'text',q:'(1) Hai rủi ro và nhóm rủi ro; (2) hai biện pháp giảm thiểu',ans:'Ví dụ: lộ ảnh khuôn mặt HS (dữ liệu); nhận sai bạn đeo kính, da tối (thiên vị). Biện pháp: xin đồng ý của phụ huynh, có cách điểm danh thay thế, mã hoá và xoá ảnh định kì, kiểm thử với đủ nhóm HS.'},
    {id:'dec',type:'single',q:'(3) Quyết định của Hội đồng',opts:['Triển khai ngay','Triển khai có điều kiện','Không triển khai'],ans:'Không có đáp án duy nhất; cần lập luận dựa trên vấn đề đạo đức. Thường hợp lí: triển khai có điều kiện.'},
    {id:'eth',type:'multi',q:'Vấn đề đạo đức cần lưu ý khi phát triển AI',opts:['Bảo mật thông tin','Không cung cấp thông tin sai lệch','Không xúc phạm người khác','Làm càng nhanh càng tốt'],ok:[0,1,2]}],

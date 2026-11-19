@@ -18,7 +18,7 @@ const STEPS=[
   key:['Ba cách học: <b>từ dữ liệu có nhãn</b>; <b>tự tìm quy luật</b>; <b>thử – sai – rút kinh nghiệm</b>.']},
  {t:'Vấn đề đạo đức từ dữ liệu',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'7.C4.1',ic:'lock',
   story:'Các tình huống (giả định) về dữ liệu huấn luyện.',
-  qs:[{id:'dd',type:'match',q:'Tình huống – vấn đề đạo đức',items:['Máy nhận diện khuôn mặt chỉ học ảnh người da sáng','Công ty lấy ảnh trên mạng xã hội của học sinh để huấn luyện mà không hỏi','Dữ liệu tuyển dụng cũ chủ yếu là nam giới'],opts:['Thiếu đa dạng → nhận sai, đối xử không công bằng','Xâm phạm quyền riêng tư','Thiên vị, phân biệt đối xử theo giới'],ok:[0,1,2]},
+  qs:[{id:'lab',type:'sim',sim:'lab_caytrong'},{id:'dd',type:'match',q:'Tình huống – vấn đề đạo đức',items:['Máy nhận diện khuôn mặt chỉ học ảnh người da sáng','Công ty lấy ảnh trên mạng xã hội của học sinh để huấn luyện mà không hỏi','Dữ liệu tuyển dụng cũ chủ yếu là nam giới'],opts:['Thiếu đa dạng → nhận sai, đối xử không công bằng','Xâm phạm quyền riêng tư','Thiên vị, phân biệt đối xử theo giới'],ok:[0,1,2]},
    {id:'q3',type:'text',q:'Đề xuất một cách giảm vấn đề cho một tình huống trên.',short:1,ans:'Ví dụ: thu thập ảnh đa dạng (màu da, tuổi, ánh sáng); chỉ dùng ảnh khi được đồng ý; kiểm tra kết quả với từng nhóm người.'}],
   key:['Dữ liệu <b>thiếu đa dạng</b> → phân biệt đối xử; dữ liệu <b>lấy không được phép</b> → xâm phạm riêng tư.']},
  {t:'Vận dụng',hd:'Hoạt động 4 · Vận dụng · Tiết 2',code:'7.C5.1',ic:'pen',

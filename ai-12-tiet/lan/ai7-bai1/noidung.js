@@ -21,7 +21,7 @@ const STEPS=[
   key:['Trả lời <b>trôi chảy, tự tin chưa chắc đúng</b>; xác thực bằng <b>nguồn tin cậy, người có trách nhiệm hoặc tính lại</b>, và ghi lại cách đã kiểm chứng.']},
  {t:'Nếu AI quyết định cuối cùng',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'7.A2.1',ic:'lock',
   story:'Phân tích tác hại khi để AI quyết định cuối cùng trong các tình huống (giả định).',
-  qs:[{id:'th',type:'match',q:'Tình huống – tác hại có thể xảy ra',items:['AI tự khoá tài khoản vì "nghi gian lận"','AI chấm bài và tự ghi điểm vào sổ','AI tự chọn người được vay tiền'],opts:['Người bị thiệt không được giải thích, không biết khiếu nại ai','Sai không được sửa, lặp lại hàng loạt','Không rõ ai chịu trách nhiệm khi có thiệt hại'],ok:[0,1,2]},
+  qs:[{id:'lab',type:'sim',sim:'lab_thamtu'},{id:'th',type:'match',q:'Tình huống – tác hại có thể xảy ra',items:['AI tự khoá tài khoản vì "nghi gian lận"','AI chấm bài và tự ghi điểm vào sổ','AI tự chọn người được vay tiền'],opts:['Người bị thiệt không được giải thích, không biết khiếu nại ai','Sai không được sửa, lặp lại hàng loạt','Không rõ ai chịu trách nhiệm khi có thiệt hại'],ok:[0,1,2]},
    {id:'q3',type:'single',q:'Cách làm đúng là…',opts:['AI phát hiện, gợi ý – con người xem xét, quyết định','AI quyết định hết cho nhanh','Không dùng AI'],ok:0}],
   key:['Để AI quyết định cuối cùng: <b>sai không được sửa, người bị thiệt không được giải thích, không rõ ai chịu trách nhiệm, sai lặp lại hàng loạt</b>.']},
  {t:'Vận dụng: Điểm dừng của em',hd:'Hoạt động 4 · Vận dụng · Tiết 2',code:'7.A1.1',ic:'pen',

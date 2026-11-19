@@ -21,7 +21,7 @@ const STEPS=[
   key:['"Nghe" = <b>chuyển giọng nói thành chữ</b> rồi <b>"đọc"</b>.','Lỗi bước đầu <b>truyền sang</b> bước sau → chữ máy nghe ra <b>cần đọc lại</b>.']},
  {t:'Ba sơ đồ Đầu vào – Xử lí – Đầu ra',hd:'Hoạt động 3 · Luyện tập',code:'8.C1.1',ic:'paper',
   story:'Xếp các thẻ vào đúng cột cho ba chức năng: máy “đọc” (dịch văn bản), máy “nghe” (trợ lí ảo), máy “nhìn” (nhận dạng biển số xe).',
-  qs:[{id:'ipo',type:'sort',q:'Thẻ này thuộc phần nào?',cols:{in:'Đầu vào',xl:'Xử lí',out:'Đầu ra'},items:[
+  qs:[{id:'lab',type:'sim',sim:'lab_camxuc'},{id:'ipo',type:'sort',q:'Thẻ này thuộc phần nào?',cols:{in:'Đầu vào',xl:'Xử lí',out:'Đầu ra'},items:[
      {t:'Đoạn văn tiếng Anh gõ vào',a:'in'},{t:'Tách từ, đổi thành số, so với dữ liệu đã học',a:'xl'},{t:'Đoạn văn tiếng Việt',a:'out'},
      {t:'Âm thanh từ micro',a:'in'},{t:'Câu trả lời của trợ lí ảo',a:'out'},
      {t:'Ảnh xe từ camera',a:'in'},{t:'So các điểm ảnh với mẫu chữ số đã học',a:'xl'},{t:'Biển số "65A-123.45"',a:'out'}]},

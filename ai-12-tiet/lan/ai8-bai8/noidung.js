@@ -21,7 +21,7 @@ const STEPS=[
   key:['Người dùng <b>góp phần tác động</b> đến AI: phản hồi trung thực giúp AI tốt lên, phản hồi sai làm AI kém đi.','Dữ liệu nhập vào chatbot <b>có thể được lưu</b> – không nhập thông tin cá nhân.']},
  {t:'Lưu đồ kịch bản mới',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'8.D2.1',ic:'paper',
   story:'Nhóm em thiết kế kịch bản cho <b>chatbot hỏi đáp an toàn giao thông</b> dành cho học sinh lớp 6 (giả định). Phân loại các câu thoại vào phần của kịch bản.',
-  qs:[{id:'nodes',type:'sort',q:'Câu thoại này thuộc phần nào?',cols:{chao:'Chào, nêu phạm vi',hoi:'Hỏi thêm',tl:'Trả lời',kh:'Không hiểu / chuyển người'},items:[
+  qs:[{id:'lab',type:'sim',sim:'lab_gaccong'},{id:'nodes',type:'sort',q:'Câu thoại này thuộc phần nào?',cols:{chao:'Chào, nêu phạm vi',hoi:'Hỏi thêm',tl:'Trả lời',kh:'Không hiểu / chuyển người'},items:[
      {t:'"Chào bạn! Mình trả lời câu hỏi về luật giao thông cho học sinh."',a:'chao'},
      {t:'"Bạn đi xe đạp hay đi bộ đến trường?"',a:'hoi'},
      {t:'"Học sinh dưới 16 tuổi không được lái xe máy."',a:'tl'},

@@ -21,7 +21,7 @@ const STEPS=[
   key:['Dữ liệu <b>sai</b> → AI <b>sai</b>. Con người chịu trách nhiệm chọn dữ liệu và <b>kiểm chứng</b> đầu ra.']},
  {t:'Công nghệ AI quanh em',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'6.C3.1',ic:'img',
   story:'Nối ví dụ với công nghệ AI. Liên hệ: công cụ đó đã được huấn luyện bằng dữ liệu gì?',
-  qs:[{id:'match3',type:'match',q:'Ví dụ nào dùng công nghệ nào?',items:['Mở khoá điện thoại bằng khuôn mặt','Đọc tin nhắn thành tiếng','Chụp biển báo tiếng Anh ra tiếng Việt','Ứng dụng nhạc gợi ý bài hát'],opts:['Nhận dạng hình ảnh','Chuyển văn bản ↔ giọng nói','Dịch tự động','Gợi ý theo sở thích'],ok:[0,1,2,3]},
+  qs:[{id:'lab',type:'sim',sim:'lab_caytrong'},{id:'match3',type:'match',q:'Ví dụ nào dùng công nghệ nào?',items:['Mở khoá điện thoại bằng khuôn mặt','Đọc tin nhắn thành tiếng','Chụp biển báo tiếng Anh ra tiếng Việt','Ứng dụng nhạc gợi ý bài hát'],opts:['Nhận dạng hình ảnh','Chuyển văn bản ↔ giọng nói','Dịch tự động','Gợi ý theo sở thích'],ok:[0,1,2,3]},
    {id:'q3b',type:'single',q:'Ứng dụng nhận biết tên cây qua ảnh đã được huấn luyện bằng…',opts:['Rất nhiều ảnh cây đã gắn tên','Bài hát','Số điện thoại'],ok:0}],
   key:['Công nghệ AI quen thuộc: <b>nhận dạng hình ảnh, chuyển giọng nói ↔ văn bản, dịch, gợi ý</b>.','Công cụ hoạt động được nhờ <b>đã huấn luyện</b> với dữ liệu phù hợp.']},
  {t:'Vận dụng',hd:'Hoạt động 4 · Vận dụng · Tiết 2',code:'6.C1.MR1',ic:'lock',

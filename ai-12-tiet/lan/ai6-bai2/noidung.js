@@ -28,7 +28,7 @@ const STEPS=[
   key:['Lợi ích: <b>học hỏi, rèn luyện kĩ năng, mở rộng hiểu biết</b> – khi em vẫn tự suy nghĩ, tự làm và kiểm tra lại.']},
  {t:'Luyện tập – Vận dụng: Ba bước ra quyết định',hd:'Hoạt động 3–4 · Luyện tập, vận dụng · Tiết 2',code:'6.A3.1',ic:'pen',
   story:'Ứng dụng thời tiết (giả định) báo: <b>“70% khả năng mưa chiều nay”</b>. Lớp em định đi tham quan vườn trường lúc 15 giờ.',
-  qs:[{id:'dec',type:'text',q:'Ra quyết định theo 3 bước: nêu lại gợi ý – cân nhắc – lựa chọn kèm lí do.',ans:'Gợi ý: 70% có mưa. Cân nhắc: xem trời, hỏi thầy cô, mưa thì đường trơn. Lựa chọn: vẫn đi nhưng mang áo mưa / dời sang sáng mai, vì …'},
+  qs:[{id:'lab',type:'sim',sim:'lab_thamtu'},{id:'dec',type:'text',q:'Ra quyết định theo 3 bước: nêu lại gợi ý – cân nhắc – lựa chọn kèm lí do.',ans:'Gợi ý: 70% có mưa. Cân nhắc: xem trời, hỏi thầy cô, mưa thì đường trơn. Lựa chọn: vẫn đi nhưng mang áo mưa / dời sang sáng mai, vì …'},
    {id:'after',type:'text',q:'Bây giờ em nghĩ…',short:1,ans:'Tự đánh giá: kết quả AI phải kiểm chứng; AI gợi ý, em quyết định.'}],
   key:['Ba bước: <b>nêu lại gợi ý → cân nhắc → lựa chọn kèm lí do</b>.']}
 ];

@@ -14,7 +14,7 @@ const STEPS=[
   key:['Dữ liệu <b>"dễ lấy nhất"</b> thường <b>bỏ sót</b> nhóm cần phục vụ. AI cần công bằng về <b>cơ hội, kết quả, quy trình</b>.']},
  {t:'Thu thập dữ liệu công bằng',hd:'Hoạt động 3–4 · Luyện tập, vận dụng',code:'9.B3.2',ic:'paper',
   story:'Nhóm em lập kế hoạch thu thập dữ liệu giọng nói cho trợ lí của trường.',
-  qs:[{id:'cach',type:'sort',q:'Cách làm này…',cols:{tot:'Bảo đảm công bằng',chua:'Dễ thiên vị, bỏ sót'},items:[
+  qs:[{id:'lab',type:'sim',sim:'lab_caytrong'},{id:'cach',type:'sort',q:'Cách làm này…',cols:{tot:'Bảo đảm công bằng',chua:'Dễ thiên vị, bỏ sót'},items:[
      {t:'Thu đủ các nhóm: vùng miền, tuổi, giới',a:'tot'},{t:'Chỉ thu giọng các bạn trong lớp mình cho nhanh',a:'chua'},{t:'Xin đồng ý trước khi ghi âm',a:'tot'},
      {t:'Kiểm thử độ chính xác riêng cho từng nhóm',a:'tot'},{t:'Lấy giọng nói trên mạng không hỏi ai',a:'chua'},{t:'Bổ sung mẫu cho nhóm đang bị nhận sai nhiều',a:'tot'}]},
    {id:'kh',type:'text',q:'Kế hoạch thu thập dữ liệu công bằng của nhóm (3 ý)',ans:'Ví dụ: (1) thu đủ học sinh 4 khối, phụ huynh, ông bà, giọng nhiều vùng; (2) xin đồng ý, không lưu tên; (3) kiểm thử theo từng nhóm, nhóm nào thấp thì thu thêm.'}],

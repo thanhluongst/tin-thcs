@@ -14,7 +14,7 @@ const STEPS=[
   key:['Bốn cách: <b>bổ sung dữ liệu thiếu – loại trùng lặp – sửa dữ liệu sai – gán nhãn lại</b>; sau đó <b>kiểm thử lại</b>.']},
  {t:'Vận dụng',hd:'Hoạt động 3–4 · Luyện tập, vận dụng',code:'9.C4.1',ic:'pen',
   story:'Chatbot hỏi đáp của lớp (giả định) hay trả lời sai lịch kiểm tra vì bộ câu hỏi – trả lời cũ còn lịch năm trước và thiếu câu về môn Tin.',
-  qs:[{id:'van',type:'text',q:'Nêu 2 cách cải thiện bộ dữ liệu của chatbot và cách kiểm tra lại.',ans:'Ví dụ: xoá/sửa lịch năm trước (dữ liệu sai), bổ sung câu hỏi môn Tin (dữ liệu thiếu), loại câu trùng; kiểm tra lại bằng 10 câu hỏi mới, đếm số câu đúng.'}],
+  qs:[{id:'lab',type:'sim',sim:'lab_caytrong'},{id:'van',type:'text',q:'Nêu 2 cách cải thiện bộ dữ liệu của chatbot và cách kiểm tra lại.',ans:'Ví dụ: xoá/sửa lịch năm trước (dữ liệu sai), bổ sung câu hỏi môn Tin (dữ liệu thiếu), loại câu trùng; kiểm tra lại bằng 10 câu hỏi mới, đếm số câu đúng.'}],
   key:['Chất lượng sản phẩm AI <b>phụ thuộc chất lượng dữ liệu</b>.']}
 ];
 const DECL=[];

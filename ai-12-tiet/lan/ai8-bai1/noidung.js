@@ -25,7 +25,7 @@ const STEPS=[
   key:['Bốn tiêu chí: (1) <b>cảm xúc, quan hệ tin cậy</b>; (2) <b>phán đoán đạo đức, giá trị</b>; (3) <b>trách nhiệm</b> quyết định quan trọng; (4) <b>dấu ấn sáng tạo</b> riêng.']},
  {t:'Lĩnh vực của em',hd:'Hoạt động 3.1 · Luyện tập · Tiết 1',code:'8.A1.1',ic:'pen',
   story:'Chọn một lĩnh vực mới (chăm sóc ông bà, thể thao, pháp luật, nấu ăn…). Nêu một việc không nên giao hẳn cho AI và lí do theo tiêu chí số mấy.',
-  qs:[{id:'mine',type:'text',q:'Lĩnh vực – việc không nên giao cho AI – vì sao (tiêu chí số …)',ph:'Ví dụ: Trọng tài – …',ans:'Ví dụ đạt: “Trọng tài: camera AI hỗ trợ phát hiện việt vị, nhưng quyết định cuối cùng và chịu trách nhiệm là của trọng tài (tiêu chí 3).”'},
+  qs:[{id:'lab',type:'sim',sim:'lab_gaccong'},{id:'mine',type:'text',q:'Lĩnh vực – việc không nên giao cho AI – vì sao (tiêu chí số …)',ph:'Ví dụ: Trọng tài – …',ans:'Ví dụ đạt: “Trọng tài: camera AI hỗ trợ phát hiện việt vị, nhưng quyết định cuối cùng và chịu trách nhiệm là của trọng tài (tiêu chí 3).”'},
    {id:'q31',type:'single',q:'Lí do nào ĐÚNG theo bốn tiêu chí?',opts:['Không giao vì robot chăm ông bà còn vụng','Không giao việc trò chuyện, an ủi ông bà vì ông bà cần tình cảm của người thân','Không giao vì robot đắt'],ok:1}],
   key:['Lí do tốt nói về <b>giá trị của con người</b>, không chỉ “AI chưa giỏi”.']},
  {t:'Hai bạn, hai cách làm',hd:'Hoạt động 2.4–2.5 · Hình thành kiến thức · Tiết 2',code:'8.A1.2',ic:'bot',

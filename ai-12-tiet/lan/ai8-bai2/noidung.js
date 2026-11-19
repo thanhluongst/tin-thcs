@@ -21,7 +21,7 @@ const STEPS=[
   key:['Chuỗi: <b>Thu thập → Phân tích → Sử dụng → Tác động</b>.','Càng nhiều quyền, càng nhiều ngày → AI đoán càng nhiều về em.']},
  {t:'Thám tử dấu hiệu',hd:'Hoạt động 3 · Luyện tập',code:'8.A2.2',ic:'student',
   story:'Bốn hiện tượng: <b>1.</b> Bị theo dõi mà không biết; <b>2.</b> Bị đề xuất một chiều; <b>3.</b> Bị thao túng suy nghĩ hoặc hành động; <b>4.</b> Mất quyền kiểm soát dữ liệu cá nhân. Gọi tên hiện tượng trong từng tình huống (giả định).',
-  qs:[{id:'det',type:'match',q:'Tình huống nào là hiện tượng nào?',items:['Ứng dụng đèn pin đòi quyền vị trí, danh bạ và không nói để làm gì.','Mạng xã hội chỉ hiện bài cùng một quan điểm với em đã thích.','Trò chơi báo “Chỉ còn 5 phút ưu đãi!” mỗi tối khi em định đi ngủ.','Em muốn xoá ảnh đã gửi lên ứng dụng chỉnh mặt nhưng không có cách nào xoá.'],opts:['1. Bị theo dõi mà không biết','2. Đề xuất một chiều','3. Thao túng hành động','4. Mất quyền kiểm soát dữ liệu'],ok:[0,1,2,3]},
+  qs:[{id:'lab',type:'sim',sim:'lab_canhsat'},{id:'det',type:'match',q:'Tình huống nào là hiện tượng nào?',items:['Ứng dụng đèn pin đòi quyền vị trí, danh bạ và không nói để làm gì.','Mạng xã hội chỉ hiện bài cùng một quan điểm với em đã thích.','Trò chơi báo “Chỉ còn 5 phút ưu đãi!” mỗi tối khi em định đi ngủ.','Em muốn xoá ảnh đã gửi lên ứng dụng chỉnh mặt nhưng không có cách nào xoá.'],opts:['1. Bị theo dõi mà không biết','2. Đề xuất một chiều','3. Thao túng hành động','4. Mất quyền kiểm soát dữ liệu'],ok:[0,1,2,3]},
    {id:'tf',type:'tf',q:'Thu thập minh bạch hay hiện tượng kiểm soát? (Đúng = minh bạch, chấp nhận được)',items:[
      {t:'Ứng dụng bản đồ xin quyền vị trí, nói rõ để chỉ đường, cho tắt bất cứ lúc nào.',a:'T'},
      {t:'Ứng dụng học tiếng Anh âm thầm bật micro khi không dùng.',a:'F'},

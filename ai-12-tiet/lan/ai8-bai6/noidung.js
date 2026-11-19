@@ -22,7 +22,7 @@ const STEPS=[
   key:['Kết hợp nhiều dấu hiệu <b>thường sát hơn</b> nhưng <b>vẫn có thể sai</b>; tự tin cao <b>chưa chắc đúng</b>.','Muốn biết bạn thấy thế nào – <b>hãy hỏi bạn</b>.']},
  {t:'Sơ đồ cho tình huống mới',hd:'Hoạt động 3 · Luyện tập',code:'8.C5.1',ic:'paper',
   story:'Ứng dụng học trực tuyến (giả định) có tính năng đoán học sinh “đang chán” qua camera. Điền sơ đồ: (1) Dấu hiệu thu được → (2) AI so với dữ liệu đã học → (3) Nhãn dự kiến → (4) Con người kiểm tra, quyết định.',
-  qs:[{id:'flow',type:'match',q:'Ghép ô sơ đồ với nội dung',items:['(1) Dấu hiệu','(2) Xử lí','(3) Nhãn dự kiến','(4) Con người'],opts:['Nét mặt cúi xuống, ngáp, ít gật đầu','So với ảnh mẫu đã gắn nhãn cảm xúc','“Có thể đang chán – 70%”','Thầy cô hỏi han, quyết định cách hỗ trợ'],ok:[0,1,2,3]},
+  qs:[{id:'lab',type:'sim',sim:'lab_camxuc'},{id:'flow',type:'match',q:'Ghép ô sơ đồ với nội dung',items:['(1) Dấu hiệu','(2) Xử lí','(3) Nhãn dự kiến','(4) Con người'],opts:['Nét mặt cúi xuống, ngáp, ít gật đầu','So với ảnh mẫu đã gắn nhãn cảm xúc','“Có thể đang chán – 70%”','Thầy cô hỏi han, quyết định cách hỗ trợ'],ok:[0,1,2,3]},
    {id:'q3',type:'single',q:'Nhãn "đang chán" của AI nên được dùng thế nào?',opts:['Trừ điểm học sinh ngay','Chỉ là gợi ý; thầy cô kiểm tra và hỏi học sinh','Gửi cho cả lớp xem'],ok:1}],
   key:['Nhãn dự kiến chỉ là <b>gợi ý</b>; <b>con người kiểm tra</b> và quyết định cách phản hồi.']},
  {t:'Có nên bật camera?',hd:'Hoạt động 4 · Vận dụng',code:'8.C5.1',ic:'lock',

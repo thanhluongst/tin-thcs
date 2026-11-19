@@ -16,7 +16,7 @@ const STEPS=[
   key:['AI được tự động khi <b>hậu quả nhỏ, hoàn tác được, người dùng xem lại hoặc tắt được</b>.']},
  {t:'Bảo vệ quyền tự chủ',hd:'Hoạt động 3 · Luyện tập',code:'7.A3.2',ic:'scale',
   story:'Ứng dụng học tập (giả định) đề nghị: <i>"Để AI tự chọn môn em học thêm, tự đăng kí lớp và tự trừ tiền từ tài khoản của bố mẹ cho tiện."</i>',
-  qs:[{id:'q3',type:'single',q:'Em xử lí thế nào?',opts:['Đồng ý cho tiện','Chỉ nhận gợi ý; em cùng bố mẹ xem xét và tự quyết định','Xoá ứng dụng ngay không cần suy nghĩ'],ok:1},
+  qs:[{id:'lab',type:'sim',sim:'lab_canhsat'},{id:'q3',type:'single',q:'Em xử lí thế nào?',opts:['Đồng ý cho tiện','Chỉ nhận gợi ý; em cùng bố mẹ xem xét và tự quyết định','Xoá ứng dụng ngay không cần suy nghĩ'],ok:1},
    {id:'why3',type:'text',q:'Vì sao cần bảo vệ quyền tự chủ khi quyết định việc quan trọng?',ans:'Vì quyết định ảnh hưởng lớn tới bản thân, gia đình; AI không hiểu hết mong muốn, hoàn cảnh; con người phải chịu trách nhiệm và có quyền lựa chọn.'}],
   key:['Quyết định <b>quan trọng</b> (tiền bạc, học tập, sức khoẻ, quan hệ) phải do <b>con người</b> quyết định; AI chỉ gợi ý.']},
  {t:'Vận dụng',hd:'Hoạt động 4 · Vận dụng',code:'7.A3.2',ic:'pen',

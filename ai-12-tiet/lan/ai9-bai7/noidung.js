@@ -16,7 +16,7 @@ const STEPS=[
   key:['Con người <b>đồng sáng tạo</b> (ý tưởng, yêu cầu rõ) và <b>dẫn dắt</b> (kiểm chứng, quyết định chấp nhận hay sửa) ở cả <b>thiết kế – vận hành – phát triển</b>.']},
  {t:'Vận dụng',hd:'Hoạt động 3–4 · Luyện tập, vận dụng',code:'9.D1.1',ic:'pen',
   story:'Chọn một hệ thống AI (bản đồ, gợi ý video, chatbot của trường…).',
-  qs:[{id:'van',type:'text',q:'Ở giai đoạn thiết kế, vận hành, phát triển, con người làm gì để dẫn dắt hệ thống đó?',ans:'Ví dụ: Chatbot trường – thiết kế: thầy cô đặt mục tiêu, chọn dữ liệu; vận hành: người quản trị theo dõi, xử lí câu khó; phát triển: đọc phản hồi, sửa dữ liệu sai.'},
+  qs:[{id:'lab',type:'sim',sim:'lab_gaccong'},{id:'van',type:'text',q:'Ở giai đoạn thiết kế, vận hành, phát triển, con người làm gì để dẫn dắt hệ thống đó?',ans:'Ví dụ: Chatbot trường – thiết kế: thầy cô đặt mục tiêu, chọn dữ liệu; vận hành: người quản trị theo dõi, xử lí câu khó; phát triển: đọc phản hồi, sửa dữ liệu sai.'},
    {id:'after',type:'text',q:'Quay lại ý kiến của Tuấn: bây giờ em nghĩ…',short:1,ans:'Tự đánh giá.'}],
   key:['Sản phẩm tốt là kết quả của <b>yêu cầu rõ</b> và <b>kiểm chứng kĩ</b>.']}
 ];

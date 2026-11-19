@@ -20,7 +20,7 @@ const STEPS=[
   key:['Cá nhân và cộng đồng: <b>không lan truyền – báo cáo – phản hồi – đề xuất giải pháp</b>.']},
  {t:'Người dùng chịu trách nhiệm',hd:'Hoạt động 3–4 · Luyện tập, vận dụng · Tiết 2',code:'9.B2.1',ic:'pen',
   story:'Em dùng AI tạo ảnh minh hoạ cho bài thuyết trình về di tích địa phương.',
-  qs:[{id:'tn',type:'single',q:'Ai chịu trách nhiệm cuối cùng về ảnh đó?',opts:['Công cụ AI','Em – người dùng quyết định dùng ảnh','Không ai'],ok:1},
+  qs:[{id:'lab',type:'sim',sim:'lab_thamtu'},{id:'tn',type:'single',q:'Ai chịu trách nhiệm cuối cùng về ảnh đó?',opts:['Công cụ AI','Em – người dùng quyết định dùng ảnh','Không ai'],ok:1},
    {id:'kb',type:'text',q:'Viết khai báo việc dùng AI cho sản phẩm (công cụ – mục đích – phần hỗ trợ – kiểm chứng – phần tự làm) và ghi chú "ảnh do AI tạo".',ans:'Ví dụ: Dùng công cụ tạo ảnh (thầy cô hướng dẫn) để vẽ ảnh minh hoạ cổng đình; đã đối chiếu ảnh chụp thật trên trang của UBND xã; nội dung, bố cục do em làm. Chú thích: "Ảnh minh hoạ do AI tạo".'}],
   key:['Người dùng <b>kiểm soát và chịu trách nhiệm</b> với kết quả cuối cùng; <b>khai báo</b> và <b>gắn nhãn</b> nội dung AI tạo.']}
 ];

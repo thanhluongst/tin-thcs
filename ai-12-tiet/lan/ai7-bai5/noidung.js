@@ -13,7 +13,7 @@ const STEPS=[
   key:['Khai báo đủ 5 ý: <b>công cụ – mục đích – phần được hỗ trợ – cách kiểm chứng – phần tự làm</b>.']},
  {t:'Hợp lí hay gian lận?',hd:'Hoạt động 3 · Luyện tập',code:'7.B3.1',ic:'scale',
   story:'Xếp các tình huống (giả định).',
-  qs:[{id:'gl',type:'sort',q:'Tình huống này…',cols:{ok:'Dùng có trách nhiệm',no:'Không phù hợp'},items:[
+  qs:[{id:'lab',type:'sim',sim:'lab_gaccong'},{id:'gl',type:'sort',q:'Tình huống này…',cols:{ok:'Dùng có trách nhiệm',no:'Không phù hợp'},items:[
      {t:'Được phép dùng AI gợi ý ý tưởng, Vy dùng và khai báo đủ',a:'ok'},{t:'Bài kiểm tra không cho dùng AI, Nam vẫn dùng rồi khai báo',a:'no'},
      {t:'Nhờ AI viết toàn bộ bài, ghi "em tự làm"',a:'no'},{t:'Dùng AI kiểm tra chính tả, tự sửa, ghi rõ',a:'ok'},
      {t:'Nhập ảnh, họ tên bạn vào AI để làm bài',a:'no'},{t:'Kiểm chứng số liệu AI đưa bằng SGK trước khi dùng',a:'ok'}]},

@@ -21,7 +21,7 @@ const STEPS=[
   key:['Quyền riêng tư: <b>thông tin của em do em quyết định</b>. Bị lộ, bị dùng sai → <b>báo người lớn tin cậy</b>.']},
  {t:'Kiểm tra ứng dụng AI trước khi dùng',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'6.B2.1',ic:'bot',
   story:'Ứng dụng "Đổi ảnh vui" (giả định) đòi nhiều quyền. Dùng mô phỏng để thử các câu hỏi trước khi cài.',
-  qs:[{id:'sim2',type:'sim',sim:'app'},
+  qs:[{id:'lab',type:'sim',sim:'lab_canhsat'},{id:'sim2',type:'sim',sim:'app'},
    {id:'q4',type:'multi',q:'Câu hỏi nên đặt trước khi dùng một ứng dụng AI',opts:['Ai làm ra ứng dụng này?','Ứng dụng lấy dữ liệu gì, để làm gì?','Có giới hạn độ tuổi không? Có cần bố mẹ đồng ý?','Biểu tượng có đẹp không?'],ok:[0,1,2]}],
   key:['Hỏi trước khi dùng: <b>Ai làm ra? Lấy dữ liệu gì? An toàn không? Cần người lớn đồng ý?</b>']},
  {t:'Vận dụng: Quy tắc 4 bước',hd:'Hoạt động 4 · Vận dụng · Tiết 2',code:'6.B2.1',ic:'pen',
