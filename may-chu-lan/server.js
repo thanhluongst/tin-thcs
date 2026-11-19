@@ -138,6 +138,19 @@ function api(action, p){
   if (action === "dk") return {ok: true, dk: d.dk[p.bai + "|" + p.buoi] || null};
   /* Nhật kí đăng nhập (giờ vào lớp, đổi máy) cho giáo viên */
   if (action === "dangnhap") { pinOK(p.pin); return {ok: true, list: d.dn.slice(-500)}; }
+  /* Phần mềm Quản lý phòng máy: cấp vé đăng nhập dùng 1 lần cho từng máy (học sinh khỏi gõ số căn cước) */
+  if (action === "ve") { pinOK(p.pin); const R = roster(), out = {};
+    (Array.isArray(p.ds) ? p.ds : []).slice(0, 200).forEach(x => {
+      const cc = [...new Set((x.cccds || []).map(c => String(c).replace(/\D/g, "")).filter(c => R.has(c)))].slice(0, 4);
+      if (cc.length) out[String(x.may || "")] = taoVe(cc, x.may); });
+    return {ok: true, ve: out}; }
+  /* Phần mềm Quản lý phòng máy: kết quả lớp học AI của các học sinh (theo số căn cước phần mềm đã có) */
+  if (action === "ketqua") { pinOK(p.pin); const R = roster(), byId = {};
+    (p.cccds || []).forEach(c => { const h = R.get(String(c).replace(/\D/g, "")); if (h) byId[h.id] = String(c); });
+    const kq = []; lopH().aiStats().forEach(ph => ph.nhom.forEach(n => {
+      let c = 0, dg = 0, t = 0; Object.values(n.yc).forEach(o => { c += o.c; dg += o.d; t += o.t; });
+      (n.ids || []).forEach(id => { if (byId[id]) kq.push({cccd: byId[id], dir: ph.dir, buoi: ph.buoi, lop: ph.lop, so: ph.so, ten: ph.ten, cham: c, dung: dg, tuluan: t, sao: n.sao, ngay: n.ngay}); }); }));
+    return {ok: true, kq}; }
   throw new Error("Hành động không hợp lệ");
 }
 
@@ -152,10 +165,17 @@ function publish(p, v){
 }
 setInterval(() => SUBS.forEach(set => set.forEach(res => res.write("event: keep-alive\ndata: null\n\n"))), 25000);
 
+/* ---------- vé đăng nhập 1 lần (Quản lý phòng máy cấp, hết hạn sau 30 phút) ---------- */
+const VE = new Map();
+function taoVe(cccds, may){ const now = Date.now(); VE.forEach((v, k) => { if (v.exp < now) VE.delete(k); });
+  const k = crypto.randomBytes(12).toString("base64url"); VE.set(k, {cccds, may: String(may || "").slice(0, 20), exp: now + 30 * 60000}); return k; }
+function dungVe(k){ const v = VE.get(String(k || "")); VE.delete(String(k || "")); return v && v.exp > Date.now() ? v : null; }
+
 /* ---------- đăng nhập bằng số căn cước ---------- */
 const FAIL = new Map();   // ip → [thời điểm nhập sai]
 function tooMany(ip){ const now = Date.now(), a = (FAIL.get(ip) || []).filter(t => now - t < 5 * 60000); FAIL.set(ip, a); return a.length >= 8; }
 function dn(action, p, ip){
+  if (action === "ve") { const v = dungVe(p.ve); if (!v) throw new Error("Vé đăng nhập đã dùng hoặc hết hạn. Em nhập số căn cước."); p = Object.assign({}, p, {cccd: v.cccds[0]}); action = "vao"; }
   const cccd = String(p.cccd || "").replace(/\D/g, "");
   if (tooMany(ip)) throw new Error("Em nhập sai nhiều lần. Đợi 5 phút hoặc nhờ thầy cô giúp.");
   if (!/^\d{12}$/.test(cccd)) throw new Error("Số căn cước gồm đúng 12 chữ số.");
@@ -215,7 +235,7 @@ function send(res, code, body, type){ res.writeHead(code, {"Content-Type": type 
 function body(req){ return new Promise((ok, no) => { let s = ""; req.on("data", c => { s += c; if (s.length > 2e6) { no(new Error("Dữ liệu quá lớn")); req.destroy(); } }); req.on("end", () => ok(s)); }); }
 
 let LOPH = null;   /* lớp học kiểu giáo viên điều khiển (lop.js) */
-const lopH = () => LOPH || (LOPH = require("./lop.js")({ROOT, DATA, roster, hsId, pinOK, send, body, MIME, lanIps, CFG}));
+const lopH = () => LOPH || (LOPH = require("./lop.js")({ROOT, DATA, roster, hsId, pinOK, send, body, MIME, lanIps, CFG, dungVe}));
 http.createServer(async (req, res) => {
   const u = new URL(req.url, "http://x"), ip = (req.socket.remoteAddress || "").replace(/^::ffff:/, "");
   try {

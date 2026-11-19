@@ -39,6 +39,15 @@ if (window.LAN_HS) {
   return;
 }
 
+/* Có vé từ phần mềm Quản lý phòng máy: tự đăng nhập, không cần gõ số căn cước */
+if (qs.get("ve")) {
+  const buoi = String(qs.get("buoi") || lastBuoi()).toUpperCase();
+  fetch("/dn/ve", {method: "POST", body: JSON.stringify({ve: qs.get("ve"), buoi})}).then(r => r.json()).then(j => {
+    if (j.ok) { localStorage.setItem("lan-hs", JSON.stringify({id: j.id, ten: j.ten, lop: j.lop, tk: j.tk, buoi})); localStorage.setItem("lan-buoi", buoi); }
+  }).catch(() => {}).finally(() => { const u = new URL(location.href); ["ve", "ten"].forEach(k => u.searchParams.delete(k)); location.replace(u.href); });
+  return;
+}
+
 /* Chưa đăng nhập: hộp đăng nhập che trang */
 document.addEventListener("DOMContentLoaded", () => {
   const box = document.createElement("div"); box.id = "lan-dn"; document.body.appendChild(box);

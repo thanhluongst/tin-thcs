@@ -174,6 +174,7 @@ async function apiCall(req, res, r, p){
   const b = JSON.parse(await body(req) || "{}");
   if (p === "join") {
     /* nhóm 1–4 bạn, mỗi bạn đã xác minh bằng số căn cước; cùng nhóm đăng nhập lại → cùng mã, bài cũ còn nguyên */
+    if (b.ve) { const v = ctx.dungVe(b.ve); if (!v) return send(res, 200, JSON.stringify({err: "Vé đăng nhập đã dùng hoặc hết hạn. Em nhập số căn cước."})); b.cccds = v.cccds; b.may = b.may || v.may; }
     const R = roster(), mem = [...new Set((b.cccds || []).map(x => String(x).replace(/\D/g, "")))].slice(0, 4);
     if (!mem.length) return send(res, 200, JSON.stringify({err: "Chưa có bạn nào trong nhóm."}));
     const hs = mem.map(c => R.get(c)); if (hs.some(x => !x)) return send(res, 200, JSON.stringify({err: "Có số căn cước không đúng. Em đăng nhập lại."}));

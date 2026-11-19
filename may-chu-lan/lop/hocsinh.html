@@ -141,7 +141,13 @@ function fxCheck(){ const n={ovt:ST.ov&&ST.ov.type,step:ST.step,reveal:!!ST.reve
   }
   PV=n; }
 function saveDraft(){const f=$('#f'); if(!f||ST.step<=0) return; try{localStorage.setItem(draftKey(ST.step),JSON.stringify(collect(f,STEPS[ST.step])));}catch(e){}}
+let VE=new URLSearchParams(location.search).get('ve');
 async function poll(){
+  if(!ME.id&&VE){const ve=VE; VE=null; const u=new URL(location.href); u.searchParams.delete('ve'); history.replaceState(null,'',u.href);
+    try{const r=await api('api/join',{ve,may:u.searchParams.get('may')||''}); if(!r.id) throw new Error(r.err);
+      ME={id:r.id,name:r.members.join(', '),cls:r.cls,may:u.searchParams.get('may')||'',members:r.members}; try{localStorage.setItem(ROOM+'-me',JSON.stringify(ME));}catch(_){}
+      FX.play('join');}
+    catch(e){joinView(); const m=document.getElementById('jmsg'); if(m) m.textContent=e.message||'Vé đăng nhập không dùng được, em nhập số căn cước.'; return;}}
   if(!ME.id){joinView();return;}
   try{const s=await api('api/s?id='+encodeURIComponent(ME.id));
     if(s.unknown){ME={};try{localStorage.removeItem(ROOM+'-me');}catch(_){} joinView(); return;}
