@@ -14,7 +14,7 @@ const STEPS=[
   key:['3 câu hỏi: <b>Có giúp em tốt hơn? Em vẫn tự làm, tự quyết? Có an toàn, được phép?</b>']},
  {t:'Nên – Cân nhắc – Không nên',hd:'Hoạt động 3 · Luyện tập',code:'6.D1.1',ic:'paper',
   story:'Nhóm em xếp các thẻ tình huống vào 3 cột.',
-  qs:[{id:'sort3',type:'sort',q:'Tình huống này…',cols:{nen:'🟢 Nên',can:'🟡 Cân nhắc',khong:'🔴 Không nên'},items:[
+  qs:[{id:'lab',type:'sim',sim:'lab_thanhpho'},{id:'sort3',type:'sort',q:'Tình huống này…',cols:{nen:'🟢 Nên',can:'🟡 Cân nhắc',khong:'🔴 Không nên'},items:[
      {t:'Luyện phát âm tiếng Anh với ứng dụng',a:'nen'},{t:'Nhờ AI viết hộ bài văn tả mẹ',a:'khong'},{t:'Hỏi bản đồ đường đến nhà sách',a:'nen'},
      {t:'Hỏi AI tìm ý tưởng cho bài thuyết trình',a:'can'},{t:'Gửi ảnh bạn cho ứng dụng chỉnh mặt',a:'khong'},{t:'Hỏi AI cách giải rồi tự làm lại bài',a:'can'}]},
    {id:'alt',type:'text',q:'Chọn một thẻ "Không nên", đề xuất cách làm thay thế.',short:1,ans:'Ví dụ: Thay vì nhờ AI viết hộ, em tự lập dàn ý, viết rồi nhờ thầy cô hoặc bố mẹ góp ý.'}],

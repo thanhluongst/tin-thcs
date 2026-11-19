@@ -15,7 +15,7 @@ const STEPS=[
   key:['Có AI: công cụ <b>học từ dữ liệu</b> để nhận dạng, gợi ý, dịch, trả lời. Không AI: làm theo <b>công thức, nút bấm cố định</b>.']},
  {t:'Công cụ AI thông dụng làm gì?',hd:'Hoạt động 3 · Luyện tập',code:'6.C2.2',ic:'paper',
   story:'Nối công cụ AI với chức năng chính.',
-  qs:[{id:'match3',type:'match',q:'Công cụ – chức năng chính',items:['Trợ lí ảo','Ứng dụng bản đồ','Công cụ dịch','Mạng xã hội'],opts:['Nghe câu hỏi bằng giọng nói, trả lời, nhắc việc','Tìm đường, gợi ý tránh tắc','Dịch chữ, giọng nói sang ngôn ngữ khác','Gợi ý bài viết, quảng cáo theo sở thích'],ok:[0,1,2,3]},
+  qs:[{id:'lab',type:'sim',sim:'lab_thanhpho'},{id:'match3',type:'match',q:'Công cụ – chức năng chính',items:['Trợ lí ảo','Ứng dụng bản đồ','Công cụ dịch','Mạng xã hội'],opts:['Nghe câu hỏi bằng giọng nói, trả lời, nhắc việc','Tìm đường, gợi ý tránh tắc','Dịch chữ, giọng nói sang ngôn ngữ khác','Gợi ý bài viết, quảng cáo theo sở thích'],ok:[0,1,2,3]},
    {id:'cn',type:'multi',q:'Đâu là tên công nghệ AI quen thuộc?',opts:['Nhận dạng hình ảnh, khuôn mặt','Chuyển giọng nói thành văn bản','Dịch tự động','Hẹn giờ tắt quạt'],ok:[0,1,2]},
    {id:'q3',type:'single',q:'"Gợi ý cho bạn" trên mạng xã hội là tính năng AI gì?',opts:['Đề xuất nội dung theo dữ liệu thói quen','Máy tính cộng trừ','Hẹn giờ tắt máy'],ok:0}],
   key:['Tính năng AI tích hợp: <b>gợi ý nội dung, quảng cáo cá nhân, nhận dạng khuôn mặt, dịch</b>.']},

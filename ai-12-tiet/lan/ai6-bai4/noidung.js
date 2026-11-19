@@ -27,7 +27,7 @@ const STEPS=[
   key:['AI làm nhanh việc <b>lặp lại, nhiều dữ liệu</b>, nhưng <b>không có cảm xúc thật</b>, chỉ tạo từ dữ liệu đã có, không nắm hết hoàn cảnh.']},
  {t:'Luyện tập – Vận dụng: AI trong nhà em',hd:'Hoạt động 3–4 · Luyện tập, vận dụng · Tiết 2',code:'6.B1.1',ic:'pen',
   story:'Chọn một tính năng AI trong nhà em (gợi ý video, bản đồ, trợ lí ảo…).',
-  qs:[{id:'home',type:'text',q:'Ghi 1 mặt tốt – 1 hạn chế – 1 cách dùng hợp lí',ans:'Ví dụ: Gợi ý video – tốt: tìm nhanh video học vẽ; hạn chế: dễ xem quá giờ; cách dùng: đặt hẹn giờ 30 phút, tự tìm chủ đề cần học.'},
+  qs:[{id:'lab',type:'sim',sim:'lab_thanhpho'},{id:'home',type:'text',q:'Ghi 1 mặt tốt – 1 hạn chế – 1 cách dùng hợp lí',ans:'Ví dụ: Gợi ý video – tốt: tìm nhanh video học vẽ; hạn chế: dễ xem quá giờ; cách dùng: đặt hẹn giờ 30 phút, tự tìm chủ đề cần học.'},
    {id:'after',type:'text',q:'Bây giờ em nghĩ…',short:1,ans:'Tự đánh giá: tính năng AI nào cũng có hai mặt, cần dùng có mục đích và giới hạn.'}],
   key:['Dùng AI <b>có mục đích, có giới hạn</b>; giữ cho con người việc cần <b>cảm xúc, sáng tạo, quyết định</b>.']}
 ];
