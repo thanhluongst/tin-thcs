@@ -1,0 +1,167 @@
+/* GIAO DIỆN NÂNG CẤP (nạp sau kieu.css) — mỗi giai đoạn một màu, mỗi câu hỏi một khối rõ ràng */
+:root{
+  --kd:#ea7a12; --kd-s:#fff3e6;   /* Khởi động */
+  --hk:#2563eb; --hk-s:#eaf1ff;   /* Hình thành kiến thức */
+  --lt:#16a34a; --lt-s:#e8f8ee;   /* Luyện tập */
+  --vd:#9333ea; --vd-s:#f4ebff;   /* Vận dụng */
+  --tk:#db2777; --tk-s:#fdeaf3;   /* Tổng kết */
+  --wel:#0891b2; --wel-s:#e3f6fa;
+  --ph:var(--pri); --ph-s:var(--pri-soft);
+  --bg:#eef2f8;
+}
+body{background:radial-gradient(1200px 500px at 10% -10%,#dfe9ff 0,transparent 60%),radial-gradient(900px 400px at 100% 0,#fde9f2 0,transparent 55%),var(--bg);background-attachment:fixed}
+.ph-kd{--ph:var(--kd);--ph-s:var(--kd-s)} .ph-hk{--ph:var(--hk);--ph-s:var(--hk-s)} .ph-lt{--ph:var(--lt);--ph-s:var(--lt-s)}
+.ph-vd{--ph:var(--vd);--ph-s:var(--vd-s)} .ph-tk{--ph:var(--tk);--ph-s:var(--tk-s)} .ph-wel{--ph:var(--wel);--ph-s:var(--wel-s)}
+.card:has(.ph-kd){--ph:var(--kd);--ph-s:var(--kd-s)} .card:has(.ph-hk){--ph:var(--hk);--ph-s:var(--hk-s)} .card:has(.ph-lt){--ph:var(--lt);--ph-s:var(--lt-s)}
+.card:has(.ph-vd){--ph:var(--vd);--ph-s:var(--vd-s)} .card:has(.ph-tk){--ph:var(--tk);--ph-s:var(--tk-s)} .card:has(.ph-wel){--ph:var(--wel);--ph-s:var(--wel-s)}
+
+/* thẻ chính */
+.card{border-radius:20px;border-color:#e3e8f1;box-shadow:0 1px 2px rgba(22,35,58,.05),0 10px 30px rgba(22,35,58,.07)}
+.card:has(.scene),.card:has(.sh){border-top:6px solid var(--ph)}
+
+/* đầu hoạt động */
+.sh{margin:0 -24px 18px;padding:18px 24px 16px;background:linear-gradient(135deg,var(--ph-s),#fff 75%);border-bottom:1px solid #e9edf4}
+.sh-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.sh-ph{background:var(--ph);color:#fff;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:5px 12px;border-radius:99px;box-shadow:0 3px 10px color-mix(in srgb,var(--ph) 35%,transparent)}
+.sh-b,.sh-n{font-size:13px;font-weight:700;color:var(--ph);background:#fff;border:1.5px solid color-mix(in srgb,var(--ph) 35%,#fff);padding:3px 10px;border-radius:99px}
+.sh-n b{font-size:15px}
+.sh h2{font-size:28px;font-weight:800;margin:2px 0 0;color:var(--ink);letter-spacing:-.01em}
+.sh .chip.code{background:#fff;border:1.5px dashed color-mix(in srgb,var(--ph) 45%,#fff);color:var(--ph)}
+
+/* băng rôn hoạt động (hieuung.js) */
+.scene .sh-ph{background:#fff;color:var(--ph);box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.scene .sh-b,.scene .sh-n{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.55);color:#fff}
+.scene h2{color:#fff}
+
+/* nhãn từng phần */
+.sec-lb{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ph);margin:4px 0 8px}
+.story{background:#fbfcfe;border:1px solid #e3e8f1;border-left:5px solid color-mix(in srgb,var(--ph) 55%,#fff);border-radius:14px;padding:16px 20px}
+.story img{border-radius:10px;max-width:100%}
+
+/* khối câu hỏi */
+.qblock,.qblock:first-of-type{margin-top:16px;padding:16px 18px 18px;border:1.5px solid #e3e8f1;border-radius:16px;background:#fff;transition:box-shadow .2s,border-color .2s}
+.qblock:hover{border-color:color-mix(in srgb,var(--ph) 35%,#e3e8f1);box-shadow:0 6px 18px rgba(22,35,58,.06)}
+.qblock:focus-within{border-color:var(--ph);box-shadow:0 0 0 4px color-mix(in srgb,var(--ph) 14%,transparent)}
+.qhd{display:flex;gap:8px;align-items:center}
+.qn{background:var(--ph);color:#fff;font-weight:800;font-size:14px;padding:3px 12px;border-radius:8px}
+.qt{font-size:12.5px;font-weight:700;color:var(--ph);background:var(--ph-s);padding:3px 10px;border-radius:99px}
+.qblock .q{font-weight:700;font-size:18px;color:var(--ink)}
+.qsim{background:linear-gradient(180deg,var(--ph-s),#fff 120px)}
+
+/* đáp án lựa chọn */
+.opt{border-radius:14px;border-color:#dfe5ee}
+.opt:hover:not(:disabled){border-color:color-mix(in srgb,var(--ph) 50%,#dfe5ee);background:color-mix(in srgb,var(--ph-s) 60%,#fff)}
+.opt.sel{border-color:var(--ph);background:var(--ph-s);box-shadow:0 2px 8px color-mix(in srgb,var(--ph) 20%,transparent)}
+.opt.sel .dot{border-color:var(--ph);background:var(--ph);box-shadow:inset 0 0 0 3px #fff}
+.sortrow{border-radius:12px}
+textarea,input[type=text]{border-radius:12px}
+textarea:focus,input[type=text]:focus,select:focus{outline:none;border-color:var(--ph);box-shadow:0 0 0 3px color-mix(in srgb,var(--ph) 15%,transparent)}
+
+/* chốt kiến thức */
+.key{border-radius:16px;box-shadow:0 4px 14px rgba(226,147,43,.12)}
+.phase{border-top:2px dashed #e3e8f1}
+
+/* thanh trên + tiến độ */
+.top{background:rgba(255,255,255,.85);box-shadow:0 2px 12px rgba(22,35,58,.06)}
+.prog{height:10px}
+.prog i{background:linear-gradient(90deg,var(--kd),var(--hk),var(--lt),var(--vd))}
+.btn{border-radius:12px}
+
+/* thanh hoạt động bên trái của giáo viên: nhóm theo giai đoạn */
+.gv .side{padding:4px}
+.side-ph{margin:14px 2px 6px;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ph);display:flex;align-items:center;gap:6px}
+.side-ph::after{content:"";flex:1;height:2px;background:color-mix(in srgb,var(--ph) 25%,transparent);border-radius:2px}
+.gv .side button{border-left:4px solid color-mix(in srgb,var(--ph) 45%,#fff);display:flex;gap:8px;align-items:flex-start;line-height:1.35}
+.gv .side button b{flex:0 0 auto;display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:7px;background:var(--ph-s);color:var(--ph);font-size:12.5px}
+.gv .side button:hover{background:var(--ph-s)}
+.gv .side button.on{background:var(--ph);border-color:var(--ph);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--ph) 30%,transparent)}
+.gv .side button.on b{background:#fff;color:var(--ph)}
+
+/* quy trình 3 bước của GV */
+.flow .fs{border-radius:14px}
+.flow .fs.cur{border-color:var(--pri2);background:var(--pri-soft);box-shadow:0 0 0 3px rgba(47,111,181,.12)}
+
+/* màn chiếu: đầu hoạt động to hơn */
+.proj .sh h2,body.present .proj .sh h2{font-size:34px}
+body.present .proj .sh{margin:0 -34px 20px;padding:20px 34px}
+@media (max-width:760px){.sh{margin:0 -18px 14px;padding:14px 18px}.sh h2{font-size:22px}.qblock{padding:14px}}
+@media (prefers-reduced-motion:reduce){.qblock,.opt{transition:none}}
+
+/* ---------- Dự án STEM (lop/stemlan.js) ---------- */
+.stem-hero{display:flex;gap:16px;align-items:center;padding:16px 18px;border-radius:16px;color:#fff;background:linear-gradient(120deg,var(--m1),var(--m2));margin-bottom:12px;box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.stem-hero b{font-size:20px}.stem-ic{font-size:44px;line-height:1;flex:none;filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))}
+.stem-tc{background:#fffbeb;border:1.5px solid #fcd34d;border-radius:14px;padding:12px 16px;margin:12px 0}
+.stem-tc ol,.stem-tc ul{margin:6px 0 0;padding-left:22px}.stem-tc li{margin:3px 0}
+.stem-the{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:10px 0}
+.stem-k{--k:#0ea5e9;border:1.5px solid color-mix(in srgb,var(--k) 35%,#fff);border-top:6px solid var(--k);border-radius:14px;padding:12px 14px;background:linear-gradient(180deg,color-mix(in srgb,var(--k) 8%,#fff),#fff 80px);font-size:15.5px}
+.stem-k.m-S{--k:#0ea5e9}.stem-k.m-T{--k:#8b5cf6}.stem-k.m-E{--k:#f97316}.stem-k.m-M{--k:#10b981}
+.stem-kh{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px;font-size:18px}
+.stem-kh span{background:var(--k);color:#fff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:2px 9px;border-radius:99px}
+.stem-kh b{flex-basis:100%;font-size:17px;color:var(--ink)}
+.stem-k p{margin:4px 0}.stem-k ul{margin:4px 0;padding-left:20px}
+.ncbh{margin-top:12px;padding:8px 12px;border:1.5px dashed #94a3b8;border-radius:12px;background:#f8fafc;color:var(--ink2);font-size:14.5px}
+body:not(.gvpage) .ncbh{display:none}
+.stem-rub{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;margin:10px 0;border:1.5px solid #e3e8f1;border-radius:12px;overflow:hidden}
+.stem-rub th,.stem-rub td{padding:7px 10px;border-bottom:1px solid #e3e8f1;vertical-align:top;text-align:left}
+.stem-rub th{background:var(--ph-s);color:var(--ph)}.stem-rub tr:last-child td{border-bottom:0}
+.stem-rub td:nth-child(2){background:#fef2f2}.stem-rub td:nth-child(3){background:#fffbeb}.stem-rub td:nth-child(4){background:#f0fdf4}
+.stem-dat{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.stem-dat span{font-size:13.5px;padding:4px 10px;border-radius:99px;background:#f1f5f9;border:1px solid #e2e8f0}
+.stem-dat span.ok{background:#dcfce7;border-color:#86efac;color:#166534;font-weight:700}
+.stem-bao{position:sticky;bottom:10px;margin-top:8px;padding:8px 14px;border-radius:12px;background:#0f172a;color:#fff;font-weight:600;opacity:0;transform:translateY(6px);transition:.25s;pointer-events:none;width:max-content;max-width:100%}
+.stem-bao.on{opacity:1;transform:none}
+body.present .ncbh{display:none}
+/* xưởng STEM: khung hẹp (màn GV có 2 cột bên) → xếp một cột */
+.stemx{container-type:inline-size}
+.stemx.stemx .vuon{grid-template-columns:repeat(7,minmax(0,1fr))}
+@container (max-width:820px){.stemx.stemx .vuon-wrap,.stemx.stemx .mm-wrap{grid-template-columns:1fr}.stemx.stemx .o-vuon{font-size:clamp(16px,6cqi,30px)}}
+
+/* ===== PHÒNG THÍ NGHIỆM (nâng cấp 2026-11-19): mọi mô phỏng .sim trông như bàn thí nghiệm ===== */
+.sim{position:relative;border:0;border-radius:22px;padding:0 0 14px;overflow:hidden;background:#fff;
+ box-shadow:0 0 0 2px color-mix(in srgb,var(--ph,#2563eb) 30%,#fff),0 14px 34px rgba(30,41,90,.14)}
+.sim-h{padding:16px 20px 14px;background:linear-gradient(120deg,#0f1b4d,#1e3a8a 55%,color-mix(in srgb,var(--ph,#2563eb) 70%,#1e3a8a));color:#fff;position:relative}
+.sim-h::after{content:"";position:absolute;inset:0;background-image:radial-gradient(#ffffff22 1.2px,transparent 1.3px);background-size:16px 16px;pointer-events:none}
+.sim-h h3{color:#fff;margin:0;font-size:22px;text-shadow:0 2px 10px #0006}
+.sim-tag{background:#ffffff1f;border:1px solid #ffffff44;color:#fff}
+.sim-tag::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#4ade80;margin-right:7px;animation:simlive 1.6s infinite}
+@keyframes simlive{0%{box-shadow:0 0 0 0 #4ade80aa}70%,100%{box-shadow:0 0 0 8px #4ade8000}}
+.sim>:not(.sim-h){margin-left:18px;margin-right:18px}
+.sim-guide{background:#f5f8ff;border-left:4px solid var(--ph,#2563eb);border-radius:0 12px 12px 0;padding:10px 14px;margin-top:14px}
+.sim-ctl{background:linear-gradient(180deg,#f8faff,#eef3ff);border:1px solid #dfe7fb;border-radius:16px;padding:10px 14px 12px}
+.sseg button{border-radius:12px!important;border:1.5px solid #d5def3!important;background:#fff;box-shadow:0 2px 0 #d5def3;transition:transform .12s,box-shadow .12s}
+.sseg button:hover{transform:translateY(-1px)}
+.sseg button.on{background:linear-gradient(135deg,var(--ph,#2563eb),color-mix(in srgb,var(--ph,#2563eb) 60%,#7c3aed))!important;color:#fff!important;border-color:transparent!important;box-shadow:0 4px 14px color-mix(in srgb,var(--ph,#2563eb) 45%,transparent)}
+.sim .btn.run,.sim .btn.acc{position:relative;overflow:hidden;font-size:17px;padding:12px 22px;border-radius:14px;box-shadow:0 6px 18px rgba(234,122,18,.35),inset 0 -3px 0 rgba(0,0,0,.12)}
+.sim .btn.run::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,#ffffff8c,transparent);transform:skewX(-20deg);animation:simshine 2.8s infinite}
+@keyframes simshine{0%,60%{left:-60%}100%{left:130%}}
+.sim-svg{border:0;border-radius:16px;background:radial-gradient(circle at 50% 30%,#fff,#f1f5ff);box-shadow:inset 0 0 0 1px #e1e8f7}
+.sim-cnt div{border:0;border-radius:16px;background:linear-gradient(160deg,#fff,#f3f6ff);box-shadow:0 4px 14px rgba(30,41,90,.08);position:relative;overflow:hidden}
+.sim-cnt div::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--ph,#2563eb)}
+.sim-cnt .bad::before{background:var(--bad)}
+.sim-hist{border-radius:14px;overflow:hidden;box-shadow:0 0 0 1px #e3e9f6}
+.sim-hist th{background:#0f1b4d;color:#fff}
+.sim-hist tr:nth-child(even) td{background:#f7f9ff}
+.sim-hist tr.fresh td{animation:simrow 1.2s ease}
+@keyframes simrow{0%{background:#fff6c2}}
+.sim.scan::before{content:"";position:absolute;left:0;right:0;height:90px;top:-90px;z-index:3;pointer-events:none;
+ background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--ph,#2563eb) 22%,transparent),transparent);animation:simscan .9s ease-in-out}
+@keyframes simscan{100%{top:100%}}
+.sim.flash{animation:simflash .6s}
+@keyframes simflash{40%{box-shadow:0 0 0 4px #facc15,0 14px 34px rgba(30,41,90,.18)}}
+/* thẻ phòng thí nghiệm mở rộng (lop/mophong.js LABS) */
+.labx{display:grid;grid-template-columns:170px 1fr;border-radius:22px;overflow:hidden;color:#fff;margin:6px 0;
+ background:linear-gradient(125deg,var(--l1),var(--l2));box-shadow:0 14px 34px color-mix(in srgb,var(--l1) 40%,transparent)}
+.labx-art{position:relative;display:grid;place-items:center;background:#0002;overflow:hidden}
+.labx-art span{font-size:76px;filter:drop-shadow(0 8px 14px #0005);animation:labbob 3s ease-in-out infinite;position:relative;z-index:1}
+.labx-art i{position:absolute;width:60px;height:60px;border-radius:50%;border:2px solid #fff5;animation:labring 3s linear infinite}
+.labx-art i:nth-of-type(2){animation-delay:1s}.labx-art i:nth-of-type(3){animation-delay:2s}
+@keyframes labring{0%{transform:scale(.6);opacity:1}100%{transform:scale(3);opacity:0}}
+@keyframes labbob{50%{transform:translateY(-8px) rotate(-4deg)}}
+.labx-b{padding:18px 22px}
+.labx-tag{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:#ffffff26;border:1px solid #fff6;border-radius:99px;padding:4px 12px}
+.labx h3{color:#fff;font-size:26px;margin:8px 0 4px;text-shadow:0 2px 10px #0004}
+.labx p{margin:0 0 14px;font-size:16px;line-height:1.5;opacity:.95}
+.labx-go{display:inline-block;background:#fff;color:var(--l1);font-weight:800;font-size:17px;padding:11px 22px;border-radius:14px;text-decoration:none;box-shadow:0 6px 18px #0003;transition:transform .15s}
+.labx-go:hover{transform:translateY(-2px) scale(1.03)}
+.labx small{display:block;margin-top:8px;opacity:.8;font-size:12.5px}
+@media(max-width:620px){.labx{grid-template-columns:1fr}.labx-art{min-height:120px}}

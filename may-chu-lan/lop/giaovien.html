@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giáo viên – Điều khiển lớp</title>
+<link rel="stylesheet" href="kieu.css"><link rel="stylesheet" href="giaodien.css">
+</head>
+<body class="gvpage">
+<header class="top"><div class="wrap" style="max-width:1560px">
+ <div class="logo"><svg width="34" height="34" viewBox="0 0 34 34"><rect width="34" height="34" rx="9" fill="#e2932b"/><circle cx="17" cy="15" r="7" fill="none" stroke="#fff" stroke-width="2"/><circle cx="14.5" cy="14" r="1.6" fill="#fff"/><circle cx="19.5" cy="14" r="1.6" fill="#fff"/><path d="M13 25h8M17 22v3" stroke="#1d4e89" stroke-width="2.2" stroke-linecap="round"/></svg><div>Bảng điều khiển giáo viên<small>Lớp học · <span id="hdbai"></span></small></div></div>
+ <div style="flex:1;text-align:center">Học sinh mở trình duyệt, gõ: <span class="addr" id="addr">…</span></div>
+ <span id="snd"></span> <button class="btn ghost" id="projBtn">Chế độ chiếu</button>
+</div></header>
+<div id="edge" title="Rê chuột vào đây để chọn hoạt động"><span>☰</span></div>
+<div id="pcount"></div>
+<div id="pbar">
+ <button data-a="prev" title="Hoạt động trước (←)">◀</button><span id="pname"></span><button data-a="next" title="Phần tiếp / hoạt động sau (→)">▶</button><button data-a="part" id="pPart" title="Hiện phần tiếp theo của hoạt động: đọc → mô phỏng → câu hỏi (phím →)">▼ Phần</button>
+ <i></i><button data-a="lock" title="Khoá / mở nộp bài (L)">🔒</button><button data-a="rev" title="Chốt đáp án & chiếu kết quả (R)">✅</button><button data-a="rank" title="Bảng xếp hạng (B)">🏆</button><button data-a="ghi" title="Nội dung ghi bài (G)">📒</button><button data-a="ghimuc" title="Ghi bài từng mục: chiếu mục 1 → hết, ▶/◀ chuyển mục (phím W)">✍️ Ghi từng mục</button><button data-a="tuhoc" id="pTuhoc" title="Giáo viên đang điều khiển. Bấm để học sinh tự học.">🎛 GV điều khiển</button>
+ <i></i><button data-a="t30" title="Đếm ngược 30 giây">⏱30″</button><button data-a="t1" title="Đếm ngược 1 phút">⏱1′</button><button data-a="t3" title="Đếm ngược 3 phút (T)">⏱3′</button><button data-a="t5" title="Đếm ngược 5 phút">⏱5′</button><button data-a="t0" title="Tắt đồng hồ">✕⏱</button>
+ <i></i><button data-a="fs" title="Toàn màn hình (F)">⛶</button><button data-a="exit" title="Thoát chế độ chiếu (Esc)">Thoát chiếu</button>
+</div>
+<main class="wrap" style="max-width:1560px;padding-top:16px">
+ <div class="gv" id="gv">
+  <aside class="side" id="side"></aside>
+  <section class="card proj" id="proj"></section>
+  <aside id="panel">
+   <div class="card">
+    <h3>Tiến trình hoạt động <span class="badge b" id="cnt">0 học sinh</span></h3>
+    <div class="flow" id="flow"></div>
+    <div class="hint" id="subInfo" style="margin-top:8px"></div>
+    <div class="stu" id="stu"></div>
+   </div>
+   <div class="card" id="praiseCard"><h3>⭐ Khen thưởng, nhận xét các nhóm</h3>
+    <p class="hint">Bấm ⭐ để tặng sao (mỗi sao = 2 điểm), ghi nhận xét rồi bấm Gửi. Lời khen hiện ngay trên máy của nhóm.</p>
+    <button class="btn ghost" id="praiseAll" style="width:100%">⭐ Khen tất cả nhóm đúng hết hoạt động này</button>
+    <div id="plist"></div></div>
+   <div class="card" id="voteCard"><h3>🗳 Bình chọn</h3><div id="vpanel"></div></div>
+   <div class="card"><h3>Kết quả trực tiếp</h3><div id="live"><p class="hint">Chưa có câu trả lời.</p></div></div>
+   <div class="card"><h3>Câu trả lời tự luận</h3><p class="hint">Bấm <b>Chiếu</b> để đưa câu trả lời lên màn hình cả lớp khi đang chiếu kết quả.</p><div id="texts"></div></div>
+   <div class="card"><h3>👥 Danh sách lớp</h3><p class="hint">Nhập một lần cho mỗi lớp; học sinh sẽ <b>chọn tên</b> khi vào lớp (dùng chung cho mọi bài).</p>
+    <div class="row"><input type="text" id="rCls" placeholder="Tên lớp, ví dụ 8A6" style="flex:1"><select id="rPick" style="flex:1"><option value="">– Lớp đã có –</option></select></div>
+    <textarea id="rNames" placeholder="Mỗi dòng một học sinh (có thể dán từ Excel)" style="margin-top:6px;min-height:120px"></textarea>
+    <button class="btn ghost" id="rSave" style="width:100%;margin-top:6px">💾 Lưu danh sách lớp</button></div>
+   <div class="card"><h3>Lưu kết quả</h3><button class="btn ghost" id="csv" style="width:100%">Tải kết quả (CSV mở bằng Excel)</button>
+    <button class="btn ghost" id="rstBtn" style="width:100%;margin-top:8px;color:var(--bad)">Bắt đầu tiết mới (xoá dữ liệu)</button>
+    <div class="fb bad" id="rstBox"><b>Xoá toàn bộ danh sách, câu trả lời, lời khen, bình chọn?</b> (Nên tải CSV trước.)<div class="row" style="margin-top:8px"><button class="btn" id="rstYes" style="background:var(--bad)">Xoá</button><button class="btn ghost" id="rstNo">Huỷ</button></div></div>
+   </div>
+  </aside>
+ </div>
+</main>
+<div class="toast" id="toast"></div>
+<script src="noidung.js"></script><script src="khung.js"></script>
+<script src="mophong.js"></script>
+<script src="hieuung.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+let PIN=new URLSearchParams(location.search).get('pin')||'';try{PIN=PIN||sessionStorage.getItem('gv-pin')||'';}catch(e){}
+let ST={step:0,open:true,reveal:false,vote:null,ov:null}, ALL={students:{},answers:{},votes:{},praise:[]}, FEAT=[], SHOWKEY=false, shownStep=-1, projSig='';
+const QUICK=['Trả lời chính xác!','Lập luận rõ ràng, có căn cứ.','Hợp tác nhóm tốt.','Có tiến bộ, cố gắng thêm!','Cần kiểm tra lại đáp án.'];
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),2200);}
+async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({pin:PIN},body||{}))}); if(!r.ok) throw new Error(r.status); return r.json();}
+let TV=null;
+function fxT(){const n={step:ST.step,reveal:!!ST.reveal,ov:!!ST.ov,vc:!!(ST.vote&&ST.vote.closed),vo:!!ST.vote};
+  if(TV){ if(n.step!==TV.step&&n.step>0) FX.play('bell');
+    if(n.reveal&&!TV.reveal){FX.play('reveal'); try{if(groupTable(ST.step,ANS(),STU()).honor.length) setTimeout(()=>confetti(),300);}catch(e){}}
+    if(n.ov&&!TV.ov){ if(ST.ov.type==='rank'){FX.play('drum'); setTimeout(()=>confetti(),1000);} else FX.play('bell'); }
+    if(n.vo&&!TV.vo) FX.play('ding'); if(n.vc&&!TV.vc) FX.play('win'); }
+  TV=n;}
+async function ctl(o){try{const r=await api('api/t',o); Object.assign(ST,r,('vote' in o)?{vote:o.vote}:{},('ov' in o)?{ov:o.ov}:{}); if('praise' in o) ALL.praise=o.praise; fxT(); drawAll(true);}catch(e){toast('Không gửi được lệnh. Máy chủ còn chạy không?');}}
+const STU=()=>ALL.students||{}, ANS=()=>ALL.answers||{};
+function subIds(){const an=ANS();return Object.keys(STU()).filter(id=>an[id]&&an[id][ST.step]);}
+function counts(){const st=STU(),ids=Object.keys(st),sub=subIds();return {m:ids.length,s:ids.reduce((t,id)=>t+wOf(st[id]),0),sm:sub.length,ss:sub.reduce((t,id)=>t+wOf(st[id]),0)};}
+function stepPraise(){return (ALL.praise||[]).filter(p=>p.step===ST.step).map(p=>Object.assign({},p,{label:labelOf(STU()[p.id])}));}
+function board(){const b=buildBoard(ST.step,ANS(),FEAT,STU()); b.table=groupTable(ST.step,ANS(),STU()); b.praise=stepPraise(); return b;}
+function rank(){return rankRows(ANS(),STU(),ALL.praise,ALL.votes);}
+/* ---------- cột trái ---------- */
+function side(){
+  let lastPh='';
+  $('#side').innerHTML=STEPS.map((s,i)=>{const p=phaseOf(s), hd=p.k!==lastPh&&p.k!=='wel'?`<div class="side-ph ph-${p.k}">${p.ic} ${p.ten}</div>`:''; lastPh=p.k;
+    return hd+`<button data-i="${i}" class="ph-${p.k} ${i===ST.step?'on':''}"><b>${i===0?'▶':i===STEPS.length-1?'★':i}</b> ${s.t}</button>`;}).join('');
+  $('#side').querySelectorAll('button').forEach(b=>b.onclick=()=>{FEAT=[]; SHOWKEY=false; ctl({step:+b.dataset.i,open:true,reveal:false,board:null,vote:null,ov:null});});
+}
+/* ---------- khung chiếu ---------- */
+function proj(force){
+  const i=ST.step, rv=ST.reveal, bd=(rv||ST.vote)?board():null;
+  const sig=JSON.stringify([i,rv,SHOWKEY,ST.ov,ST.vote,bd,ALL.votes&&ALL.votes[i],ST.part]); if(!force&&sig===projSig) return; projSig=sig;
+  if(ST.ov&&ST.ov.type==='ghi'){ $('#proj').innerHTML=renderGhiBai(ST.ov.upto,ST.ov.only)+'<p class="hint" style="margin-top:10px">Đang chiếu nội dung ghi bài lên máy học sinh. Bấm lại 📒 để tắt.</p>'; return; }
+  if(ST.ov&&ST.ov.type==='ghimuc'){ $('#proj').innerHTML=renderGhiMuc(ST.ov.k)+'<p class="hint" style="margin-top:10px">Ghi bài từng mục: ▶/→ mục tiếp, ◀/← mục trước. Bấm lại ✍️ để tắt.</p>'; return; }
+  if(ST.ov&&ST.ov.type==='rank'){ $('#proj').innerHTML=renderRank(rank(),null)+'<p class="hint" style="margin-top:10px">Đang chiếu bảng xếp hạng lên máy học sinh. Bấm "Tắt bảng xếp hạng" để quay lại hoạt động.</p>'; return; }
+  if(i===0){$('#proj').innerHTML=`<div class="wait">${mascotSvg(150)}<div class="eyebrow">${BAI.mon||'Tin học'} ${BAI.lop} · Buổi ${BAI.buoi}</div><h1>${BAI.ten}</h1>
+    <p class="lead">Các em mở trình duyệt, gõ địa chỉ:</p><p class="addr" style="font-size:40px">${$('#addr').textContent}</p><p class="lead">Nhập số căn cước, xác minh họ tên (thêm bạn ngồi chung máy) rồi chờ thầy cô bắt đầu.</p></div>`; return;}
+  const c=counts();
+  $('#proj').innerHTML=`${stepHead(i)}${stepStory(i)}
+    ${rv?`<div class="sumbar"><div><b>${c.s}</b>học sinh</div><div><b>${c.m}</b>máy</div><div><b>${c.ss}</b>bạn đã nộp</div><div><b>${bd.table.honor.length}</b>nhóm đúng hết</div></div>`:''}
+    <div id="pf" class="ro">${renderQs(STEPS[i],{},true)}</div>
+    ${rv?renderTable(bd.table,null)+renderPraise(bd.praise,null):''}
+    ${ST.vote&&ST.vote.step===i?projVote():''}
+    ${rv?revealExtras(bd,STEPS[i])+`<h2 style="margin-top:20px">📒 Ghi vào vở</h2>`+renderGhiBai(i,i===STEPS.length-1?0:i):SHOWKEY?renderKey(i):''}`;
+  if(rv||SHOWKEY) markReveal($('#pf'),STEPS[i],null,rv?bd:null);
+  mountSims($('#pf'));
+  if(!rv&&!SHOWKEY) applyParts($('#proj'),ST.part||0,STEPS[i]);
+}
+function voteCounts(){const m=(ALL.votes||{})[ST.step]||{}; const r={}; Object.values(m).forEach(t=>r[t]=(r[t]||0)+1); return r;}
+function projVote(){const v=ST.vote, res=v.closed?(v.res||{}):voteCounts(); const mx=Math.max(0,...v.items.map(it=>res[it.id]||0));
+  return `<div class="phase"><h2>🗳 Bình chọn: ${v.qtext}</h2>${v.items.map(it=>{const c=res[it.id]||0; return `<div class="vcard ${v.closed&&c===mx&&mx>0?'win':''}"><div><b>${esc(it.label)}</b><br>${esc(it.text)}</div><span class="cnt">${v.closed&&c===mx&&mx>0?'🏅 ':''}${c} phiếu</span></div>`;}).join('')}</div>`;}
+/* ---------- tiến trình 4 bước (CV 5512) ---------- */
+function flow(){
+  const i=ST.step; if(i===0){$('#flow').innerHTML='<p class="hint">Chờ học sinh vào lớp, rồi chọn Hoạt động 1 ở cột trái.</p>'+rankBtn(); wireFlow(); return;}
+  const c=counts(), phase=ST.vote?3:ST.reveal?3:(!ST.open?2:(c.sm?2:1));
+  const tq=STEPS[i].qs.filter(q=>q.type==='text'||q.type==='decl');
+  $('#flow').innerHTML=`
+   <div class="fs ${phase===1?'cur':''}"><h4>B1. Chuyển giao nhiệm vụ</h4>Hoạt động đang mở trên mọi máy. Đọc tình huống, nêu yêu cầu.</div>
+   <div class="fs ${phase===2?'cur':''}"><h4>B2. Thực hiện nhiệm vụ</h4>Đã nộp: <b>${c.sm}/${c.m}</b> máy (<b>${c.ss}/${c.s}</b> học sinh)
+     <button class="btn ${ST.open?'':'acc'}" id="fOpen">${ST.open?'🔒 Khoá nộp bài':'🔓 Mở lại nộp bài'}</button></div>
+   <div class="fs ${phase===3?'cur':''}"><h4>B3. Báo cáo, thảo luận</h4>
+     <button class="btn ${ST.reveal?'ghost':'acc'}" id="fRev">${ST.reveal?'Ẩn kết quả':'✅ Chốt đáp án & chiếu kết quả'}</button>
+     <button class="btn ghost" id="fKey">${SHOWKEY?'🙈 Ẩn đáp án (màn hình GV)':'👁 Xem trước đáp án (chỉ GV)'}</button>
+     ${tq.length?`<div style="margin-top:8px"><select id="vq">${tq.map(q=>`<option value="${q.id}">${esc(q.q.slice(0,60))}</option>`).join('')}</select>
+     ${!ST.vote?`<button class="btn ghost" id="fVote">🗳 Mở bình chọn câu trả lời hay</button>`:!ST.vote.closed?`<button class="btn acc" id="fVoteClose">🏅 Đóng & công bố bình chọn</button>`:`<button class="btn ghost" id="fVoteOff">Tắt bình chọn</button>`}</div>`:''}</div>
+   <div class="fs"><h4>B4. Kết luận, nhận định</h4>Chiếu "Điều cần nhớ" (có trong kết quả), nội dung ghi bài, khen thưởng, nhận xét các nhóm.
+     <button class="btn ${ST.ov&&ST.ov.type==='ghi'?'acc':'ghost'}" id="fGhi">${ST.ov&&ST.ov.type==='ghi'?'Tắt nội dung ghi bài':'📒 Chiếu nội dung ghi bài'}</button>
+     <button class="btn ghost" id="fPraise">⭐ Đến phần khen thưởng</button>${rankBtn()}</div>`;
+  wireFlow();
+}
+function rankBtn(){const on=ST.ov&&ST.ov.type==='rank'; return `<button class="btn ${on?'acc':'ghost'}" id="fRank" style="width:100%;margin-top:6px">${on?'Tắt bảng xếp hạng':'🏆 Chiếu bảng xếp hạng'}</button>`;}
+function wireFlow(){
+  const on=(id,f)=>{const e=$('#'+id); if(e) e.onclick=f;};
+  on('fOpen',()=>ctl({open:!ST.open}));
+  on('fRev',()=>ctl(ST.reveal?{reveal:false}:{reveal:true,open:false,board:board()}));
+  on('fKey',()=>{SHOWKEY=!SHOWKEY; drawAll(true);});
+  on('fPraise',()=>$('#praiseCard').scrollIntoView({behavior:'smooth'}));
+  on('fGhi',()=>pact('ghi'));
+  on('fRank',()=>pact('rank'));
+  on('fVote',()=>{const qid=$('#vq').value, q=STEPS[ST.step].qs.find(x=>x.id===qid), st=STU(), an=ANS();
+    const items=subIds().filter(id=>an[id][ST.step][qid]!==undefined).map(id=>({id,label:labelOf(st[id]),text:textOf(q,an[id][ST.step][qid])}));
+    if(items.length<2){toast('Cần ít nhất 2 nhóm đã trả lời câu này.');return;}
+    ctl({vote:{step:ST.step,q:qid,qtext:q.q,items,closed:false}});});
+  on('fVoteClose',()=>ctl({vote:Object.assign({},ST.vote,{closed:true,res:voteCounts()})}));
+  on('fVoteOff',()=>ctl({vote:null}));
+}
+/* ---------- khen thưởng ---------- */
+function plist(){
+  const st=STU(), i=ST.step, t=groupTable(i,ANS(),st);
+  if(!t.rows.length){$('#plist').innerHTML='<p class="hint">Chưa có nhóm nào.</p>';return;}
+  const pr=ALL.praise||[];
+  $('#plist').innerHTML=t.rows.map(r=>{const mine=pr.filter(p=>p.id===r.id), stars=mine.reduce((a,p)=>a+(p.stars||0),0);
+    return `<div class="prow" data-id="${r.id}"><div><b>${esc(r.label)}</b><br><span class="hint">${i>0?(r.sub?(t.max?`Đúng ${r.ok}/${t.max}`:'Đã nộp'):'Chưa nộp')+' · ':''}${stars} ⭐ cả bài</span></div>
+     <div class="act"><button class="sm" data-star="1">⭐ +1</button><button class="sm" data-send="1">Gửi</button></div>
+     <input type="text" placeholder="Nhận xét cho nhóm (không bắt buộc)">
+     <div class="chips">${QUICK.map(q=>`<button data-q="${esc(q)}">${q}</button>`).join('')}</div></div>`;}).join('');
+  $('#plist').querySelectorAll('.prow').forEach(row=>{
+    const id=row.dataset.id, inp=row.querySelector('input'); let st=0;
+    row.querySelectorAll('.chips button').forEach(b=>b.onclick=()=>{inp.value=b.dataset.q;});
+    row.querySelector('[data-star]').onclick=e=>{st++; e.target.textContent='⭐ +'+(st+1)+' (đã chọn '+st+')';};
+    row.querySelector('[data-send]').onclick=()=>{ if(!st&&!inp.value.trim()){toast('Chọn sao hoặc ghi nhận xét.');return;}
+      const list=(ALL.praise||[]).concat([{id,step:ST.step,stars:st,cmt:inp.value.trim(),t:Date.now()}]); sendPraise(list); toast('Đã gửi lời khen tới nhóm.');};
+  });
+}
+$('#praiseAll').onclick=()=>{const t=groupTable(ST.step,ANS(),STU()); if(!t.honor.length){toast('Chưa có nhóm nào đúng hết hoạt động này.');return;}
+  const list=(ALL.praise||[]).concat(t.honor.map(h=>({id:h.id,step:ST.step,stars:1,cmt:'Trả lời đúng tất cả câu hỏi!',t:Date.now()}))); sendPraise(list); toast('Đã khen '+t.honor.length+' nhóm.');};
+function sendPraise(list){ALL.praise=list; FX.play('sparkle'); confetti('star',30); const o={praise:list}; if(ST.reveal) o.board=board(); if(ST.ov&&ST.ov.type==='rank') o.ov={type:'rank',rows:rank()}; ctl(o);}
+/* ---------- bình chọn (panel) ---------- */
+function vpanel(){
+  if(!ST.vote||ST.vote.step!==ST.step){$('#vpanel').innerHTML='<p class="hint">Bình chọn mở ở bước B3 khi hoạt động có câu tự luận.</p>';return;}
+  const res=ST.vote.closed?(ST.vote.res||{}):voteCounts(); const n=Object.keys(((ALL.votes||{})[ST.step])||{}).length;
+  $('#vpanel').innerHTML=`<p class="hint">${ST.vote.closed?'Đã công bố.':'Đang mở'} · ${n} nhóm đã bầu</p>`+ST.vote.items.map(it=>`<div class="ans"><div class="row"><b>${esc(it.label)}</b><span class="cnt">${res[it.id]||0} phiếu</span></div></div>`).join('');
+}
+/* ---------- kết quả trực tiếp & tự luận ---------- */
+function drawLive(){
+  {const pp=document.getElementById('pPart'); if(pp){const n=nParts(STEPS[ST.step]); pp.textContent='▼ Phần '+Math.min((ST.part||0)+1,n)+'/'+n; pp.disabled=ST.step<=0||ST.reveal||(ST.part||0)>=n-1;}}
+  {const pt=document.getElementById("pTuhoc"); if(pt){pt.style.background=ST.tuhoc?"#dc2626":"#16a34a"; pt.style.color="#fff"; pt.textContent=ST.tuhoc?"🔓 GV không điều khiển":"🎛 GV điều khiển"; pt.title=ST.tuhoc?"Đang để học sinh tự học (tự chuyển hoạt động). Bấm để giáo viên điều khiển lại.":"Giáo viên đang điều khiển: học sinh theo màn hình thầy cô. Bấm để học sinh tự học.";}}
+  const i=ST.step, st=STU(), an=ANS(), ids=Object.keys(st), sub=subIds(), c=counts();
+  $('#cnt').textContent=c.s+' học sinh · '+c.m+' máy';
+  $('#pcount').innerHTML=i>0?`📥 Đã nộp <b>${c.sm}/${c.m}</b> máy · ${c.ss}/${c.s} học sinh ${ST.open?'':'· 🔒'}`:`👥 ${c.s} học sinh · ${c.m} máy đã vào lớp`;
+  $('#pname').textContent=i+'. '+STEPS[i].t;
+  $('#subInfo').innerHTML=i>0&&c.m&&c.sm===c.m?'<span class="badge g">Cả lớp đã nộp – có thể chốt đáp án</span>':'';
+  $('#stu').innerHTML=ids.map(id=>`<span class="${sub.includes(id)?'y':''}">${esc(labelOf(st[id]))}</span>`).join('');
+  if(i===0){$('#live').innerHTML='<p class="hint">Chọn một hoạt động ở cột trái để bắt đầu.</p>';$('#texts').innerHTML='';return;}
+  $('#live').innerHTML=sub.length?renderBoard(board(),null,false):'<p class="hint">Chưa có câu trả lời.</p>';
+  const tq=STEPS[i].qs.filter(q=>q.type==='text'||q.type==='decl');
+  $('#texts').innerHTML=tq.length?tq.map(q=>`<h4 style="margin:10px 0 4px">${q.q}</h4>`+sub.map(id=>{const v=an[id][i][q.id]; if(v===undefined) return ''; const on=FEAT.some(f=>f.id===id&&f.q===q.id);
+     return `<div class="ans"><div class="row"><b>${esc(labelOf(st[id]))}</b><button class="btn ${on?'':'ghost'}" data-id="${id}" data-q="${q.id}">${on?'Đang chiếu ✓':'Chiếu'}</button></div>${esc(textOf(q,v))}</div>`;}).join('')).join(''):'<p class="hint">Hoạt động này không có câu tự luận.</p>';
+  $('#texts').querySelectorAll('button').forEach(b=>b.onclick=()=>{const id=b.dataset.id,q=b.dataset.q; const k=FEAT.findIndex(f=>f.id===id&&f.q===q);
+    if(k>=0) FEAT.splice(k,1); else {const qq=STEPS[i].qs.find(x=>x.id===q); FEAT.push({id,q,name:labelOf(st[id]),text:textOf(qq,an[id][i][q])});}
+    drawLive(); if(ST.reveal) ctl({board:board()}); else toast('Đã chọn. Bấm "Chốt đáp án & chiếu kết quả" để học sinh thấy.');});
+}
+function drawAll(force){for(const f of [side,flow,()=>proj(force),plist,vpanel,drawLive]){try{f();}catch(e){console.log('draw',e);}}}
+async function poll(){
+  try{const r=await api('api/all'); const old=JSON.stringify([ST.step,ST.open,ST.reveal,ST.vote,ST.ov,ST.part]);
+    ALL=r; ST={step:r.step,open:r.open,reveal:r.reveal,vote:r.vote,ov:r.ov,tuhoc:!!r.tuhoc,part:r.part||0}; fxT(); CLOCK.set(r.timer);
+    if(old!==JSON.stringify([ST.step,ST.open,ST.reveal,ST.vote,ST.ov,ST.part])){drawAll(true);} else {flow(); proj(false); vpanel(); drawLive(); if(!document.activeElement||!document.activeElement.closest||!document.activeElement.closest('#plist')) plist();}
+    if(ST.reveal){const b=JSON.stringify(board()); if(b!==poll._last){poll._last=b; api('api/t',{board:board()}).catch(()=>{});}}
+    if(ST.ov&&ST.ov.type==='rank'){const rr=JSON.stringify(rank()); if(rr!==poll._r){poll._r=rr; api('api/t',{ov:{type:'rank',rows:rank()}}).catch(()=>{});}}
+  }catch(e){ if(String(e.message)==='403'){$('#proj').innerHTML='<h2>Trang giáo viên chỉ mở được trên máy giáo viên.</h2>';return;} }
+  setTimeout(poll,2000);
+}
+function present(on){document.body.classList.toggle('present',on); document.body.classList.remove('sideon'); try{localStorage.setItem('gv-present',on?'1':'0');}catch(e){} if(!on&&document.fullscreenElement) document.exitFullscreen().catch(()=>{}); proj(true);}
+function goStep(i){ if(i<0||i>=STEPS.length) return; FEAT=[]; SHOWKEY=false; ctl({step:i,open:true,reveal:false,board:null,vote:null,ov:null,part:0}); }
+function ghiMuc(d){ if(!(ST.ov&&ST.ov.type==='ghimuc')) return false; const k=Math.max(1,Math.min(GHIBAI.muc.length,ST.ov.k+d)); if(k!==ST.ov.k) ctl({ov:{type:'ghimuc',k}}); else toast(d>0?'Đã hết các mục ghi bài.':'Đang ở mục đầu.'); return true; }
+function goPart(d){ const n=nParts(STEPS[ST.step]), p=(ST.part||0)+d; if(ST.reveal||ST.step<=0||p<0||p>=n) return false; ctl({part:p}); return true; }
+function timer(m){ const t=m?{id:Date.now(),left:m*60}:null; CLOCK.set(t); ctl({timer:t}); }
+function pact(a){ ({prev:()=>{if(ghiMuc(-1))return; if(!goPart(-1)) goStep(ST.step-1);},next:()=>{if(ghiMuc(1))return; if(!goPart(1)) goStep(ST.step+1);},
+  ghimuc:()=>{ if(!GHIBAI.muc.length){toast('Bài chưa có nội dung ghi bài.');return;} ctl({ov:ST.ov&&ST.ov.type==='ghimuc'?null:{type:'ghimuc',k:1}}); },part:()=>{if(!goPart(1)) toast('Đã hiện hết các phần của hoạt động này.');},lock:()=>ctl({open:!ST.open}),
+  rev:()=>ctl(ST.reveal?{reveal:false}:{reveal:true,open:false,board:board()}),rank:()=>ctl({ov:ST.ov&&ST.ov.type==='rank'?null:{type:'rank',rows:rank()}}),
+  ghi:()=>{ if(ST.ov&&ST.ov.type==='ghi'){ctl({ov:null});return;} const last=ST.step===STEPS.length-1; ctl({ov:{type:'ghi',upto:last?99:Math.max(1,ST.step),only:last||ST.step<1?0:ST.step}});},
+  tuhoc:()=>{ctl({tuhoc:!ST.tuhoc}); toast(ST.tuhoc?'Giáo viên điều khiển: học sinh theo màn hình thầy cô.':'Giáo viên không điều khiển: học sinh tự học, tự chuyển hoạt động.');},
+  t30:()=>timer(0.5),t1:()=>timer(1),t3:()=>timer(3),t5:()=>timer(5),t0:()=>timer(0),
+  fs:()=>{document.fullscreenElement?document.exitFullscreen().catch(()=>{}):document.documentElement.requestFullscreen().catch(()=>{});},exit:()=>present(false)})[a]?.(); }
+$('#projBtn').onclick=()=>present(true);
+document.querySelectorAll('#pbar button').forEach(b=>b.onclick=()=>pact(b.dataset.a));
+$('#edge').onmouseenter=()=>document.body.classList.add('sideon');
+$('#side').onmouseleave=()=>document.body.classList.remove('sideon');
+let hideT; document.addEventListener('mousemove',()=>{ if(!document.body.classList.contains('present')) return; document.body.classList.add('baron'); clearTimeout(hideT); hideT=setTimeout(()=>document.body.classList.remove('baron'),2500);});
+document.addEventListener('keydown',e=>{ if(/INPUT|TEXTAREA|SELECT/.test((e.target.tagName||''))) return; const k=e.key;
+  const m={ArrowRight:'next',PageDown:'next',ArrowLeft:'prev',PageUp:'prev',r:'rev',R:'rev',g:'ghi',G:'ghi',l:'lock',L:'lock',b:'rank',B:'rank',f:'fs',F:'fs',t:'t3',T:'t3',w:'ghimuc',W:'ghimuc'}[k];
+  if(k==='Escape'&&document.body.classList.contains('present')&&!document.fullscreenElement){present(false);return;}
+  if(m){e.preventDefault(); if(m==='fs'&&!document.body.classList.contains('present')) present(true); pact(m);} });
+try{ if(localStorage.getItem('gv-present')==='1') document.body.classList.add('present'); }catch(e){}
+$('#rstBtn').onclick=()=>$('#rstBox').classList.add('show'); $('#rstNo').onclick=()=>$('#rstBox').classList.remove('show');
+$('#rstYes').onclick=async()=>{try{await api('api/reset');FEAT=[];$('#rstBox').classList.remove('show');toast('Đã xoá dữ liệu. Học sinh vào lại lớp.');}catch(e){toast('Không xoá được.');}};
+$('#csv').onclick=()=>{
+  const st=STU(), an=ANS(), cols=[], rk={}; rank().forEach((r,k)=>rk[r.id]=Object.assign({hang:k+1},r));
+  STEPS.forEach((s,i)=>(s.qs||[]).filter(q=>q.type!=='sim').forEach(q=>cols.push([i,q])));
+  const score=(q,v)=>{ if(v===undefined) return ''; const ok=isCorrect(q,v);
+    if(ok!==null&&(q.type==='sort'||q.type==='tf'||q.type==='match')) return q.items.filter((it,k)=>itemOk(q,v,k)).length+'/'+q.items.length;
+    if(ok!==null) return ok?'Đúng':'Sai'; return textOf(q,v); };
+  const head=['STT','Họ và tên','Lớp','Máy','Số bạn chung máy','Câu đúng','Sao','Phiếu bình chọn','Điểm','Hạng','Nhận xét của GV'].concat(cols.map(([i,q])=>'HĐ'+i+' '+(q.head?q.head.split(' –')[0]+' ':'')+q.q.replace(/<[^>]+>/g,'').slice(0,40)));
+  const rows=[]; Object.keys(st).forEach(id=>{const mem=(st[id].members&&st[id].members.length)?st[id].members:[st[id].name]; const r=rk[id]||{};
+    const cm=(ALL.praise||[]).filter(p=>p.id===id&&p.cmt).map(p=>'HĐ'+p.step+': '+p.cmt).join(' | ');
+    mem.forEach(nm=>rows.push([rows.length+1,nm,st[id].cls,st[id].may||'',mem.length,r.ok,r.stars,r.votes,r.pts,r.hang,cm].concat(cols.map(([i,q])=>score(q,((an[id]||{})[i]||{})[q.id])))));});
+  const csv='﻿'+[head].concat(rows).map(r=>r.map(c=>'"'+String(c??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); const d=new Date();
+  a.download='KetQua_'+BAI.dir+'_'+BAI.buoi+'_'+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'_'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0')+'.csv'; a.click();
+};
+let ROS={};
+function loadRoster(){fetch('api/roster',{cache:'no-store'}).then(r=>r.json()).then(r=>{ROS=r.classes||{}; $('#rPick').innerHTML='<option value="">– Lớp đã có –</option>'+Object.keys(ROS).map(c=>`<option>${esc(c)}</option>`).join('');}).catch(()=>{});}
+$('#rPick').onchange=()=>{const c=$('#rPick').value; if(!c) return; $('#rCls').value=c; $('#rNames').value=(ROS[c]||[]).join('\n');};
+$('#rSave').onclick=async()=>{const c=$('#rCls').value.trim(), ns=$('#rNames').value.split(/\r?\n/).map(x=>x.replace(/^\s*\d+[.)\t ]+/,'').split('\t')[0].trim()).filter(Boolean);
+  if(!c||!ns.length){toast('Nhập tên lớp và danh sách học sinh.');return;}
+  try{const r=await api('api/roster',{cls:c,names:ns}); toast('Đã lưu '+r.n+' học sinh lớp '+c+'.'); loadRoster();}catch(e){toast('Không lưu được.');}};
+try{document.getElementById('hdbai').textContent=(BAI.mon||'Tin học')+' '+BAI.lop+' · '+BAI.ten+' · '+BAI.buoi;}catch(e){}
+loadRoster(); api('api/meta',{meta:lessonMeta()}).catch(()=>{});
+fetch('api/info').then(r=>r.json()).then(i=>{const ip=(i.ips&&i.ips[0])||location.hostname; $('#addr').textContent=ip+(i.port&&i.port!=80?':'+i.port:'')+location.pathname.replace(/gv$/,''); proj(true);}).catch(()=>{});
+document.getElementById('snd').innerHTML=soundBtn();
+try{drawAll(true);}catch(e){console.log(e);} poll();
+</script>
+<script src="thongke.js"></script>
+</body>
+</html>

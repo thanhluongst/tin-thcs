@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Học sinh – Lớp học</title>
+<link rel="stylesheet" href="kieu.css"><link rel="stylesheet" href="giaodien.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+ <div class="logo"><svg width="34" height="34" viewBox="0 0 34 34"><rect width="34" height="34" rx="9" fill="#1d4e89"/><circle cx="17" cy="15" r="7" fill="none" stroke="#fff" stroke-width="2"/><circle cx="14.5" cy="14" r="1.6" fill="#fff"/><circle cx="19.5" cy="14" r="1.6" fill="#fff"/><path d="M13 25h8M17 22v3" stroke="#e2932b" stroke-width="2.2" stroke-linecap="round"/></svg><div>Lớp học<small><span id="hdbai"></span></small></div></div>
+ <div class="prog"><i id="bar"></i></div><div class="who" id="who"></div><button class="ghibtn" id="ghiBtn" type="button">📒 Bài ghi</button><button class="ghibtn" id="outBtn" type="button" onclick="logout()">Đăng xuất</button><span id="snd"></span>
+</div></header>
+<main class="wrap" id="app" style="padding-top:18px"></main>
+<div class="toast" id="toast"></div>
+<script src="noidung.js"></script><script src="khung.js"></script>
+<script src="mophong.js"></script>
+<script src="hieuung.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const ROOM='lop'+location.pathname.replace(/[^A-Za-z0-9]+/g,'-');
+let ME={}; try{ME=JSON.parse(localStorage.getItem(ROOM+'-me')||'{}');}catch(e){}
+let ST={step:-1}, shown='', mine={}, lastSent={};
+/* CHẾ ĐỘ TỰ HỌC: mã buổi bắt đầu bằng TUHOC → em tự chuyển hoạt động, nộp xong xem đáp án ngay */
+const TUHOC_URL=/\/TUHOC[^\/]*\/$/.test(location.pathname); let TUHOC=TUHOC_URL; let TH={step:0,rev:{}};
+try{TH=Object.assign(TH,JSON.parse(localStorage.getItem(ROOM+'-th')||'{}'));}catch(e){}
+function thSave(){try{localStorage.setItem(ROOM+'-th',JSON.stringify(TH));}catch(e){}}
+function thGo(i){TH.step=Math.max(0,Math.min(STEPS.length-1,i)); thSave(); ST.step=TH.step; ST.reveal=!!TH.rev[TH.step]; ST.open=true; shown=''; render(); window.scrollTo(0,0);}
+function thNav(){ if(!TUHOC||!ME.id){const o=document.getElementById('thnav'); if(o) o.remove(); return;} const i=TH.step,N=STEPS.length-1; let n=document.getElementById('thnav');
+  if(!n){n=document.createElement('div'); n.id='thnav'; n.className='card'; n.style.cssText='display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:14px;position:sticky;bottom:8px;z-index:5'; $('#app').appendChild(n);}
+  n.innerHTML=`<button type="button" class="btn ghost" ${i<=0?'disabled':''} data-g="-1">◀ Trước</button><span><b>${i<=0?'Tự học':'Hoạt động '+i+'/'+N}</b> ${STEPS.slice(1).map((s,k)=>`<span title="${esc(s.t)}" style="display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 2px;background:${TH.rev[k+1]?'var(--ok)':k+1===i?'var(--acc,#e2932b)':'#cbd5e1'}"></span>`).join('')}
+   ${TH.rev[i]?' <button type="button" class="btn ghost" data-r="1">↺ Làm lại</button>':''}</span><button type="button" class="btn acc" ${i>=N&&(ST.reveal||((TH.part||{})[i]||0)>=nParts(STEPS[i])-1)?'disabled':''} data-g="1">${i<=0?'Bắt đầu học ▶':(!ST.reveal&&((TH.part||{})[i]||0)<nParts(STEPS[i])-1?'▼ Hiện phần tiếp':'Tiếp ▶')}</button>`;
+  n.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{ const g=+b.dataset.g, st=STEPS[TH.step], p=(TH.part||{})[TH.step]||0;
+    if(g>0&&TH.step>0&&!ST.reveal&&p<nParts(st)-1){TH.part=TH.part||{}; TH.part[TH.step]=p+1; thSave(); applyParts(document.getElementById('app'),p+1,st); thNav(); FX.play('tick'); return;}
+    thGo(TH.step+g); });
+  const r=n.querySelector('[data-r]'); if(r) r.onclick=()=>{delete TH.rev[TH.step]; thSave(); thGo(TH.step);}; }
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),2400);}
+async function api(path,body){
+  const r=await fetch(path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store'});
+  if(!r.ok) throw new Error(r.status); return r.json();
+}
+function draftKey(i){return ROOM+'-d-'+(ME.id||'')+'-'+i;}
+/* Vào lớp bằng số căn cước: từng bạn ngồi máy này nhập số căn cước → xác minh đúng họ tên → thêm vào nhóm (tối đa 4 bạn). */
+function joinView(){
+  const MEM=[]; let pend=null;
+  const draw=()=>{
+    $('#app').innerHTML=`<section class="card hero"><div>
+     <div class="eyebrow">${esc(BAI.mon||'Tin học')} ${esc(BAI.lop)} · Buổi ${esc(BAI.buoi)}</div><h1>${esc(BAI.ten)}</h1>
+     <p class="lead">Thầy cô điều khiển bài học trên máy chiếu. Màn hình của em tự chuyển theo từng hoạt động. Em làm bài, bấm <b>Nộp</b>, rồi cùng cả lớp xem kết quả.</p></div>
+     <div>${IC.scale||''}<form id="jf" autocomplete="off">
+     ${MEM.length?`<label class="f">Các bạn ngồi máy này</label>${MEM.map((m,k)=>`<div class="sortrow"><span><b>${k+1}.</b> ${esc(m.ten)} – ${esc(m.lop)}</span><button type="button" class="btn ghost" data-x="${k}">Bỏ</button></div>`).join('')}`:''}
+     ${pend?`<div class="key" style="margin-top:10px"><h3>Em có phải là bạn này không?</h3><p style="font-size:24px;font-weight:800;margin:6px 0">${esc(pend.ten)}</p><p>Lớp <b>${esc(pend.lop)}</b></p>
+        <button type="button" class="btn acc" id="ok1" style="width:100%">Đúng là em</button><button type="button" class="btn ghost" id="no1" style="width:100%;margin-top:6px">Không phải em – nhập lại</button></div>`
+     :MEM.length<4?`<label class="f">${MEM.length?'Bạn tiếp theo ngồi chung máy (nếu có): số căn cước':'Số căn cước của em (12 chữ số)'}</label>
+        <input type="text" id="cc" inputmode="numeric" maxlength="12" placeholder="0xxxxxxxxxxx">
+        <button type="button" class="btn ${MEM.length?'ghost':'acc'}" id="tra" style="width:100%;margin-top:8px">${MEM.length?'+ Thêm bạn ngồi chung máy':'Tiếp tục'}</button>`:''}
+     ${MEM.length&&!pend?`<label class="f" style="margin-top:12px">Số máy (nếu có)</label><input type="text" id="may" placeholder="Ví dụ: 05">
+        <button class="btn acc" style="width:100%;margin-top:10px">Vào lớp học →</button>`:''}
+     <p class="hint" id="jmsg">Mỗi bạn tự nhập số căn cước của mình và kiểm tra đúng họ tên.</p></form></div></section>`;
+    const cc=$('#cc'); if(cc){cc.oninput=()=>{cc.value=cc.value.replace(/\D/g,'').slice(0,12);}; cc.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#tra').click();}}; cc.focus();}
+    if($('#tra')) $('#tra').onclick=async()=>{const v=cc.value; if(!/^\d{12}$/.test(v)){$('#jmsg').textContent='Số căn cước phải đủ 12 chữ số.';return;}
+      if(MEM.some(m=>m.cccd===v)){$('#jmsg').textContent='Bạn này đã có trong nhóm.';return;}
+      try{const r=await fetch('/dn/tra',{method:'POST',body:JSON.stringify({cccd:v})}).then(r=>r.json()); if(!r.ok) throw new Error(r.error); pend={cccd:v,ten:r.ten,lop:r.lop}; draw();}
+      catch(e){$('#jmsg').textContent=e.message;}};
+    if($('#ok1')) {$('#ok1').onclick=()=>{MEM.push(pend); pend=null; draw();}; $('#ok1').focus();}
+    if($('#no1')) $('#no1').onclick=()=>{pend=null; draw(); $('#jmsg').textContent='Em nhập lại số căn cước của mình cho đúng.';};
+    document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{MEM.splice(+b.dataset.x,1); draw();});
+    $('#jf').onsubmit=async e=>{e.preventDefault(); if(!MEM.length||pend) return;
+      const may=($('#may')||{}).value||'';
+      try{const r=await api('api/join',{cccds:MEM.map(m=>m.cccd),may:may.trim()}); if(!r.id) throw new Error(r.err||'Không vào được lớp');
+        ME={id:r.id,name:r.members.join(', '),cls:r.cls,may:may.trim(),members:r.members}; MEM.length=0;
+        try{localStorage.setItem(ROOM+'-me',JSON.stringify(ME));}catch(_){}
+        $('#who').textContent=whoText(); FX.unlock(); FX.play('join'); shown=''; poll();}
+      catch(err){$('#jmsg').textContent=err.message||'Không kết nối được máy thầy cô.';}};
+  };
+  draw();
+}
+function logout(){ if(!confirm('Đăng xuất? Bài đã nộp vẫn lưu trên máy thầy cô; đăng nhập lại đúng nhóm là xem tiếp.')) return; ME={}; try{localStorage.removeItem(ROOM+'-me');}catch(_){} location.reload(); }
+try{document.getElementById('hdbai').textContent=(BAI.mon||'Tin học')+' '+BAI.lop+' · '+BAI.ten;}catch(e){}
+function whoText(){return (ME.may?'Máy '+ME.may+' · ':'')+ME.name+' · '+ME.cls;}
+function render(){
+  const i=ST.step; const key=[i,ST.open,ST.reveal,ST.ver,ST.myVote].join('|'); if(key===shown) return;
+  // giữ bản nháp đang làm trước khi vẽ lại
+  saveDraft(); shown=key;
+  $('#bar').style.width=(Math.max(0,i)/(STEPS.length-1)*100)+'%';
+  const pr=(ST.myPraise||[]); const banner=pr.length?`<div class="banner">⭐ Thầy cô khen nhóm em: <b>${pr.reduce((t,p)=>t+(p.stars||0),0)} sao</b>${pr.filter(p=>p.cmt).slice(-2).map(p=>`<div style="font-size:16px;margin-top:4px">“${esc(p.cmt)}”</div>`).join('')}</div>`:'';
+  if(ST.ov&&ST.ov.type==='ghi'){ $('#app').innerHTML=banner+`<section class="card">${renderGhiBai(ST.ov.upto,ST.ov.only)}<p class="hint pulse" style="margin-top:10px">Thầy cô đang chiếu nội dung ghi bài – các em chép vào vở.</p></section>`; return; }
+  if(ST.ov&&ST.ov.type==='ghimuc'){ $('#app').innerHTML=banner+`<section class="card">${renderGhiMuc(ST.ov.k)}<p class="hint pulse" style="margin-top:10px">Thầy cô đang giảng từng mục – các em chép vào vở.</p></section>`; return; }
+  if(ST.ov&&ST.ov.type==='rank'){ $('#app').innerHTML=banner+`<section class="card">${renderRank(ST.ov.rows||[],ME.id)}<p class="hint pulse" style="margin-top:12px">Thầy cô đang chiếu bảng xếp hạng…</p></section>`; return; }
+  if(i<=0){ $('#app').innerHTML=banner+`<section class="card wait">${mascotSvg(140)}<h2>Chào ${esc(ME.name||'em')}!</h2><p class="lead pulse">${TUHOC?'Em tự học theo từng hoạt động: đọc, làm mô phỏng, trả lời rồi bấm <b>Nộp</b> để xem đáp án ngay. Bấm <b>Bắt đầu học ▶</b> ở dưới.':'Em đã vào lớp. Chờ thầy cô bắt đầu hoạt động…'}</p></section>`; return; }
+  const step=STEPS[i]; let a=mine[i]; try{const d=localStorage.getItem(draftKey(i)); if(d&&!ST.reveal) a=Object.assign({},a||{},JSON.parse(d));}catch(e){}
+  const locked=!ST.open||ST.reveal; const sent=!!mine[i];
+  $('#app').innerHTML=banner+`<section class="card">${stepHead(i)}${stepStory(i)}
+   <form id="f"><div class="${locked?'ro':''}">${renderQs(step,a,locked)}</div>
+   ${ST.reveal?'':`<div class="sticky-sub"><div class="row"><button class="btn acc" ${locked?'disabled':''}>${sent?'Nộp lại':'Nộp câu trả lời'}</button>
+   <span id="stt">${sent?'<span class="badge g">✓ Đã nộp</span>':''} ${locked&&!ST.reveal?'<span class="badge o">Thầy cô đã khoá nộp bài</span>':''}</span></div></div>`}</form>
+   ${ST.reveal&&ST.board?renderTable(ST.board.table,ME.id)+renderPraise(ST.board.praise,ME.id):''}
+   ${ST.vote&&ST.vote.step===i?voteHtml():''}
+   ${ST.reveal?`<div class="phase">${revealExtras(ST.board,step)}<h3 style="margin-top:18px">📒 Ghi vào vở</h3>${renderGhiBai(i,i===STEPS.length-1?0:i)}</div>`:''}</section>`;
+  wireVote();
+  const f=$('#f'); mountSims(f);
+  if(locked) f.querySelectorAll('input,textarea,select').forEach(x=>{if(!x.closest('.sim')) x.disabled=true;});
+  if(ST.reveal){ const tot=ST.board&&ST.board.tot; f.insertAdjacentHTML('beforebegin',`<div class="fb info show"><b>📊 Kết quả của cả lớp</b>${tot?` – ${tot.s} học sinh, ${tot.m} máy`:''}. Ô <b style="color:var(--ok)">xanh</b> là đáp án đúng, ô <b style="color:var(--bad)">đỏ</b> là lựa chọn chưa đúng của nhóm em.</div>`);
+    markReveal(f,step,mine[i]||{},ST.board); wireVote(); return; }
+  wireQs(f);
+  f.addEventListener('change',saveDraft); f.addEventListener('input',saveDraft);
+  f.onsubmit=async e=>{e.preventDefault(); const ans=collect(f,step); const m=missing(step,ans);
+    if(m){toast('Em còn '+m+' câu chưa làm xong.'); return;}
+    try{await api('api/ans',{id:ME.id,step:i,a:ans}); mine[i]=ans; try{localStorage.removeItem(draftKey(i));}catch(_){}
+      $('#stt').innerHTML='<span class="badge g">✓ Đã nộp</span>'; FX.play('submit'); toast(TUHOC?'Đã nộp. Xem đáp án bên dưới.':'Đã nộp. Em có thể sửa và nộp lại khi thầy cô chưa khoá.');
+      if(TUHOC){TH.rev[i]=true; thSave(); ST.reveal=true; ST.open=false; shown=''; render(); const kq=keyedQs(step); if(kq.length&&kq.every(q=>isCorrect(q,ans[q.id])===true)){FX.play('win'); setTimeout(()=>confetti(),200);} else FX.play('reveal');}}
+    catch(err){toast('Chưa gửi được, em bấm Nộp lại nhé.');}};
+}
+function partNow(){return TUHOC?((TH.part||{})[ST.step]||0):(ST.part||0);}
+const _render=render; render=function(){_render(); const st=STEPS[ST.step]; if(st&&ST.step>0&&!ST.reveal) applyParts(document.getElementById('app'),partNow(),st); thNav();};
+function voteHtml(){
+  const v=ST.vote; const items=v.items||[];
+  let h=`<div class="phase"><h2>🗳 Bình chọn câu trả lời hay nhất</h2><p class="q">${v.qtext||''}</p>`;
+  if(v.closed){ const mx=Math.max(0,...items.map(it=>(v.res||{})[it.id]||0));
+    h+=`<p class="hint">Kết quả bình chọn:</p>`+items.map(it=>{const c=(v.res||{})[it.id]||0; return `<div class="vcard ${c===mx&&mx>0?'win':''}"><div><b>${esc(it.label)}</b><br>${esc(it.text)}</div><span class="cnt">${c===mx&&mx>0?'🏅 ':''}${c} phiếu</span></div>`;}).join('');
+  } else {
+    h+=`<p class="hint">Đọc câu trả lời của các nhóm, bấm <b>Bình chọn</b> cho câu em thấy hay và đúng nhất (mỗi nhóm 1 phiếu, không tự bầu cho mình, có thể đổi).</p>`+
+     items.map(it=>{const mine=it.id===ME.id, voted=ST.myVote===it.id; return `<div class="vcard ${mine?'mine':''} ${voted?'voted':''}"><div><b>${esc(it.label)}</b><br>${esc(it.text)}</div>${mine?'<span class="badge b">Bài nhóm em</span>':`<button class="btn ${voted?'acc':'ghost'}" data-vote="${it.id}">${voted?'✓ Đã chọn':'Bình chọn'}</button>`}</div>`;}).join('');
+  }
+  return h+'</div>';
+}
+function wireVote(){document.querySelectorAll('[data-vote]').forEach(b=>b.onclick=async()=>{
+  try{const r=await api('api/vote',{id:ME.id,target:b.dataset.vote}); if(r.ok){ST.myVote=b.dataset.vote; FX.play('vote'); toast('Đã bình chọn.'); render();} else toast('Bình chọn đã đóng.');}catch(e){toast('Chưa gửi được.');}});}
+let PV=null;
+function fxCheck(){ const n={ovt:ST.ov&&ST.ov.type,step:ST.step,reveal:!!ST.reveal,ov:!!(ST.ov&&ST.ov.type==='rank'),pr:(ST.myPraise||[]).length,vc:!!(ST.vote&&ST.vote.closed),vo:!!ST.vote};
+  if(PV){
+    if(n.step!==PV.step&&n.step>0) FX.play('bell');
+    if(n.reveal&&!PV.reveal&&n.step>0){const kq=keyedQs(STEPS[n.step]), a=mine[n.step]||{}; const ok=kq.length>0&&kq.every(q=>isCorrect(q,a[q.id])===true);
+      if(ok){FX.play('win'); setTimeout(()=>confetti(),250);} else FX.play('reveal');}
+    if(n.pr>PV.pr){FX.play('sparkle'); confetti('star');}
+    if(n.ov&&!PV.ov){FX.play('drum'); const rows=ST.ov.rows||[], k=rows.findIndex(r=>r.id===ME.id); if(k>=0&&k<3&&rows[k].pts>0) setTimeout(()=>confetti(),1100);}
+    if(n.vo&&!PV.vo) FX.play('ding');
+    if(ST.ov&&ST.ov.type==='ghi'&&!(PV.ovt==='ghi')) FX.play('bell');
+    if(n.vc&&!PV.vc) FX.play('reveal');
+  }
+  PV=n; }
+function saveDraft(){const f=$('#f'); if(!f||ST.step<=0) return; try{localStorage.setItem(draftKey(ST.step),JSON.stringify(collect(f,STEPS[ST.step])));}catch(e){}}
+async function poll(){
+  if(!ME.id){joinView();return;}
+  try{const s=await api('api/s?id='+encodeURIComponent(ME.id));
+    if(s.unknown){ME={};try{localStorage.removeItem(ROOM+'-me');}catch(_){} joinView(); return;}
+    {const was=TUHOC; TUHOC=TUHOC_URL||!!s.tuhoc; if(TUHOC&&!was&&!TUHOC_URL){ if(!TH.step) TH.step=Math.max(0,s.step||0); thSave(); FX.play('bell'); toast('Thầy cô đã bật chế độ tự học: em tự chuyển hoạt động nhé.'); shown=''; } if(!TUHOC&&was){ toast('Thầy cô đã tắt tự học. Màn hình theo thầy cô.'); shown=''; }}
+    ST=TUHOC?Object.assign({},s,{step:TH.step,open:true,reveal:!!TH.rev[TH.step],board:null,vote:null,ov:null,timer:null,myVote:null,myPraise:[]}):s; mine=s.mine||{}; fxCheck(); CLOCK.set(s.timer); $('#who').textContent=whoText(); render();}
+  catch(e){/* mất kết nối tạm thời */}
+  setTimeout(poll,1500);
+}
+document.getElementById('snd').innerHTML=soundBtn();
+document.getElementById('ghiBtn').onclick=()=>{const m=document.createElement('div'); m.className='modal'; m.innerHTML=`<div><button class="btn ghost x">Đóng ✕</button>${renderGhiBai(Math.max(ST.step||0,0))}</div>`; m.onclick=e=>{if(e.target===m||e.target.classList.contains('x')) m.remove();}; document.body.appendChild(m);};
+poll();
+</script>
+</body>
+</html>
