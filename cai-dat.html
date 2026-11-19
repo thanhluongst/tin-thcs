@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cài máy chủ lớp học</title>
+<link rel="stylesheet" href="chung/vui.css">
+<style>
+body{margin:0;font-family:"Be Vietnam Pro","Segoe UI",system-ui,sans-serif;background:#f4f6fb;color:#1e2a5a}
+.w{max-width:820px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:18px;padding:18px 20px;margin:14px 0}
+h1{font-size:30px;margin:6px 0}
+ol li{margin:8px 0;line-height:1.5}
+.big{display:inline-block;background:#3b82f6;color:#fff!important;text-decoration:none;padding:12px 20px;border-radius:14px;font-weight:800;font-size:18px;border:3px solid #1e2a5a;box-shadow:4px 4px 0 #1e2a5a}
+code.cmd{display:block;background:#1e2a5a;color:#fde68a;padding:12px;border-radius:12px;font-size:14px;overflow-x:auto;white-space:pre}
+button.copy{margin-top:8px;padding:6px 14px;border-radius:10px;border:2px solid #1e2a5a;background:#fcd34d;font-weight:700;cursor:pointer}
+.sm{font-size:14px;opacity:.85}
+</style></head>
+<body><div class="w">
+<header class="card"><span class="eyebrow">Dành cho giáo viên</span>
+<h1>💻 Cài máy chủ lớp học – một bước</h1>
+<p class="lead">Cài toàn bộ hệ thống (bài học Tin 6–9, 12 tiết AI, lớp học LAN, thống kê, kế hoạch bài dạy) lên máy Windows. Bấm lại lần nữa để cập nhật bản mới, dữ liệu lớp vẫn giữ nguyên.</p></header>
+
+<section class="card"><h2>Cách 1 – Tải tệp và bấm đúp</h2>
+<p><a class="big" href="CAI-DAT-LOP-HOC.bat" download>⬇ Tải CAI-DAT-LOP-HOC.bat</a></p>
+<ol><li>Bấm đúp tệp vừa tải. Nếu Windows báo “đã bảo vệ PC”: chọn <b>Thông tin bổ sung → Vẫn chạy</b>.</li>
+<li>Chờ máy tự tải, cài Node.js, tạo mã giáo viên (khoảng 2–5 phút, cần Internet lần đầu).</li>
+<li>Bấm <b>Yes</b> khi Windows hỏi mở tường lửa. Trang giáo viên tự mở ra – xong.</li></ol></section>
+
+<section class="card"><h2>Cách 2 – Dán một dòng lệnh</h2>
+<p>Mở <b>PowerShell</b> (bấm Start, gõ PowerShell), dán dòng sau rồi nhấn Enter:</p>
+<code class="cmd" id="cmd">irm https://raw.githubusercontent.com/thanhluongst/tin-thcs/main/cai-dat-nhanh.ps1 | iex</code>
+<button class="copy" onclick="navigator.clipboard.writeText(document.getElementById('cmd').textContent);this.textContent='✓ Đã chép'">📋 Chép lệnh</button></section>
+
+<section class="card"><h2>Sau khi cài</h2>
+<ul><li>Hệ thống nằm ở <b>C:\LopHocTin</b>. Ngoài màn hình có 2 lối tắt: <b>Lop hoc Tin hoc</b> (mở lớp) và <b>Cap nhat lop hoc Tin</b> (lấy bản mới).</li>
+<li>Mã giáo viên riêng của máy lưu ở tệp <b>“Ma giao vien - lop hoc.txt”</b> ngoài màn hình. Không đưa mã này cho học sinh.</li>
+<li>Nạp danh sách lớp (lớp, số căn cước, họ tên) ở trang <b>/gv</b>. Học sinh vào bằng địa chỉ hiện trên màn hình máy chủ.</li>
+<li>Kế hoạch bài dạy 12 tiết AI chỉ được tạo khi máy có Python; không có vẫn dùng lớp học bình thường.</li></ul>
+<p class="sm">Danh sách lớp, bài làm và mã giáo viên chỉ nằm trên máy của thầy cô, không gửi lên mạng.</p></section>
+</div></body></html>
