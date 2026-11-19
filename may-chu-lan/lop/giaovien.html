@@ -72,6 +72,8 @@ function subIds(){const an=ANS();return Object.keys(STU()).filter(id=>an[id]&&an
 function counts(){const st=STU(),ids=Object.keys(st),sub=subIds();return {m:ids.length,s:ids.reduce((t,id)=>t+wOf(st[id]),0),sm:sub.length,ss:sub.reduce((t,id)=>t+wOf(st[id]),0)};}
 function stepPraise(){return (ALL.praise||[]).filter(p=>p.step===ST.step).map(p=>Object.assign({},p,{label:labelOf(STU()[p.id])}));}
 function board(){const b=buildBoard(ST.step,ANS(),FEAT,STU()); b.table=groupTable(ST.step,ANS(),STU()); b.praise=stepPraise(); return b;}
+function rankQ(){const st=Object.assign({_i:ST.step},STEPS[ST.step]), qi=(ST.part||0)-1, q=st.qs&&st.qs[qi]; if(!q||q.type==='sim') return null;
+  return {type:'rankq',title:partLabel(STEPS[ST.step],ST.part)+' – '+(q.q||'').replace(/<[^>]+>/g,'').slice(0,70),rows:rankQRows(st,qi,ANS(),STU(),ALL.tm,ALL.pt,ST.step+'|'+(ST.part||0))};}
 function rank(){return rankRows(ANS(),STU(),ALL.praise,ALL.votes);}
 /* ---------- cột trái ---------- */
 function side(){
@@ -86,6 +88,7 @@ function proj(force){
   const sig=JSON.stringify([i,rv,SHOWKEY,ST.ov,ST.vote,bd,ALL.votes&&ALL.votes[i],ST.part]); if(!force&&sig===projSig) return; projSig=sig;
   if(ST.ov&&ST.ov.type==='ghi'){ $('#proj').innerHTML=renderGhiBai(ST.ov.upto,ST.ov.only)+'<p class="hint" style="margin-top:10px">Đang chiếu nội dung ghi bài lên máy học sinh. Bấm lại 📒 để tắt.</p>'; return; }
   if(ST.ov&&ST.ov.type==='ghimuc'){ $('#proj').innerHTML=renderGhiMuc(ST.ov.k)+'<p class="hint" style="margin-top:10px">Ghi bài từng mục: ▶/→ mục tiếp, ◀/← mục trước. Bấm lại ✍️ để tắt.</p>'; return; }
+  if(ST.ov&&ST.ov.type==='rankq'){ $('#proj').innerHTML=renderRankQ(ST.ov,null)+'<p class="hint" style="margin-top:10px">Đang chiếu xếp hạng câu này lên máy học sinh. Bấm "Tắt xếp hạng câu" để quay lại.</p>'; return; }
   if(ST.ov&&ST.ov.type==='rank'){ $('#proj').innerHTML=renderRank(rank(),null)+'<p class="hint" style="margin-top:10px">Đang chiếu bảng xếp hạng lên máy học sinh. Bấm "Tắt bảng xếp hạng" để quay lại hoạt động.</p>'; return; }
   if(i===0){$('#proj').innerHTML=`<div class="wait">${mascotSvg(150)}<div class="eyebrow">${BAI.mon||'Tin học'} ${BAI.lop} · Buổi ${BAI.buoi}</div><h1>${BAI.ten}</h1>
     <p class="lead">Các em mở trình duyệt, gõ địa chỉ:</p><p class="addr" style="font-size:40px">${$('#addr').textContent}</p><p class="lead">Nhập số căn cước, xác minh họ tên (thêm bạn ngồi chung máy) rồi chờ thầy cô bắt đầu.</p></div>`; return;}
@@ -114,7 +117,8 @@ function flow(){
      <button class="btn ${ST.open?'':'acc'}" id="fOpen">${ST.open?'🔒 Khoá nộp bài':'🔓 Mở lại nộp bài'}</button></div>
    <div class="fs ${phase===3?'cur':''}"><h4>B3. Báo cáo, thảo luận</h4>
      ${(()=>{const q=(STEPS[i].qs||[])[(ST.part||0)-1]; if(ST.reveal||!q||q.type==='sim') return ''; const done=(ST.qrev||[]).includes(q.id);
-       return `<button class="btn ${done?'ghost':'acc'}" id="fQrev" data-q="${q.id}" ${done?'disabled':''}>${done?'✅ Đã chốt câu này':'✅ Chốt câu này ('+partLabel(STEPS[i],ST.part||0)+')'}</button> `;})()}
+       const rq=ST.ov&&ST.ov.type==='rankq';
+       return `<button class="btn ${rq?'acc':'ghost'}" id="fRankQ">${rq?'Tắt xếp hạng câu':'🏁 Xếp hạng câu này (đúng + nhanh)'}</button> <button class="btn ${done?'ghost':'acc'}" id="fQrev" data-q="${q.id}" ${done?'disabled':''}>${done?'✅ Đã chốt câu này':'✅ Chốt câu này ('+partLabel(STEPS[i],ST.part||0)+')'}</button> `;})()}
      <button class="btn ${ST.reveal?'ghost':'acc'}" id="fRev">${ST.reveal?'Ẩn kết quả':'✅ Chốt đáp án & chiếu kết quả'}</button>
      <button class="btn ghost" id="fKey">${SHOWKEY?'🙈 Ẩn đáp án (màn hình GV)':'👁 Xem trước đáp án (chỉ GV)'}</button>
      ${tq.length?`<div style="margin-top:8px"><select id="vq">${tq.map(q=>`<option value="${q.id}">${esc(q.q.slice(0,60))}</option>`).join('')}</select>
@@ -128,6 +132,7 @@ function rankBtn(){const on=ST.ov&&ST.ov.type==='rank'; return `<button class="b
 function wireFlow(){
   const on=(id,f)=>{const e=$('#'+id); if(e) e.onclick=f;};
   on('fOpen',()=>ctl({open:!ST.open}));
+  on('fRankQ',()=>ctl({ov:ST.ov&&ST.ov.type==='rankq'?null:rankQ()}));
   on('fQrev',()=>{const id=$('#fQrev').dataset.q; ctl({qrev:[...(ST.qrev||[]).filter(x=>x!==id),id],board:board()});});
   on('fRev',()=>ctl(ST.reveal?{reveal:false}:{reveal:true,open:false,board:board()}));
   on('fKey',()=>{SHOWKEY=!SHOWKEY; drawAll(true);});
@@ -190,9 +195,10 @@ function drawLive(){
 function drawAll(force){for(const f of [side,flow,()=>proj(force),plist,vpanel,drawLive]){try{f();}catch(e){console.log('draw',e);}}}
 async function poll(){
   try{const r=await api('api/all'); const old=JSON.stringify([ST.step,ST.open,ST.reveal,ST.vote,ST.ov,ST.part]);
-    ALL=r; ST={step:r.step,open:r.open,reveal:r.reveal,vote:r.vote,ov:r.ov,tuhoc:!!r.tuhoc,part:r.part||0}; fxT(); CLOCK.set(r.timer);
+    ALL=r; ST={step:r.step,open:r.open,reveal:r.reveal,vote:r.vote,ov:r.ov,tuhoc:!!r.tuhoc,part:r.part||0,qrev:r.qrev||[]}; fxT(); CLOCK.set(r.timer);
     if(old!==JSON.stringify([ST.step,ST.open,ST.reveal,ST.vote,ST.ov,ST.part])){drawAll(true);} else {flow(); proj(false); vpanel(); drawLive(); if(!document.activeElement||!document.activeElement.closest||!document.activeElement.closest('#plist')) plist();}
     if(ST.reveal||(ST.qrev||[]).length){const b=JSON.stringify(board()); if(b!==poll._last){poll._last=b; api('api/t',{board:board()}).catch(()=>{});}}
+    if(ST.ov&&ST.ov.type==='rankq'){const o=rankQ(), rr=JSON.stringify(o); if(o&&rr!==poll._q){poll._q=rr; api('api/t',{ov:o}).catch(()=>{});}}
     if(ST.ov&&ST.ov.type==='rank'){const rr=JSON.stringify(rank()); if(rr!==poll._r){poll._r=rr; api('api/t',{ov:{type:'rank',rows:rank()}}).catch(()=>{});}}
   }catch(e){ if(String(e.message)==='403'){$('#proj').innerHTML='<h2>Trang giáo viên chỉ mở được trên máy giáo viên.</h2>';return;} }
   setTimeout(poll,2000);

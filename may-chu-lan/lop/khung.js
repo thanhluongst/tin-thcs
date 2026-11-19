@@ -260,6 +260,16 @@ function applyParts(root,part,step){
     w.innerHTML='📍 Đang ở: <b>'+partLabel(step,part)+'</b> · chờ thầy cô chuyển sang: '+partLabel(step,part+1)+' (phần '+(part+1)+'/'+n+')';}
   else if(w) w.remove();
 }
+/* Xếp hạng một câu: đúng trước, rồi ai nộp nhanh hơn (tính từ lúc thầy cô chiếu câu) */
+function rankQRows(step,qi,ans,stu,tm,pt,part){const q=step&&step.qs[qi]; if(!q) return []; const t0=(pt||{})[part]||0;
+  return Object.keys(stu||{}).map(sid=>{const v=(((ans||{})[sid]||{})[step._i]||{})[q.id], t=((((tm||{})[sid]||{})[step._i])||{})[q.id];
+    const ok=v===undefined?null:isCorrect(q,v); return {id:sid,label:stu[sid].name+(stu[sid].may?' (máy '+stu[sid].may+')':''),done:v!==undefined,ok,sec:t&&t0?Math.max(0,Math.round((t-t0)/1000)):null};})
+   .sort((a,b)=>(b.done-a.done)||((b.ok===true)-(a.ok===true))||((a.sec==null?1e9:a.sec)-(b.sec==null?1e9:b.sec)));}
+function renderRankQ(o,myId){const md=['🥇','🥈','🥉'], rows=o.rows||[], tg=s=>s==null?'–':(s>=60?Math.floor(s/60)+' phút '+(s%60)+' giây':s+' giây');
+  const pod=rows.filter(r=>r.done&&r.ok!==false).slice(0,3);
+  return `<h2>🏁 Xếp hạng ${esc(o.title||'câu hỏi')}</h2><p class="hint">Trả lời <b>đúng</b> xếp trước, cùng đúng thì ai <b>nộp nhanh hơn</b> (tính từ lúc thầy cô chiếu câu) đứng trên.</p>
+  ${pod.length?`<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">${pod.map((r,k)=>`<div style="flex:1;min-width:150px;text-align:center;padding:10px;border-radius:16px;background:${['#fde68a','#e5e7eb','#fed7aa'][k]};border:3px solid #1e2a5a;box-shadow:4px 4px 0 #1e2a5a"><div style="font-size:34px">${md[k]}</div><b>${esc(r.label)}</b><div>⏱ ${tg(r.sec)}</div></div>`).join('')}</div>`:''}
+  <div style="overflow-x:auto"><table class="tbl gt"><tr><th>#</th><th>Nhóm (máy)</th><th>Kết quả</th><th>Thời gian</th></tr>${rows.map((r,k)=>`<tr class="${r.id===myId?'me':''}"><td style="text-align:center">${r.done?k+1:'–'}</td><td>${esc(r.label)}${r.id===myId?' <span class="badge b">Nhóm em</span>':''}</td><td>${!r.done?'⏳ Chưa nộp':r.ok===true?'✅ Đúng':r.ok===false?'❌ Chưa đúng':'📝 Đã trả lời'}</td><td>${r.done?tg(r.sec):''}</td></tr>`).join('')}</table></div>`;}
 /* Chốt từng câu: hiện đáp án + thống kê cả lớp của các câu đã chốt, khoá các câu đó */
 function applyQrev(root,step,mine,board,qrev){
   if(!root||!step||!qrev||!qrev.length) return;

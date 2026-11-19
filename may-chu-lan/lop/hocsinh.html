@@ -85,6 +85,7 @@ function render(){
   const pr=(ST.myPraise||[]); const banner=pr.length?`<div class="banner">⭐ Thầy cô khen nhóm em: <b>${pr.reduce((t,p)=>t+(p.stars||0),0)} sao</b>${pr.filter(p=>p.cmt).slice(-2).map(p=>`<div style="font-size:16px;margin-top:4px">“${esc(p.cmt)}”</div>`).join('')}</div>`:'';
   if(ST.ov&&ST.ov.type==='ghi'){ $('#app').innerHTML=banner+`<section class="card">${renderGhiBai(ST.ov.upto,ST.ov.only)}<p class="hint pulse" style="margin-top:10px">Thầy cô đang chiếu nội dung ghi bài – các em chép vào vở.</p></section>`; return; }
   if(ST.ov&&ST.ov.type==='ghimuc'){ $('#app').innerHTML=banner+`<section class="card">${renderGhiMuc(ST.ov.k)}<p class="hint pulse" style="margin-top:10px">Thầy cô đang giảng từng mục – các em chép vào vở.</p></section>`; return; }
+  if(ST.ov&&ST.ov.type==='rankq'){ $('#app').innerHTML=banner+`<section class="card">${renderRankQ(ST.ov,ME.id)}<p class="hint pulse" style="margin-top:12px">Thầy cô đang chiếu xếp hạng câu hỏi…</p></section>`; return; }
   if(ST.ov&&ST.ov.type==='rank'){ $('#app').innerHTML=banner+`<section class="card">${renderRank(ST.ov.rows||[],ME.id)}<p class="hint pulse" style="margin-top:12px">Thầy cô đang chiếu bảng xếp hạng…</p></section>`; return; }
   if(i<=0){ $('#app').innerHTML=banner+`<section class="card wait">${mascotSvg(140)}<h2>Chào ${esc(ME.name||'em')}!</h2><p class="lead pulse">${TUHOC?'Em tự học theo từng hoạt động: đọc, làm mô phỏng, trả lời rồi bấm <b>Nộp</b> để xem đáp án ngay. Bấm <b>Bắt đầu học ▶</b> ở dưới.':'Em đã vào lớp. Chờ thầy cô bắt đầu hoạt động…'}</p></section>`; return; }
   const step=STEPS[i]; let a=mine[i]; try{const d=localStorage.getItem(draftKey(i)); if(d&&!ST.reveal) a=Object.assign({},a||{},JSON.parse(d));}catch(e){}
@@ -111,7 +112,7 @@ function render(){
     catch(err){toast('Chưa gửi được, em bấm Nộp lại nhé.');}};
 }
 function partNow(){return TUHOC?((TH.part||{})[ST.step]||0):(ST.part||0);}
-const _render=render; render=function(){_render(); const st=STEPS[ST.step]; if(st&&ST.step>0&&!ST.reveal){applyParts(document.getElementById('app'),partNow(),st); if(!TUHOC) applyQrev(document.getElementById('app'),st,mine[ST.step]||{},ST.board,ST.qrev);} thNav();};
+const _render=render; render=function(){_render(); const st=STEPS[ST.step]; if(st&&ST.step>0&&!ST.reveal&&!ST.ov){applyParts(document.getElementById('app'),partNow(),st); if(!TUHOC) applyQrev(document.getElementById('app'),st,mine[ST.step]||{},ST.board,ST.qrev);} thNav();};
 function voteHtml(){
   const v=ST.vote; const items=v.items||[];
   let h=`<div class="phase"><h2>🗳 Bình chọn câu trả lời hay nhất</h2><p class="q">${v.qtext||''}</p>`;

@@ -190,6 +190,8 @@ async function apiCall(req, res, r, p){
     if (!S.students[sid]) return send(res, 200, '{"ok":false,"unknown":true}');
     const tuhoc = S.tuhoc || /^TUHOC/.test(r.k.split("__")[1] || "");
     if (!tuhoc && (!S.open || S.reveal || st !== String(S.step))) return send(res, 200, '{"ok":false,"locked":true}');
+    { const old = (S.answers[sid] || {})[st] || {}, now = Date.now(), tm = ((S.tm = S.tm || {})[sid] = S.tm[sid] || {})[st] = (S.tm[sid] || {})[st] || {};
+      Object.keys(b.a || {}).forEach(q => { if (JSON.stringify(b.a[q]) !== JSON.stringify(old[q])) tm[q] = now; }); }   /* thời điểm nộp từng câu → xếp hạng nhanh */
     (S.answers[sid] = S.answers[sid] || {})[st] = b.a || {}; persist(r); return send(res, 200, '{"ok":true}');
   }
   if (p === "vote") {
@@ -201,12 +203,13 @@ async function apiCall(req, res, r, p){
     if (!isLocal(req)) { try { pinOK(b.pin); } catch(e) { return send(res, 403, '{"err":"forbidden"}'); } }
     if (p === "roster") return send(res, 200, JSON.stringify({ok: false, err: "Danh sách lớp sửa trong file du-lieu/danh-sach.csv (có số căn cước)."}));
     if (p === "meta") { S.meta = b.meta; persist(r); return send(res, 200, '{"ok":true}'); }
-    if (p === "t") { ["step", "open", "reveal", "board", "vote", "ov", "praise", "timer", "tuhoc", "part", "qrev"].forEach(k => { if (k in b) S[k] = b[k]; }); S.ver++; persist(r); return send(res, 200, JSON.stringify(state(S))); }
+    if (p === "t") { if (("part" in b && b.part !== S.part) || ("step" in b && b.step !== S.step)) (S.pt = S.pt || {})[(("step" in b) ? b.step : S.step) + "|" + (b.part || 0)] = Date.now();
+      ["step", "open", "reveal", "board", "vote", "ov", "praise", "timer", "tuhoc", "part", "qrev"].forEach(k => { if (k in b) S[k] = b[k]; }); S.ver++; persist(r); return send(res, 200, JSON.stringify(state(S))); }
     if (p === "all") {
       /* mỗi ngày giáo viên mở lớp = một tiết: ghi lại để dạy tiếp tuần sau */
       const nd = new Date().toLocaleDateString("vi-VN"); S.tiet = S.tiet || [];
       if (!S.tiet.length || S.tiet[S.tiet.length - 1].ngay !== nd) { S.tiet.push({ngay: nd, tu: S.step}); persist(r); }
-      const o = state(S); o.tiet = S.tiet; ["students", "answers", "votes", "praise", "vote", "ov", "timer"].forEach(k => o[k] = S[k]); return send(res, 200, JSON.stringify(o)); }
+      const o = state(S); o.tiet = S.tiet; ["students", "answers", "votes", "praise", "vote", "ov", "timer", "tm", "pt"].forEach(k => o[k] = S[k]); return send(res, 200, JSON.stringify(o)); }
     if (p === "reset") { Object.assign(S, fresh(), {ver: S.ver + 1}); persist(r); return send(res, 200, JSON.stringify(state(S))); }
   }
   return send(res, 404, '{"err":"not found"}');
