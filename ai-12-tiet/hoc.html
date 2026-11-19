@@ -1,0 +1,114 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Học AI theo bước</title>
+<link rel="stylesheet" href="../may-chu-lan/lop/kieu.css"><link rel="stylesheet" href="../may-chu-lan/lop/giaodien.css">
+<style>
+body{background:#eef1f8}
+.top{background:linear-gradient(125deg,#1e1b4b,#3730a3 45%,#7c3aed 80%,#db2777);color:#fff;padding:14px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:20;box-shadow:0 6px 20px -10px #1e1b4b}
+.top a{color:#fff;text-decoration:none;background:#ffffff22;padding:4px 12px;border-radius:99px;font-size:14px}
+.top h1{font-size:clamp(17px,2.4vw,24px);margin:0;flex:1;min-width:220px;color:#fff}
+.top button{background:#ffffff22;color:#fff;border:1px solid #ffffff44;border-radius:10px;padding:6px 12px;cursor:pointer;font:inherit;font-size:14px}
+.wrap{max-width:1100px;margin:auto;padding:14px 16px 90px}
+.acts{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px}
+.acts button{flex:none;border:0;background:#fff;border-radius:12px;padding:8px 12px;cursor:pointer;font:inherit;font-size:14px;box-shadow:0 2px 6px #1e1b4b14;color:#334}
+.acts button.on{background:linear-gradient(120deg,#4f46e5,#7c3aed);color:#fff}
+.acts button.done{box-shadow:inset 0 -3px 0 #22c55e,0 2px 6px #1e1b4b14}
+.hd{background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 10px 30px -18px #1e1b4b;margin-bottom:14px}
+.hd small{color:#7c3aed;font-weight:700;letter-spacing:.3px}.hd h2{margin:4px 0 0;font-size:clamp(20px,3vw,28px)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 14px}
+.steps button{border:0;border-radius:14px;padding:10px 8px;cursor:pointer;font:inherit;font-weight:700;font-size:14px;background:#fff;color:#556;box-shadow:0 2px 6px #1e1b4b14;display:flex;flex-direction:column;align-items:center;gap:2px}
+.steps button b{font-size:22px}.steps button.on{color:#fff;background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 60%,#000));transform:translateY(-2px);box-shadow:0 10px 20px -10px var(--c)}
+.steps button:nth-child(1){--c:#0ea5e9}.steps button:nth-child(2){--c:#f97316}.steps button:nth-child(3){--c:#7c3aed}.steps button:nth-child(4){--c:#16a34a}
+.pane{animation:pin .35s ease}@keyframes pin{from{opacity:0;transform:translateY(10px)}}
+.box{background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 30px -18px #1e1b4b;margin-bottom:14px}
+.tinh{font-size:clamp(17px,2.2vw,22px);line-height:1.6;border-left:6px solid #0ea5e9;padding-left:16px}
+.ask{margin:16px 0 0;padding:0;list-style:none;counter-reset:a}.ask li{counter-increment:a;padding:8px 0 8px 44px;position:relative;font-size:clamp(16px,2vw,20px)}
+.ask li::before{content:counter(a);position:absolute;left:0;top:6px;width:32px;height:32px;border-radius:50%;background:#e0f2fe;color:#0369a1;display:grid;place-items:center;font-weight:800}
+.lead{display:flex;gap:10px;align-items:center;font-weight:700;color:#334;margin:0 0 10px;font-size:18px}.lead span{font-size:26px}
+.qq{border:1px solid #e3e8f4;border-radius:16px;padding:14px 16px;margin:0 0 12px;background:#fbfcff}
+.qq>p{margin:0 0 10px;font-weight:700;font-size:18px}
+.ch{display:flex;flex-wrap:wrap;gap:8px}.ch button,.tfr button{border:2px solid #dbe2f0;background:#fff;border-radius:12px;padding:9px 14px;cursor:pointer;font:inherit;text-align:left;transition:.15s}
+.ch button.on{border-color:#7c3aed;background:#f3efff}.ch button.ok{border-color:#16a34a;background:#e8f8ee}.ch button.no{border-color:#dc2626;background:#fdecec}
+.tfr{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px dashed #e3e8f4}.tfr span{flex:1}.tfr button{padding:5px 12px}
+.tfr button.on{border-color:#7c3aed;background:#f3efff}.tfr.ok span{color:#15803d}.tfr.no span{color:#b91c1c}
+.mrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px 0;border-top:1px dashed #e3e8f4}.mrow span{flex:1;min-width:180px}.mrow select{font:inherit;padding:6px;border-radius:10px;border:2px solid #dbe2f0;max-width:100%}
+.mrow.ok select{border-color:#16a34a}.mrow.no select{border-color:#dc2626}
+.qq textarea{width:100%;min-height:70px;border-radius:12px;border:2px solid #dbe2f0;padding:10px;font:inherit}
+.chk{margin-top:10px;background:#7c3aed;color:#fff;border:0;border-radius:10px;padding:8px 16px;cursor:pointer;font:inherit;font-weight:700}
+.fb{margin-top:8px;padding:8px 12px;border-radius:10px;display:none}.fb.show{display:block}.fb.ok{background:#e8f8ee;color:#15803d}.fb.no{background:#fdecec;color:#b91c1c}.fb.hint{background:#fff7e6;color:#8a5a00}
+.key{background:linear-gradient(135deg,#ecfdf5,#fff);border:2px solid #86efac;border-radius:20px;padding:22px}
+.key li{font-size:clamp(18px,2.4vw,24px);margin:8px 0}
+.reveal{display:block;margin:20px auto;border:0;border-radius:16px;padding:16px 28px;font:inherit;font-size:20px;font-weight:800;color:#fff;background:linear-gradient(135deg,#16a34a,#15803d);cursor:pointer;box-shadow:0 12px 24px -10px #16a34a}
+.nav{position:fixed;left:0;right:0;bottom:0;background:#ffffffe8;backdrop-filter:blur(8px);padding:10px 16px;display:flex;justify-content:center;gap:10px;box-shadow:0 -6px 20px -12px #1e1b4b;z-index:20}
+.nav button{border:0;border-radius:12px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer;background:#e9ecf5;color:#334}.nav button.nx{background:linear-gradient(120deg,#4f46e5,#7c3aed);color:#fff}
+.nav span{align-self:center;color:#667;font-size:14px}
+.pick .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}.pick a{display:block;background:#fff;border-radius:14px;padding:12px 14px;text-decoration:none;color:#223;box-shadow:0 2px 8px #1e1b4b14}.pick a:hover{outline:2px solid #7c3aed}
+body.big .wrap{max-width:1400px}body.big{font-size:20px}
+</style></head><body>
+<div class="top"><a href="./" id="back">← AI 12 tiết</a><h1 id="ti">Đang tải…</h1><button onclick="FX&&(this.textContent=FX.toggle()?'🔊':'🔇')" id="snd">🔊</button><button onclick="document.body.classList.toggle('big');document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()">⛶ Trình chiếu</button></div>
+<div class="wrap" id="app"></div>
+<div class="nav" id="nav" style="display:none"><button id="pv">◀ Lùi</button><span id="pos"></span><button class="nx" id="nx">Tiếp ▶</button></div>
+<script>
+const Q=new URLSearchParams(location.search),LOP=+Q.get('l')||0,SO=+Q.get('b')||0,DIR=`ai${LOP}-bai${SO}`;
+const get=u=>fetch(u).then(r=>{if(!r.ok)throw u;return r.text()});
+const cut=(s,a,b)=>{const i=s.indexOf(a);if(i<0)return'';const j=b?s.indexOf(b,i):-1;return s.slice(i,j<0?undefined:j)};
+const addJs=t=>{const s=document.createElement('script');s.textContent=t;document.head.append(s)};
+const addSrc=u=>new Promise(r=>{const s=document.createElement('script');s.src=u;s.onload=r;s.onerror=r;document.head.append(s)});
+(async()=>{
+ const fx=await get('../may-chu-lan/lop/hieuung.js').catch(()=>'');
+ if(fx) addJs(cut(fx,'const FX=','const TIPS=')+'\nwindow.FX=FX;\n'+cut(fx,'/* Âm thanh + hiệu ứng tự động'));
+ if(!LOP||!SO) return pick();
+ const [n,m]=await Promise.all([get(`lan/${DIR}/noidung.js`),get(`lan/${DIR}/mophong.js`)]).catch(()=>[null,null]);
+ if(!n){app.innerHTML='<div class="box">Không tìm thấy bài.</div>';return}
+ addJs(cut(n,'const BAI=','\n')+'\n'+cut(n,'const STEPS=','\nconst DECL')+'\nwindow.BAI=BAI;window.STEPS=STEPS;');
+ const s=cut(m,'const SIMS={');addJs('var SIMS_BAI={'+s.slice(12).replace(/\};\s*$/,'};'));
+ await addSrc('../may-chu-lan/lop/mophong.js');
+ addJs("for(const k in LABS)LABS[k].u='..'+LABS[k].u;");
+ start();
+})();
+function pick(){ti.textContent='🧪 Học AI theo bước – chọn bài';
+ const ds=[...Array(31)];let h='';[6,7,8,9].forEach(l=>{h+=`<h2 style="margin:14px 0 8px">Lớp ${l}</h2><div class="grid">`+AI_LOP[l].map(a=>`<a href="?l=${l}&b=${a[0]}"><b>Bài ${a[0]}.</b> ${a[1]}<br><small>Tiết AI ${a[2]} · Tuần ${a[3]}</small></a>`).join('')+'</div>'});
+ app.innerHTML=`<div class="pick">${h}</div>`}
+let A=[],ai=0,st=0;const PH=[['📖','Đọc & suy nghĩ'],['🔬','Thí nghiệm'],['✍️','Trả lời – nhận định'],['📌','Chốt kiến thức']];
+function start(){document.title=`AI ${BAI.lop} · Bài ${BAI.so}`;ti.textContent=`Lớp ${BAI.lop} · Bài ${BAI.so}. ${BAI.ten}`;back.href='./?lop='+BAI.lop;
+ A=STEPS.filter(x=>x.k!=='wel'&&(x.story||x.qs||x.key));nav.style.display='';
+ pv.onclick=()=>go(-1);nx.onclick=()=>go(1);
+ document.addEventListener('keydown',e=>{if(e.target.closest('textarea,select'))return;if(e.key==='ArrowRight'||e.key==='PageDown')go(1);if(e.key==='ArrowLeft'||e.key==='PageUp')go(-1)});
+ try{const v=JSON.parse(sessionStorage.getItem(DIR)||'[0,0]');ai=Math.min(v[0],A.length-1);st=v[1]}catch(e){}
+ render()}
+function go(d){st+=d;if(st>3){if(ai<A.length-1){ai++;st=0}else st=3}if(st<0){if(ai>0){ai--;st=3}else st=0}render();scrollTo({top:0,behavior:'smooth'})}
+const sims=x=>(x.qs||[]).filter(q=>q.type==='sim'),asks=x=>(x.qs||[]).filter(q=>q.type!=='sim');
+function render(){try{sessionStorage.setItem(DIR,JSON.stringify([ai,st]))}catch(e){}
+ const x=A[ai];if(window.FX)FX.play('tick');
+ let h=`<div class="acts">${A.map((a,i)=>`<button class="${i==ai?'on':i<ai?'done':''}" data-a="${i}">${i+1}. ${a.t}</button>`).join('')}</div>
+ <div class="hd"><small>${x.hd||''}${x.code?' · '+x.code:''}</small><h2>${x.t}</h2></div>
+ <div class="steps">${PH.map((p,i)=>`<button class="${i==st?'on':''}" data-s="${i}"><b>${p[0]}</b>Bước ${i+1}. ${p[1]}</button>`).join('')}</div><div class="pane">`;
+ if(st==0)h+=`<div class="box"><p class="lead"><span>📖</span>Em hãy đọc tình huống và các câu hỏi</p><div class="tinh">${x.story||'Cùng tìm hiểu nội dung hoạt động này.'}</div>
+  ${asks(x).length?`<p class="lead" style="margin-top:18px"><span>❓</span>Câu hỏi cần trả lời sau khi làm thí nghiệm</p><ol class="ask">${asks(x).map(q=>`<li>${q.q}</li>`).join('')}</ol>`:''}</div>`;
+ if(st==1)h+=sims(x).length?`<div class="box"><p class="lead"><span>🔬</span>Làm thí nghiệm: thay đổi, bấm chạy, quan sát kết quả</p>${sims(x).map(q=>`<div class="simslot" data-sim="${q.sim}"></div>`).join('')}</div>`
+  :`<div class="box"><p class="lead"><span>👥</span>Hoạt động này không có mô phỏng: thảo luận nhóm đôi theo tình huống</p><div class="tinh">${x.story||''}</div></div>`;
+ if(st==2)h+=`<div class="box"><p class="lead"><span>✍️</span>Trả lời và nêu nhận định của em</p>${asks(x).map(qHtml).join('')||'<p>Không có câu hỏi.</p>'}</div>`;
+ if(st==3)h+=`<div id="kw">${(x.key||[]).length?`<button class="reveal" id="rv">📌 Giáo viên chốt kiến thức</button>`:'<div class="box">Hoạt động này không có phần chốt.</div>'}</div>`;
+ app.innerHTML=h+'</div>';pos.textContent=`Hoạt động ${ai+1}/${A.length} · Bước ${st+1}/4`;
+ app.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{ai=+b.dataset.a;st=0;render()});
+ app.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{st=+b.dataset.s;render()});
+ if(st==1)mountSims(app);if(st==2)wireQ(x);
+ const rv=document.getElementById('rv');if(rv)rv.onclick=()=>{kw.innerHTML=`<div class="key pane"><p class="lead"><span>📌</span>Ghi nhớ</p><ul>${x.key.map(k=>`<li>${k}</li>`).join('')}</ul></div>`;if(window.FX)FX.play('reveal')}}
+function qHtml(q,i){const o=q.opts||[];let b='';
+ if(q.type=='single'||q.type=='multi')b=`<div class="ch">${o.map((t,j)=>`<button data-j="${j}">${t}</button>`).join('')}</div>`;
+ else if(q.type=='tf')b=q.items.map((t,j)=>`<div class="tfr" data-j="${j}"><span>${t.t}</span><button data-v="T">Đúng</button><button data-v="F">Sai</button></div>`).join('');
+ else if(q.type=='match')b=q.items.map((t,j)=>`<div class="mrow"><span>${t}</span><select><option value="">– chọn –</option>${o.map((p,k)=>`<option value="${k}">${p}</option>`).join('')}</select></div>`).join('');
+ else if(q.type=='sort')b=q.items.map(t=>`<div class="mrow"><span>${t.t}</span><select><option value="">– chọn –</option>${Object.entries(q.cols).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>`).join('');
+ else b=`<textarea placeholder="Em viết câu trả lời…"></textarea>`;
+ return `<div class="qq" data-i="${i}"><p>${i+1}. ${q.q}${q.type=='multi'?' <small>(chọn nhiều)</small>':''}</p>${b}<button class="chk">${['text','decl'].includes(q.type)||(q.type=='single'&&q.ok==null)?'💡 Xem gợi ý':'✔ Kiểm tra'}</button><div class="fb"></div></div>`}
+function wireQ(x){const Qs=asks(x);app.querySelectorAll('.qq').forEach(el=>{const q=Qs[+el.dataset.i],fb=el.querySelector('.fb');
+ el.querySelectorAll('.ch button').forEach(b=>b.onclick=()=>{if(q.type=='single')el.querySelectorAll('.ch button').forEach(c=>c.classList.remove('on','ok','no'));b.classList.toggle('on');if(window.FX)FX.play('tick')});
+ el.querySelectorAll('.tfr button').forEach(b=>b.onclick=()=>{b.parentNode.querySelectorAll('button').forEach(c=>c.classList.remove('on'));b.classList.add('on')});
+ el.querySelector('.chk').onclick=()=>{let ok=null;
+  if(q.type=='single'&&q.ok!=null){const s=el.querySelector('.ch .on');if(!s)return;ok=+s.dataset.j===q.ok;s.classList.add(ok?'ok':'no')}
+  else if(q.type=='multi'){const s=[...el.querySelectorAll('.ch .on')].map(b=>+b.dataset.j).sort()+'';ok=s===[...q.ok].sort()+'';el.querySelectorAll('.ch button').forEach(b=>b.classList.toggle('ok',q.ok.includes(+b.dataset.j)&&b.classList.contains('on')))}
+  else if(q.type=='tf'){ok=true;el.querySelectorAll('.tfr').forEach(r=>{const v=r.querySelector('.on'),g=v&&v.dataset.v===q.items[+r.dataset.j].a;r.className='tfr '+(g?'ok':'no');ok=ok&&g})}
+  else if(q.type=='match'||q.type=='sort'){ok=true;el.querySelectorAll('.mrow').forEach((r,j)=>{const v=r.querySelector('select').value,g=q.type=='match'?v!==''&&+v===q.ok[j]:v===q.items[j].a;r.className='mrow '+(g?'ok':'no');ok=ok&&g})}
+  if(ok===null){fb.className='fb show hint';fb.innerHTML='💡 '+(q.ans||'Trao đổi với bạn và thầy cô.');return}
+  fb.className='fb show '+(ok?'ok':'no');fb.innerHTML=ok?'✅ Chính xác!'+(q.ans?' '+q.ans:''):'❌ Chưa đúng – xem lại thí nghiệm ở Bước 2 rồi thử lại.';
+  if(window.FX)FX.play(ok?'win':'drum')}})}
+</script><script src="assets/data.js"></script><script src="assets/ai-lop.js"></script></body></html>
