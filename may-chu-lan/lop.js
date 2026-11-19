@@ -152,7 +152,7 @@ function room(dir, buoi){
   return r;
 }
 function persist(r){ clearTimeout(r.t); r.t = setTimeout(() => { const f = path.join(STORE, r.k + ".json"); fs.writeFileSync(f + ".tmp", JSON.stringify(r.S)); fs.renameSync(f + ".tmp", f); }, 300); }
-const state = S => ({step: S.step, open: S.open, reveal: S.reveal, ver: S.ver, tuhoc: !!S.tuhoc, part: S.part || 0});
+const state = S => ({step: S.step, open: S.open, reveal: S.reveal, ver: S.ver, tuhoc: !!S.tuhoc, part: S.part || 0, qrev: S.qrev || []});
 const isLocal = req => /^(127\.0\.0\.1|::1|::ffff:127\.0\.0\.1)$/.test(req.socket.remoteAddress || "");
 
 function rosterClasses(){ const cl = {}; roster().forEach(h => { (cl[h.lop] = cl[h.lop] || []).push(h.ten); }); return cl; }
@@ -165,7 +165,7 @@ async function apiCall(req, res, r, p){
     if (p === "s") {
       const sid = new URL(req.url, "http://x").searchParams.get("id") || "";
       if (!S.students[sid]) return send(res, 200, JSON.stringify({unknown: true}));
-      const o = state(S); o.board = S.reveal ? S.board : null; o.mine = S.answers[sid] || {}; o.vote = S.vote; o.ov = S.ov; o.timer = S.timer;
+      const o = state(S); o.board = S.reveal || (S.qrev && S.qrev.length) ? S.board : null; o.mine = S.answers[sid] || {}; o.vote = S.vote; o.ov = S.ov; o.timer = S.timer;
       o.myPraise = S.praise.filter(x => x.id === sid); o.myVote = (S.votes[String(S.step)] || {})[sid];
       return send(res, 200, JSON.stringify(o));
     }
@@ -201,7 +201,7 @@ async function apiCall(req, res, r, p){
     if (!isLocal(req)) { try { pinOK(b.pin); } catch(e) { return send(res, 403, '{"err":"forbidden"}'); } }
     if (p === "roster") return send(res, 200, JSON.stringify({ok: false, err: "Danh sách lớp sửa trong file du-lieu/danh-sach.csv (có số căn cước)."}));
     if (p === "meta") { S.meta = b.meta; persist(r); return send(res, 200, '{"ok":true}'); }
-    if (p === "t") { ["step", "open", "reveal", "board", "vote", "ov", "praise", "timer", "tuhoc", "part"].forEach(k => { if (k in b) S[k] = b[k]; }); S.ver++; persist(r); return send(res, 200, JSON.stringify(state(S))); }
+    if (p === "t") { ["step", "open", "reveal", "board", "vote", "ov", "praise", "timer", "tuhoc", "part", "qrev"].forEach(k => { if (k in b) S[k] = b[k]; }); S.ver++; persist(r); return send(res, 200, JSON.stringify(state(S))); }
     if (p === "all") {
       /* mỗi ngày giáo viên mở lớp = một tiết: ghi lại để dạy tiếp tuần sau */
       const nd = new Date().toLocaleDateString("vi-VN"); S.tiet = S.tiet || [];

@@ -260,6 +260,15 @@ function applyParts(root,part,step){
     w.innerHTML='📍 Đang ở: <b>'+partLabel(step,part)+'</b> · chờ thầy cô chuyển sang: '+partLabel(step,part+1)+' (phần '+(part+1)+'/'+n+')';}
   else if(w) w.remove();
 }
+/* Chốt từng câu: hiện đáp án + thống kê cả lớp của các câu đã chốt, khoá các câu đó */
+function applyQrev(root,step,mine,board,qrev){
+  if(!root||!step||!qrev||!qrev.length) return;
+  qrev.forEach(id=>{const q=(step.qs||[]).find(x=>x.id===id), el=q&&root.querySelector(`[data-q="${id}"]`); if(!el) return; const blk=el.closest('.qblock');
+    if(blk.dataset.qr) return; blk.dataset.qr=1; markReveal(blk,{qs:[q]},mine,board);
+    blk.querySelectorAll('input,textarea,select,button').forEach(x=>x.disabled=true); blk.style.pointerEvents='none';
+    const t=document.createElement('div'); t.className='badge g'; t.style.cssText='display:inline-block;margin:6px 0'; t.textContent='✅ Thầy cô đã chốt câu này'; blk.prepend(t);
+    if(board&&board.res&&board.res[id]){const d=document.createElement('div'); d.innerHTML=statBox(q,board.res[id],board.tot,false); blk.appendChild(d.firstElementChild);}});
+}
 /* Ghi bài từng mục: hiện mục 1..k (mục mới nhất tô nổi) để học sinh chép dần theo lời giảng */
 function renderGhiMuc(k){const all=GHIBAI.muc, ms=all.slice(0,Math.max(1,k)).map((m,j)=>Object.assign({n:j+1},m));
   return `<div class="vo"><div class="vo-title"><span class="b">${GHIBAI.so}</span> <span class="r">${GHIBAI.ten}</span></div>`+ms.map((m,j)=>`<div class="vo-m ${j===ms.length-1&&ms.length>1?'vo-new':''}"><div class="vo-mh">${m.n}. <span>${m.h}</span></div>

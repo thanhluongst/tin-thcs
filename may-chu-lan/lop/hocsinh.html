@@ -78,7 +78,7 @@ function logout(){ if(!confirm('Đăng xuất? Bài đã nộp vẫn lưu trên 
 try{document.getElementById('hdbai').textContent=(BAI.mon||'Tin học')+' '+BAI.lop+' · '+BAI.ten;}catch(e){}
 function whoText(){return (ME.may?'Máy '+ME.may+' · ':'')+ME.name+' · '+ME.cls;}
 function render(){
-  const i=ST.step; const key=[i,ST.open,ST.reveal,ST.ver,ST.myVote].join('|'); if(key===shown) return;
+  const i=ST.step; const key=[i,ST.open,ST.reveal,ST.ver,ST.myVote,(ST.qrev||[]).join()].join('|'); if(key===shown) return;
   // giữ bản nháp đang làm trước khi vẽ lại
   saveDraft(); shown=key;
   $('#bar').style.width=(Math.max(0,i)/(STEPS.length-1)*100)+'%';
@@ -103,7 +103,7 @@ function render(){
     markReveal(f,step,mine[i]||{},ST.board); wireVote(); return; }
   wireQs(f);
   f.addEventListener('change',saveDraft); f.addEventListener('input',saveDraft);
-  f.onsubmit=async e=>{e.preventDefault(); const ans=collect(f,step); const m=missing(TUHOC?step:Object.assign({},step,{qs:(step.qs||[]).slice(0,partNow())}),ans);
+  f.onsubmit=async e=>{e.preventDefault(); const ans=TUHOC?collect(f,step):Object.assign({},mine[i]||{},collect(f,step)); const m=missing(TUHOC?step:Object.assign({},step,{qs:(step.qs||[]).slice(0,partNow())}),ans);
     if(m){toast('Em còn '+m+' câu chưa làm xong.'); return;}
     try{await api('api/ans',{id:ME.id,step:i,a:ans}); mine[i]=ans; try{localStorage.removeItem(draftKey(i));}catch(_){}
       $('#stt').innerHTML='<span class="badge g">✓ Đã nộp</span>'; FX.play('submit'); toast(TUHOC?'Đã nộp. Xem đáp án bên dưới.':'Đã nộp. Em có thể sửa và nộp lại khi thầy cô chưa khoá.');
@@ -111,7 +111,7 @@ function render(){
     catch(err){toast('Chưa gửi được, em bấm Nộp lại nhé.');}};
 }
 function partNow(){return TUHOC?((TH.part||{})[ST.step]||0):(ST.part||0);}
-const _render=render; render=function(){_render(); const st=STEPS[ST.step]; if(st&&ST.step>0&&!ST.reveal) applyParts(document.getElementById('app'),partNow(),st); thNav();};
+const _render=render; render=function(){_render(); const st=STEPS[ST.step]; if(st&&ST.step>0&&!ST.reveal){applyParts(document.getElementById('app'),partNow(),st); if(!TUHOC) applyQrev(document.getElementById('app'),st,mine[ST.step]||{},ST.board,ST.qrev);} thNav();};
 function voteHtml(){
   const v=ST.vote; const items=v.items||[];
   let h=`<div class="phase"><h2>🗳 Bình chọn câu trả lời hay nhất</h2><p class="q">${v.qtext||''}</p>`;
