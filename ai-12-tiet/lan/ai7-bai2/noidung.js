@@ -14,7 +14,7 @@ const STEPS=[
   key:['Không có quy định: công cụ có hại <b>được làm ra, phát tán tự do</b> → hậu quả <b>xảy ra, lan rộng, kéo dài</b>; người bị hại khó đòi quyền lợi.']},
  {t:'Viết một nguyên tắc',hd:'Hoạt động 3 · Luyện tập',code:'7.A2.2',ic:'pen',
   story:'Nhóm em là "Hội đồng soạn luật" của đất nước X. Viết một nguyên tắc nhắm vào <b>bên làm ra công cụ</b>.',
-  qs:[{id:'nt',type:'text',q:'Nguyên tắc: "Bên làm ra công cụ AI phải … Vì nếu không có thì …"',ans:'Ví dụ: "Bên làm ra công cụ tạo giọng nói phải gắn nhãn cho biết nội dung do AI tạo và chỉ cho dùng giọng khi người đó đồng ý. Vì nếu không có thì kẻ gian giả giọng lừa tiền mà người nghe không phân biệt được."'},
+  qs:[{id:'lab',type:'sim',sim:'lab_kiemduyet'},{id:'nt',type:'text',q:'Nguyên tắc: "Bên làm ra công cụ AI phải … Vì nếu không có thì …"',ans:'Ví dụ: "Bên làm ra công cụ tạo giọng nói phải gắn nhãn cho biết nội dung do AI tạo và chỉ cho dùng giọng khi người đó đồng ý. Vì nếu không có thì kẻ gian giả giọng lừa tiền mà người nghe không phân biệt được."'},
    {id:'q3',type:'multi',q:'Quy định nào giúp ngăn công cụ AI có hại?',opts:['Cấm thiết kế công cụ chuyên để lừa đảo, giả mạo','Buộc cho người dùng biết đang tương tác với AI, gắn nhãn nội dung AI tạo','Quy định trách nhiệm của bên làm ra công cụ khi gây hại','Ai cũng được tự do làm mọi công cụ'],ok:[0,1,2]}],
   key:['Nhiều điều lớp mình đề xuất đã có trong luật; Việt Nam đã có <b>Luật Trí tuệ nhân tạo</b>, buộc cho người dùng biết đang tương tác với AI.']},
  {t:'Phiếu cuối giờ',hd:'Hoạt động 4 · Vận dụng',code:'7.A2.2',ic:'lock',

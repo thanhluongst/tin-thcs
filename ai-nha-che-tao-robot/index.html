@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nhà Chế Tạo Robot</title>
+<meta name="description" content="Mô phỏng lớp 6: robot không tự biết gì – con người lập trình quy tắc, điều khiển và kiểm tra kết quả.">
+<style>
+:root{--ink:#0f172a;--mute:#64748b;--line:#cbd5e1;--ok:#16a34a;--bad:#dc2626;--acc:#2563eb}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;color:var(--ink);min-height:100vh;background:linear-gradient(180deg,#dbeafe,#f0f9ff 40%,#ecfccb)}
+header{display:flex;align-items:center;gap:14px;padding:14px 20px;flex-wrap:wrap}
+.logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:linear-gradient(135deg,#3b82f6,#06b6d4);box-shadow:0 6px 18px #3b82f655}
+h1{margin:0;font-size:22px} header p{margin:2px 0 0;color:var(--mute);font-size:13px} .sp{flex:1}
+.ib{background:#fff;border:1.5px solid var(--line);color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer;box-shadow:0 2px 0 var(--line)}
+main{max-width:1100px;margin:0 auto;padding:0 16px 30px;display:grid;gap:14px}
+.mis{display:flex;gap:10px;flex-wrap:wrap}
+.mb{flex:1;min-width:190px;text-align:left;cursor:pointer;border-radius:16px;padding:10px 14px;border:2px solid var(--line);background:#fff;color:var(--ink);font:inherit}
+.mb small{display:block;color:var(--mute);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.mb.on{border-color:var(--acc);box-shadow:0 0 0 4px #2563eb22} .mb.done small::after{content:" ✓ Hoàn thành";color:var(--ok);font-weight:700}
+.story{display:flex;gap:14px;align-items:center;background:#fff;border:2px solid #bfdbfe;border-radius:18px;padding:12px 16px}
+.story .av{font-size:40px} .story p{margin:0;font-size:16px;line-height:1.5} .story b{color:#1d4ed8}
+.cols{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.3fr);gap:14px}
+@media(max-width:860px){.cols{grid-template-columns:1fr}}
+.panel{background:#fff;border-radius:22px;padding:16px;box-shadow:0 14px 34px #0f172a1a;border:2px solid #e2e8f0}
+h2{margin:0 0 10px;font-size:17px}
+.rule{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:#eff6ff;border:2px solid #bfdbfe;border-radius:14px;padding:8px 10px;margin:6px 0;font-weight:700;font-size:15px;animation:pop .3s}
+.rule select{font:inherit;font-size:15px;border-radius:10px;border:1.5px solid #93c5fd;padding:5px 8px;background:#fff}
+.rule .x{margin-left:auto;border:0;background:#fee2e2;color:var(--bad);border-radius:8px;cursor:pointer;font-weight:900;padding:4px 9px}
+.add{width:100%;border:2px dashed #93c5fd;background:#f8fbff;border-radius:14px;padding:10px;font:inherit;font-weight:700;color:#1d4ed8;cursor:pointer}
+.empty{color:var(--mute);font-style:italic;text-align:center;padding:14px}
+/* xưởng */
+.fac{position:relative;height:260px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#e0f2fe,#f1f5f9 62%,#cbd5e1 62%)}
+.belt{position:absolute;left:0;right:0;top:150px;height:26px;background:repeating-linear-gradient(90deg,#64748b 0 20px,#475569 20px 40px);animation:roll .5s linear infinite paused}
+.fac.run .belt{animation-play-state:running} @keyframes roll{to{background-position:40px 0}}
+.bot{position:absolute;left:44%;top:30px;font-size:74px;transition:transform .2s;filter:drop-shadow(0 6px 8px #0003)}
+.fac.run .bot{animation:bob .4s infinite alternate} @keyframes bob{to{transform:translateY(-6px)}}
+.bot.confused::after{content:"❓";position:absolute;right:-24px;top:-10px;font-size:34px;animation:pop .3s}
+.light{position:absolute;left:calc(44% + 22px);top:14px;width:16px;height:16px;border-radius:50%;background:#94a3b8}
+.fac.run .light{background:#22c55e;box-shadow:0 0 12px #22c55e}
+.fruit{position:absolute;top:108px;font-size:40px;left:-60px;transition:left 1s linear,top .5s ease-in}
+.baskets{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:0 10px 6px}
+.bk{text-align:center;font-size:13px;font-weight:700;min-width:80px}
+.bk .in{min-height:34px;font-size:24px;letter-spacing:-4px;cursor:pointer}
+.bk .h{font-size:34px}
+.bk .in span{display:inline-block;animation:pop .3s} .bk .in span.bad{filter:drop-shadow(0 0 6px #ef4444)}
+.stop{position:absolute;right:12px;top:12px;width:70px;height:70px;border-radius:50%;border:6px solid #fde047;background:radial-gradient(#ef4444,#b91c1c);color:#fff;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 6px 14px #0004}
+.stop:active{transform:scale(.94)}
+.ctl{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.go{flex:1;border:0;border-radius:14px;padding:12px;font:800 17px inherit;font-family:inherit;color:#fff;cursor:pointer;background:linear-gradient(135deg,#3b82f6,#1d4ed8);box-shadow:inset 0 -4px 0 #0003}
+.go:disabled{filter:grayscale(1);opacity:.5}
+.fb{margin-top:12px;border-radius:14px;padding:10px 14px;line-height:1.5;display:none}
+.fb.ok{display:block;background:#dcfce7;border:1.5px solid #86efac} .fb.bad{display:block;background:#fee2e2;border:1.5px solid #fca5a5} .fb.inf{display:block;background:#eff6ff;border:1.5px solid #93c5fd}
+.end{display:none;background:linear-gradient(135deg,#dbeafe,#dcfce7)} .end.show{display:block;animation:pop .5s} .end ul{margin:8px 0 0;padding-left:20px;line-height:1.7;font-size:16px}
+.note{text-align:center;color:var(--mute);font-size:12.5px}
+@keyframes pop{0%{transform:scale(.8);opacity:0}100%{transform:none;opacity:1}}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+</style></head>
+<body>
+<header><div class="logo">🤖</div><div><h1>Nhà Chế Tạo Robot</h1><p>Robot không tự biết gì – em là người lập trình và điều khiển!</p></div><div class="sp"></div><button class="ib" id="snd">🔊 Âm thanh: Bật</button></header>
+<main>
+ <div class="mis" id="mis"></div>
+ <div class="story" id="story"></div>
+ <div class="cols">
+  <section class="panel"><h2>🧩 Bảng quy tắc của robot</h2><div id="rules"></div><button class="add" id="add">➕ Thêm quy tắc</button>
+   <p style="font-size:13px;color:var(--mute);margin:10px 0 0">Robot chỉ làm <b>đúng theo quy tắc</b> con người viết. Quả không khớp quy tắc nào → robot bỏ qua.</p></section>
+  <section class="panel"><h2>🏭 Xưởng phân loại quả</h2>
+   <div class="fac" id="fac"><div class="light"></div><div class="bot" id="bot">🤖</div><button class="stop" id="stop" title="Nút dừng khẩn cấp">DỪNG</button><div class="belt"></div><div id="fr"></div>
+    <div class="baskets" id="bks"></div></div>
+   <div class="ctl"><button class="go" id="go">▶ Bật robot</button></div>
+   <div class="fb" id="fb"></div></section>
+ </div>
+ <section class="panel end" id="end"><h2>🏆 Em là Nhà chế tạo robot!</h2><ul>
+  <li>AI/robot <b>không tự sinh ra</b>, không tự biết làm gì – <b>con người tạo ra, lập trình, điều khiển</b>.</li>
+  <li>Robot làm <b>đúng nhiệm vụ cụ thể</b> theo quy tắc; quy tắc chưa đủ thì robot sai (cà chua vào rổ táo).</li>
+  <li><b>Con người kiểm tra kết quả</b>, có thể <b>dừng</b> robot bất cứ lúc nào và <b>chịu trách nhiệm</b> cuối cùng.</li></ul></section>
+ <p class="note">Mô phỏng chỉ để minh hoạ · Giáo dục AI lớp 6 Bài 1</p>
+</main>
+<canvas class="confetti" id="cf"></canvas>
+<script>
+const SND=(()=>{let c=null,on=true;try{on=localStorage.getItem('nctr-snd')!=='off'}catch(e){}
+ const ac=()=>{if(!c){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;c=new A()}if(c.state==='suspended')c.resume();return c};
+ const t=(f,s,d,ty,v,f2)=>{const a=ac();if(!a)return;const T=a.currentTime+s,o=a.createOscillator(),g=a.createGain();o.type=ty||'sine';o.frequency.setValueAtTime(f,T);if(f2)o.frequency.exponentialRampToValueAtTime(f2,T+d);
+  g.gain.setValueAtTime(.0001,T);g.gain.exponentialRampToValueAtTime(v||.12,T+.01);g.gain.exponentialRampToValueAtTime(.0001,T+d);o.connect(g);g.connect(a.destination);o.start(T);o.stop(T+d+.05)};
+ const S={pop:()=>t(500,0,.12,'sine',.1,1400),on:()=>{t(300,0,.4,'sawtooth',.05,900);t(1200,.35,.1,'square',.05)},off:()=>t(900,0,.5,'sawtooth',.06,120),
+  beep:()=>{t(1400,0,.05,'square',.04);t(1700,.07,.05,'square',.04)},drop:()=>t(600,0,.12,'triangle',.08,250),huh:()=>{t(400,0,.15,'square',.05,600);t(600,.18,.2,'square',.05,350)},
+  ok:()=>{t(784,0,.12,'triangle',.11);t(1175,.1,.25,'triangle',.11)},bad:()=>{t(260,0,.2,'sawtooth',.06,170)},alarm:()=>{for(let k=0;k<3;k++){t(880,k*.25,.12,'square',.06);t(660,k*.25+.12,.12,'square',.06)}},
+  win:()=>[523,659,784,1047,1319].forEach((f,k)=>t(f,k*.1,.35,'triangle',.11))};
+ return{play:n=>{if(on)try{S[n]()}catch(e){}},get on(){return on},toggle(){on=!on;try{localStorage.setItem('nctr-snd',on?'on':'off')}catch(e){}return on}}})();
+const $=id=>document.getElementById(id),wait=ms=>new Promise(r=>setTimeout(r,ms));
+const F=[['🍎','do','tron','tao'],['🍌','vang','dai','chuoi'],['🍏','xanh','tron','tao'],['🍎','do','tron','tao'],['🍌','vang','dai','chuoi'],['🍎','do','tron','tao']];
+const BK={tao:['🧺','Rổ táo'],chuoi:['🧺','Rổ chuối'],khac:['🗑️','Rổ khác']};
+const MAU={do:'màu đỏ',vang:'màu vàng',xanh:'màu xanh'},HINH={tron:'hình tròn',dai:'hình dài'};
+const MIS=[{t:'Robot tự biết không?',av:'🔌',s:'Robot mới được lắp xong, <b>chưa có quy tắc nào</b>. Bấm <b>▶ Bật robot</b> xem nó làm gì.'},
+ {t:'Lập trình robot',av:'🧑‍💻',s:'Em là <b>người lập trình</b>: thêm quy tắc để robot xếp <b>táo</b> vào rổ táo, <b>chuối</b> vào rổ chuối. Chạy thử và xem kết quả.'},
+ {t:'Người kiểm tra & điều khiển',av:'🕵️',s:'Bật robot lần nữa: có <b>quả cà chua 🍅</b> lẫn vào! Cà chua cũng <b>đỏ và tròn</b> như táo – quy tắc không phân biệt được. Hãy <b>bấm vào quả sai</b> trong rổ để nhặt ra, rồi chạy lại và bấm nút <b>DỪNG</b> đỏ khi robot đang chạy.'}];
+let cur=0,done=[0,0,0],rules=[],running=false,stopped=false,res={},stopUsed=false,picked=false;
+function menu(){$('mis').innerHTML=MIS.map((M,k)=>`<button class="mb ${k==cur?'on':''} ${done[k]?'done':''}" onclick="setM(${k})"><small>Nhiệm vụ ${k+1}</small><b>${M.t}</b></button>`).join('');$('story').innerHTML=`<div class="av">${MIS[cur].av}</div><p>${MIS[cur].s}</p>`}
+function setM(k){cur=k;SND.play('pop');$('fb').className='fb';menu()}
+function drawR(){$('rules').innerHTML=rules.length?rules.map((r,k)=>`<div class="rule">Nếu quả <select onchange="rules[${k}].m=this.value">${Object.keys(MAU).map(m=>`<option value="${m}" ${r.m==m?'selected':''}>${MAU[m]}</option>`).join('')}</select>
+ và <select onchange="rules[${k}].h=this.value"><option value="">(hình gì cũng được)</option>${Object.keys(HINH).map(h=>`<option value="${h}" ${r.h==h?'selected':''}>${HINH[h]}</option>`).join('')}</select>
+ → <select onchange="rules[${k}].b=this.value">${Object.keys(BK).map(b=>`<option value="${b}" ${r.b==b?'selected':''}>${BK[b][1]}</option>`).join('')}</select><button class="x" onclick="rules.splice(${k},1);drawR()">✕</button></div>`).join(''):'<div class="empty">Chưa có quy tắc nào – robot chưa biết làm gì.</div>'}
+$('add').onclick=()=>{rules.push({m:'do',h:'',b:'tao'});SND.play('pop');drawR()};
+function drawB(){$('bks').innerHTML=Object.keys(BK).map(b=>`<div class="bk"><div class="in">${(res[b]||[]).map((f,k)=>`<span class="${f[3]!=b?'bad':''}" onclick="pickOut('${b}',${k})">${f[0]}</span>`).join('')}</div><div class="h">${BK[b][0]}</div>${BK[b][1]}</div>`).join('')}
+function pickOut(b,k){const f=res[b][k];if(f[3]==b){SND.play('bad');say('bad',`${f[0]} đúng rổ rồi, không cần nhặt ra.`);return}res[b].splice(k,1);(res[f[3]]=res[f[3]]||[]).push(f);picked=true;SND.play('ok');drawB();
+ say('ok','👍 Em đã <b>kiểm tra và sửa</b> lỗi mà robot không tự nhận ra. Giờ bấm ▶ chạy lại, và khi robot đang chạy hãy bấm nút <b>DỪNG</b> đỏ.')}
+function rule(f){return rules.find(r=>r.m==f[1]&&(!r.h||r.h==f[2]))}
+function say(c,h){$('fb').className='fb '+c;$('fb').innerHTML=h}
+async function run(){if(running)return;running=true;stopped=false;res={};drawB();$('go').disabled=true;$('fac').classList.add('run');SND.play('on');$('bot').classList.remove('confused');
+ if(!rules.length){await wait(900);$('bot').classList.add('confused');SND.play('huh');$('fac').classList.remove('run');
+  say('inf','🤖 Robot <b>đứng yên</b>, không biết làm gì! Vì chưa có ai viết quy tắc. 👉 AI <b>không tự sinh ra</b>, không tự biết nhiệm vụ.');if(cur==0)finish();running=false;$('go').disabled=false;return}
+ // trường hợp đặc biệt: cà chua – bản gốc nhầm vì đỏ và tròn
+ const seq=cur==2&&!picked?F.slice(0,3).concat([['🍅','do','tron','khac']]):F;
+ for(const f of seq){if(stopped)break;const el=document.createElement('div');el.className='fruit';el.textContent=f[0];$('fr').appendChild(el);
+  requestAnimationFrame(()=>el.style.left='calc(44% + 14px)');await wait(1000);if(stopped){el.remove();break}SND.play('beep');
+  const r=rule(f),b=r?r.b:null;if(!b){el.style.left='110%';SND.play('huh');setTimeout(()=>el.remove(),1000);await wait(300);continue}
+  el.style.top='200px';el.style.opacity='0';SND.play('drop');await wait(400);el.remove();(res[b]=res[b]||[]).push(f);drawB()}
+ $('fac').classList.remove('run');running=false;$('go').disabled=false;check()}
+function check(){if(stopped)return;const all=Object.values(res).flat(),wrong=Object.entries(res).flatMap(([b,a])=>a.filter(f=>f[3]!=b)),fruits=all.filter(f=>f[3]!='khac').length;
+ if(cur==0){say('inf','Robot đã chạy theo quy tắc em viết. Nhiệm vụ 1 là chạy khi <b>chưa có quy tắc</b> – thử xoá hết quy tắc rồi bật lại.');return}
+ if(cur==1){if(!wrong.length&&fruits>=6){say('ok','✅ Robot xếp đúng hết! Kết quả phụ thuộc vào <b>quy tắc do con người đặt</b>.');finish()}
+  else say('bad',`Robot xếp sai hoặc bỏ sót ${6-all.filter(f=>res[f[3]]&&res[f[3]].includes(f)).length} quả. Quả xanh 🍏 cũng là táo! Sửa quy tắc rồi chạy lại.`);return}
+ if(cur==2){const tom=wrong.find(f=>f[0]=='🍅');if(tom){SND.play('alarm');say('bad','⚠️ Cà chua 🍅 bị bỏ vào <b>rổ táo</b> vì nó cũng đỏ và tròn! Robot <b>không tự nhận ra</b> lỗi. Em hãy <b>bấm vào quả cà chua</b> trong rổ để nhặt ra.');return}
+  if(picked&&stopUsed){say('ok','✅ Em đã <b>kiểm tra, sửa lỗi và điều khiển</b> robot – con người chịu trách nhiệm cuối cùng!');finish()}
+  else if(picked)say('inf','Khi robot đang chạy, hãy bấm nút <b>DỪNG</b> đỏ – con người luôn có thể dừng robot.');}}
+$('stop').onclick=()=>{if(!running){SND.play('pop');return}stopped=true;stopUsed=true;SND.play('off');$('fac').classList.remove('run');document.querySelectorAll('.fruit').forEach(e=>e.remove());
+ say('inf','🛑 Robot đã <b>dừng ngay</b> khi em bấm nút. Con người luôn <b>điều khiển</b> được robot. Bấm ▶ để chạy lại.');running=false;$('go').disabled=false;
+ if(cur==2&&picked&&!done[2]){say('ok','✅ Em đã <b>kiểm tra kết quả, nhặt quả sai</b> và <b>dừng robot</b> khi cần. Con người điều khiển và chịu trách nhiệm cuối cùng!');finish()}};
+$('go').onclick=run;
+function finish(){if(done[cur])return;done[cur]=1;SND.play('win');confetti();menu();
+ if(done.every(x=>x)){$('end').classList.add('show');setTimeout(()=>$('end').scrollIntoView({behavior:'smooth'}),800)}
+ else{const nx=done.indexOf(0);$('story').insertAdjacentHTML('beforeend',`<button class="ib" onclick="setM(${nx})">➡️ Nhiệm vụ tiếp</button>`)}}
+function confetti(){const c=$('cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const P=Array.from({length:140},()=>({x:innerWidth/2,y:innerHeight/3,vx:(Math.random()-.5)*14,vy:Math.random()*-12-4,r:Math.random()*6+3,c:['#facc15','#f472b6','#22d3ee','#a78bfa','#34d399'][Math.random()*5|0],a:Math.random()*6}));
+ let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.a+=.2;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillRect(-p.r,-p.r/2,p.r*2,p.r);x.restore()});if(++t<110)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+$('snd').onclick=()=>{$('snd').textContent='🔊 Âm thanh: '+(SND.toggle()?'Bật':'Tắt')};$('snd').textContent='🔊 Âm thanh: '+(SND.on?'Bật':'Tắt');
+menu();drawR();drawB();
+</script></body></html>

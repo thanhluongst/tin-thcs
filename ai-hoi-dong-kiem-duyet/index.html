@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hội Đồng Kiểm Duyệt AI</title>
+<meta name="description" content="Mô phỏng: em là thanh tra, đối chiếu các ứng dụng AI với quy định để Cấp phép, Yêu cầu sửa hoặc Cấm.">
+<style>
+:root{--ink:#1e1b16;--mute:#6b6253;--paper:#fffaf0;--line:#e7dcc4;--ok:#15803d;--bad:#b91c1c;--fix:#b45309}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;color:var(--ink);min-height:100vh;
+ background:radial-gradient(900px 500px at 0 -10%,#7c2d12aa 0,transparent 60%),linear-gradient(180deg,#3b2414,#1f140b)}
+header{display:flex;align-items:center;gap:14px;padding:14px 20px;flex-wrap:wrap;color:#fef3c7}
+.logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:linear-gradient(135deg,#fbbf24,#b45309);box-shadow:0 6px 20px #b4530966}
+h1{margin:0;font-size:22px} header p{margin:2px 0 0;color:#d6c3a1;font-size:13px} .sp{flex:1}
+.ib{background:#ffffff18;border:1px solid #ffffff30;color:#fef3c7;border-radius:12px;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer}
+main{max-width:1150px;margin:0 auto;padding:0 16px 30px;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.3fr);gap:16px}
+@media(max-width:880px){main{grid-template-columns:1fr}}
+.full{grid-column:1/-1}
+.story{display:flex;gap:14px;align-items:center;background:#fef3c71a;border:1px solid #fbbf2466;border-radius:18px;padding:12px 16px;color:#fef3c7}
+.story .av{font-size:40px} .story p{margin:0;font-size:16px;line-height:1.55} .story b{color:#fcd34d}
+.law{background:var(--paper);border-radius:6px 18px 18px 6px;padding:16px 18px;box-shadow:0 20px 40px #0007;border-left:10px solid #92400e;position:relative}
+.law h2{margin:0 0 8px;font-size:17px;font-family:Georgia,serif;text-align:center;letter-spacing:.04em}
+.law ol{margin:0;padding-left:22px;line-height:1.55;font-size:14.5px}
+.law li{margin:6px 0;padding:4px 6px;border-radius:8px;transition:.3s}
+.law li.hl{background:#fde68a;box-shadow:0 0 0 2px #f59e0b}
+.desk{display:grid;gap:12px;align-content:start}
+.prog{display:flex;gap:6px;flex-wrap:wrap}
+.prog i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px;background:#ffffff18;color:#fef3c7}
+.prog i.cur{background:#fbbf24;color:#1e1b16} .prog i.okk{background:var(--ok)} .prog i.bd{background:var(--bad)} .prog i.fx{background:var(--fix)}
+.doc{background:var(--paper);border-radius:18px;padding:18px;position:relative;overflow:hidden;box-shadow:0 20px 40px #0007;animation:slide .45s}
+@keyframes slide{0%{transform:translateY(-30px) rotate(-2deg);opacity:0}100%{transform:none;opacity:1}}
+.doc .hd{display:flex;gap:14px;align-items:center;border-bottom:2px dashed var(--line);padding-bottom:10px;margin-bottom:10px}
+.doc .ic{font-size:50px} .doc h3{margin:0;font-size:21px} .doc .by{color:var(--mute);font-size:13px}
+.doc ul{margin:0;padding-left:0;list-style:none} .doc li{padding:7px 10px;border-radius:10px;margin:4px 0;background:#fff;border:1px solid var(--line);font-size:15px;cursor:pointer;transition:.2s}
+.doc li:hover{border-color:#f59e0b} .doc li.mark{background:#fee2e2;border-color:#f87171} .doc li.mark::after{content:" 🚩";}
+.doc .tip{font-size:13px;color:var(--mute);margin-top:8px}
+.stamp{position:absolute;right:20px;top:40px;font:900 30px/1 Georgia,serif;letter-spacing:.06em;padding:8px 16px;border:5px solid;border-radius:10px;transform:rotate(-14deg) scale(2.4);opacity:0;pointer-events:none}
+.stamp.show{animation:stamp .35s forwards}
+@keyframes stamp{to{transform:rotate(-14deg) scale(1);opacity:.85}}
+.stamp.ok{color:var(--ok)} .stamp.bad{color:var(--bad)} .stamp.fix{color:var(--fix)}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btns button{flex:1;min-width:140px;font:inherit;font-weight:900;font-size:16px;border:0;border-radius:14px;padding:13px;cursor:pointer;color:#fff;box-shadow:inset 0 -4px 0 #0003,0 8px 18px #0005}
+.b-ok{background:linear-gradient(135deg,#22c55e,#15803d)} .b-fix{background:linear-gradient(135deg,#f59e0b,#b45309)} .b-bad{background:linear-gradient(135deg,#ef4444,#991b1b)}
+.btns button:disabled{filter:grayscale(1);opacity:.5}
+.fb{border-radius:16px;padding:12px 14px;line-height:1.55;display:none;background:var(--paper)}
+.fb.show{display:block;animation:slide .35s} .fb.ok{border-left:8px solid var(--ok)} .fb.bad{border-left:8px solid var(--bad)}
+.end{display:none;background:var(--paper);border-radius:18px;padding:16px 18px} .end.show{display:block;animation:slide .5s}
+.end ul{margin:8px 0 0;padding-left:20px;line-height:1.7;font-size:16px}
+.note{text-align:center;color:#d6c3a1;font-size:12.5px}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.shake{animation:shake .45s}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+</style></head>
+<body>
+<header><div class="logo">🏛️</div><div><h1>Hội Đồng Kiểm Duyệt AI</h1><p>Em là thanh tra: ứng dụng AI nào được phép phục vụ học sinh?</p></div><div class="sp"></div><button class="ib" id="snd">🔊 Âm thanh: Bật</button></header>
+<main>
+ <div class="story full"><div class="av">🧑‍⚖️</div><p>Có <b>6 ứng dụng AI</b> xin phép dùng trong trường học. Đọc hồ sơ, <b>bấm vào dòng vi phạm</b> để gắn cờ 🚩, đối chiếu với <b>Bộ quy định</b> rồi đóng dấu: <b>CẤP PHÉP</b>, <b>YÊU CẦU SỬA</b> (vi phạm sửa được) hoặc <b>CẤM</b> (gây hại nghiêm trọng).</p></div>
+ <aside class="law"><h2>📜 BỘ QUY ĐỊNH (giả định)</h2><ol id="law">
+  <li>Không thu thập dữ liệu cá nhân của trẻ em khi <b>chưa có sự đồng ý</b> của cha mẹ.</li>
+  <li>Không tạo hình ảnh, giọng nói <b>giả mạo người thật</b> để lừa dối, bôi nhọ.</li>
+  <li>Nội dung do AI tạo phải được <b>ghi nhãn</b> rõ ràng.</li>
+  <li>Không dùng AI để <b>thao túng</b>, gây nghiện, lừa đảo người dùng.</li>
+  <li>Không <b>phân biệt đối xử</b> theo giới tính, vùng miền, dân tộc.</li>
+  <li>Quyết định quan trọng phải có <b>con người kiểm tra</b> và chịu trách nhiệm.</li></ol></aside>
+ <section class="desk">
+  <div class="prog" id="prog"></div>
+  <div class="doc" id="doc"></div>
+  <div class="btns"><button class="b-ok" data-v="ok">✅ CẤP PHÉP</button><button class="b-fix" data-v="fix">🛠️ YÊU CẦU SỬA</button><button class="b-bad" data-v="bad">⛔ CẤM</button></div>
+  <div class="fb" id="fb"></div>
+ </section>
+ <section class="end full" id="end"><h2>🏆 Hội đồng đã làm việc xong!</h2><div id="sum"></div><ul>
+  <li>Nhà nước và nhà trường đặt ra <b>quy định pháp lí</b> để ngăn công cụ AI có hại: lộ dữ liệu trẻ em, giả mạo người thật, thao túng, phân biệt đối xử.</li>
+  <li>Vi phạm nhẹ có thể <b>yêu cầu sửa</b>; gây hại nghiêm trọng thì <b>cấm</b>.</li>
+  <li>Là người dùng, em <b>chọn ứng dụng hợp pháp</b>, đọc kĩ quyền truy cập và <b>báo cáo</b> khi gặp công cụ AI có hại.</li></ul></section>
+ <p class="note full">Mô phỏng chỉ để minh hoạ · ứng dụng và quy định là giả định · Giáo dục AI lớp 7 Bài 2</p>
+</main>
+<canvas class="confetti" id="cf"></canvas>
+<script>
+const SND=(()=>{let c=null,on=true;try{on=localStorage.getItem('hdkd-snd')!=='off'}catch(e){}
+ const ac=()=>{if(!c){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;c=new A()}if(c.state==='suspended')c.resume();return c};
+ const t=(f,s,d,ty,v,f2)=>{const a=ac();if(!a)return;const T=a.currentTime+s,o=a.createOscillator(),g=a.createGain();o.type=ty||'sine';o.frequency.setValueAtTime(f,T);if(f2)o.frequency.exponentialRampToValueAtTime(f2,T+d);
+  g.gain.setValueAtTime(.0001,T);g.gain.exponentialRampToValueAtTime(v||.12,T+.01);g.gain.exponentialRampToValueAtTime(.0001,T+d);o.connect(g);g.connect(a.destination);o.start(T);o.stop(T+d+.05)};
+ const nz=(d,v)=>{const a=ac();if(!a)return;const n=a.sampleRate*d|0,b=a.createBuffer(1,n,a.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);const s=a.createBufferSource(),g=a.createGain();g.gain.value=v;s.buffer=b;s.connect(g);g.connect(a.destination);s.start()};
+ const S={stamp:()=>{nz(.25,.5);t(90,0,.2,'sine',.25,50)},flag:()=>t(1000,0,.08,'triangle',.07,1500),paper:()=>nz(.3,.08),
+  ok:()=>{t(784,.25,.12,'triangle',.1);t(1175,.35,.25,'triangle',.1)},bad:()=>{t(260,0,.2,'sawtooth',.06,170);t(200,.16,.25,'sawtooth',.05,130)},
+  win:()=>[523,659,784,1047,1319].forEach((f,k)=>t(f,k*.1,.35,'triangle',.11))};
+ return{play:n=>{if(on)try{S[n]()}catch(e){}},get on(){return on},toggle(){on=!on;try{localStorage.setItem('hdkd-snd',on?'on':'off')}catch(e){}return on}}})();
+const $=id=>document.getElementById(id);
+// it: [nội dung, số quy định vi phạm hoặc 0]
+const APPS=[
+ {ic:'📖',n:'Gia Sư AI Toán',by:'Công ty Học Vui',v:'ok',it:[['Giải thích từng bước khi học sinh hỏi',0],['Ghi rõ “Lời giải do AI tạo, hãy kiểm tra lại”',0],['Chỉ lưu biệt danh, không lưu họ tên, địa chỉ',0],['Giáo viên xem được lịch sử để hướng dẫn',0]],
+  w:'Ứng dụng <b>tuân thủ quy định</b>: có ghi nhãn (QĐ 3), bảo vệ dữ liệu (QĐ 1), giáo viên kiểm tra (QĐ 6).'},
+ {ic:'🎭',n:'Mặt Nạ Vui Vẻ',by:'Studio XYZ',v:'bad',it:[['Ghép khuôn mặt bạn bè vào video bất kì',2],['Tạo giọng nói giống hệt thầy cô',2],['Không ghi nhãn video là do AI tạo',3],['Chia sẻ thẳng lên mạng xã hội',0]],
+  w:'Tạo <b>video, giọng nói giả mạo người thật</b> (QĐ 2) không ghi nhãn (QĐ 3) – có thể dùng để bôi nhọ, lừa đảo → <b>gây hại nghiêm trọng, phải CẤM</b>.'},
+ {ic:'🎮',n:'Thú Cưng AI',by:'Game Kids',v:'fix',it:[['Trò chuyện, chăm thú cưng ảo',0],['Đòi ảnh và số điện thoại của bé để “làm quen”',1],['Nhắc bé nghỉ sau 30 phút chơi',0],['Có nút để cha mẹ xem lịch sử',0]],
+  w:'Thu thập <b>ảnh và số điện thoại trẻ em</b> khi chưa có đồng ý (QĐ 1). Lỗi này <b>sửa được</b>: bỏ yêu cầu hoặc xin phép cha mẹ → <b>YÊU CẦU SỬA</b>.'},
+ {ic:'🛒',n:'Siêu Ưu Đãi AI',by:'Shop Nhanh',v:'bad',it:[['AI đoán lúc bé buồn để hiện quảng cáo đồ chơi',4],['Đếm ngược giả “chỉ còn 1 phút!” để thúc mua',4],['Tự lưu thẻ của bố mẹ, mua bằng 1 chạm',4],['Ẩn nút huỷ đăng kí',4]],
+  w:'Cố ý <b>thao túng cảm xúc</b> và lừa trẻ chi tiền (QĐ 4) bằng nhiều cách → <b>CẤM</b>.'},
+ {ic:'🏅',n:'Chọn Đội Tuyển Tự Động',by:'EduRank',v:'fix',it:[['AI chấm hồ sơ, xếp hạng học sinh',0],['Chấm thấp học sinh nữ vì dữ liệu cũ ít bạn nữ',5],['Kết quả tự động công bố, không ai xem lại',6],['Có giải thích lí do xếp hạng',0]],
+  w:'AI <b>thiên vị giới tính</b> (QĐ 5) và <b>không có người kiểm tra</b> (QĐ 6). Có thể sửa: bổ sung dữ liệu, thêm bước giáo viên duyệt → <b>YÊU CẦU SỬA</b>.'},
+ {ic:'🌐',n:'Dịch Nhanh Lớp Học',by:'LinguaAI',v:'ok',it:[['Dịch lời giáo viên sang phụ đề',0],['Không lưu giọng nói sau khi dịch',0],['Ghi chú “Bản dịch máy có thể sai”',0],['Học sinh báo lỗi dịch để cải thiện',0]],
+  w:'Hữu ích, <b>không lưu dữ liệu</b>, có ghi nhãn → <b>CẤP PHÉP</b>.'}];
+let i=0,res=[],tries=0;
+function prog(){$('prog').innerHTML=APPS.map((a,k)=>`<i class="${k==i?'cur':''} ${res[k]?{ok:'okk',bad:'bd',fix:'fx'}[APPS[k].v]:''}">${k+1}</i>`).join('')}
+function show(){prog();if(i>=APPS.length){end();return}const a=APPS[i];tries=0;$('fb').className='fb';document.querySelectorAll('#law li').forEach(l=>l.classList.remove('hl'));
+ $('doc').innerHTML=`<div class="hd"><div class="ic">${a.ic}</div><div><div class="by">HỒ SƠ XIN CẤP PHÉP · ${a.by}</div><h3>${a.n}</h3></div></div><ul>${a.it.map((x,k)=>`<li data-k="${k}">${x[0]}</li>`).join('')}</ul><div class="tip">👆 Bấm vào dòng em thấy vi phạm để gắn cờ 🚩</div><div class="stamp" id="stp"></div>`;
+ $('doc').style.animation='none';void $('doc').offsetWidth;$('doc').style.animation='';SND.play('paper');
+ $('doc').querySelectorAll('li').forEach(li=>li.onclick=()=>{li.classList.toggle('mark');SND.play('flag');const r=a.it[li.dataset.k][1];if(li.classList.contains('mark')&&r)document.querySelectorAll('#law li')[r-1].classList.add('hl')});
+ document.querySelectorAll('.btns button').forEach(b=>b.disabled=false)}
+document.querySelectorAll('.btns button').forEach(b=>b.onclick=()=>{const a=APPS[i],v=b.dataset.v,ok=v==a.v;
+ const st=$('stp');st.className='stamp '+v;st.textContent={ok:'CẤP PHÉP',fix:'SỬA LẠI',bad:'CẤM'}[v];void st.offsetWidth;st.classList.add('show');SND.play('stamp');
+ if(!ok){tries++;setTimeout(()=>{SND.play('bad');$('doc').classList.remove('shake');void $('doc').offsetWidth;$('doc').classList.add('shake');st.className='stamp'},450);
+  $('fb').className='fb show bad';$('fb').innerHTML=tries<2?'🤔 Hội đồng chưa đồng ý. Đọc lại từng dòng và đối chiếu Bộ quy định. Vi phạm <b>nghiêm trọng</b> hay <b>sửa được</b>?':'💡 Gợi ý: '+a.w;return}
+ SND.play('ok');res[i]=tries?1:2;document.querySelectorAll('.btns button').forEach(x=>x.disabled=true);
+ a.it.forEach((x,k)=>{if(x[1])document.querySelectorAll('#law li')[x[1]-1].classList.add('hl')});
+ $('fb').className='fb show ok';$('fb').innerHTML='✅ '+a.w+`<div style="margin-top:8px"><button class="ib" style="color:#1e1b16;background:#fde68a" onclick="i++;show()">${i+1<APPS.length?'Hồ sơ tiếp theo ➜':'Xem tổng kết 🏁'}</button></div>`;prog()});
+function end(){const p=res.filter(x=>x==2).length;$('sum').innerHTML=`<p style="font-size:17px">Em xử lí đúng ngay lần đầu <b>${p}/6</b> hồ sơ. ${p>=5?'🌟 Thanh tra xuất sắc!':'👍 Cố gắng đọc kĩ hơn lần sau nhé!'}</p>`;
+ $('end').classList.add('show');SND.play('win');confetti();setTimeout(()=>$('end').scrollIntoView({behavior:'smooth'}),400)}
+function confetti(){const c=$('cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const P=Array.from({length:140},()=>({x:innerWidth/2,y:innerHeight/3,vx:(Math.random()-.5)*14,vy:Math.random()*-12-4,r:Math.random()*6+3,c:['#facc15','#f472b6','#22d3ee','#a78bfa','#34d399'][Math.random()*5|0],a:Math.random()*6}));
+ let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.a+=.2;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillRect(-p.r,-p.r/2,p.r*2,p.r);x.restore()});if(++t<110)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+$('snd').onclick=()=>{$('snd').textContent='🔊 Âm thanh: '+(SND.toggle()?'Bật':'Tắt')};$('snd').textContent='🔊 Âm thanh: '+(SND.on?'Bật':'Tắt');
+show();
+</script></body></html>

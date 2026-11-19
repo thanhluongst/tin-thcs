@@ -21,7 +21,7 @@ const STEPS=[
   key:['AI chỉ là <b>công cụ hỗ trợ</b>; <b>con người quyết định cuối cùng</b> và <b>chịu trách nhiệm</b>.']},
  {t:'Luyện tập: Ai giao việc, ai kiểm tra?',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'6.A1.2',ic:'paper',
   story:'Xếp các việc vào đúng người.',
-  qs:[{id:'sort4',type:'sort',q:'Việc này do ai làm?',cols:{nguoi:'Con người',ai:'Công cụ AI'},items:[
+  qs:[{id:'lab',type:'sim',sim:'lab_robot'},{id:'sort4',type:'sort',q:'Việc này do ai làm?',cols:{nguoi:'Con người',ai:'Công cụ AI'},items:[
      {t:'Đặt quy tắc cho robot',a:'nguoi'},{t:'Xếp quả theo quy tắc rất nhanh',a:'ai'},{t:'Kiểm tra rổ quả trước khi bán',a:'nguoi'},
      {t:'Gợi ý đường đi trên bản đồ',a:'ai'},{t:'Chọn có đi theo gợi ý hay không',a:'nguoi'},{t:'Chịu trách nhiệm khi có sai sót',a:'nguoi'}]}],
   key:['Người <b>tạo</b> – người <b>dùng</b> – người <b>chịu trách nhiệm</b>.']},

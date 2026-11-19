@@ -21,7 +21,7 @@ const STEPS=[
   key:['AI là <b>công cụ</b> giúp thể hiện bản thân; <b>ý tưởng và dấu ấn</b> là của em.']},
  {t:'Nghề nghiệp thay đổi thế nào?',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'9.A3.4',ic:'bot',
   story:'Dùng "bản đồ nghề tương lai": chọn một nghề, xem việc nào AI làm, việc nào con người vẫn giữ và kĩ năng cần trang bị.',
-  qs:[{id:'sim1',type:'sim',sim:'job'},
+  qs:[{id:'lab',type:'sim',sim:'lab_nghenghiep'},{id:'sim1',type:'sim',sim:'job'},
    {id:'q4',type:'single',q:'Nhận xét chung đúng nhất',opts:['AI sẽ thay hết mọi nghề','Nhiều việc lặp lại do AI làm; con người cần kĩ năng làm việc cùng AI và những việc cần phán đoán, giao tiếp, sáng tạo','Nghề nghiệp không thay đổi gì'],ok:1}],
   key:['AI thay đổi <b>cách làm</b> của nhiều nghề; cần kĩ năng <b>dùng AI, kiểm chứng, giao tiếp, sáng tạo</b>.']},
  {t:'Vận dụng: Nghề em quan tâm',hd:'Hoạt động 4 · Vận dụng · Tiết 2',code:'9.A3.4',ic:'pen',

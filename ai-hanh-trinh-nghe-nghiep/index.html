@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hành Trình Nghề Nghiệp</title>
+<meta name="description" content="Mô phỏng lớp 9: AI thay đổi công việc thế nào, việc nào AI hỗ trợ, việc nào con người giữ; chọn kĩ năng và lập hồ sơ tương lai.">
+<style>
+:root{--ink:#eef2ff;--mute:#a5b4fc;--line:#3730a3;--ok:#22c55e;--bad:#f43f5e;--acc:#f472b6}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;color:var(--ink);min-height:100vh;
+ background:radial-gradient(1px 1px at 20% 30%,#fff 50%,transparent),radial-gradient(1px 1px at 70% 20%,#fff 50%,transparent),radial-gradient(1.5px 1.5px at 40% 70%,#fff 50%,transparent),radial-gradient(1px 1px at 85% 60%,#fff 50%,transparent),radial-gradient(900px 500px at 20% 0,#4338ca 0,transparent 60%),radial-gradient(800px 600px at 100% 100%,#be185d 0,transparent 55%),#0f0b2e}
+header{display:flex;align-items:center;gap:14px;padding:14px 20px;flex-wrap:wrap}
+.logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:linear-gradient(135deg,#818cf8,#f472b6);box-shadow:0 6px 20px #f472b666}
+h1{margin:0;font-size:22px} header p{margin:2px 0 0;color:var(--mute);font-size:13px} .sp{flex:1}
+.ib{background:#ffffff14;border:1px solid #ffffff2a;color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer}
+main{max-width:1100px;margin:0 auto;padding:0 16px 30px;display:grid;gap:14px}
+.mis{display:flex;gap:10px;flex-wrap:wrap}
+.mb{flex:1;min-width:190px;text-align:left;cursor:pointer;border-radius:16px;padding:10px 14px;border:1.5px solid var(--line);background:#ffffff08;color:var(--ink);font:inherit}
+.mb small{display:block;color:var(--mute);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.mb.on{border-color:var(--acc);box-shadow:0 0 0 3px #f472b633}
+.mb.done small::after{content:" ✓ Hoàn thành";color:var(--ok);font-weight:700}
+.story{display:flex;gap:14px;align-items:center;background:linear-gradient(90deg,#f472b622,#ffffff05);border:1px solid #f472b666;border-radius:18px;padding:12px 16px}
+.story .av{font-size:40px} .story p{margin:0;font-size:16px;line-height:1.55} .story b{color:#f9a8d4}
+.panel{background:linear-gradient(180deg,#1e1b4bdd,#14123acc);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 20px 50px #0008}
+[hidden]{display:none!important}
+.jobs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:760px){.jobs{grid-template-columns:1fr 1fr}}
+.job{border-radius:18px;padding:12px;text-align:center;cursor:pointer;border:2px solid var(--line);background:#ffffff08;color:var(--ink);font:inherit;transition:.2s}
+.job .e{font-size:46px;display:block;transition:transform .3s} .job:hover .e{transform:scale(1.15) rotate(-5deg)}
+.job.on{border-color:var(--acc);background:#f472b61a} .job.done::after{content:"✓";color:var(--ok);font-weight:900;margin-left:6px}
+.task{margin:14px auto 0;max-width:560px;background:#fff;color:#1e1b4b;border-radius:18px;padding:14px;text-align:center;font-size:17px;animation:pop .35s;box-shadow:0 12px 30px #0006}
+.ch{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.ch button{flex:1;min-width:150px;max-width:260px;font:inherit;font-weight:800;font-size:15px;border:0;border-radius:14px;padding:12px;cursor:pointer;color:#fff;box-shadow:inset 0 -4px 0 #0003}
+.c-ai{background:linear-gradient(135deg,#38bdf8,#4f46e5)} .c-ng{background:linear-gradient(135deg,#f472b6,#be185d)} .c-cl{background:linear-gradient(135deg,#a3e635,#16a34a)}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+@media(max-width:700px){.cols{grid-template-columns:1fr}}
+.col{border-radius:16px;padding:10px;min-height:90px;border:2px dashed var(--line)} .col h3{margin:0 0 6px;font-size:14px}
+.chip{display:inline-block;margin:3px;padding:6px 10px;border-radius:10px;background:#ffffff14;font-size:13px;animation:pop .3s}
+.fb{margin:12px auto 0;max-width:700px;border-radius:14px;padding:10px 14px;line-height:1.5;display:none}
+.fb.ok{display:block;background:#22c55e22;border:1px solid #22c55e77} .fb.bad{display:block;background:#f43f5e22;border:1px solid #f43f5e77}
+/* cửa hàng kĩ năng */
+.coins{font-size:18px;font-weight:800;margin-bottom:10px} .coins b{color:#facc15}
+.skills{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.sk{border-radius:16px;padding:12px;border:2px solid var(--line);background:#ffffff08;color:var(--ink);font:inherit;text-align:left;cursor:pointer;transition:.2s}
+.sk .e{font-size:30px} .sk b{display:block;font-size:15px;margin:4px 0} .sk small{color:var(--mute);font-size:12.5px;line-height:1.4;display:block}
+.sk.on{border-color:#facc15;background:#facc151a;box-shadow:0 0 18px #facc1533}
+.sk:disabled{opacity:.35;cursor:default}
+.prof{display:none;margin-top:14px;border-radius:22px;padding:18px;background:linear-gradient(135deg,#fdf2f8,#e0e7ff);color:#1e1b4b;box-shadow:0 20px 40px #0007}
+.prof.show{display:block;animation:pop .5s}
+.prof h2{margin:0 0 6px} .prof .row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.prof .bd{background:#fff;border-radius:99px;padding:6px 12px;font-weight:700;box-shadow:0 2px 6px #0001}
+textarea{width:100%;min-height:70px;border-radius:12px;border:1.5px solid #c7d2fe;padding:10px;font:inherit;font-size:15px}
+.end{display:none} .end.show{display:block;animation:pop .5s} .end ul{margin:8px 0 0;padding-left:20px;line-height:1.7;font-size:16px}
+.note{text-align:center;color:var(--mute);font-size:12.5px}
+@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:none;opacity:1}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.shake{animation:shake .45s}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+</style></head>
+<body>
+<header><div class="logo">🚀</div><div><h1>Hành Trình Nghề Nghiệp</h1><p>Trong thế giới có AI, con người làm gì? Em chuẩn bị gì?</p></div><div class="sp"></div><button class="ib" id="snd">🔊 Âm thanh: Bật</button></header>
+<main>
+ <div class="mis" id="mis"></div>
+ <div class="story" id="story"></div>
+ <section class="panel" id="m0">
+  <div class="jobs" id="jobs"></div>
+  <div class="task" id="task"></div>
+  <div class="ch"><button class="c-ai" data-a="ai">🤖 AI làm tốt</button><button class="c-cl" data-a="cl">🤝 Người + AI cùng làm</button><button class="c-ng" data-a="ng">🧑 Con người giữ</button></div>
+  <div class="fb" id="fb"></div>
+  <div class="cols"><div class="col"><h3>🤖 AI làm tốt</h3><div id="k-ai"></div></div><div class="col"><h3>🤝 Cùng làm</h3><div id="k-cl"></div></div><div class="col"><h3>🧑 Con người giữ</h3><div id="k-ng"></div></div></div>
+ </section>
+ <section class="panel" id="m1" hidden>
+  <div class="coins">💰 Em có <b id="coin">3</b> xu thời gian – chọn 3 kĩ năng để đầu tư cho tương lai</div>
+  <div class="skills" id="skills"></div>
+  <div class="ch"><button class="c-cl" id="mk">🎓 Tạo hồ sơ tương lai</button></div>
+  <div class="fb" id="fb2"></div>
+  <div class="prof" id="prof"></div>
+ </section>
+ <section class="panel end" id="end"><h2>🏆 Hành trình hoàn tất!</h2><ul>
+  <li>AI làm tốt việc <b>lặp lại, tính toán, tìm kiếm nhanh</b>; nhiều nghề sẽ thay đổi chứ không chỉ “mất đi”.</li>
+  <li>Con người giữ phần cần <b>sáng tạo, thấu cảm, đạo đức, trách nhiệm, quyết định</b>; nhiều việc là <b>người + AI cùng làm</b>.</li>
+  <li>Hãy học cách <b>dùng AI để học tốt hơn</b> (không nhờ làm hộ), rèn kĩ năng mềm và <b>học tập suốt đời</b>.</li></ul></section>
+ <p class="note">Mô phỏng chỉ để minh hoạ · Giáo dục AI lớp 9 Bài 2</p>
+</main>
+<canvas class="confetti" id="cf"></canvas>
+<script>
+const SND=(()=>{let c=null,on=true;try{on=localStorage.getItem('htnn-snd')!=='off'}catch(e){}
+ const ac=()=>{if(!c){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;c=new A()}if(c.state==='suspended')c.resume();return c};
+ const t=(f,s,d,ty,v,f2)=>{const a=ac();if(!a)return;const T=a.currentTime+s,o=a.createOscillator(),g=a.createGain();o.type=ty||'sine';o.frequency.setValueAtTime(f,T);if(f2)o.frequency.exponentialRampToValueAtTime(f2,T+d);
+  g.gain.setValueAtTime(.0001,T);g.gain.exponentialRampToValueAtTime(v||.12,T+.01);g.gain.exponentialRampToValueAtTime(.0001,T+d);o.connect(g);g.connect(a.destination);o.start(T);o.stop(T+d+.05)};
+ const S={pop:()=>t(500,0,.12,'sine',.1,1400),ok:()=>{t(784,0,.12,'triangle',.11);t(1175,.1,.25,'triangle',.11)},bad:()=>{t(260,0,.2,'sawtooth',.06,170);t(200,.16,.25,'sawtooth',.05,130)},
+  coin:()=>{t(988,0,.08,'square',.06);t(1319,.07,.2,'square',.06)},warp:()=>t(200,0,.8,'sine',.1,2000),
+  win:()=>[523,659,784,1047,1319].forEach((f,k)=>t(f,k*.1,.35,'triangle',.11))};
+ return{play:n=>{if(on)try{S[n]()}catch(e){}},get on(){return on},toggle(){on=!on;try{localStorage.setItem('htnn-snd',on?'on':'off')}catch(e){}return on}}})();
+const $=id=>document.getElementById(id);
+const JOBS=[
+ {e:'🩺',n:'Bác sĩ',t:[['Xem hàng nghìn ảnh X-quang để khoanh vùng nghi bệnh','cl','AI <b>khoanh vùng nhanh</b>, bác sĩ <b>kiểm tra và kết luận</b>.'],['Báo tin bệnh cho người nhà, an ủi bệnh nhân','ng','Cần <b>thấu cảm</b>, trách nhiệm – con người.'],['Sắp xếp lịch hẹn khám','ai','Việc lặp lại, có quy luật – AI làm tốt.']]},
+ {e:'👩‍🏫',n:'Giáo viên',t:[['Chấm nhanh bài trắc nghiệm','ai','Có đáp án sẵn – AI chấm nhanh.'],['Động viên học sinh đang buồn chán','ng','Cần <b>tình cảm, thấu hiểu</b> – con người.'],['Gợi ý bài tập phù hợp từng bạn','cl','AI <b>gợi ý</b> theo dữ liệu, giáo viên <b>chọn lại</b>.']]},
+ {e:'🎨',n:'Nhà thiết kế',t:[['Tạo nhanh 20 bản phác thảo logo','cl','AI tạo nhiều phương án, người <b>chọn, chỉnh sửa, chịu trách nhiệm</b> bản quyền.'],['Hiểu mong muốn khách hàng, kể câu chuyện thương hiệu','ng','Cần <b>sáng tạo và giao tiếp</b> – con người.'],['Đổi kích thước ảnh cho nhiều mạng xã hội','ai','Việc lặp lại – AI làm tốt.']]},
+ {e:'🌾',n:'Nông dân công nghệ',t:[['Đo độ ẩm, dự báo lúc cần tưới','ai','Cảm biến + AI dự báo tốt.'],['Phát hiện lá bệnh qua ảnh flycam','cl','AI <b>phát hiện</b>, người <b>kiểm tra ruộng</b> và quyết định phun thuốc.'],['Quyết định trồng giống gì cho mùa sau','ng','Cần kinh nghiệm, cân nhắc thị trường, <b>trách nhiệm</b> – con người quyết định (có thể tham khảo AI).']]}];
+const SK=[
+ {e:'💡',n:'Sáng tạo',d:'Nghĩ ra ý tưởng mới mà AI chưa có.',g:1},{e:'❤️',n:'Thấu cảm & giao tiếp',d:'Hiểu và giúp đỡ người khác.',g:1},
+ {e:'🔎',n:'Tư duy phản biện',d:'Kiểm chứng thông tin, phát hiện AI sai.',g:1},{e:'🤖',n:'Dùng AI có trách nhiệm',d:'Biết hỏi AI đúng cách, khai báo trung thực.',g:1},
+ {e:'📚',n:'Học tập suốt đời',d:'Luôn học kĩ năng mới khi nghề thay đổi.',g:1},{e:'🧑‍🤝‍🧑',n:'Hợp tác nhóm',d:'Cùng người khác (và AI) làm dự án.',g:1},
+ {e:'📋',n:'Nhờ AI làm hộ mọi bài tập',d:'Nhanh xong bài, khỏi suy nghĩ.',g:0},{e:'📵',n:'Tránh xa mọi công nghệ',d:'Không bao giờ dùng AI.',g:0}];
+const MIS=[{t:'Ai làm việc gì?',av:'🧭',s:'Chọn từng <b>nghề</b> và xếp các công việc: <b>AI làm tốt</b>, <b>người + AI cùng làm</b>, hay <b>con người giữ</b>?'},
+ {t:'Đầu tư kĩ năng',av:'💰',s:'Em có <b>3 xu</b> thời gian. Chọn <b>3 kĩ năng</b> giúp em vững vàng trong thế giới có AI, rồi tạo <b>hồ sơ tương lai</b> của em.'}];
+let cur=0,done=[0,0],ji=0,ti=0,jd=[0,0,0,0],pick=[];
+function menu(){$('mis').innerHTML=MIS.map((M,k)=>`<button class="mb ${k==cur?'on':''} ${done[k]?'done':''}" onclick="setM(${k})"><small>Nhiệm vụ ${k+1}</small><b>${M.t}</b></button>`).join('');
+ $('story').innerHTML=`<div class="av">${MIS[cur].av}</div><p>${MIS[cur].s}</p>`;$('m0').hidden=cur!=0;$('m1').hidden=cur!=1}
+function setM(k){cur=k;SND.play('pop');menu()}
+function jobs(){$('jobs').innerHTML=JOBS.map((j,k)=>`<button class="job ${k==ji?'on':''} ${jd[k]?'done':''}" onclick="selJ(${k})"><span class="e">${j.e}</span>${j.n}</button>`).join('');
+ const J=JOBS[ji];$('task').innerHTML=ti<J.t.length?`<div style="font-size:13px;color:#6366f1;font-weight:700">${J.e} ${J.n} · việc ${ti+1}/3</div>${J.t[ti][0]}`:`🎉 Xong nghề ${J.n}! Chọn nghề khác.`}
+function selJ(k){ji=k;ti=jd[k]?3:0;SND.play('warp');$('fb').className='fb';jobs()}
+$('m0').querySelectorAll('.ch button').forEach(b=>b.onclick=()=>{const J=JOBS[ji];if(ti>=3)return;const T=J.t[ti],ok=b.dataset.a==T[1];
+ $('fb').className='fb '+(ok?'ok':'bad');$('fb').innerHTML=(ok?'✅ ':'🤔 Chưa đúng. ')+T[2];
+ if(!ok){SND.play('bad');$('task').classList.remove('shake');void $('task').offsetWidth;$('task').classList.add('shake');return}
+ SND.play('ok');$('k-'+T[1]).insertAdjacentHTML('beforeend',`<span class="chip">${J.e} ${T[0]}</span>`);ti++;
+ if(ti>=3){jd[ji]=1;const nx=jd.indexOf(0);if(nx>=0){ji=nx;ti=0}else finish()}jobs()});
+function skills(){$('coin').textContent=3-pick.length;$('skills').innerHTML=SK.map((s,k)=>`<button class="sk ${pick.includes(k)?'on':''}" ${pick.length>=3&&!pick.includes(k)?'disabled':''} onclick="tog(${k})"><span class="e">${s.e}</span><b>${s.n}</b><small>${s.d}</small></button>`).join('')}
+function tog(k){const p=pick.indexOf(k);if(p>=0)pick.splice(p,1);else if(pick.length<3)pick.push(k);SND.play('coin');skills()}
+$('mk').onclick=()=>{if(pick.length<3){SND.play('bad');$('fb2').className='fb bad';$('fb2').innerHTML='Hãy tiêu đủ <b>3 xu</b> nhé.';return}
+ const bad=pick.filter(k=>!SK[k].g);if(bad.length){SND.play('bad');$('fb2').className='fb bad';$('fb2').innerHTML=bad.map(k=>SK[k].n).join(', ')+': '+(bad.includes(6)?'nhờ AI làm hộ khiến em <b>không học được gì</b> và không trung thực. ':'')+(bad.includes(7)?'tránh xa công nghệ khiến em <b>khó theo kịp</b> công việc tương lai. ':'')+'Hãy đổi kĩ năng khác.';return}
+ $('fb2').className='fb';SND.play('warp');
+ $('prof').innerHTML=`<h2>🎓 Hồ sơ tương lai của em</h2><div class="row">${pick.map(k=>`<span class="bd">${SK[k].e} ${SK[k].n}</span>`).join('')}</div>
+  <p>Nghề em quan tâm và cách em sẽ <b>cùng làm với AI</b>:</p><textarea placeholder="Ví dụ: Em muốn làm bác sĩ. AI giúp em đọc ảnh X-quang nhanh, còn em kiểm tra lại và chăm sóc bệnh nhân…"></textarea>`;
+ $('prof').classList.add('show');finish()};
+function finish(){if(done[cur])return;done[cur]=1;SND.play('win');confetti();menu();
+ if(done.every(x=>x)){$('end').classList.add('show');setTimeout(()=>$('end').scrollIntoView({behavior:'smooth'}),900)}
+ else $('story').insertAdjacentHTML('beforeend','<button class="ib" onclick="setM(1)">➡️ Nhiệm vụ tiếp</button>')}
+function confetti(){const c=$('cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const P=Array.from({length:140},()=>({x:innerWidth/2,y:innerHeight/3,vx:(Math.random()-.5)*14,vy:Math.random()*-12-4,r:Math.random()*6+3,c:['#facc15','#f472b6','#22d3ee','#a78bfa','#34d399'][Math.random()*5|0],a:Math.random()*6}));
+ let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.a+=.2;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillRect(-p.r,-p.r/2,p.r*2,p.r);x.restore()});if(++t<110)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+$('snd').onclick=()=>{$('snd').textContent='🔊 Âm thanh: '+(SND.toggle()?'Bật':'Tắt')};$('snd').textContent='🔊 Âm thanh: '+(SND.on?'Bật':'Tắt');
+menu();jobs();skills();
+</script></body></html>
