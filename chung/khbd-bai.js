@@ -31,6 +31,47 @@
     if (a === "3.4" || /^5\./.test(a)) return "NLc";
     return "NLb";   // 2.3, 2.5, 2.6, 3.3, 4.x
   }
+
+  /* LỒNG GHÉP GIÁO DỤC AI (QĐ 2422/QĐ-BGDĐT, CV 5588): Bảng 2.9 tài liệu tập huấn Giáo dục AI THCS –
+     nội dung Tin học là nền cho YCCĐ AI. Mã cùng khối lớp → lồng ghép trong bài; mã khối khác → chỉ liên hệ. */
+  var AI_BAI = { "6.C1.1": [6, 5, "Bên trong một công cụ AI"], "6.B1.1": [6, 4, "Mặt tốt, mặt hạn chế và giới hạn của AI"],
+    "6.A3.3": [6, 3, "Dữ liệu cá nhân, quyền riêng tư và an toàn AI"], "6.A3.4": [6, 3, "Dữ liệu cá nhân, quyền riêng tư và an toàn AI"],
+    "6.A1.3": [6, 2, "Học tập, kiểm chứng và ra quyết định với AI"], "7.A1.2": [7, 1, "Con người giữ quyền quyết định và xác thực kết quả AI"],
+    "7.B2.2": [7, 4, "Đánh giá ứng dụng và xây dựng môi trường AI có đạo đức"], "7.C5.1": [7, 6, "Dữ liệu huấn luyện và các cách AI học"],
+    "7.C5.2": [7, 6, "Dữ liệu huấn luyện và các cách AI học"], "7.C4.1": [7, 6, "Dữ liệu huấn luyện và các cách AI học"],
+    "8.A1.2": [8, 1, "AI không thay thế con người và rủi ro khi lạm dụng AI tạo sinh"], "8.A3.2": [8, 3, "Vai trò và trách nhiệm của các bên trong hệ sinh thái AI"],
+    "8.B2.1": [8, 4, "Nhận diện, phòng tránh rủi ro và phát triển AI có đạo đức"], "8.D2.1": [8, 8, "Thiết kế kịch bản hội thoại có ứng dụng AI"],
+    "8.D2.MR2": [8, 8, "Thiết kế kịch bản hội thoại có ứng dụng AI"], "9.B2.3": [9, 3, "Người dùng có trách nhiệm và ứng phó nội dung giả mạo do AI"],
+    "9.B2.1": [9, 3, "Người dùng có trách nhiệm và ứng phó nội dung giả mạo do AI"], "9.C4.1": [9, 6, "Cải thiện dữ liệu để nâng cao chất lượng sản phẩm AI"],
+    "9.D2.1": [9, 8, "Kiểm tra và đánh giá sản phẩm AI"], "9.C2.MR1": [9, 5, "Ý tưởng sáng tạo giải quyết vấn đề bằng AI"],
+    "9.A3.4": [9, 2, "Học tập, thể hiện bản thân và định hướng nghề nghiệp trong thế giới AI"] };
+  var AI_NHOM = [
+    [/^tin6-(thong-tin-va-du-lieu|thuat-toan|cac-cau-truc-dieu-khien)$/, ["6.C1.1"], "Dữ liệu và thuật toán là hai thành phần để huấn luyện AI; các bước hoạt động của một công cụ AI"],
+    [/^tin6-(mang-may-tinh|internet)$/, ["6.B1.1", "6.A3.3"], "Dữ liệu người dùng được thu thập, truyền, lưu trữ qua dịch vụ trực tuyến; AI dùng dữ liệu đó để gợi ý; quyền riêng tư khi dùng ứng dụng có AI"],
+    [/^tin6-an-toan-thong-tin-tren-internet$/, ["6.A3.3", "6.A3.4"], "Dữ liệu cá nhân, quyền riêng tư; môi trường AI có đạo đức"],
+    [/^tin7-(ung-xu-tren-mang|mang-xa-hoi)$/, ["7.B2.2"], "Dữ liệu cá nhân, quyền riêng tư; môi trường AI có đạo đức"],
+    [/^tin6-(mang-thong-tin-toan-cau|thu-dien-tu|tim-kiem-thong-tin-tren-internet)$/, ["6.A1.3", "7.A1.2"], "Kiểm chứng kết quả do AI đưa ra; nhận diện nội dung giả mạo do AI tạo ra"],
+    [/^tin8-(thong-tin-trong-moi-truong-so|khai-thac-thong-tin-so)$/, ["8.A1.2"], "Kiểm chứng kết quả do AI đưa ra; nhận diện nội dung giả mạo do AI tạo ra"],
+    [/^tin9-(danh-gia-chat-luong-thong-tin|thong-tin-giai-quyet-van-de)$/, ["9.B2.3"], "Kiểm chứng kết quả do AI đưa ra; nhận diện nội dung giả mạo do AI tạo ra"],
+    [/^tin7-thuat-toan-/, ["7.C5.1", "7.C5.2"], "Máy so sánh dữ liệu mới với dữ liệu đã có để xếp nhóm; sắp xếp, phân nhóm dữ liệu trước khi huấn luyện; các bước huấn luyện AI"],
+    [/^tin7-(phan-mem-bang-tinh|tinh-toan-tu-dong|cong-cu-ho-tro-tinh-toan|trinh-bay-bang-tinh|hoan-thien-bang-tinh|quan-li-du-lieu)$/, ["7.C4.1"], "Dữ liệu huấn luyện; cải thiện bộ dữ liệu; đếm số lần đúng – sai để đánh giá sản phẩm AI"],
+    [/^tin8-(bang-tinh-bai-toan-thuc-te|sap-xep-va-loc-du-lieu|bieu-do)$/, ["7.C4.1", "9.C4.1"], "Dữ liệu huấn luyện; cải thiện bộ dữ liệu; đếm số lần đúng – sai để đánh giá sản phẩm AI"],
+    [/^tin9-(ham-if|ham-countif|ham-sumif|xac-thuc-du-lieu|tai-chinh-gia-dinh)$/, ["9.C4.1", "9.D2.1"], "Dữ liệu huấn luyện; cải thiện bộ dữ liệu; đếm số lần đúng – sai để đánh giá sản phẩm AI"],
+    [/^tin8-(cau-truc-dieu-khien|tu-thuat-toan-den-chuong-trinh|go-loi|bieu-dien-du-lieu|danh-sach-hinh-anh)$/, ["8.D2.1", "8.D2.MR2"], "Kịch bản hội thoại; chatbot theo kịch bản; sản phẩm AI đơn giản bằng công cụ có sẵn"],
+    [/^tin9-(giai-quyet-van-de|bai-toan-tin-hoc|lap-chuong-trinh-may-tinh)$/, ["9.C2.MR1"], "Kịch bản hội thoại; chatbot theo kịch bản; sản phẩm AI đơn giản bằng công cụ có sẵn"],
+    [/^tin8-dao-duc-van-hoa-so$/, ["8.A3.2", "8.B2.1"], "Trách nhiệm của các bên; bảo vệ dữ liệu cá nhân, tôn trọng bản quyền; trách nhiệm của người dùng"],
+    [/^tin9-phap-li-dich-vu-internet$/, ["9.B2.1", "8.A3.2"], "Trách nhiệm của các bên; bảo vệ dữ liệu cá nhân, tôn trọng bản quyền; trách nhiệm của người dùng"],
+    [/^tin(8-tin-hoc-nghe-nghiep|9-the-gioi-nghe-nghiep)$/, ["9.A3.4"], "Thay đổi của các ngành nghề trong thế giới có AI"]
+  ];
+  var AI = (function () {
+    for (var k = 0; k < AI_NHOM.length; k++) if (AI_NHOM[k][0].test(id)) return { ma: AI_NHOM[k][1], nd: AI_NHOM[k][2] };
+    return null;
+  })();
+  function aiDong(m) {
+    var b = AI_BAI[m]; if (!b) return m;
+    return "<b>" + m + "</b> – Giáo dục AI lớp " + b[0] + ", Bài " + b[1] + ". " + esc(b[2]) + (+m[0] === lop ? " <i>(lồng ghép trong bài)</i>" : +m[0] > lop ? " <i>(chuẩn bị nền cho lớp " + m[0] + ")</i>" : " <i>(ôn lại, vận dụng)</i>");
+  }
+  function aiLab() { var b = AI_BAI[AI.ma[0]]; return baseUrl.replace(/tin[6-9]-[a-z0-9-]+\/$/, "") + "ai-12-tiet/hoc.html?l=" + b[0] + "&b=" + b[1]; }
   function thuong(s) { s = String(s || "").trim().replace(/\.$/, ""); return s.charAt(0).toLowerCase() + s.slice(1); }
 
   /* Ghi bài (HTML) → các dòng */
@@ -158,6 +199,12 @@
       }
       N.push(T([100], [[{ c: [P("<b>Mục tiêu tích hợp:</b> " + esc(NA.mt))], nen: "EAF1FB" }]], { vien: "9DC3E6" }));
     }
+    if (AI) {
+      N.push(P("<b><i>" + (NA ? (NA.atm.length ? "e" : "d") : "c") + ") Liên hệ giáo dục trí tuệ nhân tạo</i></b> <i>(QĐ 2422/QĐ-BGDĐT, CV 5588; Bảng 2.9 tài liệu tập huấn Giáo dục AI THCS)</i>", { thut: 1 }));
+      N.push(G("<i>Nội dung AI kế thừa từ bài:</i> " + esc(AI.nd) + "."));
+      AI.ma.forEach(function (m) { N.push(G(aiDong(m))); });
+      N.push(G("<i>Lưu ý:</i> không dạy lặp lại 12 tiết chuyên đề AI; chỉ lồng ghép khi gắn với YCCĐ AI cùng khối đã học và có minh chứng, mã khối khác chỉ để liên hệ."));
+    }
     N.push(Nhan("3. Về phẩm chất"));
     N.push(G("<i>Chăm chỉ:</i> tích cực tham gia, hoàn thành các nhiệm vụ học tập được giao."));
     N.push(G("<i>Trung thực:</i> tự làm bài, báo cáo đúng kết quả của nhóm; nhận xét bài bạn khách quan."));
@@ -169,6 +216,7 @@
     N.push(G("Máy tính, máy chiếu; SGK Tin học " + lop + "; kế hoạch bài dạy."));
     N.push(G("Trang giáo viên của bài (mở buổi học, mã QR, theo dõi tiến độ các nhóm, chiếu bài làm, chốt đáp án): <i>" + esc(baseUrl + "giaovien.html") + "</i>"));
     (NA ? NA.atm : []).forEach(function (a) { N.push(G("Học liệu cho hoạt động an toàn mạng (" + a.nhom + "): " + esc(a.hd))); });
+    N.push(G("<i>Công cụ số và AI:</i> trang học tập của bài (không thu thập dữ liệu cá nhân)" + (AI ? "; mô phỏng AI liên quan: <i>" + esc(aiLab()) + "</i>. Nếu dùng chatbot AI: chỉ GV thao tác trên máy chiếu, không nhập thông tin cá nhân; HS tự làm trước → AI hỗ trợ → HS đối chiếu, kiểm chứng." : ".")));
     N.push(Nhan("2. Học sinh"));
     N.push(G("SGK Tin học " + lop + ", vở ghi."));
     N.push(G("Mỗi nhóm một máy tính hoặc thiết bị truy cập trang học sinh của bài: <i>" + esc(baseUrl) + "</i> (nếu thiếu thiết bị: GV chiếu câu hỏi, nhóm trả lời trên phiếu)."));
@@ -208,6 +256,10 @@
         nd.push(T([100], [[{ c: [P("<b>Hoạt động tích hợp an toàn mạng (" + a.nhom + " [" + a.muc + "]):</b> " + esc(a.hd))], nen: "FCE4D6" }]], { vien: "F4B183" }));
         sp.push(G("<i>Minh chứng an toàn mạng:</i> " + esc(a.mc), 2));
       });
+      if (AI && i === oAtm) {
+        nd.push(T([100], [[{ c: [P("<b>Liên hệ giáo dục AI (" + AI.ma.join(", ") + "):</b> " + esc(AI.nd) + ". HS tự trả lời trước, sau đó GV cho xem kết quả của AI/mô phỏng AI, HS đối chiếu, chỉ ra chỗ đúng – sai và ghi vào nhật kí sử dụng AI.")], nen: "EDE7F6" }]], { vien: "B4A7D6" }));
+        sp.push(G("<i>Minh chứng liên hệ AI:</i> nhận xét đối chiếu kết quả AI của nhóm (nhật kí sử dụng AI).", 2));
+      }
       var ghiDong = [];
       ghi.forEach(function (a) { ghiDong = ghiDong.concat(dong(L.CONCEPTS[a.concept].b)); });
       var ghiNho = ghiDong.map(function (x) { return x.charAt(0) === "\u0001" ? { td: esc(chu(x.slice(1))) } : x; });
