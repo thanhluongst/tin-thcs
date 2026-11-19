@@ -20,7 +20,7 @@ const STEPS=[
   key:['Hành động: <b>báo cáo lỗi, không dùng ứng dụng độc hại, yêu cầu minh bạch</b>, góp ý trung thực.']},
  {t:'Luyện tập – Vận dụng',hd:'Hoạt động 3–4 · Luyện tập, vận dụng · Tiết 2',code:'7.B2.1',ic:'pen',
   story:'Chọn một ứng dụng AI em biết, đánh giá theo 5 tiêu chí.',
-  qs:[{id:'dg',type:'text',q:'Ứng dụng – đạt tiêu chí nào – chưa đạt tiêu chí nào – em sẽ làm gì?',ans:'Ví dụ: Ứng dụng dịch – minh bạch (ghi rõ dịch máy), chính xác khá; riêng tư chưa rõ (lưu đoạn văn?) → em không dịch thông tin cá nhân, báo lỗi khi dịch sai.'},
+  qs:[{id:'lab',type:'sim',sim:'lab_tuyenchon'},{id:'dg',type:'text',q:'Ứng dụng – đạt tiêu chí nào – chưa đạt tiêu chí nào – em sẽ làm gì?',ans:'Ví dụ: Ứng dụng dịch – minh bạch (ghi rõ dịch máy), chính xác khá; riêng tư chưa rõ (lưu đoạn văn?) → em không dịch thông tin cá nhân, báo lỗi khi dịch sai.'},
    {id:'cam',type:'single',q:'Việc em cam kết',opts:['Báo lỗi và không dùng ứng dụng độc hại','Dùng ứng dụng nào đông người dùng là được'],ok:0}],
   key:['Đánh giá trước khi dùng; <b>hành động</b> để môi trường AI tốt hơn.']}
 ];

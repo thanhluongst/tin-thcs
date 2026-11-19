@@ -20,7 +20,7 @@ const STEPS=[
   key:['AI <b>học lại thành kiến</b> từ dữ liệu rồi <b>lặp lại hàng loạt</b>. "AI không có ác ý, nhưng có thể bất công với hàng nghìn người cùng lúc."']},
  {t:'Luyện tập – Vận dụng',hd:'Hoạt động 3–4 · Luyện tập, vận dụng · Tiết 2',code:'9.A2.2',ic:'pen',
   story:'Công cụ AI vẽ ảnh nghề nghiệp (mô phỏng): "kĩ sư", "bác sĩ" gần như toàn ảnh nam; "y tá", "giáo viên mầm non" gần như toàn ảnh nữ.',
-  qs:[{id:'hq',type:'text',q:'Nếu rất nhiều người dùng những ảnh này thì sao? Đề xuất một cách giảm thiên vị.',ans:'Cách nhìn "nghề này của nam, nghề kia của nữ" bị củng cố, ảnh hưởng lựa chọn nghề của học sinh. Giảm: dữ liệu đa dạng, kiểm tra kết quả theo nhóm, người dùng phản hồi.'},
+  qs:[{id:'lab',type:'sim',sim:'lab_tuyenchon'},{id:'hq',type:'text',q:'Nếu rất nhiều người dùng những ảnh này thì sao? Đề xuất một cách giảm thiên vị.',ans:'Cách nhìn "nghề này của nam, nghề kia của nữ" bị củng cố, ảnh hưởng lựa chọn nghề của học sinh. Giảm: dữ liệu đa dạng, kiểm tra kết quả theo nhóm, người dùng phản hồi.'},
    {id:'after',type:'text',q:'Quay lại tình huống công ty X: ý kiến của em có thay đổi không?',short:1,ans:'Tự đánh giá.'}],
   key:['Phát hiện thiên vị: <b>xem kết quả theo từng nhóm</b>, hỏi "dữ liệu từ đâu?".']}
 ];

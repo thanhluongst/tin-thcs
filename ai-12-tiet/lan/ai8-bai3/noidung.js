@@ -50,7 +50,7 @@ const STEPS=[
   key:['Cho biết sản phẩm có sử dụng AI và sử dụng ở phần nào.','Nói rõ công cụ AI đã dùng khi được hỏi.','Tự kiểm tra tính chính xác của nội dung AI tạo ra trước khi dùng, ghi nguồn đối chiếu.','Chịu trách nhiệm với sản phẩm cuối cùng, sửa khi phát hiện sai.']},
  {t:'Luyện tập',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'8.A3.1 – 8.A3.3',ic:'video',
   story:'<b>Phần A:</b> đúng hay sai? <b>Phần B – bản tin giả định:</b> Một trang mạng đăng video <b>giả giọng hiệu trưởng</b> một trường, thông báo cho học sinh nghỉ học. Video được tạo bằng công cụ AI và được nhiều người chia sẻ.',
-  qs:[{id:'sim5',type:'sim',sim:'spread'},
+  qs:[{id:'lab',type:'sim',sim:'lab_tuyenchon'},{id:'sim5',type:'sim',sim:'spread'},
    {id:'obs5',type:'single',q:'Quan sát mô phỏng: trường hợp nào video giả lan đến ít người nhất?',opts:['Nhiều người kiểm chứng trước khi chia sẻ, trang mạng gỡ sớm và có nhãn “nội dung AI”','Không ai kiểm chứng, không gỡ video','Chỉ cần nhiều người xem video','Ai cũng chia sẻ thật nhanh để mọi người cùng biết'],ok:0},
    {id:'tf',type:'tf',q:'Phần A. Đúng (Đ) hay sai (S)?',items:[
     {t:'Kết quả AI tạo ra sai thì AI phải chịu trách nhiệm.',a:'F'},{t:'Người dùng quyết định có dùng kết quả của AI hay không.',a:'T'},

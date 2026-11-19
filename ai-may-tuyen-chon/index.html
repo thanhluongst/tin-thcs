@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Máy Tuyển Chọn AI</title>
+<meta name="description" content="Mô phỏng: AI học từ dữ liệu cũ bị lệch nên chọn người không công bằng. Học sinh tìm nguyên nhân, sửa dữ liệu và giữ quyền quyết định.">
+<style>
+:root{--bg:#07142b;--line:#24406e;--ink:#eef4ff;--mute:#9fb3d9;--acc:#ffb020;--ok:#22c55e;--bad:#f43f5e;--cy:#22d3ee;--tp:#60a5fa;--nt:#4ade80}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;color:var(--ink);min-height:100vh;
+ background:radial-gradient(900px 500px at 0% -10%,#1d4ed8 0,transparent 60%),radial-gradient(800px 500px at 100% 0,#0f766e 0,transparent 55%),var(--bg)}
+header{display:flex;align-items:center;gap:14px;padding:14px 20px;flex-wrap:wrap}
+.logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:linear-gradient(135deg,#22d3ee,#6366f1);box-shadow:0 6px 20px #6366f166}
+h1{margin:0;font-size:22px} header p{margin:2px 0 0;color:var(--mute);font-size:13px} .sp{flex:1}
+.ib{background:#ffffff14;border:1px solid #ffffff26;color:var(--ink);border-radius:12px;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer}
+.ib:hover{background:#ffffff24} .ib:disabled{opacity:.4;cursor:default}
+main{max-width:1180px;margin:0 auto;padding:0 16px 30px;display:grid;gap:16px}
+.mis{display:flex;gap:10px;flex-wrap:wrap}
+.mb{flex:1;min-width:200px;text-align:left;cursor:pointer;border-radius:16px;padding:10px 14px;border:1.5px solid var(--line);background:#ffffff08;color:var(--ink);font:inherit}
+.mb small{display:block;color:var(--mute);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.mb.on{border-color:var(--acc);background:#ffb02018;box-shadow:0 0 0 3px #ffb02033}
+.mb.done small::after{content:" ✓ Hoàn thành";color:var(--ok);font-weight:700}
+.story{display:flex;gap:14px;align-items:flex-start;background:linear-gradient(90deg,#ffb02022,#ffffff06);border:1px solid #ffb02055;border-radius:18px;padding:14px 16px}
+.story .av{font-size:40px;line-height:1} .story p{margin:0;font-size:16px;line-height:1.55} .story b{color:#ffd27a}
+.cols{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:16px}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.panel{background:linear-gradient(180deg,#10254d,#0b1c3d);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 20px 50px #0007}
+h2{margin:0 0 10px;font-size:17px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;background:#ffffff14;color:var(--mute)}
+/* dữ liệu cũ */
+.data{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:6px}
+.dt{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-size:20px;position:relative;border:2px solid transparent;animation:pop .35s both}
+.dt.tp{background:#60a5fa26} .dt.nt{background:#4ade8026}
+.dt.y{border-color:var(--ok)} .dt.y::after{content:"✓";position:absolute;right:-4px;top:-6px;font-size:11px;background:var(--ok);color:#022;border-radius:50%;width:15px;height:15px;display:grid;place-items:center;font-weight:900}
+.dt.new{box-shadow:0 0 0 2px var(--acc)}
+.leg{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin:10px 0}
+.leg span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px;background:var(--c)}
+.chart{display:grid;gap:8px;margin-top:6px}
+.cb{display:grid;grid-template-columns:110px 1fr 44px;gap:8px;align-items:center;font-size:14px}
+.cb .tr{height:14px;border-radius:99px;background:#ffffff12;overflow:hidden} .cb .fl{height:100%;border-radius:99px;transition:width .8s}
+.brain{margin-top:12px;border-radius:16px;background:#00000030;border:1px dashed var(--line);padding:10px 12px}
+.w{display:grid;grid-template-columns:120px 1fr 52px;gap:8px;align-items:center;font-size:14px;margin:6px 0}
+.w .tr{height:12px;border-radius:99px;background:#ffffff10;position:relative;overflow:hidden}
+.w .tr::before{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:2px;background:#ffffff40}
+.w .fl{position:absolute;top:0;bottom:0;transition:all .8s}
+.w.hot{color:#fecaca;font-weight:700}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.go{border:0;border-radius:14px;padding:12px 18px;font:800 16px inherit;font-family:inherit;color:#1b1300;cursor:pointer;background:linear-gradient(135deg,#ffd166,#ff9f1c);box-shadow:0 8px 22px #ff9f1c55;position:relative;overflow:hidden}
+.go::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,#fff8,transparent);transform:skewX(-20deg);animation:shine 2.6s infinite}
+@keyframes shine{0%,60%{left:-60%}100%{left:130%}}
+.go:disabled{filter:grayscale(1);opacity:.5;cursor:default}
+.fix{border-radius:12px;border:1.5px solid var(--line);background:#ffffff08;color:var(--ink);padding:9px 12px;font:inherit;font-size:14px;cursor:pointer}
+.fix.on{border-color:var(--cy);background:#22d3ee22;box-shadow:0 0 14px #22d3ee44}
+/* ứng viên */
+.cands{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.cd{border-radius:16px;padding:10px;background:#ffffff0a;border:1.5px solid var(--line);position:relative;transition:.3s;animation:pop .4s both}
+.cd .face{font-size:34px} .cd b{display:block;font-size:15px} .cd .meta{font-size:12.5px;color:var(--mute);line-height:1.5}
+.cd .rg{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-top:4px}
+.cd .rg.tp{background:#60a5fa33;color:#bfdbfe} .cd .rg.nt{background:#4ade8033;color:#bbf7d0}
+.cd .sc{margin-top:8px;height:8px;border-radius:99px;background:#ffffff12;overflow:hidden} .cd .sc i{display:block;height:100%;background:linear-gradient(90deg,#f43f5e,#facc15,#22c55e);transition:width .8s}
+.cd .st{position:absolute;top:8px;right:8px;font-size:12px;font-weight:800;padding:3px 8px;border-radius:99px}
+.cd.pick{border-color:var(--ok);background:#22c55e18;box-shadow:0 0 18px #22c55e33} .cd.pick .st{background:var(--ok);color:#022}
+.cd.drop .st{background:#ffffff1a;color:var(--mute)}
+.cd.miss{border-color:var(--bad);animation:shake .5s} .cd.miss::before{content:"⚠ Bị bỏ sót";position:absolute;bottom:-10px;left:10px;font-size:11px;background:var(--bad);color:#fff;border-radius:99px;padding:2px 8px;font-weight:800}
+.cd .hs{margin-top:8px;width:100%;font-size:12.5px;padding:6px}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:none;opacity:1}}
+.scanning .cd{animation:scanc .9s ease-in-out}
+@keyframes scanc{50%{box-shadow:0 0 0 2px var(--cy),0 0 24px #22d3ee66}}
+.meter{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.meter div{flex:1;min-width:150px;border-radius:14px;padding:10px 12px;background:#00000030;border:1px solid var(--line);font-size:13px;color:var(--mute)}
+.meter b{display:block;font-size:26px;color:#fff} .meter .bad b{color:#fda4af} .meter .good b{color:#86efac}
+.msg{margin-top:12px;border-radius:16px;padding:12px 14px;display:none;font-size:15px;line-height:1.55}
+.msg.show{display:block;animation:pop .45s} .msg.ok{background:linear-gradient(90deg,#22c55e22,#ffffff05);border:1px solid #22c55e66}
+.msg.warn{background:linear-gradient(90deg,#f43f5e22,#ffffff05);border:1px solid #f43f5e77}
+.end{display:none} .end.show{display:block;animation:pop .5s} .end ul{margin:8px 0 0;padding-left:20px;line-height:1.7;font-size:16px}
+.note{text-align:center;color:var(--mute);font-size:12.5px}
+.modal{position:fixed;inset:0;background:#000a;display:none;place-items:center;z-index:40;padding:16px}
+.modal.show{display:grid} .modal .box{max-width:420px;width:100%;background:#10254d;border:1px solid var(--line);border-radius:20px;padding:18px;animation:pop .3s}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+</style></head>
+<body>
+<header><div class="logo">⚖️</div><div><h1>Máy Tuyển Chọn AI</h1><p>AI chọn bạn vào đội tuyển Tin học – nó có công bằng không?</p></div><div class="sp"></div><button class="ib" id="snd">🔊 Âm thanh: Bật</button></header>
+<main>
+ <div class="mis" id="mis"></div>
+ <div class="story" id="story"></div>
+ <div class="cols">
+  <section class="panel">
+   <h2>📚 Dữ liệu huấn luyện <span class="pill" id="dn"></span></h2>
+   <div class="data" id="data"></div>
+   <div class="leg"><span style="--c:#60a5fa">Học sinh thành phố</span><span style="--c:#4ade80">Học sinh nông thôn</span><span style="--c:#22c55e">✓ = từng được chọn</span></div>
+   <div class="chart" id="chart"></div>
+   <div class="brain"><b>🧠 “Bộ não” AI đã học được</b><div id="ws" style="font-size:13px;color:var(--mute)">Chưa huấn luyện.</div></div>
+   <div class="btns" id="fixes" style="display:none">
+    <button class="fix" id="fx1">➕ Thêm dữ liệu từ trường nông thôn</button>
+    <button class="fix" id="fx2">✂️ Bỏ thông tin “khu vực”</button>
+   </div>
+  </section>
+  <section class="panel" id="cpanel">
+   <h2>🎓 8 bạn đăng kí năm nay <span class="pill">AI chọn 4 bạn</span></h2>
+   <div class="cands" id="cands"></div>
+   <div class="btns"><button class="go" id="go">🤖 Huấn luyện AI &amp; chọn đội</button></div>
+   <div class="meter" id="meter"></div>
+   <div class="msg" id="msg"></div>
+  </section>
+ </div>
+ <section class="panel end" id="end"><h2>🏆 Em đã hoàn thành cả 3 nhiệm vụ!</h2><ul>
+  <li>AI học từ <b>dữ liệu quá khứ</b>. Dữ liệu lệch (thiếu một nhóm người) → AI <b>thiên vị</b>, lặp lại bất công cũ.</li>
+  <li>Sửa bằng cách <b>làm dữ liệu đa dạng, đầy đủ</b> và bỏ những thông tin không liên quan đến năng lực.</li>
+  <li>AI chỉ <b>gợi ý</b>; <b>con người kiểm tra hồ sơ và quyết định cuối cùng</b>, chịu trách nhiệm về kết quả.</li></ul></section>
+ <p class="note">Mô phỏng chỉ để minh hoạ · nhân vật và số liệu giả định · Giáo dục AI (lớp 9 Bài 1, Bài 4; lớp 7 Bài 4; lớp 8 Bài 3)</p>
+</main>
+<div class="modal" id="modal"><div class="box" id="mbox"></div></div>
+<canvas class="confetti" id="cf"></canvas>
+<script>
+const SND=(()=>{let c=null,on=true;try{on=localStorage.getItem('mtc-snd')!=='off'}catch(e){}
+ const ac=()=>{if(!c){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;c=new A()}if(c.state==='suspended')c.resume();return c};
+ const t=(f,s,d,ty,v,f2)=>{const a=ac();if(!a)return;const T=a.currentTime+s,o=a.createOscillator(),g=a.createGain();o.type=ty||'sine';o.frequency.setValueAtTime(f,T);if(f2)o.frequency.exponentialRampToValueAtTime(f2,T+d);
+  g.gain.setValueAtTime(.0001,T);g.gain.exponentialRampToValueAtTime(v||.12,T+.01);g.gain.exponentialRampToValueAtTime(.0001,T+d);o.connect(g);g.connect(a.destination);o.start(T);o.stop(T+d+.05)};
+ const S={click:()=>t(700,0,.06,'square',.04),drop:()=>t(900,0,.08,'triangle',.06,1300),
+  train:()=>{for(let k=0;k<12;k++)t(300+k*70,k*.06,.06,'square',.03);},
+  scan:()=>{for(let k=0;k<8;k++)t(500+k*140,k*.1,.08,'sine',.05)},
+  pick:()=>{t(880,0,.12,'triangle',.1);t(1320,.1,.2,'triangle',.1)},
+  wrong:()=>{t(220,0,.25,'sawtooth',.07,150);t(180,.2,.3,'sawtooth',.06,120)},
+  win:()=>[523,659,784,1047,1319].forEach((f,k)=>t(f,k*.1,.35,'triangle',.11)),pop:()=>t(500,0,.12,'sine',.1,1400)};
+ return{play:n=>{if(on)try{S[n]()}catch(e){}},get on(){return on},toggle(){on=!on;try{localStorage.setItem('mtc-snd',on?'on':'off')}catch(e){}return on}}})();
+const $=id=>document.getElementById(id);
+
+/* ===== Dữ liệu (giả định) ===== */
+// [điểm Tin 0-10, giờ luyện/tuần, thành phố 1 / nông thôn 0, được chọn]
+const OLD=[[9,6,1,1],[8,5,1,1],[8,7,1,1],[7,4,1,1],[7,5,1,1],[9,4,1,1],[6,6,1,1],[7,6,1,1],[5,2,1,0],[4,3,1,0],[6,2,1,0],[5,4,1,0],[3,2,1,0],[6,3,1,1],
+ [9,6,0,0],[8,5,0,0],[6,3,0,0],[4,2,0,0]]; // các năm trước gần như chỉ trường thành phố được gửi lên đội → nông thôn giỏi vẫn không được chọn
+const ADD=[[9,7,0,1],[8,6,0,1],[9,5,0,1],[7,6,0,1],[8,4,0,1],[5,2,0,0],[4,3,0,0],[6,2,0,0],[7,5,0,1],[3,1,0,0]];
+const CAND=[
+ {n:'Khoa',f:'👦🏻',tin:9,gio:6,tp:0},{n:'Vy',f:'👧🏽',tin:6,gio:3,tp:1},{n:'Hà',f:'👧🏻',tin:9,gio:7,tp:0},{n:'Bảo',f:'👦🏽',tin:7,gio:4,tp:1},
+ {n:'Ngân',f:'👧',tin:5,gio:3,tp:1},{n:'Tùng',f:'🧒🏽',tin:8,gio:null,real:7,tp:0},{n:'Quân',f:'👦',tin:8,gio:6,tp:1},{n:'Mai',f:'👩🏻',tin:6,gio:2,tp:1}];
+const MIS=[
+ {t:'Huấn luyện & chạy AI',av:'🧑‍🏫',s:'Trường dùng <b>AI chọn 4 bạn</b> vào đội tuyển Tin học. AI học từ <b>hồ sơ các năm trước</b> (bên trái). Bấm <b>Huấn luyện AI &amp; chọn đội</b>, rồi quan sát: những bạn <b>giỏi</b> có được chọn hết không?'},
+ {t:'Sửa dữ liệu cho công bằng',av:'🔧',s:'AI đã <b>bỏ sót bạn giỏi ở nông thôn</b> vì dữ liệu cũ hầu như chỉ có học sinh thành phố được chọn. Hãy chọn cách sửa ở bảng bên trái, rồi <b>huấn luyện lại</b> cho đến khi <b>không còn bạn giỏi nào bị bỏ sót</b>.'},
+ {t:'Con người kiểm tra hồ sơ',av:'🕵️',s:'Bạn <b>Tùng</b> bị <b>thiếu ô “giờ luyện”</b> trong hồ sơ nên AI cho điểm thấp. AI chỉ gợi ý – <b>em là người quyết định</b>. Bấm <b>📄 Xem hồ sơ</b> của Tùng, bổ sung thông tin rồi chạy lại.'}];
+let cur=0,done=[0,0,0],useAdd=false,dropRegion=false,fixedTung=false,W=null,ran=false;
+
+/* ===== Hồi quy logistic thu nhỏ ===== */
+function feats(r){return [r[0]/10,r[1]/8,dropRegion?0:r[2]]}
+function train(){const D=OLD.concat(useAdd?ADD:[]);let w=[0,0,0],b=0;
+ for(let it=0;it<3000;it++){let g=[0,0,0],gb=0;D.forEach(r=>{const x=feats(r),z=b+w[0]*x[0]+w[1]*x[1]+w[2]*x[2],p=1/(1+Math.exp(-z)),e=p-r[3];x.forEach((v,k)=>g[k]+=e*v);gb+=e});
+  w=w.map((v,k)=>v-1.2*g[k]/D.length);b-=1.2*gb/D.length}return{w,b}}
+const gio=c=>c.gio==null?(fixedTung?c.real:0):c.gio;
+function score(c){const x=feats([c.tin,gio(c),c.tp]);return 1/(1+Math.exp(-(W.b+W.w[0]*x[0]+W.w[1]*x[1]+W.w[2]*x[2])))}
+
+/* ===== Vẽ ===== */
+function drawData(){const D=OLD.map(r=>[...r,0]).concat(useAdd?ADD.map(r=>[...r,1]):[]);
+ $('data').innerHTML=D.map((r,i)=>`<div class="dt ${r[2]?'tp':'nt'} ${r[3]?'y':''} ${r[4]?'new':''}" style="animation-delay:${i*15}ms" title="Điểm ${r[0]}, ${r[1]} giờ/tuần">${r[2]?'🏙️':'🌾'}</div>`).join('');
+ $('dn').textContent=D.length+' hồ sơ';
+ const rate=tp=>{const g=D.filter(r=>r[2]==tp&&r[0]>=8);return g.length?g.filter(r=>r[3]).length/g.length:0};
+ $('chart').innerHTML=`<div style="font-size:13px;color:var(--mute)">Trong dữ liệu: bạn giỏi (điểm ≥ 8) từng được chọn</div>`+[[1,'🏙️ Thành phố','var(--tp)'],[0,'🌾 Nông thôn','var(--nt)']].map(([k,l,c])=>`<div class="cb"><span>${l}</span><div class="tr"><div class="fl" style="width:${rate(k)*100}%;background:${c}"></div></div><span>${Math.round(rate(k)*100)}%</span></div>`).join('')}
+function drawW(){if(!W){$('ws').textContent='Chưa huấn luyện.';return}const L=['📘 Điểm Tin','⏱️ Giờ luyện','🏙️ Ở thành phố'],m=Math.max(4,...W.w.map(Math.abs));
+ $('ws').innerHTML=W.w.map((v,k)=>`<div class="w ${k==2&&v>1?'hot':''}"><span>${L[k]}${dropRegion&&k==2?' (đã bỏ)':''}</span><div class="tr"><div class="fl" style="${v>=0?'left:50%':'right:50%'};width:${Math.abs(v)/m*50}%;background:${k==2?'#f87171':'#22d3ee'}"></div></div><span>${v>=0?'+':''}${v.toFixed(1)}</span></div>`).join('')+
+ (W.w[2]>1?'<div style="color:#fecaca;font-size:13px;margin-top:4px">⚠ AI đang “thích” học sinh thành phố – thông tin này không nói gì về năng lực!</div>':'')}
+function drawC(res){$('cands').innerHTML=CAND.map((c,i)=>{const r=res&&res[i];const g=gio(c);
+ return `<div class="cd ${r?(r.pick?'pick':'drop'):''} ${r&&r.miss?'miss':''}" style="animation-delay:${i*40}ms">${r?`<span class="st">${r.pick?'✓ Được chọn':'Không chọn'}</span>`:''}
+ <div class="face">${c.f}</div><b>${c.n}</b><div class="meta">📘 Điểm Tin: <b style="display:inline">${c.tin}</b><br>⏱️ Giờ luyện: ${g===0&&c.gio==null?'<span style="color:#fda4af">(trống)</span>':g+' giờ/tuần'}</div>
+ <span class="rg ${c.tp?'tp':'nt'}">${c.tp?'🏙️ Thành phố':'🌾 Nông thôn'}</span>
+ ${r?`<div class="sc"><i style="width:${Math.round(r.s*100)}%"></i></div><div class="meta">AI chấm: ${Math.round(r.s*100)}%</div>`:''}
+ ${c.gio==null&&cur==2&&!fixedTung?'<button class="ib hs" onclick="hoSo()">📄 Xem hồ sơ</button>':''}</div>`}).join('')}
+function run(){SND.play('train');$('go').disabled=true;W=train();drawW();$('cpanel').classList.add('scanning');setTimeout(()=>SND.play('scan'),400);
+ setTimeout(()=>{$('cpanel').classList.remove('scanning');const s=CAND.map(score),ord=s.map((v,i)=>i).sort((a,b)=>s[b]-s[a]).slice(0,4);
+  const res=CAND.map((c,i)=>({s:s[i],pick:ord.includes(i),miss:!ord.includes(i)&&c.tin>=8}));drawC(res);ran=true;
+  const miss=res.filter(r=>r.miss).length,nt=res.filter((r,i)=>r.pick&&!CAND[i].tp).length;
+  $('meter').innerHTML=`<div class="${miss?'bad':'good'}">Bạn giỏi bị bỏ sót<b>${miss}</b></div><div>Bạn nông thôn được chọn<b>${nt} / 4</b></div><div>Độ “thích thành phố” của AI<b>${dropRegion?'0':W.w[2].toFixed(1)}</b></div>`;
+  SND.play(miss?'wrong':'pick');$('go').disabled=false;$('go').textContent='🔁 Huấn luyện lại & chọn đội';check(miss,res)},1100)}
+function say(cls,h){$('msg').className='msg show '+cls;$('msg').innerHTML=h}
+function check(miss,res){
+ if(cur==0){const names=CAND.filter((c,i)=>res[i].miss).map(c=>c.n).join(', ');
+  say('warn',`😮 AI <b>bỏ sót ${names}</b> dù điểm cao, chỉ vì ở <b>nông thôn</b>. Nhìn “bộ não” AI: nó học được rằng <b>“ở thành phố” = được chọn</b>, vì dữ liệu cũ bị lệch. Đây là <b>thiên vị do dữ liệu</b>.`);finish()}
+ else if(cur==1){if(miss&&!res[5].miss||miss>1){say('warn','Vẫn còn bạn giỏi bị bỏ sót. Thử thêm một cách sửa nữa rồi huấn luyện lại.');return}
+  if(res[5].miss&&miss==1){say('ok',`✅ Hà và Khoa đã được chọn! AI bớt thiên vị nhờ ${useAdd?'<b>dữ liệu đa dạng hơn</b>':''}${useAdd&&dropRegion?' và ':''}${dropRegion?'<b>bỏ thông tin không liên quan</b>':''}. Nhưng… <b>Tùng</b> (8 điểm) vẫn bị loại – vì sao? Sang nhiệm vụ 3.`);finish();return}
+  say('ok','✅ Không còn bạn giỏi nào bị bỏ sót!');finish()}
+ else if(cur==2){if(!fixedTung){say('warn','Tùng vẫn bị chấm thấp vì hồ sơ <b>thiếu dữ liệu</b>. Hãy bấm <b>📄 Xem hồ sơ</b> trên thẻ của Tùng.');return}
+  if(!miss){say('ok','✅ Sau khi <b>con người kiểm tra và bổ sung hồ sơ</b>, Tùng đã được chọn. AI chỉ gợi ý; <b>thầy cô quyết định</b> và chịu trách nhiệm.');finish()}
+  else say('warn','Vẫn còn bạn giỏi bị bỏ sót – hãy quay lại nhiệm vụ 2 để sửa dữ liệu.')}}
+function hoSo(){SND.play('pop');$('mbox').innerHTML=`<h2>📄 Hồ sơ của Tùng</h2><p style="line-height:1.6">Phiếu đăng kí bị <b>bỏ trống</b> ô “Giờ luyện”. Thầy chủ nhiệm xác nhận: Tùng luyện <b>7 giờ/tuần</b> ở câu lạc bộ Tin học của xã.</p>
+ <div class="btns"><button class="go" onclick="fixedTung=true;$('modal').classList.remove('show');SND.play('drop');drawC();say('ok','Đã bổ sung hồ sơ. Bấm <b>Huấn luyện lại &amp; chọn đội</b>.')">✍️ Bổ sung: 7 giờ/tuần</button><button class="ib" onclick="$('modal').classList.remove('show')">Đóng</button></div>`;$('modal').classList.add('show')}
+function finish(){if(done[cur])return;done[cur]=1;SND.play('win');confetti();menu(true);
+ if(done.every(x=>x)){$('end').classList.add('show');setTimeout(()=>$('end').scrollIntoView({behavior:'smooth'}),700)}
+ else{const nx=done.indexOf(0);$('msg').insertAdjacentHTML('beforeend',`<div style="margin-top:8px"><button class="ib" onclick="setM(${nx})">➡️ Nhiệm vụ tiếp: ${MIS[nx].t}</button></div>`)}}
+function menu(keep){$('mis').innerHTML=MIS.map((M,i)=>`<button class="mb ${i==cur?'on':''} ${done[i]?'done':''}" onclick="setM(${i})"><small>Nhiệm vụ ${i+1}</small><b>${M.t}</b></button>`).join('');
+ $('story').innerHTML=`<div class="av">${MIS[cur].av}</div><p>${MIS[cur].s}</p>`;$('fixes').style.display=cur>=1?'flex':'none'}
+function setM(i){cur=i;SND.play('pop');$('msg').className='msg';menu();drawC();window.scrollTo({top:0,behavior:'smooth'})}
+function confetti(){const c=$('cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;const P=Array.from({length:140},()=>({x:innerWidth/2,y:innerHeight/3,vx:(Math.random()-.5)*14,vy:Math.random()*-12-4,r:Math.random()*6+3,c:['#facc15','#f472b6','#22d3ee','#a78bfa','#34d399'][Math.random()*5|0],a:Math.random()*6}));
+ let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.a+=.2;x.fillStyle=p.c;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillRect(-p.r,-p.r/2,p.r*2,p.r);x.restore()});if(++t<110)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+$('fx1').onclick=()=>{useAdd=!useAdd;$('fx1').classList.toggle('on',useAdd);SND.play('drop');drawData()};
+$('fx2').onclick=()=>{dropRegion=!dropRegion;$('fx2').classList.toggle('on',dropRegion);SND.play('click')};
+$('go').onclick=run;
+$('snd').onclick=()=>{$('snd').textContent='🔊 Âm thanh: '+(SND.toggle()?'Bật':'Tắt')};$('snd').textContent='🔊 Âm thanh: '+(SND.on?'Bật':'Tắt');
+menu();drawData();drawW();drawC();
+</script></body></html>
