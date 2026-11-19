@@ -103,7 +103,7 @@ function render(){
     markReveal(f,step,mine[i]||{},ST.board); wireVote(); return; }
   wireQs(f);
   f.addEventListener('change',saveDraft); f.addEventListener('input',saveDraft);
-  f.onsubmit=async e=>{e.preventDefault(); const ans=collect(f,step); const m=missing(step,ans);
+  f.onsubmit=async e=>{e.preventDefault(); const ans=collect(f,step); const m=missing(TUHOC?step:Object.assign({},step,{qs:(step.qs||[]).slice(0,partNow())}),ans);
     if(m){toast('Em còn '+m+' câu chưa làm xong.'); return;}
     try{await api('api/ans',{id:ME.id,step:i,a:ans}); mine[i]=ans; try{localStorage.removeItem(draftKey(i));}catch(_){}
       $('#stt').innerHTML='<span class="badge g">✓ Đã nộp</span>'; FX.play('submit'); toast(TUHOC?'Đã nộp. Xem đáp án bên dưới.':'Đã nộp. Em có thể sửa và nộp lại khi thầy cô chưa khoá.');

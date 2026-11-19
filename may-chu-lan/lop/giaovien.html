@@ -167,7 +167,7 @@ function vpanel(){
 }
 /* ---------- kết quả trực tiếp & tự luận ---------- */
 function drawLive(){
-  {const pp=document.getElementById('pPart'); if(pp){const n=nParts(STEPS[ST.step]); pp.textContent='▼ Phần '+Math.min((ST.part||0)+1,n)+'/'+n; pp.disabled=ST.step<=0||ST.reveal||(ST.part||0)>=n-1;}}
+  {const pp=document.getElementById('pPart'); if(pp){const n=nParts(STEPS[ST.step]); {const k=Math.min(ST.part||0,n-1); pp.textContent='▼ '+partLabel(STEPS[ST.step],k)+' ('+(k+1)+'/'+n+')';} pp.disabled=ST.step<=0||ST.reveal||(ST.part||0)>=n-1;}}
   {const pt=document.getElementById("pTuhoc"); if(pt){pt.style.background=ST.tuhoc?"#dc2626":"#16a34a"; pt.style.color="#fff"; pt.textContent=ST.tuhoc?"🔓 GV không điều khiển":"🎛 GV điều khiển"; pt.title=ST.tuhoc?"Đang để học sinh tự học (tự chuyển hoạt động). Bấm để giáo viên điều khiển lại.":"Giáo viên đang điều khiển: học sinh theo màn hình thầy cô. Bấm để học sinh tự học.";}}
   const i=ST.step, st=STU(), an=ANS(), ids=Object.keys(st), sub=subIds(), c=counts();
   $('#cnt').textContent=c.s+' học sinh · '+c.m+' máy';

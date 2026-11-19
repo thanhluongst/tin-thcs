@@ -244,16 +244,20 @@ function renderRank(rows,myId){
 
 /* ---- Nội dung ghi bài: mỗi hoạt động một mục, chiếu khi kết thúc hoạt động ---- */
 
-/* ---- Chia một hoạt động thành từng phần: 1) đọc tình huống → 2) mô phỏng (nếu có) → 3) câu hỏi ---- */
-function nParts(step){const qs=(step&&step.qs)||[]; if(!qs.length) return 1; return qs.some(q=>q.type==='sim')?3:2;}
+/* ---- Chia một hoạt động thành từng phần: 0) đọc tình huống → mỗi mô phỏng / mỗi câu hỏi là MỘT phần.
+   GV chiếu tới phần nào thì HS chỉ thấy phần đó (các câu đã làm vẫn giữ câu trả lời, chỉ tạm ẩn). ---- */
+function nParts(step){const qs=(step&&step.qs)||[]; return 1+qs.length;}
+function partLabel(step,p){const qs=(step&&step.qs)||[]; if(!p) return 'Tình huống';
+  const q=qs[p-1]; if(!q) return ''; if(q.type==='sim') return 'Mô phỏng';
+  return 'Câu '+qs.slice(0,p).filter(x=>x.type!=='sim').length+'/'+qs.filter(x=>x.type!=='sim').length;}
 function applyParts(root,part,step){
-  if(!root||!step) return; const n=nParts(step), hasSim=n===3; part=Math.min(part,n-1);
-  root.querySelectorAll('.qblock').forEach(b=>{const isSim=!!b.querySelector('.simslot,.sim'); b.hidden=part<(isSim?1:(hasSim?2:1));});
-  root.querySelectorAll('.sticky-sub').forEach(b=>b.hidden=part<n-1);
+  if(!root||!step) return; const n=nParts(step); part=Math.min(part,n-1);
+  root.querySelectorAll('.qblock').forEach((b,k)=>{b.hidden=k!==part-1;});
+  root.querySelectorAll('.sticky-sub').forEach(b=>b.hidden=part<1||(step.qs[part-1]||{}).type==='sim');
   let w=root.querySelector('.part-wait');
   if(part<n-1){ if(!w){w=document.createElement('div'); w.className='part-wait fb info show'; w.style.cssText='margin-top:14px;text-align:center;font-weight:700';
       const f=root.querySelector('form,#pf'); (f||root).insertAdjacentElement(f?'afterend':'beforeend',w);}
-    w.innerHTML='⏳ '+(part===0?(hasSim?'Đọc kĩ tình huống. Sắp tới: phòng thí nghiệm mô phỏng':'Đọc kĩ tình huống. Sắp tới: câu hỏi'):'Làm thí nghiệm, quan sát kĩ. Sắp tới: câu hỏi')+' (phần '+(part+1)+'/'+n+')';}
+    w.innerHTML='📍 Đang ở: <b>'+partLabel(step,part)+'</b> · chờ thầy cô chuyển sang: '+partLabel(step,part+1)+' (phần '+(part+1)+'/'+n+')';}
   else if(w) w.remove();
 }
 /* Ghi bài từng mục: hiện mục 1..k (mục mới nhất tô nổi) để học sinh chép dần theo lời giảng */
