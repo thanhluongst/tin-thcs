@@ -270,6 +270,20 @@ function renderRankQ(o,myId){const md=['🥇','🥈','🥉'], rows=o.rows||[], t
   return `<h2>🏁 Xếp hạng ${esc(o.title||'câu hỏi')}</h2><p class="hint">Trả lời <b>đúng</b> xếp trước, cùng đúng thì ai <b>nộp nhanh hơn</b> (tính từ lúc thầy cô chiếu câu) đứng trên.</p>
   ${pod.length?`<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">${pod.map((r,k)=>`<div style="flex:1;min-width:150px;text-align:center;padding:10px;border-radius:16px;background:${['#fde68a','#e5e7eb','#fed7aa'][k]};border:3px solid #1e2a5a;box-shadow:4px 4px 0 #1e2a5a"><div style="font-size:34px">${md[k]}</div><b>${esc(r.label)}</b><div>⏱ ${tg(r.sec)}</div></div>`).join('')}</div>`:''}
   <div style="overflow-x:auto"><table class="tbl gt"><tr><th>#</th><th>Nhóm (máy)</th><th>Kết quả</th><th>Thời gian</th></tr>${rows.map((r,k)=>`<tr class="${r.id===myId?'me':''}"><td style="text-align:center">${r.done?k+1:'–'}</td><td>${esc(r.label)}${r.id===myId?' <span class="badge b">Nhóm em</span>':''}</td><td>${!r.done?'⏳ Chưa nộp':r.ok===true?'✅ Đúng':r.ok===false?'❌ Chưa đúng':'📝 Đã trả lời'}</td><td>${r.done?tg(r.sec):''}</td></tr>`).join('')}</table></div>`;}
+/* Vinh danh + thống kê một hoạt động: số câu đúng nhiều hơn đứng trên, bằng nhau thì ai xong sớm hơn */
+function rankHRows(step,i,ans,stu,tm,pt){const qs=(step.qs||[]).filter(q=>q.type!=='sim'), t0=Math.min(...Object.keys(pt||{}).filter(k=>k.split('|')[0]==String(i)).map(k=>pt[k]),Infinity);
+  return Object.keys(stu||{}).map(sid=>{const a=((ans||{})[sid]||{})[i]||{}, t=((tm||{})[sid]||{})[i]||{};
+    const done=qs.filter(q=>a[q.id]!==undefined).length, ok=qs.filter(q=>isCorrect(q,a[q.id])===true).length, last=Math.max(0,...Object.values(t));
+    return {id:sid,label:stu[sid].name+(stu[sid].may?' (máy '+stu[sid].may+')':''),done,ok,n:qs.length,sec:last&&isFinite(t0)?Math.max(0,Math.round((last-t0)/1000)):null,
+      cau:qs.map(q=>a[q.id]===undefined?'⏳':isCorrect(q,a[q.id])===true?'✅':isCorrect(q,a[q.id])===false?'❌':'📝')};})
+   .sort((a,b)=>(b.ok-a.ok)||(b.done-a.done)||((a.sec==null?1e9:a.sec)-(b.sec==null?1e9:b.sec)));}
+function renderRankH(o,myId){const md=['🥇','🥈','🥉'], rows=o.rows||[], tg=s=>s==null?'–':(s>=60?Math.floor(s/60)+'′'+String(s%60).padStart(2,'0')+'″':s+' giây');
+  const pod=rows.filter(r=>r.ok>0).slice(0,3), n=rows.length, nop=rows.filter(r=>r.done).length, nq=(rows[0]||{}).n||0;
+  return `<h2>🏆 Vinh danh – ${esc(o.title||'hoạt động')}</h2>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px"><span class="badge b">📥 Đã nộp: ${nop}/${n} nhóm</span><span class="badge g">✅ Đúng hết: ${rows.filter(r=>r.n&&r.ok===r.n).length} nhóm</span><span class="badge o">❓ ${nq} câu</span></div>
+  ${pod.length?`<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0;align-items:flex-end">${[1,0,2].filter(k=>pod[k]).map(k=>{const r=pod[k];return `<div style="flex:1;min-width:150px;text-align:center;padding:${k?10:18}px 10px;border-radius:16px;background:${['#fde68a','#e5e7eb','#fed7aa'][k]};border:3px solid #1e2a5a;box-shadow:4px 4px 0 #1e2a5a"><div style="font-size:${k?32:44}px">${md[k]}</div><b>${esc(r.label)}</b><div>${r.ok}/${r.n} câu đúng · ⏱ ${tg(r.sec)}</div></div>`;}).join('')}</div>`:'<p class="hint">Chưa có nhóm nào trả lời đúng.</p>'}
+  <div style="overflow-x:auto"><table class="tbl gt"><tr><th>#</th><th>Nhóm (máy)</th>${Array.from({length:nq},(_,k)=>`<th>Câu ${k+1}</th>`).join('')}<th>Đúng</th><th>Xong sau</th></tr>${rows.map((r,k)=>`<tr class="${r.id===myId?'me':''}"><td style="text-align:center">${r.done?k+1:'–'}</td><td>${esc(r.label)}${r.id===myId?' <span class="badge b">Nhóm em</span>':''}</td>${r.cau.map(c=>`<td style="text-align:center">${c}</td>`).join('')}<td style="text-align:center"><b>${r.ok}/${r.n}</b></td><td>${r.done?tg(r.sec):'⏳'}</td></tr>`).join('')}</table></div>
+  <p class="hint">✅ đúng · ❌ chưa đúng · 📝 câu tự luận (thầy cô nhận xét) · ⏳ chưa nộp</p>`;}
 /* Chốt từng câu: hiện đáp án + thống kê cả lớp của các câu đã chốt, khoá các câu đó */
 function applyQrev(root,step,mine,board,qrev){
   if(!root||!step||!qrev||!qrev.length) return;
