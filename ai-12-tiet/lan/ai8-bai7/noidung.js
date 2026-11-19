@@ -15,7 +15,7 @@ const STEPS=[
   key:['Xác định vấn đề → đối tượng, nhu cầu → <b>dữ liệu</b> → <b>khả năng AI</b> → <b>giải pháp khác</b> → <b>rủi ro</b> → <b>con người quyết định</b>.']},
  {t:'Soi vấn đề của lớp',hd:'Hoạt động 3 · Luyện tập',code:'8.D1.1',ic:'paper',
   story:'Phân loại các vấn đề (giả định) ở trường em.',
-  qs:[{id:'cls',type:'sort',q:'Vấn đề này…',cols:{ai:'Đáng xem xét dùng AI',khong:'Giải pháp đơn giản là đủ',no:'Không nên dùng AI'},items:[
+  qs:[{id:'lab',type:'sim',sim:'lab_xuong'},{id:'cls',type:'sort',q:'Vấn đề này…',cols:{ai:'Đáng xem xét dùng AI',khong:'Giải pháp đơn giản là đủ',no:'Không nên dùng AI'},items:[
      {t:'Nhận dạng loài chim trong ảnh chụp ở vườn trường',a:'ai'},{t:'Nhắc giờ vào lớp',a:'khong'},
      {t:'Dịch biển chỉ dẫn tiếng Anh cho khách tham quan',a:'ai'},{t:'Chấm điểm hạnh kiểm học sinh qua camera',a:'no'},
      {t:'Đếm số sách mượn trong ngày',a:'khong'},{t:'Gợi ý bài luyện tập theo lỗi sai thường gặp của từng bạn (dữ liệu ẩn danh)',a:'ai'}]},

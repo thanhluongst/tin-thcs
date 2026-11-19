@@ -14,7 +14,7 @@ const STEPS=[
   key:['Kế hoạch có: <b>mục tiêu</b> (làm gì, cho ai) – <b>cách làm</b> (AI làm một việc dựa trên dữ liệu nào, ai làm, khi nào) – <b>kiểm tra</b> (tiêu chí đo được, có người đối chiếu kết quả AI).']},
  {t:'Rủi ro và biện pháp',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'7.D2.1',ic:'lock',
   story:'Ghép rủi ro với biện pháp cụ thể.',
-  qs:[{id:'rr',type:'match',q:'Rủi ro – biện pháp',items:['Chatbot trả lời sai lịch thi','Học sinh nhập họ tên, số điện thoại vào chatbot','Nhóm làm không kịp'],opts:['Thầy cô đối chiếu 10 câu trả lời trước khi cho dùng','Ghi rõ "không nhập thông tin cá nhân", không lưu tên','Chia việc theo tuần, thu hẹp còn 20 câu hỏi'],ok:[0,1,2]}],
+  qs:[{id:'lab',type:'sim',sim:'lab_xuong'},{id:'rr',type:'match',q:'Rủi ro – biện pháp',items:['Chatbot trả lời sai lịch thi','Học sinh nhập họ tên, số điện thoại vào chatbot','Nhóm làm không kịp'],opts:['Thầy cô đối chiếu 10 câu trả lời trước khi cho dùng','Ghi rõ "không nhập thông tin cá nhân", không lưu tên','Chia việc theo tuần, thu hẹp còn 20 câu hỏi'],ok:[0,1,2]}],
   key:['Biện pháp tốt là biện pháp <b>cụ thể, có người làm</b>, không chung chung.']},
  {t:'Hoàn thiện và góp ý',hd:'Hoạt động 4 · Vận dụng · Tiết 2',code:'7.D2.1',ic:'pen',
   story:'Nhóm viết kế hoạch hoàn chỉnh, đổi chéo với nhóm bạn để góp ý, rồi sửa.',

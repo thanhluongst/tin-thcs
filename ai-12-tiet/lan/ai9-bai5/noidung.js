@@ -13,7 +13,7 @@ const STEPS=[
   key:['Ý tưởng tốt: <b>mới</b>, <b>chọn từ nhiều phương án</b>, AI làm <b>đúng một việc</b> hợp với dữ liệu, <b>có người quyết định</b>, có cách xử lí rủi ro.']},
  {t:'Góp ý phải kiểm',hd:'Hoạt động 3 · Luyện tập',code:'9.C2.1',ic:'scale',
   story:'Các nhóm nhận góp ý cho ý tưởng (từ bạn, người lớn, công cụ AI).',
-  qs:[{id:'gy',type:'single',q:'Một công cụ AI khen: "Ý tưởng tuyệt vời, chắc chắn thành công!". Nhóm nên…',opts:['Giữ nguyên vì đã được khen','Coi lời khen không phải bằng chứng; kiểm điều kiểm được, ghi "chưa chắc" điều chưa kiểm được','Bỏ ý tưởng'],ok:1},
+  qs:[{id:'lab',type:'sim',sim:'lab_xuong'},{id:'gy',type:'single',q:'Một công cụ AI khen: "Ý tưởng tuyệt vời, chắc chắn thành công!". Nhóm nên…',opts:['Giữ nguyên vì đã được khen','Coi lời khen không phải bằng chứng; kiểm điều kiểm được, ghi "chưa chắc" điều chưa kiểm được','Bỏ ý tưởng'],ok:1},
    {id:'yt',type:'text',q:'Ý tưởng của nhóm: vấn đề – người dùng – AI làm một việc gì – dữ liệu – người quyết định – rủi ro và cách xử lí',ans:'Ví dụ: Chatbot ngày hội đọc sách trả lời vị trí gian, giờ hoạt động dựa trên sơ đồ, lịch do ban tổ chức cung cấp; bạn trực gian xử lí câu khó; rủi ro trả lời sai giờ → ban tổ chức kiểm 20 câu trước ngày hội.'}],
   key:['Góp ý từ bất kì nguồn nào cũng <b>phải kiểm</b> rồi mới giữ hay bỏ; <b>lời khen không phải bằng chứng</b>.']}
 ];

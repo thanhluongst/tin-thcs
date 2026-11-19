@@ -13,7 +13,7 @@ const STEPS=[
   key:['Mô tả phạm vi: <b>giúp ai – làm việc gì – ở đâu, khi nào</b>; nhỏ, rõ, làm được.']},
  {t:'Ý tưởng có khả thi không?',hd:'Hoạt động 3 · Luyện tập',code:'7.D1.MR1',ic:'scale',
   story:'Dùng "máy soi khả thi": chọn ý tưởng, đánh giá 3 câu hỏi.',
-  qs:[{id:'sim1',type:'sim',sim:'feas'},
+  qs:[{id:'lab',type:'sim',sim:'lab_xuong'},{id:'sim1',type:'sim',sim:'feas'},
    {id:'kt',type:'multi',q:'Câu hỏi để phân tích tính khả thi',opts:['Dữ liệu có dễ thu thập không?','Có rủi ro đạo đức không?','Mức độ phức tạp, chi phí có phù hợp không?','Tên dự án có hay không?'],ok:[0,1,2]}],
   key:['Khả thi khi: <b>dữ liệu dễ thu thập</b>, <b>rủi ro đạo đức thấp</b>, <b>độ phức tạp và chi phí phù hợp</b>.']},
  {t:'Vận dụng',hd:'Hoạt động 4 · Vận dụng',code:'7.D1.MR1',ic:'pen',

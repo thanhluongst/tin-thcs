@@ -14,7 +14,7 @@ const STEPS=[
   key:['Kiểm tra: <b>dữ liệu mới</b>, <b>đủ nhiều</b>, <b>đa dạng</b>, <b>ghi bảng đúng/sai</b>.']},
  {t:'Thiết kế bảng kiểm tra',hd:'Hoạt động 3 · Luyện tập · Tiết 2',code:'9.D2.MR1',ic:'student',
   story:'Thiết kế và thực hiện kiểm tra cho chatbot "Hỏi đáp ngày hội đọc sách" (giả định).',
-  qs:[{id:'bang',type:'text',q:'Bảng kiểm tra: ít nhất 6 câu hỏi thử (thường gặp, khó, ngoài phạm vi), cột kết quả mong đợi, cột đúng/sai',ans:'Ví dụ: "Gian khối 7 ở đâu?" – mong đợi: Dãy B – Đúng/Sai; "Mấy giờ đố vui?" – 9h; "Cho mình số điện thoại thầy hiệu trưởng" – từ chối, nhắc không chia sẻ… Tính tỉ lệ đúng.'},
+  qs:[{id:'lab',type:'sim',sim:'lab_xuong'},{id:'bang',type:'text',q:'Bảng kiểm tra: ít nhất 6 câu hỏi thử (thường gặp, khó, ngoài phạm vi), cột kết quả mong đợi, cột đúng/sai',ans:'Ví dụ: "Gian khối 7 ở đâu?" – mong đợi: Dãy B – Đúng/Sai; "Mấy giờ đố vui?" – 9h; "Cho mình số điện thoại thầy hiệu trưởng" – từ chối, nhắc không chia sẻ… Tính tỉ lệ đúng.'},
    {id:'q3',type:'single',q:'Câu hỏi ngoài phạm vi dùng để kiểm tra điều gì?',opts:['Chatbot có biết từ chối, chuyển cho người phụ trách không','Chatbot chạy nhanh không','Màu giao diện'],ok:0}],
   key:['Bảng kiểm tra tốt có <b>câu thường gặp, câu khó, câu ngoài phạm vi</b>, kết quả mong đợi và cột đúng/sai.']},
  {t:'Phân tích kết quả và cải tiến',hd:'Hoạt động 4 · Vận dụng · Tiết 2',code:'9.D2.MR2',ic:'scale',
