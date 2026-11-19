@@ -1,4 +1,4 @@
-/* MÁY CHỦ LỚP HỌC QUA MẠNG NỘI BỘ (LAN) — chạy trên máy giáo viên, không cần Internet.
+﻿/* MÁY CHỦ LỚP HỌC QUA MẠNG NỘI BỘ (LAN) — chạy trên máy giáo viên, không cần Internet.
    - Phục vụ toàn bộ trang bài học trong thư mục tin-thcs/.
    - /api        : cùng các lệnh như Apps Script (nộp bài, chốt, nhận xét, thống kê…), lưu vào du-lieu/lop-hoc.json
    - /tin/...json: kênh tức thì kiểu Firebase (EventSource) — chốt, nhận xét, bài vừa nộp hiện ngay
@@ -147,9 +147,8 @@ function api(action, p){
   /* Phần mềm Quản lý phòng máy: kết quả lớp học AI của các học sinh (theo số căn cước phần mềm đã có) */
   if (action === "ketqua") { pinOK(p.pin); const R = roster(), byId = {};
     (p.cccds || []).forEach(c => { const h = R.get(String(c).replace(/\D/g, "")); if (h) byId[h.id] = String(c); });
-    const kq = []; lopH().aiStats().forEach(ph => ph.nhom.forEach(n => {
-      let c = 0, dg = 0, t = 0; Object.values(n.yc).forEach(o => { c += o.c; dg += o.d; t += o.t; });
-      (n.ids || []).forEach(id => { if (byId[id]) kq.push({cccd: byId[id], dir: ph.dir, buoi: ph.buoi, lop: ph.lop, so: ph.so, ten: ph.ten, cham: c, dung: dg, tuluan: t, sao: n.sao, ngay: n.ngay}); }); }));
+    const kq = []; lopH().stats().forEach(ph => ph.nhom.forEach(n => {
+      (n.ids || []).forEach(id => { if (byId[id]) kq.push({cccd: byId[id], dir: ph.dir, buoi: ph.buoi, ten: ph.ten || "", cham: n.cham, dung: n.dung, tuluan: Math.max(0, n.nop - n.cham), sao: n.sao, ngay: n.ngay}); }); }));
     return {ok: true, kq}; }
   throw new Error("Hành động không hợp lệ");
 }
