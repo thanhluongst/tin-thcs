@@ -236,12 +236,19 @@ http.createServer(async (req, res) => {
       req.on("close", () => { const s = SUBS.get(p); if (s) { s.delete(res); if (!s.size) SUBS.delete(p); } });
       return;
     }
+    /* Kế hoạch bài dạy (khbd/docx): chỉ giáo viên đúng mã mới tải được */
+    if (u.pathname.startsWith("/khbd/") && req.method === "POST") {
+      try { pinOK((JSON.parse(await body(req) || "{}")).pin); } catch(e) { return send(res, 403, JSON.stringify({ok: false, error: e.message})); }
+      const m = u.pathname.match(/^\/khbd\/ai([6-9])-bai(\d+)$/), kf = m && path.join(__dirname, "khbd", "docx", "KHBD_AI" + m[1] + "_Bai" + m[2] + ".docx");
+      if (!kf || !fs.existsSync(kf)) return send(res, 404, JSON.stringify({ok: false, error: "Chưa có kế hoạch bài dạy cho bài này (chạy khbd/tao-khbd.py)."}));
+      res.writeHead(200, {"Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Cache-Control": "no-store"}); return fs.createReadStream(kf).pipe(res);
+    }
     if (u.pathname === "/gv" || u.pathname === "/gv/") { u.pathname = "/may-chu-lan/trang-chu.html"; }
     if (u.pathname === "/thong-ke" || u.pathname === "/thong-ke/") { u.pathname = "/may-chu-lan/thong-ke.html"; }
     if (u.pathname === "/chung/config.js") return send(res, 200, LAN_CONFIG, MIME[".js"]);
     if (u.pathname === "/sw.js") return send(res, 200, NO_SW, MIME[".js"]);
     let f = path.normalize(path.join(ROOT, decodeURIComponent(u.pathname)));
-    if (!f.startsWith(ROOT) || /[\\/]may-chu-lan[\\/]du-lieu/.test(f) || /[\\/]\./.test(f.slice(ROOT.length))) return send(res, 403, "Không được phép", "text/plain; charset=utf-8");
+    if (!f.startsWith(ROOT) || /[\\/]may-chu-lan[\\/](du-lieu|khbd[\\/]docx)/.test(f) || /[\\/]\./.test(f.slice(ROOT.length))) return send(res, 403, "Không được phép", "text/plain; charset=utf-8");
     if (fs.existsSync(f) && fs.statSync(f).isDirectory()) {
       if (!u.pathname.endsWith("/")) { res.writeHead(302, {Location: u.pathname + "/" + u.search}); return res.end(); }
       f = path.join(f, "index.html");
