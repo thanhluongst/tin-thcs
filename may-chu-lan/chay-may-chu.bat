@@ -2,6 +2,11 @@
 chcp 65001 >nul
 title May chu lop hoc (LAN)
 cd /d "%~dp0"
+rem --- Lan dau: tu cai dat (Node.js, ma giao vien, loi tat, KHBD) ---
+if not exist "du-lieu\.da-cai-dat" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0cai-dat.ps1" || (pause & exit /b)
+)
+where node >nul 2>nul || set "PATH=%PATH%;%ProgramFiles%\nodejs"
 where node >nul 2>nul || (echo Can cai Node.js: https://nodejs.org & pause & exit /b)
 
 rem --- Cong may chu (doc tu du-lieu\cau-hinh.json, mac dinh 8080) ---
