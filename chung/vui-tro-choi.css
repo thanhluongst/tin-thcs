@@ -1,0 +1,9 @@
+/* Giao diện hoạt hình nhẹ cho các trò chơi (Tailwind): chỉ đổi nền trời xanh, đồi cỏ, ngôi sao, font và viền thẻ trắng */
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap");
+body{background:#8fd3f7 radial-gradient(#ffffff55 2px,transparent 2.5px) 0 0/34px 34px fixed!important;font-family:"Baloo 2","Be Vietnam Pro","Segoe UI",system-ui,sans-serif!important;color:#1e2a5a;padding-bottom:120px}
+body::before{content:"";position:fixed;inset:auto 0 0 0;height:130px;z-index:0;pointer-events:none;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 150' preserveAspectRatio='none'%3E%3Cpath d='M0 90 Q300 0 640 80 T1440 60 V150 H0Z' fill='%2386d97a' stroke='%231e2a5a' stroke-width='4'/%3E%3Cpath d='M0 120 Q420 50 860 110 T1440 100 V150 H0Z' fill='%234ec46b' stroke='%231e2a5a' stroke-width='4'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}
+body>*{position:relative;z-index:1}
+h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif!important;font-weight:800!important;letter-spacing:-.3px}
+.bg-white,.bg-white\/80,.bg-white\/90,.bg-white\/70{border:3px solid #1e2a5a!important;box-shadow:5px 5px 0 #1e2a5a!important}
+button{font-family:inherit!important}
