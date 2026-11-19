@@ -1,0 +1,70 @@
+/* Giao diện "hoạt hình": trời xanh, đồi cỏ, viền đậm, bóng đổ cứng, nhãn màu kẹo. Nạp SAU các CSS khác để phủ lên. */
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap");
+:root{--ink:#1e2a5a;--sky:#8fd3f7;--y:#fcd34d;--pk:#f9a8d4;--mt:#bbf7d0;--pp:#c4b5fd;--or:#fb923c;--bl:#3b82f6;
+ --vui-font:"Baloo 2","Be Vietnam Pro","Segoe UI",system-ui,sans-serif;
+ --bg:var(--sky);--surface:#fff;--card:#fff;--line:var(--ink);--fg:var(--ink);--accent:var(--bl);--accent-ink:#fff}
+html:not([data-theme="dark"]) body{
+ background:var(--sky) radial-gradient(#ffffff55 2px,transparent 2.5px) 0 0/34px 34px fixed!important;color:var(--ink)!important;
+ font-family:var(--vui-font)!important;padding-bottom:140px;position:relative;min-height:100vh}
+html:not([data-theme="dark"]) body::before{content:"";position:fixed;inset:auto 0 0 0;height:150px;z-index:-1;pointer-events:none;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 150' preserveAspectRatio='none'%3E%3Cpath d='M0 90 Q300 0 640 80 T1440 60 V150 H0Z' fill='%2386d97a' stroke='%231e2a5a' stroke-width='4'/%3E%3Cpath d='M0 120 Q420 50 860 110 T1440 100 V150 H0Z' fill='%234ec46b' stroke='%231e2a5a' stroke-width='4'/%3E%3C/svg%3E") bottom/100% 100% no-repeat}
+html:not([data-theme="dark"]) body::after{content:"✦      ✦\A\A        ✦";white-space:pre;position:fixed;top:90px;right:4vw;z-index:-1;font-size:30px;line-height:1.1;color:var(--y);
+ text-shadow:0 0 0 var(--ink),2px 2px 0 var(--ink);pointer-events:none;animation:vui-tw 3s ease-in-out infinite}
+@keyframes vui-tw{50%{opacity:.45;transform:scale(.92)}}
+html:not([data-theme="dark"]) h1,html:not([data-theme="dark"]) h2,html:not([data-theme="dark"]) h3{font-family:var(--vui-font)!important;color:var(--ink);font-weight:800;letter-spacing:-.3px}
+
+/* khối thẻ */
+html:not([data-theme="dark"]) :is(header,.tk,.card,.topic,.box,.hd,.les,.labx,.pick a,.qq,.sim,.the,.key){
+ background:#fff;border:3px solid var(--ink)!important;border-radius:24px!important;box-shadow:6px 6px 0 var(--ink)!important}
+html:not([data-theme="dark"]) header{max-width:1040px;margin:22px auto 14px!important;padding:22px 26px!important;position:relative}
+html:not([data-theme="dark"]) header .wrap{padding:0}
+html:not([data-theme="dark"]) header h1{font-size:clamp(28px,5vw,48px)!important;line-height:1.05;margin:10px 0}
+html:not([data-theme="dark"]) .eyebrow{display:inline-block;background:var(--y);color:var(--ink)!important;border:3px solid var(--ink);border-radius:99px;padding:3px 14px;box-shadow:3px 3px 0 var(--ink);text-transform:none;letter-spacing:0;font-weight:700}
+html:not([data-theme="dark"]) .lead{color:#3b4a7a!important;font-weight:600}
+
+/* nút, nhãn, tab */
+html:not([data-theme="dark"]) :is(.btn,.stat,.tabs button,nav.tabs button,.hub a,.hub button,.go,.chk,.reveal,.nav button,.steps button,.acts button,.tn-loc button,.chip,.nut,.sseg button,.ch button,.tfr button){
+ border:3px solid var(--ink)!important;border-radius:16px!important;box-shadow:3px 3px 0 var(--ink)!important;font-family:var(--vui-font)!important;font-weight:700!important;color:var(--ink);transition:transform .1s,box-shadow .1s}
+html:not([data-theme="dark"]) :is(.btn,.stat,.tabs button,.hub a,.hub button,.go,.chk,.reveal,.nav button,.steps button,.acts button,.tn-loc button,.chip,.nut):active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)!important}
+html:not([data-theme="dark"]) :is(.btn,.stat,.go,.nav button,.chip,.nut,.chk):hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)!important}
+html:not([data-theme="dark"]) .stat:nth-child(4n+1){background:var(--pk)}html:not([data-theme="dark"]) .stat:nth-child(4n+2){background:var(--mt)}
+html:not([data-theme="dark"]) .stat:nth-child(4n+3){background:var(--y)}html:not([data-theme="dark"]) .stat:nth-child(4n){background:var(--pp)}
+html:not([data-theme="dark"]) :is(.btn.primary,.btn:not(.ghost),.nav .nx,.chk){background:var(--bl)!important;color:#fff!important}
+html:not([data-theme="dark"]) .btn.ghost{background:#fff!important;color:var(--ink)!important}
+html:not([data-theme="dark"]) nav.tabs{background:transparent!important;border:0!important}
+html:not([data-theme="dark"]) :is(nav.tabs button,.tabs button){background:#fff}
+html:not([data-theme="dark"]) :is(nav.tabs button[aria-pressed=true],nav.tabs button.on,.tabs button.on,.acts button.on,.tn-loc button.on){background:var(--or)!important;color:var(--ink)!important}
+html:not([data-theme="dark"]) input[type=search],html:not([data-theme="dark"]) input[type=password]{border:3px solid var(--ink)!important;border-radius:14px!important;font-family:var(--vui-font)}
+
+/* trang chủ: lối tắt màu kẹo + trò chơi */
+html:not([data-theme="dark"]) .hub a:nth-child(1){background:var(--pp)}html:not([data-theme="dark"]) .hub a:nth-child(2){background:var(--mt)}
+html:not([data-theme="dark"]) .hub a:nth-child(3){background:var(--y)}html:not([data-theme="dark"]) .hub a:nth-child(4){background:var(--pk)}
+html:not([data-theme="dark"]) .hub a:nth-child(5){background:#a5f3fc}html:not([data-theme="dark"]) .hub button{background:var(--or)!important;color:var(--ink)!important}
+html:not([data-theme="dark"]) .tn-grid a,html:not([data-theme="dark"]) .les-art{border:3px solid var(--ink)!important;box-shadow:4px 4px 0 var(--ink)!important;border-radius:18px}
+html:not([data-theme="dark"]) .les-art{border-width:0 0 3px!important;box-shadow:none!important;border-radius:0}
+html:not([data-theme="dark"]) .lesson .num,html:not([data-theme="dark"]) .tag{background:var(--y)!important;color:var(--ink)!important;border:2px solid var(--ink);font-weight:700}
+html:not([data-theme="dark"]) .topic h3{display:inline-block;background:var(--mt);border:3px solid var(--ink);border-radius:99px;padding:2px 14px;box-shadow:3px 3px 0 var(--ink)}
+
+/* trang AI 12 tiết + trang học 4 bước */
+html:not([data-theme="dark"]) header.top{background:#fff!important;color:var(--ink)!important}
+html:not([data-theme="dark"]) header.top::before,html:not([data-theme="dark"]) header.top::after{display:none}
+html:not([data-theme="dark"]) header.top a{background:var(--y)!important;color:var(--ink)!important;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+html:not([data-theme="dark"]) header.top h1{color:var(--ink)!important;text-shadow:none!important}
+html:not([data-theme="dark"]) main{margin-top:0!important}
+html:not([data-theme="dark"]) .top{background:#fff!important;color:var(--ink)!important;border-bottom:3px solid var(--ink);box-shadow:0 4px 0 var(--ink)!important}
+html:not([data-theme="dark"]) .top h1{color:var(--ink)!important}
+html:not([data-theme="dark"]) .top :is(a,button){background:var(--y)!important;color:var(--ink)!important;border:3px solid var(--ink)!important;box-shadow:3px 3px 0 var(--ink);font-weight:700}
+html:not([data-theme="dark"]) .steps button.on{color:var(--ink)!important;background:var(--y)!important}
+html:not([data-theme="dark"]) .steps button:nth-child(2).on{background:var(--or)!important}html:not([data-theme="dark"]) .steps button:nth-child(3).on{background:var(--pp)!important}html:not([data-theme="dark"]) .steps button:nth-child(4).on{background:var(--mt)!important}
+html:not([data-theme="dark"]) .hd small{display:inline-block;background:var(--y);color:var(--ink)!important;border:2px solid var(--ink);border-radius:99px;padding:1px 10px}
+html:not([data-theme="dark"]) .tinh{border-left:6px solid var(--bl)!important}
+html:not([data-theme="dark"]) .key{background:var(--mt)!important}
+html:not([data-theme="dark"]) .reveal{background:var(--mt)!important;color:var(--ink)!important}
+html:not([data-theme="dark"]) .nav{background:#fff!important;border-top:3px solid var(--ink)}
+html:not([data-theme="dark"]) .cycle div{border:3px solid var(--ink)!important;box-shadow:3px 3px 0 var(--ink);background:var(--y)!important}
+html:not([data-theme="dark"]) .cycle div:nth-child(2){background:var(--pk)!important}html:not([data-theme="dark"]) .cycle div:nth-child(3){background:var(--mt)!important}html:not([data-theme="dark"]) .cycle div:nth-child(4){background:var(--pp)!important}
+html:not([data-theme="dark"]) .cycle b{color:var(--ink)!important}
+html:not([data-theme="dark"]) table{border-collapse:separate;border-spacing:0;border:3px solid var(--ink);border-radius:14px;overflow:hidden}
+html:not([data-theme="dark"]) th{background:var(--y)!important;color:var(--ink)!important}
+html:not([data-theme="dark"]) td,html:not([data-theme="dark"]) th{border-color:#c9d3ef!important}
+@media (prefers-reduced-motion:reduce){html body::after{animation:none}}
