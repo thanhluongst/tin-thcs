@@ -9,7 +9,7 @@
 const http = require("http"), fs = require("fs"), path = require("path"), crypto = require("crypto"), os = require("os");
 
 const ROOT = path.resolve(__dirname, "..");
-const DATA = path.join(__dirname, "du-lieu");
+const DATA = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(__dirname, "du-lieu");
 const CFG = Object.assign({port: 8080, pin: "tin7"}, readJson(path.join(DATA, "cau-hinh.json")) || {});
 if (process.env.PORT) CFG.port = Number(process.env.PORT);
 if (!fs.existsSync(DATA)) fs.mkdirSync(DATA, {recursive: true});
