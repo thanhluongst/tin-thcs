@@ -165,6 +165,10 @@ footer{color:var(--mute);font-size:13px;text-align:center;padding:10px 0 30px}
 .sortrow{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0;background:#fff}
 .sortrow .seg{display:flex;gap:6px;flex:0 0 auto}
 .seg button{border:1.5px solid #cbd5e3;background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:14px;font-weight:600}
+/* Nút đã chọn – áp cho mọi tên cột (c0, c1, tot, nen...); các luật riêng bên dưới ghi đè màu */
+.seg button.sel{background:var(--pri);border-color:var(--pri);color:#fff}
+.seg button.c1.sel{background:var(--dev);border-color:var(--dev)}
+.seg button.c2.sel{background:var(--user);border-color:var(--user)}
 .seg button.dev.sel{background:var(--dev);border-color:var(--dev);color:#fff}
 .seg button.user.sel{background:var(--user);border-color:var(--user);color:#fff}
 .seg button.sel.T{background:var(--ok);border-color:var(--ok);color:#fff}
