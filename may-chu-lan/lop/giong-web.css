@@ -1,0 +1,2 @@
+/* Nạp sau kieu.css + giaodien.css: bỏ nhãn chữ in hoa nhỏ (cùng cách đã sửa trên web, chung/style.css). */
+.sh-ph,.sec-lb,.side-ph,.stem-kh span,.labx-tag,.eyebrow,.scene-tag{text-transform:none;letter-spacing:0}
